@@ -19,3 +19,7 @@
 '.editor':
   'cmd-up': 'editor:move-line-up'
   'cmd-down': 'editor:move-line-down'
+  'cmd-d': 'editor:delete-line'
+
+'.platform-darwin .editor':
+  'cmd-d': 'editor:delete-line'
