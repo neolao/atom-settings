@@ -1,0 +1,26 @@
+'exception-reporting':
+  'userId': '5c1b3e91-177a-1a3d-e8d5-6f5458113034'
+'release-notes':
+  'viewedVersion': '0.76.0'
+'welcome':
+  'showOnStartup': false
+'metrics':
+  'userId': 'b53641952e75709991d2d77f556a6ab0a912fea0'
+'editor':
+  'fontSize': 14
+  'fontFamily': 'DejaVu Sans Mono'
+  'showIndentGuide': true
+  'showInvisibles': true
+  'tabLength': 4
+'core':
+  'themes': [
+    'atom-dark-ui'
+    'monokai'
+  ]
+  'ignoredNames': [
+    '.git'
+    '.svn'
+    '.DS_Store'
+  ]
+  'projectHome': '/Users/eric/workspace'
+'tree-view': {}

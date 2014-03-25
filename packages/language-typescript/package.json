@@ -1,0 +1,26 @@
+{
+  "name": "language-typescript",
+  "version": "0.14.0",
+  "description": "TypeScript language support in Atom",
+  "engines": {
+    "atom": "*",
+    "node": "*"
+  },
+  "homepage": "http://atom.io/packages/language-typescript",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/olegbl/language-typescript.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/olegbl/language-typescript/issues"
+  },
+  "readme": "# TypeScript language support in Atom\n\nAdds syntax highlighting and snippets to TypeScript file in Atom.\n\nOriginally [converted](http://atom.io/docs/latest/converting-a-text-mate-bundle)\nfrom the [TypeScript TextMate bundle](https://github.com/stoffera/textmate-typescript).\n\nContributions are greatly appreciated. Please fork this repository and open a\npull request to add snippets, make grammar tweaks, etc.\n",
+  "readmeFilename": "README.md",
+  "_id": "language-typescript@0.14.0",
+  "dist": {
+    "shasum": "50a79abe6de3717c0c2cdaee4dfaa477cd0a999f"
+  },
+  "_resolved": "/var/folders/0t/sjn1ngrj4379sbtpfhcw4n6m0000gp/T/d-114225-90334-wve6je/package.tgz",
+  "_from": "/var/folders/0t/sjn1ngrj4379sbtpfhcw4n6m0000gp/T/d-114225-90334-wve6je/package.tgz"
+}
