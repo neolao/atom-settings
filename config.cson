@@ -9,9 +9,10 @@
 'editor':
   'fontSize': 14
   'fontFamily': 'DejaVu Sans Mono'
-  'showIndentGuide': true
   'showInvisibles': true
   'tabLength': 4
+  'showIndentGuide': true
+  'preferredLineLength': 120
 'core':
   'themes': [
     'atom-dark-ui'
