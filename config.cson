@@ -1,7 +1,7 @@
 'exception-reporting':
   'userId': '5c1b3e91-177a-1a3d-e8d5-6f5458113034'
 'release-notes':
-  'viewedVersion': '0.76.0'
+  'viewedVersion': '0.94.0'
 'welcome':
   'showOnStartup': false
 'metrics':
@@ -18,10 +18,8 @@
     'atom-dark-ui'
     'monokai'
   ]
-  'ignoredNames': [
-    '.git'
-    '.svn'
-    '.DS_Store'
-  ]
   'projectHome': '/Users/eric/workspace'
+  'disabledPackages': [
+    'aural-coding'
+  ]
 'tree-view': {}

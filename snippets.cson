@@ -13,3 +13,11 @@
 #     'prefix': 'log'
 #     'body': 'console.log $1'
 #
+
+# TYPESCRIPT
+'.source.ts':
+    'comment-block':
+        'prefix': '/**'
+        'body': '/**\n
+                  * $1\n
+                  */'

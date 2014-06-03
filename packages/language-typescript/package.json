@@ -1,6 +1,6 @@
 {
   "name": "language-typescript",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "description": "TypeScript language support in Atom",
   "engines": {
     "atom": "*",
@@ -17,10 +17,10 @@
   },
   "readme": "# TypeScript language support in Atom\n\nAdds syntax highlighting and snippets to TypeScript file in Atom.\n\nOriginally [converted](http://atom.io/docs/latest/converting-a-text-mate-bundle)\nfrom the [TypeScript TextMate bundle](https://github.com/stoffera/textmate-typescript).\n\nContributions are greatly appreciated. Please fork this repository and open a\npull request to add snippets, make grammar tweaks, etc.\n",
   "readmeFilename": "README.md",
-  "_id": "language-typescript@0.14.0",
+  "_id": "language-typescript@0.15.0",
   "dist": {
-    "shasum": "50a79abe6de3717c0c2cdaee4dfaa477cd0a999f"
+    "shasum": "6d945044b68346efa78a9ab06e19a9e6d9b220aa"
   },
-  "_resolved": "/var/folders/0t/sjn1ngrj4379sbtpfhcw4n6m0000gp/T/d-114225-90334-wve6je/package.tgz",
-  "_from": "/var/folders/0t/sjn1ngrj4379sbtpfhcw4n6m0000gp/T/d-114225-90334-wve6je/package.tgz"
+  "_resolved": "/var/folders/0t/sjn1ngrj4379sbtpfhcw4n6m0000gp/T/d-11453-8210-ifh6xv/package.tgz",
+  "_from": "/var/folders/0t/sjn1ngrj4379sbtpfhcw4n6m0000gp/T/d-11453-8210-ifh6xv/package.tgz"
 }

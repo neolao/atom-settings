@@ -1,0 +1,25 @@
+{
+  "name": "Atom-Syntax-highlighting-for-Sass",
+  "version": "0.2.0",
+  "description": "Perfect syntax highlighting for both SCSS and Sass in Atom",
+  "homepage": "https://github.com/P233/Atom-Syntax-highlighting-for-Sass",
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/P233/Atom-Syntax-highlighting-for-Sass.git"
+  },
+  "bugs": {
+    "url": "https://github.com/P233/Atom-Syntax-highlighting-for-Sass/issues"
+  },
+  "readme": "# Syntax highlighting for Sass in Atom\n\nThis package is converted from the Sublime Text 2/3 [Syntax-highlighting-for-Sass](https://github.com/P233/Syntax-highlighting-for-Sass) package. For some reasons, completions haven't been converted. I'll make an update later.\n\nPlease feel free to [fill an issue](https://github.com/P233/Atom-Syntax-highlighting-for-Sass/issues/new) if you get any problem with this package or have any suggestions.",
+  "readmeFilename": "README.md",
+  "_id": "Atom-Syntax-highlighting-for-Sass@0.2.0",
+  "dist": {
+    "shasum": "e89ae9750f4382bcf2689c097e7a7f959875f5a8"
+  },
+  "_resolved": "/var/folders/0t/sjn1ngrj4379sbtpfhcw4n6m0000gp/T/d-11432-48548-1lwpy8d/package.tgz",
+  "_from": "/var/folders/0t/sjn1ngrj4379sbtpfhcw4n6m0000gp/T/d-11432-48548-1lwpy8d/package.tgz"
+}

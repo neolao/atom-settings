@@ -20,6 +20,8 @@
   'cmd-up': 'editor:move-line-up'
   'cmd-down': 'editor:move-line-down'
   'cmd-d': 'editor:delete-line'
+  'alt-cmd-down': 'editor:duplicate-lines'
 
 '.platform-darwin .editor':
   'cmd-d': 'editor:delete-line'
+  'alt-cmd-down': 'editor:duplicate-lines'
