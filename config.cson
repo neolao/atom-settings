@@ -23,3 +23,7 @@
     'aural-coding'
   ]
 'tree-view': {}
+'whitespace':
+  'ignoreWhitespaceOnCurrentLine': false
+  'ensureSingleTrailingNewline': false
+  'removeTrailingWhitespace': false
