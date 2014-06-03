@@ -1,0 +1,31 @@
+{
+  "name": "task-list",
+  "main": "./lib/task-list",
+  "version": "0.6.0",
+  "private": true,
+  "description": "Display and navigate to TODO: style comments",
+  "activationEvents": [
+    "task-list:toggle"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kenwheeler/task-list"
+  },
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {},
+  "readme": "# task-list package\n\nThis package parses TODO comments and displays them in a list, and navigates to them on selection.\n\nActivate with `ctrl-option-t`\n\n####Sample Comment:\n\n`// TODO: Test Comment`\n\n####Preview:\n\n![Preview](http://i.imgur.com/heY3FIc.gif)\n",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/kenwheeler/task-list/issues"
+  },
+  "homepage": "https://github.com/kenwheeler/task-list",
+  "_id": "task-list@0.6.0",
+  "dist": {
+    "shasum": "b08d902bbf10360f28271064bfb09441ff394bbe"
+  },
+  "_resolved": "/var/folders/0t/sjn1ngrj4379sbtpfhcw4n6m0000gp/T/d-11453-9826-12q9jaa/package.tgz",
+  "_from": "/var/folders/0t/sjn1ngrj4379sbtpfhcw4n6m0000gp/T/d-11453-9826-12q9jaa/package.tgz"
+}
