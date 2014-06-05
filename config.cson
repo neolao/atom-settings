@@ -31,3 +31,6 @@
   'closeOnEndOfOpeningTag': true
   'makeNeverCloseElementsSelfClosing': true
   'forceInline': 'title, h1, h2, h3, h4, h5, h6, p'
+'highlight-column':
+  'opacity': 1
+  'enableHighlight': true
