@@ -36,7 +36,7 @@ prepFile = (text) ->
      "#{amendMsg}\n\
       # Please enter the commit message for your changes. Lines starting\n\
       # with '#' will be ignored, and an empty message aborts the commit.\n\
-      # Remove hypen(-) and update commit message as necessary for amend.\n\
+      # Remove hyphen(-) and update commit message as necessary for amend.\n\
       # #{text}",
     flag: 'w+'
   showFile()
@@ -62,7 +62,12 @@ commit = ->
     options:
       cwd: dir
     stdout: (data) ->
-      atom.workspace.destroyActivePane()
+      # Destroy item if there are other items in this pane
+      # Otherwise, destroy the pane
+      if atom.workspace.getActivePane().getItems().length > 1
+        atom.workspace.destroyActivePaneItem()
+      else
+        atom.workspace.destroyActivePane()
       currentPane.activate()
       new StatusView(type: 'success', message: data.toString())
       # reset editor for commitFile
