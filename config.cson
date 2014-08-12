@@ -15,7 +15,7 @@
   'preferredLineLength': 120
 'core':
   'themes': [
-    'atom-dark-ui'
+    'seti-ui'
     'monokai'
   ]
   'projectHome': '/Users/eric/workspace'
