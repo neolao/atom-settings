@@ -16,7 +16,7 @@
 'core':
   'themes': [
     'atom-dark-ui'
-    'theme-neolao'
+    'monokai'
   ]
   'projectHome': '/Users/eric/workspace'
   'disabledPackages': [

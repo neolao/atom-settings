@@ -1,7 +1,7 @@
 {
   "name": "highlight-selected",
   "main": "./lib/highlight-selected",
-  "version": "0.2.11",
+  "version": "0.4.1",
   "description": "Highlights the current word selected when double clicking",
   "repository": {
     "type": "git",
@@ -20,10 +20,10 @@
     "url": "https://github.com/richrace/highlight-selected/issues"
   },
   "homepage": "https://github.com/richrace/highlight-selected",
-  "_id": "highlight-selected@0.2.11",
+  "_id": "highlight-selected@0.4.1",
   "dist": {
-    "shasum": "ada80adbe4965d7102ba0a3a6e92e0bb639cce2f"
+    "shasum": "eec404124f9e0ec903d1eb738efe0f753447b67c"
   },
-  "_resolved": "/var/folders/0t/sjn1ngrj4379sbtpfhcw4n6m0000gp/T/d-11455-34831-1v3qy6i/package.tgz",
-  "_from": "/var/folders/0t/sjn1ngrj4379sbtpfhcw4n6m0000gp/T/d-11455-34831-1v3qy6i/package.tgz"
+  "_resolved": "/var/folders/q8/nyrt885s5kvdkjbsx784vjyc0000gn/T/d-114712-4517-5cev7i/package.tgz",
+  "_from": "/var/folders/q8/nyrt885s5kvdkjbsx784vjyc0000gn/T/d-114712-4517-5cev7i/package.tgz"
 }

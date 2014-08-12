@@ -13,11 +13,14 @@ class Git extends Model
     @path = path || atom.project.getRepo().getWorkingDirectory()
     @gift = gift @path
 
+  getPath: ->
+    @path
+
   diff: (path, callback, options) ->
     options ||= {}
     flags = options.flags || ""
-    @gift.diff "", flags, [path], @callbackWithErrorsNoChange (diffs) =>
-        callback diffs[0] if callback
+    @gift.diff "", flags, [path], @callbackWithErrorsNoChange (diffs) ->
+      callback diffs[0] if callback
 
   add: (filename, callback) ->
     @gift.add filename + " --no-ignore-removal", @callbackWithErrors(callback)
@@ -29,8 +32,8 @@ class Git extends Model
     @gift.git command, @callbackWithErrorsNoChange(callback)
 
   status: (callback) ->
-    @gift.status @callbackWithErrorsNoChange (status) =>
-      callback @_tidyStatus status.files
+    @gift.status @callbackWithErrorsNoChange (status) ->
+      callback status?.files
 
   branch: (callback) ->
     @gift.branch @callbackWithErrorsNoChange(callback)
@@ -53,6 +56,9 @@ class Git extends Model
   remotePush: (remote_branch, callback) ->
     @gift.remote_push remote_branch + " -u", @callbackWithErrors(callback)
 
+  showObject: (obj, callback) ->
+    @gift.git 'show', [], [obj], @callbackWithErrorsNoChange(callback)
+
   callbackWithErrors: (callback) =>
     @incrementTaskCounter()
     (error, value) =>
@@ -72,7 +78,6 @@ class Git extends Model
       else
         callback value if callback
 
-
   incrementTaskCounter: ->
     @task_counter += 1
     @trigger("change:task_counter") if @task_counter == 1
@@ -88,7 +93,6 @@ class Git extends Model
   workingP: ->
     @task_counter > 0
 
-
   setMessage: (message) ->
     @set message: message
     @trigger "error"
@@ -97,32 +101,12 @@ class Git extends Model
     message = @get "message"
     message.replace /\n/g, "<br />"
 
-  clearMessage: () ->
+  clearMessage: ->
     @set message: ""
-
-
-  _tidyStatus: (filehash) ->
-    output =
-      untracked: []
-      unstaged: []
-      staged: []
-
-    _.each filehash, (status, path) =>
-      file = {path: path, status: status}
-
-      if not status.tracked
-        output.untracked.push file
-      if status.staged
-        output.staged.push file
-      if (status.tracked and not status.staged) or
-         (status.type && status.type.length == 2)
-        output.unstaged.push file
-
-    output
 
 git = {}
 if atom.project
-  git = new Git
+  git = new Git()
 
 module.exports =
   Git: Git

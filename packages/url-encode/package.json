@@ -1,7 +1,7 @@
 {
   "name": "url-encode",
   "main": "./lib/url-encode",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "URL encode or decode the selected text.",
   "activationEvents": [
     "url-encode:encode",
@@ -22,10 +22,10 @@
     "url": "https://github.com/mmattozzi/url-encode/issues"
   },
   "homepage": "https://github.com/mmattozzi/url-encode",
-  "_id": "url-encode@0.1.0",
+  "_id": "url-encode@0.2.0",
   "dist": {
-    "shasum": "13c99a1bb5535bba3b15ad6d97c47c9eefe0fba8"
+    "shasum": "b66218fe60c07ae3ad56b5f182bce7ccdb145585"
   },
-  "_resolved": "/var/folders/0t/sjn1ngrj4379sbtpfhcw4n6m0000gp/T/d-11453-11483-12bjqq5/package.tgz",
-  "_from": "/var/folders/0t/sjn1ngrj4379sbtpfhcw4n6m0000gp/T/d-11453-11483-12bjqq5/package.tgz"
+  "_resolved": "/var/folders/q8/nyrt885s5kvdkjbsx784vjyc0000gn/T/d-114712-4541-1i9psqc/package.tgz",
+  "_from": "/var/folders/q8/nyrt885s5kvdkjbsx784vjyc0000gn/T/d-114712-4541-1i9psqc/package.tgz"
 }

@@ -1,7 +1,11 @@
+const _ = require('underscore');
 const $ = require('atom').$;
 const BlameListView = require('../views/blame-list-view');
-
 const errorController = require('../controllers/errorController');
+
+const TOGGLE_DEBOUNCE_TIME = 600;
+const SELECTOR_REACT = '.editor-contents > .gutter';
+const SELECTOR = '.gutter';
 
 /**
  * Getter for the currently focused editor.
@@ -43,6 +47,13 @@ function toggleBlame(filePath, projectBlamer) {
 }
 
 /**
+ * Debounced version of toggleBlame that will only allow toggleBlame function
+ * to be executed 700ms after the last execution. Executes immediately the first
+ * time its called.
+ */
+var debouncedToggleBlame = _.debounce(toggleBlame, TOGGLE_DEBOUNCE_TIME, true);
+
+/**
  * Makes the view arguments scroll position match the target elements scroll position
  *
  * @param {JQuery} view - the view whose scrollTop to adjust
@@ -76,7 +87,8 @@ function insertBlameView(blameData, focusedEditor) {
   });
 
   // insert the BlameListView after the gutter div
-  focusedEditor.find('.gutter').after(blameView);
+  var selector = focusedEditor.hasClass('react') ? SELECTOR_REACT : SELECTOR;
+  focusedEditor.find(selector).after(blameView);
   focusedEditor.addClass('blaming');
 
   // match scroll positions in case we blame at a scrolled position
@@ -85,5 +97,5 @@ function insertBlameView(blameData, focusedEditor) {
 
 // EXPORTS
 module.exports = {
-  toggleBlame: toggleBlame
+  toggleBlame: debouncedToggleBlame
 }
