@@ -1,0 +1,67 @@
+# See https://atom.io/docs/latest/creating-a-package#menus for more details
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'MarkDown Writer'
+      'submenu': [
+        {
+          'label': 'Add New Draft',
+          'command': 'markdown-writer:new-draft'
+        }
+        {
+          'label': 'Add New Post',
+          'command': 'markdown-writer:new-post'
+        }
+        {
+          'label': 'Publish Draft',
+          'command': 'markdown-writer:publish-draft'
+        }
+        {
+          'label': 'Manage Post Tags',
+          'command': 'markdown-writer:manage-post-tags'
+        }
+        {
+          'label': 'Manage Post Categories',
+          'command': 'markdown-writer:manage-post-categories'
+        }
+        {
+          'label': 'Insert Link',
+          'command': 'markdown-writer:insert-link'
+        }
+        {
+          'label': 'Toggle Code Text',
+          'command': 'markdown-writer:toggle-code-text'
+        }
+        {
+          'label': 'Toggle Bold Text',
+          'command': 'markdown-writer:toggle-bold-text'
+        }
+        {
+          'label': 'Toggle Italic Text',
+          'command': 'markdown-writer:toggle-italic-text'
+        }
+        {
+          'label': 'Toggle Strikethrough Text',
+          'command': 'markdown-writer:toggle-strikethrough-text'
+        }
+        {
+          'label': 'Toggle Heading 1'
+          'command': 'markdown-writer:toggle-h1'
+        }
+        {
+          'label': 'Toggle Heading 2'
+          'command': 'markdown-writer:toggle-h2'
+        }
+        {
+          'label': 'Toggle Heading 3'
+          'command': 'markdown-writer:toggle-h3'
+        }
+        {
+          'label': 'Toggle Heading 4'
+          'command': 'markdown-writer:toggle-h4'
+        }
+      ]
+    ]
+  }
+]
