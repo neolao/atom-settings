@@ -1,17 +1,34 @@
 utils = require "../lib/utils"
 
 describe "utils", ->
-  it "get posts path without token", ->
-    expect(utils.dirTemplate("_posts/")).toEqual("_posts/")
-
-  it "get posts path with tokens", ->
-    date = utils.getDate()
-    result = utils.dirTemplate("_posts/{year}/{month}")
-    expect(result).toEqual("_posts/#{date.year}/#{date.month}")
-
   it "get date dashed string", ->
     date = utils.getDate()
     expect(utils.getDateStr()).toEqual("#{date.year}-#{date.month}-#{date.day}")
+
+  it "check is valid image", ->
+    fixture = "![text](url)"
+    expect(utils.isImage(fixture)).toBe(true)
+    fixture = "[text](url)"
+    expect(utils.isImage(fixture)).toBe(false)
+
+  it "parse valid image", ->
+    fixture = "![text](url)"
+    expect(utils.parseImage(fixture)).toEqual
+      alt: "text", src: "url", title: ""
+
+  it "check is valid raw image", ->
+    fixture = """
+<img alt="alt" src="src.png" class="aligncenter" height="304" width="520">
+"""
+    expect(utils.isRawImage(fixture)).toBe(true)
+
+  it "check parse valid raw image", ->
+    fixture = """
+  <img alt="alt" src="src.png" class="aligncenter" height="304" width="520">
+  """
+    expect(utils.parseRawImage(fixture)).toEqual
+      alt: "alt", src: "src.png",
+      class: "aligncenter", height: "304", width: "520"
 
   it "check is text invalid inline link", ->
     fixture = "![text](url)"
@@ -77,19 +94,34 @@ Markdown (or Textile), Liquid, HTML & CSS go in.
     expect(utils.parseReferenceLink(fixture, contentWithTitle)).toEqual
       id: "id", text: "text", url: "http://jekyll.com", title: "Jekyll Website"
 
-  it "test whether has front matter", ->
-    fixture = "abc\n---\nhello world\n"
+  it "test not has front matter", ->
+    fixture = "title\n---\nhello world\n"
     expect(utils.hasFrontMatter(fixture)).toBe(false)
-    fixture = "---\nkey1: val1\nkey2: val2\n---\n"
+
+  it "test has front matter", ->
+    fixture = "---\nkey1: val1\nkey2: val2\n---\n" # jeykll
+    expect(utils.hasFrontMatter(fixture)).toBe(true)
+    fixture = "key1: val1\nkey2: val2\n---\n" # hexo
     expect(utils.hasFrontMatter(fixture)).toBe(true)
 
-  it "get front matter as js object", ->
+  it "get front matter as js object (jekyll)", ->
     fixture = "---\nkey1: val1\nkey2: val2\n---\n"
+    result = utils.getFrontMatter(fixture)
+    expect(result).toEqual key1: "val1", key2: "val2"
+
+  it "get front matter as js object (hexo)", ->
+    fixture = "key1: val1\nkey2: val2\n---\n"
     result = utils.getFrontMatter(fixture)
     expect(result).toEqual key1: "val1", key2: "val2"
 
   it "get front matter as empty object", ->
     fixture = "---\n\n\n---\n"
+    result = utils.getFrontMatter(fixture)
+    expect(result).toEqual {}
+    fixture = "\n\n\n---\n"
+    result = utils.getFrontMatter(fixture)
+    expect(result).toEqual {}
+    fixture = "this is content\nwith no front matters\n"
     result = utils.getFrontMatter(fixture)
     expect(result).toEqual {}
 
@@ -105,6 +137,25 @@ key2:
     result = utils.getFrontMatterText(key1: "val1", key2: ["v1", "v2"])
     expect(result).toEqual(expected)
 
+  it "check is url", ->
+    fixture = "https://github.com/zhuochun/md-writer"
+    expect(utils.isUrl(fixture)).toBe(true)
+    fixture = "/Users/zhuochun/md-writer"
+    expect(utils.isUrl(fixture)).toBe(false)
+
+  it "replace front matter (no leading fence)", ->
+    expected = """
+key1: val1
+key2:
+  - v1
+  - v2
+---
+
+"""
+    result = utils.getFrontMatterText(
+      {key1: "val1", key2: ["v1", "v2"]}, true)
+    expect(result).toEqual(expected)
+
   it "dasherize title", ->
     fixture = "hello world!"
     expect(utils.dasherize(fixture)).toEqual("hello-world")
@@ -113,7 +164,20 @@ key2:
     fixture = " hello     World"
     expect(utils.dasherize(fixture)).toEqual("hello-world")
 
-  it "generate templatet", ->
-    fixture = "Hello <title>! -<from>"
-    expect(utils.template(fixture,
-      title: "world", from: "ZC")).toEqual("Hello world! -ZC")
+  it "generate posts directory without token", ->
+    expect(utils.dirTemplate("_posts/")).toEqual("_posts/")
+
+  it "generate posts directory with tokens", ->
+    date = utils.getDate()
+    result = utils.dirTemplate("_posts/{year}/{month}")
+    expect(result).toEqual("_posts/#{date.year}/#{date.month}")
+
+  it "generate template", ->
+    fixture = "<a href=''>hello <title>! <from></a>"
+    expect(utils.template(fixture, title: "world", from: "markdown-writer"))
+      .toEqual("<a href=''>hello world! markdown-writer</a>")
+
+  it "generate template with data missing", ->
+    fixture = "<a href='<url>' title='<title>'><img></a>"
+    expect(utils.template(fixture, url: "//", title: ''))
+      .toEqual("<a href='//' title=''><img></a>")

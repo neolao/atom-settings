@@ -71,13 +71,16 @@ class NewPostView extends View
     return path.join(@pathEditor.getText(), @getFileName())
 
   getFileName: ->
-    date = @dateEditor.getText()
-    title = utils.dasherize(@titleEditor.getText() || "new post")
-    extension = atom.config.get("markdown-writer.fileExtension")
-    return "#{date}-#{title}#{extension}"
+    template = atom.config.get("markdown-writer.newPostFileName")
+    date = utils.parseDateStr(@dateEditor.getText())
+    info =
+      title: utils.dasherize(@titleEditor.getText()) || "new-post"
+      extension: atom.config.get("markdown-writer.fileExtension")
+    return utils.template(template, $.extend(info, date))
 
   getFrontMatter: ->
     layout: "post"
+    published: true
     title: @titleEditor.getText()
     date: "#{@dateEditor.getText()} #{utils.getTimeStr()}"
 
@@ -89,5 +92,5 @@ title: "<title>"
 date: "<date>"
 ---
     """
-    
+
     return utils.template(frontMatter, data)

@@ -1,6 +1,7 @@
-utils = require "./utils"
-path = require "path"
+{$} = require "atom"
 fs = require "fs-plus"
+path = require "path"
+utils = require "./utils"
 
 module.exports =
 class PublishDraft
@@ -22,6 +23,7 @@ class PublishDraft
     atom.workspaceView.open(@postPath)
 
   updateFrontMatter: ->
+    @frontMatter.published = true if @frontMatter.published?
     @frontMatter.date = "#{utils.getDateStr()} #{utils.getTimeStr()}"
     @editor.buffer.scan utils.frontMatterRegex, (match) =>
       match.replace utils.getFrontMatterText(@frontMatter)
@@ -42,15 +44,23 @@ class PublishDraft
   getPostDir: ->
     localDir = atom.config.get("markdown-writer.siteLocalDir")
     postsDir = atom.config.get("markdown-writer.sitePostsDir")
-    postsDir = utils.dirTemplate(postsDir) # replace tokens
+    postsDir = utils.dirTemplate(postsDir)
     return path.join(localDir, postsDir)
 
   getPostName: ->
-    date = utils.getDateStr()
-    title = @getPostTitle()
-    extension = atom.config.get("markdown-writer.fileExtension")
-    return "#{date}-#{title}#{extension}"
+    template = atom.config.get("markdown-writer.newPostFileName")
+    date = utils.getDate()
+    info =
+      title: @getPostTitle()
+      extension: @getPostExtension()
+    return utils.template(template, $.extend(info, date))
 
   getPostTitle: ->
-    utils.dasherize(@frontMatter.title) or
-    path.basename(@draftPath, atom.config.get("markdown-writer.fileExtension"))
+    if atom.config.get("markdown-writer.publishRenameBasedOnTitle")
+      title = utils.dasherize(@frontMatter.title)
+    return title || path.basename(@draftPath, path.extname(@draftPath))
+
+  getPostExtension: ->
+    if atom.config.get("markdown-writer.publishKeepFileExtname")
+      extname = path.extname(@draftPath)
+    return extname || atom.config.get("markdown-writer.fileExtension")

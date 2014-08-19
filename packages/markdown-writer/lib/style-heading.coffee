@@ -6,6 +6,11 @@ styles =
   h3: before: "### ", after: ""
   h4: before: "#### ", after: ""
   h5: before: "##### ", after: ""
+  ul: before: "- ", after: "", prefix: "-|\\*|\\d+\\."
+  ol: before: "0. ", after: "", prefix: "-|\\*|\\d+\\."
+  task: before: "- [ ] ", after: "", prefix: "- \\[ ]|- \\[x]|- \\[X]|-|\\*"
+  taskdone: before: "- [x] ", after: "", prefix: "- \\[ ]|- \\[x]|- \\[X]|-|\\*"
+  blockquote: before: "> ", after: ""
 
 module.exports =
 class StyleHeading
@@ -17,39 +22,46 @@ class StyleHeading
 
   display: ->
     @editor = atom.workspace.getActiveEditor()
-    if line = @getLine()
-      @toggleStyle(line)
-    else
-      @insertEmptyStyle()
+    @editor.buffer.beginTransaction()
+    @editor.getSelections().forEach (selection) =>
+      range = selection.getBufferRange()
+      rows = selection.getBufferRowRange()
+      for row in [rows[0]..rows[1]]
+        selection.cursor.setBufferPosition([row,0])
+        if line = @getLine(selection)
+          @toggleStyle(selection, line)
+        else
+          @insertEmptyStyle(selection)
+      selection.setBufferRange(range) if rows[0] != rows[1]
+    @editor.buffer.commitTransaction()
 
-  getLine: ->
-    @editor.moveCursorToBeginningOfLine()
-    return @editor.selectToEndOfLine()[0].getText()
+  getLine: (selection) ->
+    selection.selectToEndOfLine()
+    return selection.getText()
 
-  toggleStyle: (text) ->
+  toggleStyle: (selection, text) ->
     if @isStyleOn(text)
       text = @removeStyle(text)
     else
       text = @addStyle(text)
-    @editor.insertText(text)
+    selection.insertText(text)
 
-  insertEmptyStyle: ->
-    @editor.insertText(@addStyle(""))
-    pos = @editor.getCursorBufferPosition()
-    @editor.setCursorBufferPosition([pos.row, pos.column - @style.after.length])
+  insertEmptyStyle: (selection) ->
+    selection.insertText(@addStyle(""))
 
   isStyleOn: (text) ->
     @getStylePattern().test(text)
 
   addStyle: (text) ->
-    text = /^#*\s?(.*)/.exec(text)[1]
-    "#{@style.before}#{text}#{@style.after}"
+    prefix = @style.prefix || @style.before[0]
+    match = @getStylePattern("(?:#{prefix})*\\s?").exec(text)
+    return "#{match[1]}#{@style.before}#{match[2]}#{@style.after}"
 
   removeStyle: (text) ->
     matches = @getStylePattern().exec(text)
     return matches[1..].join("")
 
-  getStylePattern: ->
-    before = utils.regexpEscape(@style.before)
-    after = utils.regexpEscape(@style.after)
-    /// ^#{before} (.*?) #{after}$ ///
+  getStylePattern: (before, after) ->
+    before ?= utils.regexpEscape(@style.before)
+    after  ?= utils.regexpEscape(@style.after)
+    return /// ^ (\s*) #{before} (.*?) #{after}$ ///

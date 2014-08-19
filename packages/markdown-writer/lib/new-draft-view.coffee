@@ -10,8 +10,9 @@ class NewDraftView extends View
   @content: ->
     @div class: "markdown-writer overlay from-top", =>
       @label "Add New Draft", class: "icon icon-file-add"
-      @label "Title", class: "message"
-      @subview "titleEditor", new EditorView(mini: true)
+      @div =>
+        @label "Title", class: "message"
+        @subview "titleEditor", new EditorView(mini: true)
       @p class: "message", outlet: "message"
       @p class: "error", outlet: "error"
 
@@ -67,6 +68,7 @@ class NewDraftView extends View
 
   getFrontMatter: ->
     layout: "post"
+    published: false
     title: @titleEditor.getText()
     date: "#{utils.getDateStr()} #{utils.getTimeStr()}"
 

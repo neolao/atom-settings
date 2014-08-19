@@ -15,7 +15,7 @@ class InsertLinkView extends View
 
   @content: ->
     @div class: "markdown-writer markdown-writer-dialog overlay from-top", =>
-      @label "Insert Link", class: "icon icon-link"
+      @label "Insert Link", class: "icon icon-globe"
       @div =>
         @label "Text to be displayed", class: "message"
         @subview "textEditor", new EditorView(mini: true)
@@ -23,17 +23,15 @@ class InsertLinkView extends View
         @subview "urlEditor", new EditorView(mini: true)
         @label "Title", class: "message"
         @subview "titleEditor", new EditorView(mini: true)
-      @p =>
+      @div class: "dialog-row", =>
         @input type: "checkbox", outlet: "saveCheckbox"
-        @span "Automatically link to this text next time", class: "cb-label"
+        @span "Automatically link to this text next time", class: "side-label"
       @div outlet: "searchBox", =>
         @label "Search Posts", class: "icon icon-search"
         @subview "searchEditor", new EditorView(mini: true)
         @ul class: "markdown-writer-list", outlet: "searchResult"
 
   initialize: ->
-    @fetchPosts()
-    @loadSavedLinks()
     @handleEvents()
     @on "core:confirm", => @onConfirm()
     @on "core:cancel", => @detach()
@@ -53,13 +51,15 @@ class InsertLinkView extends View
   display: ->
     @previouslyFocusedElement = $(':focus')
     @editor = atom.workspace.getActiveEditor()
-    @setLinkFromSelection()
     atom.workspaceView.append(this)
-    if @textEditor.getText()
-      @urlEditor.getEditor().selectAll()
-      @urlEditor.focus()
-    else
-      @textEditor.focus()
+    @fetchPosts()
+    @loadSavedLinks =>
+      @setLinkFromSelection()
+      if @textEditor.getText()
+        @urlEditor.getEditor().selectAll()
+        @urlEditor.focus()
+      else
+        @textEditor.focus()
 
   detach: ->
     return unless @hasParent()
@@ -97,6 +97,8 @@ class InsertLinkView extends View
   useSearchResult: (e) ->
     @titleEditor.setText(e.target.textContent)
     @urlEditor.setText(e.target.dataset.url)
+    @textEditor.setText(e.target.textContent) unless @textEditor.getText()
+    @titleEditor.focus()
 
   insertLink: (text, title, url) ->
     if @referenceId
@@ -121,9 +123,12 @@ class InsertLinkView extends View
 
     # insert reference
     position = @editor.getCursorBufferPosition()
-    @editor.moveCursorToBeginningOfNextParagraph()
+    if position.row == @editor.getLastBufferRow()
+      @editor.insertNewline() # handle last row position
+    else
+      @editor.moveCursorToBeginningOfNextParagraph()
     @editor.insertNewline()
-    @editor.insertText("[#{id}]: #{url} \"#{title}\"")
+    @editor.insertText("  [#{id}]: #{url} \"#{title}\"")
     @editor.moveCursorDown()
     line = @editor.selectLine()[0].getText().trim()
     unless utils.isReferenceDefinition(line)
@@ -137,9 +142,9 @@ class InsertLinkView extends View
     if title
       @editor.buffer.beginTransaction()
       position = @editor.getCursorBufferPosition()
-      @editor.buffer.scan /// ^ \[#{@referenceId}\]: \ + ///, (match) =>
+      @editor.buffer.scan /// ^\ * \[#{@referenceId}\]: \ +(.+)$ ///, (match) =>
         @editor.setSelectedBufferRange(match.range)
-        @editor.insertText("[#{id}]: #{url} \"#{title}\"")
+        @editor.insertText("  [#{@referenceId}]: #{url} \"#{title}\"")
       @editor.setCursorBufferPosition(position)
       @editor.buffer.commitTransaction()
     else
@@ -149,7 +154,7 @@ class InsertLinkView extends View
     @editor.buffer.beginTransaction()
     @editor.insertText(text)
     position = @editor.getCursorBufferPosition()
-    @editor.buffer.scan /// ^ \[#{@referenceId}\]: \ + ///, (match) =>
+    @editor.buffer.scan /// ^\ * \[#{@referenceId}\]: \ + ///, (match) =>
       @editor.setSelectedBufferRange(match.range)
       @editor.deleteLine()
       emptyLine = !@editor.selectLine()[0].getText().trim()
@@ -181,15 +186,16 @@ class InsertLinkView extends View
     catch error
       console.log(error.message)
 
-  loadSavedLinks: ->
-    try
-      file = @getSavedLinksPath()
-      if fs.existsSync(file)
-        @links = CSON.readFileSync(file)
+  loadSavedLinks: (callback) ->
+    file = @getSavedLinksPath()
+    setLinks = (data) => @links = data || {}; callback()
+    fs.exists file, (exists) ->
+      if exists
+        CSON.readFile file, (error, data) ->
+          setLinks(data)
+          console.log(error.message) if error
       else
-        @links = {}
-    catch error
-      console.log(error.message)
+        setLinks()
 
   getSavedLinksPath: ->
     atom.config.get("markdown-writer.siteLinkPath") ||
