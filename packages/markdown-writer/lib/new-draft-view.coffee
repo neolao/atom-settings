@@ -1,4 +1,5 @@
 {$, View, EditorView} = require "atom"
+config = require "./config"
 utils = require "./utils"
 path = require "path"
 fs = require "fs-plus"
@@ -42,43 +43,30 @@ class NewDraftView extends View
         @error.text("Draft #{@getFullPath()} already exists!")
       else
         fs.writeFileSync(post, @generateFrontMatter(@getFrontMatter()))
-
-        rootDir = atom.config.get("markdown-writer.siteLocalDir")
-        if atom.project.path == rootDir
-          atom.workspaceView.open(post)
-        else
-          atom.open(pathsToOpen: [post])
-
+        atom.workspaceView.open(post)
         @detach()
     catch error
       @error.text("#{error.message}")
 
   getFullPath: ->
-    localDir = atom.config.get("markdown-writer.siteLocalDir")
+    localDir = config.get("siteLocalDir")
     return path.join(localDir, @getPostPath())
 
   getPostPath: ->
-    draftsDir = atom.config.get("markdown-writer.siteDraftsDir")
+    draftsDir = config.get("siteDraftsDir")
     return path.join(draftsDir, @getFileName())
 
   getFileName: ->
     title = utils.dasherize(@titleEditor.getText() || "new draft")
-    extension = atom.config.get("markdown-writer.fileExtension")
+    extension = config.get("fileExtension")
     return "#{title}#{extension}"
 
   getFrontMatter: ->
     layout: "post"
     published: false
+    slug: utils.dasherize(@titleEditor.getText() || "new draft")
     title: @titleEditor.getText()
     date: "#{utils.getDateStr()} #{utils.getTimeStr()}"
 
   generateFrontMatter: (data) ->
-    frontMatter = atom.config.get("markdown-writer.frontMatter") || """
-  ---
-  layout: <layout>
-  title: "<title>"
-  date: "<date>"
-  ---
-    """
-
-    return utils.template(frontMatter, data)
+    utils.template(config.get("frontMatter"), data)

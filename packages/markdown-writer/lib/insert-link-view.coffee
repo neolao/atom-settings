@@ -1,7 +1,7 @@
 {$, View, EditorView} = require "atom"
+config = require "./config"
 utils = require "./utils"
 CSON = require "season"
-path = require "path"
 fs = require "fs-plus"
 
 posts = null # to cache it
@@ -37,7 +37,8 @@ class InsertLinkView extends View
     @on "core:cancel", => @detach()
 
   handleEvents: ->
-    @searchEditor.hiddenInput.on "keyup", => @updateSearch() if posts
+    @searchEditor.hiddenInput.on "keyup", =>
+      @updateSearch(@searchEditor.getText()) if posts
     @searchResult.on "click", "li", (e) => @useSearchResult(e)
 
   onConfirm: ->
@@ -86,8 +87,8 @@ class InsertLinkView extends View
     else
       @setLink(selection, "", "")
 
-  updateSearch: ->
-    query = @searchEditor.getText().trim().toLowerCase()
+  updateSearch: (query) ->
+    query = query.trim().toLowerCase()
     results = posts.filter (post) ->
       query and post.title.toLowerCase().contains(query)
     results = results.map (post) ->
@@ -128,7 +129,8 @@ class InsertLinkView extends View
     else
       @editor.moveCursorToBeginningOfNextParagraph()
     @editor.insertNewline()
-    @editor.insertText("  [#{id}]: #{url} \"#{title}\"")
+    @editor.insertText("  [#{id}]: #{url}" +
+      if /^[-\*\!]$/.test(title) then "" else " \"#{title}\"")
     @editor.moveCursorDown()
     line = @editor.selectLine()[0].getText().trim()
     unless utils.isReferenceDefinition(line)
@@ -197,18 +199,20 @@ class InsertLinkView extends View
       else
         setLinks()
 
-  getSavedLinksPath: ->
-    atom.config.get("markdown-writer.siteLinkPath") ||
-      path.join(atom.getConfigDirPath(), "markdown-writer-links.cson")
+  getSavedLinksPath: -> config.get("siteLinkPath")
 
   fetchPosts: ->
     if posts
       @searchBox.hide() unless posts.length > 0
     else
-      uri = atom.config.get("markdown-writer.urlForPosts")
+      uri = config.get("urlForPosts")
       succeed = (body) =>
         posts = body.posts
-        @searchBox.show() if posts.length > 0
+
+        if posts.length > 0
+          @searchBox.show()
+          @searchEditor.setText(@textEditor.getText())
+          @updateSearch(@textEditor.getText())
       error = (err) =>
         @searchBox.hide()
       utils.getJSON(uri, succeed, error)

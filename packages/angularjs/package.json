@@ -1,7 +1,6 @@
 {
   "name": "angularjs",
-  "main": "./lib/angularjs",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "An AngularJS package for Atom",
   "activationEvents": [
     "angularjs:toggle"
@@ -21,10 +20,10 @@
     "url": "https://github.com/angular-ui/AngularJS-Atom/issues"
   },
   "homepage": "https://github.com/angular-ui/AngularJS-Atom",
-  "_id": "angularjs@0.0.4",
+  "_id": "angularjs@0.0.5",
   "dist": {
-    "shasum": "1aa1d1dad2c320918b7d7b66fc333f67adfd7413"
+    "shasum": "1905005f114f28e4878bdd135803de924f166b9b"
   },
-  "_resolved": "/var/folders/0t/sjn1ngrj4379sbtpfhcw4n6m0000gp/T/d-11453-17411-1m1gp6v/package.tgz",
-  "_from": "/var/folders/0t/sjn1ngrj4379sbtpfhcw4n6m0000gp/T/d-11453-17411-1m1gp6v/package.tgz"
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114819-43130-1yny5qz/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114819-43130-1yny5qz/package.tgz"
 }

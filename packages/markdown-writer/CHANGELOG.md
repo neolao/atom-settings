@@ -1,3 +1,59 @@
+## 0.9.0
+
+* Add an option to set static engine
+* Add `litcoffee` to grammars
+* No more reload for `codeblock` style change
+
+## 0.8.1
+
+* Move all configurations to a central class
+* Support alignment in insert image
+
+## 0.8.0
+
+* Enhance table format command
+* Add insert new line continue markdown list
+* Set default search query when insert link
+* Change open new post/draft in same window
+
+## 0.7.5
+
+* Enhance jump table cell behaviour
+* Change key mappings of jump headings
+* Mention Gist to markdown specific styles
+
+## 0.7.4
+
+* Change key mappings of headings to `Ctrl-Alt-[1-5]`
+* Add new key mappings for jump-* commands
+* Insert reference link with empty title
+
+## 0.7.3
+
+* Rename move-* commands to jump-*
+* Add jump-between-reference-definition command
+* Fix aborted key bindings
+
+## 0.7.2
+
+* Publish Draft takes care of date prefix
+
+## 0.7.1
+
+* Update cheat sheet
+* Fix some menu commands not updated
+
+## 0.7.0
+
+* Insert table dialog
+* Add new commands:
+  * move to previous/next heading
+  * move to next table cell
+  * format table
+* Changed cheat sheet command
+* Re-organize package menus
+* Improve insert local image's path
+
 ## 0.6.4
 
 * Markdown cheat sheet

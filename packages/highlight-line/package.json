@@ -1,7 +1,7 @@
 {
   "name": "highlight-line",
-  "main": "./lib/highlight-line-view",
-  "version": "0.7.6",
+  "main": "./lib/highlight-line",
+  "version": "0.8.1",
   "description": "Highlights the current line in the editor",
   "repository": {
     "type": "git",
@@ -9,19 +9,24 @@
   },
   "license": "MIT",
   "engines": {
-    "atom": ">0.50.0"
+    "atom": ">=0.123.0"
   },
   "dependencies": {},
+  "devDependencies": {
+    "coffee-script": "latest",
+    "coffeelint": "latest",
+    "coffeelint-jasmine": "latest"
+  },
   "bugs": {
     "url": "https://github.com/richrace/highlight-line/issues"
   },
   "homepage": "https://github.com/richrace/highlight-line",
-  "readme": "# Highlight Line Package\n\nHighlights the current line in the editor; really simple.\n\n![screenshot](http://i.imgur.com/fa32Wtr.png)\n\nNow also supports multi-line selections!\n\n![screenshot](http://i.imgur.com/Y3sstsF.gif)\n\nYou can now also underline the the current lines thanks to\n[@sniperbat](https://github.com/sniperbat). This isn't enabled by default, and\nyou can edit the colour and type of line.\n\n![screenshot](http://i.imgur.com/lIYBxQX.png)\n\n\nWhen selecting more than one line of text, you can enable selection borders at\nthe top and bottom of the selections. This isn't enabled by default.\nCourtesy of [@djak250](https://github.com/djak250)\n\n![screenshot](http://i.imgur.com/G1b8eAJ.png)\nI've added some basic options to change the colour and opacity for the line.\nAlso, It's now possible to Enable and Disable the line.\n\nYou can now toggle the highlighted line by:  ```cmd+alt+H```\nYou can now toggle the hiding the highlight on selecting text by:  ```cmd+shift+alt+H```\n\nYou can now toggle the underline by:  ```cmd+alt+U```\nYou can now toggle the selection borders by:  ```cmd+shift+alt+U```\n",
+  "readme": "[![Build Status](https://travis-ci.org/richrace/highlight-line.svg?branch=master)](https://travis-ci.org/richrace/highlight-line)\n\n# Highlight Line Package\n\nHighlights the current line in the editor; really simple.\n\n![screenshot](http://i.imgur.com/fa32Wtr.png)\n\nYou can now also underline the the current lines thanks to\n[@sniperbat](https://github.com/sniperbat). This isn't enabled by default, and\nyou can edit the colour and type of line.\n\n![screenshot](http://i.imgur.com/lIYBxQX.png)\n\n\nWhen selecting more than one line of text, you can enable selection borders at\nthe top and bottom of the selections. This isn't enabled by default.\nCourtesy of [@djak250](https://github.com/djak250)\n\n![screenshot](http://i.imgur.com/G1b8eAJ.png)\n\nYou can now toggle the highlighted line by:  ```cmd+alt+H```\nYou can now toggle the hiding the highlight on selecting text by:  ```cmd+shift+alt+H```\n\nYou can now toggle the underline by:  ```cmd+alt+U```\nYou can now toggle the selection borders by:  ```cmd+shift+alt+U```\n\nI've moved this package to use the new decorations API and as such we can no\nlonger set arbitrary style on the lines. So, this means no more entering colours/\nopacity in the settings.\n\n# Customisation\n\nYou can update the colours by either updating the ```line-colors.less``` file\nonce you've installed the package. Or by adding the following to your ```syle.less```\n\nI don't use the ```.cursor-line``` class as when you make selection on the\nsame line, you then lose the highlight.\n\n```scss\n.editor {\n  // The cursor line important to use rgba for opacity, also requires !important\n  // to override any theme.\n  .line.highlight-line {\n    background: rgba(255, 0, 0, 0.3) !important;\n  }\n\n  // Replace 'solid', with 'dashed' or 'dotted' depending of what you have\n  // set in the settings page.\n\n  // This is for the bottom line (underline)\n  .line.highlight-line-multi-line-solid-bottom {\n    border-bottom-color: red;\n  }\n\n  // This is for the top line when you have the selection borders enabled.\n  .line.highlight-line-multi-line-solid-top {\n    border-top-color: red;\n  }\n}\n```\n\nTo remove unused settings delete them from your ```config.cson```.\n",
   "readmeFilename": "README.md",
-  "_id": "highlight-line@0.7.6",
+  "_id": "highlight-line@0.8.1",
   "dist": {
-    "shasum": "d704b64e0653e11427694c265cfcd9cf95243ba8"
+    "shasum": "2a58218073a64710e8315201f58d2ab591d5c7d5"
   },
-  "_resolved": "/var/folders/q8/nyrt885s5kvdkjbsx784vjyc0000gn/T/d-114712-4509-15z6o2m/package.tgz",
-  "_from": "/var/folders/q8/nyrt885s5kvdkjbsx784vjyc0000gn/T/d-114712-4509-15z6o2m/package.tgz"
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114819-43146-wdvfyh/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114819-43146-wdvfyh/package.tgz"
 }

@@ -7,12 +7,12 @@
 'metrics':
   'userId': 'b53641952e75709991d2d77f556a6ab0a912fea0'
 'editor':
-  'fontSize': 14
   'fontFamily': 'DejaVu Sans Mono'
   'showInvisibles': true
   'tabLength': 4
   'showIndentGuide': true
   'preferredLineLength': 120
+  'invisibles': {}
 'core':
   'themes': [
     'seti-ui'
@@ -21,6 +21,8 @@
   'projectHome': '/Users/eric/workspace'
   'disabledPackages': [
     'aural-coding'
+    'spell-check'
+    'welcome'
   ]
 'tree-view': {}
 'whitespace':
@@ -34,3 +36,6 @@
 'highlight-column':
   'opacity': 1
   'enableHighlight': true
+'tabs': {}
+'spell-check': {}
+'markdown-writer': {}

@@ -30,6 +30,14 @@ describe "utils", ->
       alt: "alt", src: "src.png",
       class: "aligncenter", height: "304", width: "520"
 
+  it "check parse valid raw image 2", ->
+    fixture = """
+  <img title="" src="src.png" class="aligncenter" height="304" width="520" />
+  """
+    expect(utils.parseRawImage(fixture)).toEqual
+      title: "", src: "src.png",
+      class: "aligncenter", height: "304", width: "520"
+
   it "check is text invalid inline link", ->
     fixture = "![text](url)"
     expect(utils.isInlineLink(fixture)).toBe(false)
@@ -143,6 +151,10 @@ key2:
     fixture = "/Users/zhuochun/md-writer"
     expect(utils.isUrl(fixture)).toBe(false)
 
+  it "check is table separator", ->
+    fixture = "--|------|---"
+    expect(utils.isTableSeparator(fixture)).toBe(true)
+
   it "replace front matter (no leading fence)", ->
     expected = """
 key1: val1
@@ -163,6 +175,15 @@ key2:
     expect(utils.dasherize(fixture)).toEqual("hello-world")
     fixture = " hello     World"
     expect(utils.dasherize(fixture)).toEqual("hello-world")
+
+  it "get title slug", ->
+    slug = "hello-world"
+    fixture = "abc/hello-world.markdown"
+    expect(utils.getTitleSlug(slug)).toEqual(slug)
+    fixture = "abc/2014-02-12-hello-world.markdown"
+    expect(utils.getTitleSlug(fixture)).toEqual(slug)
+    fixture = "abc/02-12-2014-hello-world.markdown"
+    expect(utils.getTitleSlug(fixture)).toEqual(slug)
 
   it "generate posts directory without token", ->
     expect(utils.dirTemplate("_posts/")).toEqual("_posts/")

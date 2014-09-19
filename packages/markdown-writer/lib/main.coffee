@@ -1,13 +1,18 @@
+config = require "./config"
+
+CmdModule = {}
+
 module.exports =
   configDefaults:
-    siteLocalDir: "/GitHub/example.github.io/"
-    siteDraftsDir: "_drafts/"
-    sitePostsDir: "_posts/{year}/"
-    urlForTags: "http://example.github.io/assets/tags.json"
-    urlForPosts: "http://example.github.io/assets/posts.json"
-    urlForCategories: "http://example.github.io/assets/categories.json"
-    newPostFileName: "{year}-{month}-{day}-{title}{extension}"
-    fileExtension: ".markdown"
+    siteEngine: config.getDefault("siteEngine")
+    siteLocalDir: config.getDefault("siteLocalDir")
+    siteDraftsDir: config.getDefault("siteDraftsDir")
+    sitePostsDir: config.getDefault("sitePostsDir")
+    urlForTags: config.getDefault("urlForTags")
+    urlForPosts: config.getDefault("urlForPosts")
+    urlForCategories: config.getDefault("urlForCategories")
+    newPostFileName: config.getDefault("newPostFileName")
+    fileExtension: config.getDefault("fileExtension")
 
   activate: (state) ->
     # general
@@ -27,44 +32,41 @@ module.exports =
     # line-wise
     ["h1", "h2", "h3", "h4", "h5", "ul", "ol",
      "task", "taskdone", "blockquote"].forEach (style) =>
-      @registerCommand "toggle-#{style}", "./style-heading", args: style
+      @registerCommand "toggle-#{style}", "./style-line", args: style
 
     # media
-    ["link", "image"].forEach (media) =>
+    ["link", "image", "table"].forEach (media) =>
       @registerCommand "insert-#{media}", "./insert-#{media}-view"
 
-    # help
-    atom.workspaceView.command "markdown-writer:cheatsheet", =>
-      @openCheatSheet()
+    # helpers
+    ["open-cheat-sheet", "insert-new-line",
+     "jump-between-reference-definition",
+     "jump-to-previous-heading", "jump-to-next-heading",
+     "jump-to-next-table-cell", "format-table"].forEach (command) =>
+      @registerHelper command, "./commands"
 
   registerCommand: (cmd, path, options = {}) ->
-    atom.workspaceView.command "markdown-writer:#{cmd}", =>
-      return unless options.optOutGrammars or @isMarkdown()
+    atom.workspaceView.command "markdown-writer:#{cmd}", (e) =>
+      unless options.optOutGrammars or @isMarkdown()
+        return e.abortKeyBinding()
 
-      cmdModule = require(path)
-      cmdInstance = new cmdModule(options.args)
+      CmdModule[path] ?= require(path)
+      cmdInstance = new CmdModule[path](options.args)
       cmdInstance.display()
+
+  registerHelper: (cmd, path) ->
+    atom.workspaceView.command "markdown-writer:#{cmd}", (e) =>
+      return e.abortKeyBinding() unless @isMarkdown()
+
+      CmdModule[path] ?= require(path)
+      CmdModule[path].trigger(cmd)
 
   isMarkdown: ->
     editor = atom.workspace.getActiveEditor()
     return false unless editor?
-
-    grammars = atom.config.get('markdown-writer.grammars') || [
-      'source.gfm'
-      'text.plain'
-      'text.plain.null-grammar'
-    ]
-    return true if editor.getGrammar().scopeName in grammars
-
-  openCheatSheet: ->
-    return unless @isMarkdown()
-
-    packageDir = atom.packages.getLoadedPackage("markdown-writer").path
-    cheatsheet = require("path").join packageDir, "CHEATSHEET.md"
-
-    atom.workspace.open "markdown-preview://#{encodeURI(cheatsheet)}",
-      split: 'right', searchAllPanes: true
+    return editor.getGrammar().scopeName in config.get("grammars")
 
   deactivate: ->
+    CmdModule = {}
 
   serialize: ->

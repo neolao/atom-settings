@@ -68,7 +68,7 @@ getFrontMatterText = (obj, noLeadingFence) ->
     return ["---", "#{yamlText}---", ""].join(os.EOL)
 
 IMG_RAW_REGEX = /// <img (.*?)\/?> ///i
-IMG_RAW_ATTRIBUTE = /// ([a-z]+?) = ('|")(.+?)\2 ///ig
+IMG_RAW_ATTRIBUTE = /// ([a-z]+?) = ('|")(.*?)\2 ///ig
 IMG_REGEX  = ///
   !\[(.+?)\]               # ![text]
   \(                       # open (
@@ -129,10 +129,35 @@ URL_REGEX = ///
 
 isUrl = (url) -> URL_REGEX.test(url)
 
+TABLE_LINE_SEPARATOR_REGEX = ///
+  ^(?:\|?)
+  (?::?-+:?\|)+
+  (?::?-+:?)
+  \|? $
+  ///
+
+isTableSeparator = (line) ->
+  TABLE_LINE_SEPARATOR_REGEX.test(line)
+
 regexpEscape = (str) -> str and str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
 
 dasherize = (str) ->
   str.trim().toLowerCase().replace(/[^-\w\s]|_/g, "").replace(/\s+/g,"-")
+
+SLUG_REGEX = ///
+  ^
+  (\d{1,4}-\d{1,2}-\d{1,4}-)
+  (.+)
+  $
+  ///
+
+getTitleSlug = (str) ->
+  str = path.basename(str, path.extname(str))
+  
+  if matches = SLUG_REGEX.exec(str)
+    matches[2]
+  else
+    str
 
 dirTemplate = (directory, date) ->
   template(directory, getDate(date))
@@ -161,7 +186,9 @@ module.exports =
   isReferenceDefinition: isReferenceDefinition
   parseReferenceLink: parseReferenceLink
   isUrl: isUrl
+  isTableSeparator: isTableSeparator
   regexpEscape: regexpEscape
   dasherize: dasherize
+  getTitleSlug: getTitleSlug
   dirTemplate: dirTemplate
   template: template

@@ -6,7 +6,7 @@
 'patterns': [
   {
     'name': 'keyword.declaration.swift'
-    'match': '\\b(class|deinit|enum|extension|final|func|import|init|internal|let|private|protocol|public|static|struct|subscript|typealias|var)\\b'
+    'match': '\\b(class|deinit|enum|extension|final|import|init|internal|let|private|protocol|public|static|struct|subscript|typealias|var)\\b'
   }
   {
     'name': 'keyword.statement.swift'
@@ -22,6 +22,15 @@
   }
   {
     'include': '#comment'
+  }
+  {
+    'include': '#literal'
+  }
+  {
+    'include': '#function'
+  }
+  {
+    'include': '#operator'
   }
 ]
 'repository':
@@ -249,6 +258,40 @@
         'include': '#escaped-char'
       }
     ]
+  'function':
+    'name': 'meta.function.swift'
+    'begin': '(func) \\s*'
+    'end': '(?=\\{|#)|;|$'
+    'beginCaptures':
+      '1':
+        'name': 'storage.type.function.swift'
+    'comment': 'match regular function like: func myFunc(...)'
+    'patterns': [
+      # TODO: These should be refactored out...
+      {
+        'begin': '([a-zA-Z_0-9]+)\\s*(\\()'
+        'beginCaptures':
+          '1':
+            'name': 'entity.name.function.swift'
+          '2':
+            'name': 'punctuation.definition.parameters.begin.swift'
+        'comment': 'match regular function like: func myFunc(...)'
+        'end': '(\\))'
+        'endCaptures':
+          '1':
+            'name': 'punctuation.definition.parameters.end.swift'
+      }
+      {
+        'name': 'meta.return-type.swift'
+        'match': '((->)\\s*([^\\{]+))'
+        'captures':
+          '2':
+            'name': 'punctuation.function.swift'
+          '3':
+            'name': 'entity.name.type.class.swift'
+      }
+    ]
+
   'whitespace':
     'match':
       '(?x)

@@ -1,10 +1,7 @@
 {$, View, EditorView} = require "atom"
+config = require "./config"
 utils = require "./utils"
 request = require "request"
-
-### TODO
-- merge categories view and tags view to front matter view
-###
 
 module.exports =
 class ManagePostCategoriesView extends View
@@ -67,11 +64,12 @@ class ManagePostCategoriesView extends View
     @categoriesEditor.getText().split(/\s*,\s*/).filter((c) -> !!c.trim())
 
   fetchCategories: ->
-    uri = atom.config.get("markdown-writer.urlForCategories")
+    uri = config.get("urlForCategories")
     succeed = (body) =>
       @categories = body.categories
       @displayCategories(@categories)
-    error = (err) => @error.text(err.message)
+    error = (err) =>
+      @error.text(err?.message || "Categories are not available")
     utils.getJSON(uri, succeed, error)
 
   displayCategories: (categories) ->
