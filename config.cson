@@ -15,7 +15,7 @@
   'invisibles': {}
 'core':
   'themes': [
-    'seti-ui'
+    'neolao-ui'
     'monokai'
   ]
   'projectHome': '/Users/eric/workspace'
@@ -39,3 +39,4 @@
 'tabs': {}
 'spell-check': {}
 'markdown-writer': {}
+'woah-there-mousewheel': {}
