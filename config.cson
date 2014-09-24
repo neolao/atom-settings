@@ -40,3 +40,17 @@
 'spell-check': {}
 'markdown-writer': {}
 'woah-there-mousewheel': {}
+'linter':
+  'showErrorInline': true
+  'showStatusBarWhenCursorIsInErrorRange': true
+'todo-show':
+  'findTheseRegexes': [
+    'FIXMEs'
+    '/FIXME ?:?(.+$)/g'
+    'TODOs'
+    '/TODO ?:?(.+$)/g'
+    'TODOs'
+    '/@todo ?:?(.+$)/g'
+    'CHANGEDs'
+    '/CHANGED ?:?(.+$)/g'
+  ]

@@ -139,13 +139,14 @@ class Linter
   # Private: process the string result of a linter execution using the regex
   #          as the message builder
   #
-  # Override this in order to handle message processing in a differen manner
+  # Override this in order to handle message processing in a different manner
   # for instance if the linter returns json or xml data
   processMessage: (message, callback) ->
     messages = []
     regex = XRegExp @regex, @regexFlags
     XRegExp.forEach message, regex, (match, i) =>
-      messages.push(@createMessage(match))
+      msg = @createMessage match
+      messages.push msg if msg.range?
     , this
     callback messages
 
@@ -227,7 +228,13 @@ class Linter
       Math.max 0, parseInt(x) - 1
 
     rowStart = decrementParse match.lineStart ? match.line
-    rowEnd = decrementParse match.lineEnd ? match.line
+    rowEnd = decrementParse match.lineEnd ? match.line ? rowStart
+
+    # if this message purports to be from beyond the maximum line count,
+    # ignore it
+    if rowEnd >= @editor.getLineCount()
+      log "ignoring #{match} - it's longer than the buffer"
+      return null
 
     match.col ?=  0
     unless match.colStart
