@@ -1,7 +1,7 @@
 {
   "name": "linter",
   "main": "./lib/init",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "private": true,
   "description": "Validates your code using linters.",
   "repository": {
@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "chai": "^1.9.1",
-    "copy-paste": "^0.2.2",
     "emissary": "^1.0.0",
     "jshint": "^2.4.4",
     "lodash": "^2.4.1",
@@ -46,10 +45,10 @@
     "url": "https://github.com/AtomLinter/Linter/issues"
   },
   "homepage": "https://github.com/AtomLinter/Linter",
-  "_id": "linter@0.7.2",
+  "_id": "linter@0.7.3",
   "dist": {
-    "shasum": "d27dec888a8991ff4ef456df0e8c265f7e8a3934"
+    "shasum": "f25dcfbf6ce32f541f02f4875cc0ec560395eb84"
   },
-  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114824-61757-1y6uwt7/package.tgz",
-  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114824-61757-1y6uwt7/package.tgz"
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-11491-92275-1nskyfi/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-11491-92275-1nskyfi/package.tgz"
 }

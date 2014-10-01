@@ -2,7 +2,7 @@ _ = require 'lodash'
 fs = require 'fs'
 temp = require 'temp'
 path = require 'path'
-{log} = require './utils'
+{log, warn} = require './utils'
 rimraf = require 'rimraf'
 
 
@@ -23,15 +23,14 @@ class LinterView
   #              annotations
   # statusBarView - shared StatusBarView between all linters
   # linters - global linter set to utilize for linting
-  constructor: (editorView, statusBarView, inlineView, linters) ->
+  constructor: (@editorView, @statusBarView, @inlineView, @linters = []) ->
 
-    @editor = editorView.editor
-    @editorView = editorView
-    @statusBarView = statusBarView
-    @inlineView = inlineView
+    @editor = @editorView.getModel()
+    unless @editor?
+      warn "No editor instance on this editorView"
     @markers = null
 
-    @initLinters(linters)
+    @initLinters(@linters)
 
     @subscriptions.push atom.workspaceView.on 'pane:item-removed', =>
       @statusBarView.hide()
