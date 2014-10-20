@@ -22,6 +22,10 @@
   "dist": {
     "shasum": "cba2b07481263440b17039d1770ee93ca36fae2e"
   },
-  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114824-60299-k4egla/package.tgz",
-  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114824-60299-k4egla/package.tgz"
+  "_from": "/Users/eric/.atom/.node-gyp/.atom/.apm/docblockr/0.5.8/package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [],
+    "folders": []
+  }
 }

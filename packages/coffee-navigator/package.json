@@ -1,0 +1,31 @@
+{
+  "name": "coffee-navigator",
+  "main": "./lib/coffee-navigator",
+  "version": "0.0.8",
+  "description": "Code navigation panel for Coffee Script",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/suda/coffee-navigator"
+  },
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {
+    "coffee-script": "*",
+    "underscore.string": "*",
+    "q": "^1.0.1"
+  },
+  "readme": "# Coffee Navigator\n\n![Usage](http://cl.ly/image/1H1I472L0I2U/cn.gif)\n\nCode navigation panel for Coffee Script, alternative to `Symbols View: Toggle File Symbols`/`CMD+R`.\n\n# Usage\n\n* Use command palette and search for `Coffee Navigator: Toggle`\n\nor\n\n* `Ctrl-Alt-N`\n\nto toggle navigator.\n",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/suda/coffee-navigator/issues"
+  },
+  "homepage": "https://github.com/suda/coffee-navigator",
+  "_id": "coffee-navigator@0.0.8",
+  "dist": {
+    "shasum": "b64e3be5c9db5f438b92c13076ad48f614991951"
+  },
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-11491-95243-kodju1/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-11491-95243-kodju1/package.tgz"
+}

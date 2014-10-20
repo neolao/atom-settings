@@ -1,53 +1,66 @@
-'exception-reporting':
-  'userId': '5c1b3e91-177a-1a3d-e8d5-6f5458113034'
-'release-notes':
-  'viewedVersion': '0.94.0'
-'welcome':
-  'showOnStartup': false
-'metrics':
-  'userId': 'b53641952e75709991d2d77f556a6ab0a912fea0'
-'editor':
-  'fontFamily': 'DejaVu Sans Mono'
-  'showInvisibles': true
-  'tabLength': 4
-  'showIndentGuide': true
-  'preferredLineLength': 120
-  'fontSize': 19
-'core':
-  'themes': [
-    'neolao-ui'
-    'monokai'
-  ]
-  'projectHome': '/Users/eric/workspace'
-  'disabledPackages': [
-    'aural-coding'
-    'spell-check'
-    'welcome'
-  ]
-'whitespace':
-  'ignoreWhitespaceOnCurrentLine': false
-  'ensureSingleTrailingNewline': false
-  'removeTrailingWhitespace': false
-'autoclose-html':
-  'closeOnEndOfOpeningTag': true
-  'makeNeverCloseElementsSelfClosing': true
-  'forceInline': 'title, h1, h2, h3, h4, h5, h6, p'
-'highlight-column':
-  'opacity': 1
-  'enableHighlight': true
-'linter':
-  'showErrorInline': true
-  'showStatusBarWhenCursorIsInErrorRange': true
-'todo-show':
-  'findTheseRegexes': [
-    'FIXMEs'
-    '/FIXME ?:?(.+$)/g'
-    'TODOs'
-    '/TODO ?:?(.+$)/g'
-    'TODOs'
-    '/@todo ?:?(.+$)/g'
-    'CHANGEDs'
-    '/CHANGED ?:?(.+$)/g'
-  ]
-'project-manager':
-  'sortByTitle': true
+'global':
+  'exception-reporting':
+    'userId': '5c1b3e91-177a-1a3d-e8d5-6f5458113034'
+  'release-notes':
+    'viewedVersion': '0.94.0'
+  'welcome':
+    'showOnStartup': false
+  'metrics':
+    'userId': 'b53641952e75709991d2d77f556a6ab0a912fea0'
+  'editor':
+    'fontFamily': 'DejaVu Sans Mono'
+    'showInvisibles': true
+    'tabLength': 4
+    'showIndentGuide': true
+    'preferredLineLength': 120
+    'fontSize': 20
+    'invisibles': {}
+  'core':
+    'themes': [
+      'neolao-ui'
+      'monokai'
+    ]
+    'projectHome': '/Users/eric/workspace'
+    'disabledPackages': [
+      'aural-coding'
+      'spell-check'
+      'welcome'
+      'symbols-view'
+      'snippets'
+    ]
+  'whitespace':
+    'ignoreWhitespaceOnCurrentLine': false
+    'ensureSingleTrailingNewline': false
+    'removeTrailingWhitespace': false
+  'autoclose-html':
+    'closeOnEndOfOpeningTag': true
+    'makeNeverCloseElementsSelfClosing': true
+    'forceInline': 'title, h1, h2, h3, h4, h5, h6, p'
+  'highlight-column':
+    'opacity': 1
+    'enableHighlight': true
+  'linter':
+    'showErrorInline': true
+    'showStatusBarWhenCursorIsInErrorRange': true
+  'todo-show':
+    'findTheseRegexes': [
+      'FIXMEs'
+      '/FIXME ?:?(.+$)/g'
+      'TODOs'
+      '/TODO ?:?(.+$)/g'
+      'TODOs'
+      '/@todo ?:?(.+$)/g'
+      'CHANGEDs'
+      '/CHANGED ?:?(.+$)/g'
+    ]
+  'project-manager':
+    'sortByTitle': true
+  'atom-ctags':
+    'autoBuildTagsWhenActive': true
+    'cmdArgs': '--exclude=.git --exclude=vendor --exclude=web --exclude=tests'
+  'tree-view':
+    'hideIgnoredNames': true
+  'docblockr':
+    'auto_add_method_tag': true
+    'simple_mode': true
+    'spacer_between_sections': true

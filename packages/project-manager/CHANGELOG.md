@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.10.0
+- You can now add a `group:` setting on a project and sort the projects list by group.
+- Added a marker for projects with `devMode: true` to the projects list to make it more clear that it will open in developer mode
+
+## 1.9.3
+Did a fix that might fix an error that sometimes came up when updating to latest version.
+If an error still comes up, try updating to latest version of Atom, currently 0.135
+
+## 1.9.2
+Bug fix
+
+## 1.9.1
+Now using the updated config system. If you were using "sort by title" you will have to set it again with the new sort by option.
+
 ## 1.9.0
 - You can now add templates in the projects file.
 
