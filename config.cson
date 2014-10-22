@@ -27,6 +27,8 @@
       'welcome'
       'symbols-view'
       'snippets'
+      'feedback'
+      'minimap'
     ]
   'whitespace':
     'ignoreWhitespaceOnCurrentLine': false
@@ -42,6 +44,7 @@
   'linter':
     'showErrorInline': true
     'showStatusBarWhenCursorIsInErrorRange': true
+    'showAllErrorsInStatusBar': true
   'todo-show':
     'findTheseRegexes': [
       'FIXMEs'
@@ -58,9 +61,29 @@
   'atom-ctags':
     'autoBuildTagsWhenActive': true
     'cmdArgs': '--exclude=.git --exclude=vendor --exclude=web --exclude=tests'
-  'tree-view':
-    'hideIgnoredNames': true
+  'tree-view': {}
   'docblockr':
     'auto_add_method_tag': true
     'simple_mode': true
     'spacer_between_sections': true
+  'autocomplete':
+    'includeCompletionsFromAllBuffers': true
+  'autocomplete-plus':
+    'includeCompletionsFromAllBuffers': true
+    'autoActivationDelay': 1000
+    'enableAutoActivation': false
+  'highlight-line':
+    'enableUnderline': true
+    'hideHighlightOnSelect': true
+    'enableSelectionBorder': true
+  'highlight-selected':
+    'highlightBackground': true
+    'lightTheme': true
+    'hideHighlightOnSelectedWord': true
+  'minimap': {}
+  'merge-conflicts':
+    'gitPath': '/usr/bin/git'
+  'toolbar':
+    'visible': false
+  'enhanced-package-list':
+    'sourceFilter': 'user'

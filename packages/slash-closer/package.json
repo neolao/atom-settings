@@ -1,0 +1,32 @@
+{
+  "name": "slash-closer",
+  "main": "./lib/slash-closer",
+  "version": "0.7.0",
+  "description": "Automatically close HTML tags when typing </",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/postcasio/slash-closer"
+  },
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {},
+  "readme": "# slash-closer\n\nAutomatically close HTML tags when typing `</`.\n\nWarning: Uses regex to match HTML. The method is naive and might not work with some valid HTML5 (implicit closing `<p>` or `<li>` tags etc will cause problems)\n",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/postcasio/slash-closer/issues"
+  },
+  "homepage": "https://github.com/postcasio/slash-closer",
+  "_id": "slash-closer@0.7.0",
+  "dist": {
+    "shasum": "7dbb86ceff8614131f12254c90d5c53f8d9611eb"
+  },
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114921-51498-voke4k/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114921-51498-voke4k/package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [],
+    "folders": []
+  }
+}
