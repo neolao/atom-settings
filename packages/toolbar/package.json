@@ -1,7 +1,7 @@
 {
   "name": "toolbar",
   "main": "./lib/toolbar",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Package providing customisable toolbar",
   "repository": {
     "type": "git",
@@ -12,18 +12,18 @@
     "atom": ">0.50.0"
   },
   "dependencies": {},
-  "readme": "# Atom Toolbar\n\nThis package provides extensible toolbar for Atom.\n\n![Horizontal](http://f.cl.ly/items/453U17471p0C2P2L0t0c/toolbar-horizontal.png)\n\n![Vertical](http://f.cl.ly/items/3y041V2Y1l1x3B0G0g1u/toolbar-vertical.png)\n\n![Big Icons](http://f.cl.ly/items/3M1x1A0J0r3m0q292728/toolbar-big.png)\n\n![Light Theme](http://f.cl.ly/items/351g2D1f1o3f0O1H0N2b/toolbar-light.png)\n\n# Configuration\n\n### Orientation\n\n* Top\n* Right\n* Bottom\n* Left\n\n### Icon size\n\n* Small *(16px)*\n* Big *(24px)*\n\n# Plugins\n\nBy itself this package just shows empty bar. To add toolbar to your package use this code:\n\n```coffeescript\natom.packages.activatePackage('toolbar')\n  .then (pkg) =>\n    @toolbar = pkg.mainModule\n\n    @toolbar.appendButton 'octoface', 'application:about', 'About Atom'\n    # Adding spacer\n    @toolbar.appendSpacer()\n    # Using custom icon set\n    @toolbar.appendButton 'gear-a', 'application:show-settings', 'Show Settings', 'ion'\n    # Function as a callback\n    @toolbar.appendButton 'alert', ->\n      alert 'foo'\n    , 'Show Alert'\n```\n\nYou can also prepend buttons/spacers using `prependButton()` and `prependSpacer()` methods.\n\nBoth `prependButton()` and `appendButton` return `ToolbarButtonView` instance which has `setEnabled()` method:\n\n```coffeescript\nbutton = @toolbar.appendButton 'octoface', 'application:about', 'About Atom'\nbutton.setEnabled false\n```\n\n# Supported icon sets\n\n* [Octicons](https://octicons.github.com/) (Atom's flavour)\n* [Ionicons](http://ionicons.com/)\n",
+  "readme": "# Atom Toolbar\n\nThis package provides extensible toolbar for Atom.\n\n![Horizontal](http://f.cl.ly/items/453U17471p0C2P2L0t0c/toolbar-horizontal.png)\n\n![Vertical](http://f.cl.ly/items/3y041V2Y1l1x3B0G0g1u/toolbar-vertical.png)\n\n![Big Icons](http://f.cl.ly/items/3M1x1A0J0r3m0q292728/toolbar-big.png)\n\n![Light Theme](http://f.cl.ly/items/351g2D1f1o3f0O1H0N2b/toolbar-light.png)\n\n# Configuration\n\n### Orientation\n\n* Top\n* Right\n* Bottom\n* Left\n\n### Icon size\n\n* Small *(16px)*\n* Big *(24px)*\n\n# Plugins\n\n* [toolbar-main](https://atom.io/packages/toolbar-main)\n\n# Integrating toolbar with your package\n\nBy itself this package just shows empty bar. To add toolbar to your package use this code:\n\n```coffeescript\natom.packages.activatePackage('toolbar')\n  .then (pkg) =>\n    @toolbar = pkg.mainModule\n\n    @toolbar.appendButton 'octoface', 'application:about', 'About Atom'\n    # Adding spacer\n    @toolbar.appendSpacer()\n    # Using custom icon set (Ionicons)\n    @toolbar.appendButton 'gear-a', 'application:show-settings', 'Show Settings', 'ion'\n    # Using custom icon set (FontAwesome)\n    @toolbar.appendButton 'pied-piper-alt', 'application:open-license', 'Open License', 'fa'\n    # Function as a callback\n    @toolbar.appendButton 'alert', ->\n      alert 'foo'\n    , 'Show Alert'\n```\n\nYou can also prepend buttons/spacers using `prependButton()` and `prependSpacer()` methods.\n\nBoth `prependButton()` and `appendButton` return `ToolbarButtonView` instance which has `setEnabled()` method:\n\n```coffeescript\nbutton = @toolbar.appendButton 'octoface', 'application:about', 'About Atom'\nbutton.setEnabled false\n```\n\n# Supported icon sets\n\n* [Octicons](https://octicons.github.com/) (Atom's flavour)\n* [Ionicons](http://ionicons.com/)\n* [FontAwesome](http://fortawesome.github.io/Font-Awesome/)\n",
   "readmeFilename": "README.md",
   "bugs": {
     "url": "https://github.com/suda/toolbar/issues"
   },
   "homepage": "https://github.com/suda/toolbar",
-  "_id": "toolbar@0.0.3",
+  "_id": "toolbar@0.0.4",
   "dist": {
-    "shasum": "e83399097122467f32066f8d556eac2d3d6a37c6"
+    "shasum": "b2bf3f26fa9a1a6c3d4ba0ec075d34cf934edacd"
   },
-  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114921-51510-rzomhp/package.tgz",
-  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114921-51510-rzomhp/package.tgz",
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114924-69216-1cfsh6l/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114924-69216-1cfsh6l/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [],

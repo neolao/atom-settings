@@ -61,7 +61,6 @@
   'atom-ctags':
     'autoBuildTagsWhenActive': true
     'cmdArgs': '--exclude=.git --exclude=vendor --exclude=web --exclude=tests'
-  'tree-view': {}
   'docblockr':
     'auto_add_method_tag': true
     'simple_mode': true
@@ -70,8 +69,7 @@
     'includeCompletionsFromAllBuffers': true
   'autocomplete-plus':
     'includeCompletionsFromAllBuffers': true
-    'autoActivationDelay': 1000
-    'enableAutoActivation': false
+    'autoActivationDelay': 500
   'highlight-line':
     'enableUnderline': true
     'hideHighlightOnSelect': true
@@ -80,7 +78,6 @@
     'highlightBackground': true
     'lightTheme': true
     'hideHighlightOnSelectedWord': true
-  'minimap': {}
   'merge-conflicts':
     'gitPath': '/usr/bin/git'
   'toolbar':

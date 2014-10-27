@@ -1,7 +1,7 @@
 {
   "name": "http-status-codes",
   "main": "./lib/http-status-codes",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "This package shows a list of HTTP status codes.",
   "repository": {
     "type": "git",
@@ -18,12 +18,12 @@
     "url": "https://github.com/josa42/atom-http-status-codes/issues"
   },
   "homepage": "https://github.com/josa42/atom-http-status-codes",
-  "_id": "http-status-codes@1.0.1",
+  "_id": "http-status-codes@1.0.2",
   "dist": {
-    "shasum": "92893a51f43faa8147a4847acde43a6ec9a732a5"
+    "shasum": "797ee95949b2bfa511bec0d836300c1eb7c7b2f0"
   },
-  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114921-51469-56ysfd/package.tgz",
-  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114921-51469-56ysfd/package.tgz",
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114924-69199-7wc43h/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114924-69199-7wc43h/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [],

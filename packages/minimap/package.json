@@ -1,7 +1,7 @@
 {
   "name": "minimap",
   "main": "./lib/minimap",
-  "version": "3.3.3",
+  "version": "3.3.4",
   "private": true,
   "description": "A preview of the full source code.",
   "author": {
@@ -43,12 +43,12 @@
     "url": "https://github.com/fundon/atom-minimap/issues"
   },
   "homepage": "https://github.com/fundon/atom-minimap",
-  "_id": "minimap@3.3.3",
+  "_id": "minimap@3.3.4",
   "dist": {
-    "shasum": "db3a5f77d42b02f3fd1687de506aac8bb13340b2"
+    "shasum": "1016f4e2e68bbcc9c4ed299e7124958451524327"
   },
-  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114920-40784-56adcl/package.tgz",
-  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114920-40784-56adcl/package.tgz",
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114924-69200-1fdzq4x/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114924-69200-1fdzq4x/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
@@ -124,7 +124,7 @@
       },
       {
         "name": "underscore-plus",
-        "version": "1.5.1",
+        "version": "1.6.1",
         "path": "node_modules/underscore-plus/lib/underscore-plus.js"
       },
       {
