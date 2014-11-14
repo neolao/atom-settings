@@ -1,7 +1,7 @@
 {
   "name": "coffee-navigator",
   "main": "./lib/coffee-navigator",
-  "version": "0.0.8",
+  "version": "0.0.13",
   "description": "Code navigation panel for Coffee Script",
   "repository": {
     "type": "git",
@@ -12,7 +12,6 @@
     "atom": ">0.50.0"
   },
   "dependencies": {
-    "coffee-script": "*",
     "underscore.string": "*",
     "q": "^1.0.1"
   },
@@ -22,10 +21,59 @@
     "url": "https://github.com/suda/coffee-navigator/issues"
   },
   "homepage": "https://github.com/suda/coffee-navigator",
-  "_id": "coffee-navigator@0.0.8",
+  "_id": "coffee-navigator@0.0.13",
   "dist": {
-    "shasum": "b64e3be5c9db5f438b92c13076ad48f614991951"
+    "shasum": "df5a11edeff48c1fcdc61aec12e858ac9fd83c60"
   },
-  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-11491-95243-kodju1/package.tgz",
-  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-11491-95243-kodju1/package.tgz"
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141014-55857-1708r85/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141014-55857-1708r85/package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [
+      {
+        "name": "q",
+        "version": "1.1.1",
+        "path": "node_modules/q/q.js"
+      },
+      {
+        "name": "underscore.string",
+        "version": "2.3.3",
+        "path": "node_modules/underscore.string/lib/underscore.string.js"
+      }
+    ],
+    "extensions": {
+      ".coffee": [
+        "lib/coffee-navigator-view.coffee",
+        "lib/coffee-navigator.coffee",
+        "lib/tag-generator.coffee"
+      ],
+      ".js": [
+        "node_modules/q/benchmark/compare-with-callbacks.js",
+        "node_modules/q/benchmark/scenarios.js",
+        "node_modules/q/q.js",
+        "node_modules/q/queue.js",
+        "node_modules/underscore.string/dist/underscore.string.min.js",
+        "node_modules/underscore.string/lib/underscore.string.js"
+      ],
+      ".json": [
+        "node_modules/q/package.json",
+        "node_modules/underscore.string/component.json",
+        "node_modules/underscore.string/package.json",
+        "package.json"
+      ]
+    },
+    "folders": [
+      {
+        "paths": [
+          "lib",
+          "",
+          "spec"
+        ],
+        "dependencies": {
+          "underscore.string": "*",
+          "q": "^1.0.1"
+        }
+      }
+    ]
+  }
 }

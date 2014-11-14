@@ -1,3 +1,18 @@
+## 0.0.13
+* Fixed errors with latest Atom
+
+## 0.0.12
+* Fixed issue with class names
+
+## 0.0.11
+* Fixed issue with switching panes
+
+## 0.0.10
+* Switched to ctags for parsing
+
+## 0.0.9
+* Bug fixes
+
 ## 0.0.8
 * Support for static methods
 

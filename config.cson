@@ -11,10 +11,10 @@
     'fontFamily': 'DejaVu Sans Mono'
     'showInvisibles': true
     'tabLength': 4
-    'showIndentGuide': true
     'preferredLineLength': 120
-    'fontSize': 20
+    'fontSize': 21
     'invisibles': {}
+    'showIndentGuide': true
   'core':
     'themes': [
       'neolao-ui'
@@ -82,5 +82,8 @@
     'gitPath': '/usr/bin/git'
   'toolbar':
     'visible': false
+  'zentabs':
+    'neverCloseUnsaved': true
+    'maximumOpenedTabs': 10
   'enhanced-package-list':
     'sourceFilter': 'user'

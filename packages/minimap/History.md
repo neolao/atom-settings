@@ -1,8 +1,27 @@
+3.3.8 / 2014-11-14
+==================
+
+* exclude handling of text editor views that doesn't belong to a pane view
+
+3.3.7 / 2014-11-12
+==================
+
+* fix links to documentation in Readme
+
+3.3.6 / 2014-11-06
+==================
+
+* fix using `.editor` in tokens scopes breaks layout
+
+3.3.5 / 2014-11-06
+==================
+
+* fix relying on overlayer to compute scroll offset
+
 3.3.4 / 2014-10-22
 ==================
 
 * fix access to deprecated scopes property of tokens
-
 
 3.3.3 / 2014-10-13
 ==================

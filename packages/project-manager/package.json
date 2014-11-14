@@ -1,7 +1,7 @@
 {
   "name": "project-manager",
   "main": "./lib/project-manager",
-  "version": "1.10.1",
+  "version": "1.10.2",
   "description": "Project Manager for easy access and switching between projects in Atom.",
   "repository": {
     "type": "git",
@@ -22,18 +22,18 @@
     "season": "1.x",
     "underscore-plus": "1.5.1"
   },
-  "readme": "# Project Manager\n\n![Project Manager](https://raw.github.com/danielbrodin/atom-project-manager/master/project-manager.gif)\n\nA package for saving your projects for fast and easy access.\n\n## Installation\n```sh\napm install project-manager\n```\nor find it in the Packages tab under settings\n\n## Usage\nAll commands can also be found in the Packages menu\n### List projects\n`ctrl-cmd-p` (mac) / `ctrl-shift-alt-p` (win & linux) or **Project Manager** in the Command Palette.\n\n### Save project\n**Project Manager: Save Project** in the Command Palette and write the title you want to save the project as.\n\n### Edit projects\nAll projects are saved in a `.cson` file which you can easily reach by searching for **Project Manager: Edit Projects** in the Command Palette.\n\n## Project Settings\n### `settings:`\nUnder settings you can set everything that you can have in the `config.cson` file which is what you see under the settings view.\nThe formatting should be as follows:\n```\n'settings':\n  'editor.tabLength': 2\n  'project-manager.showPath': true\n```\nThe settings will be updated on change, but can also manually be done from the command palette with **Project Manager: Reload Project Settings**\n\n### `devMode:`\nWill open the project in dev mode. The API for this doesn't work perfectly though so if you try to switch to a project that is already open in dev mode, a new window will open.\n\n### `icon:`\nThis changes the icon displayed next to the project title in the list view. The icon is class-based, so you can either use the classes already provided by Atom like `icon-squirrel` or make your own class (target `:before`). The GitHub [octicon](https://github.com/styleguide/css/7.0) font is available to use, and most, if not all classes, just replace `octicon-` with `icon-`.\n\n### `template:`\nYou can specify a template in the `projects.cson` file to share settings between projects. The settings will merge so you can still specify project specific settings.\n\n### `group:`\nYou can specify a group that the project belongs to and then sort the projects list after group.\n\n### Example\n```coffeeScript\n'Project Manager':\n  'title': 'Project Manager'\n  'devMode': true\n  'group': 'Atom'\n  'template': 'coffeescript-template'\n  'paths': [\n    '/path/to/project-manager'\n  ]\n  'settings':\n    'editor.showIndentGuide': false\n    'project-manager:showPath': true\n\n'coffeescript-template':\n  'icon': 'icon-coffeescript'\n  'settings':\n    'editor.tabLength': 2\n    'editor.preferredLineLength': 80\n```\n\n## Package Settings\n**Show Path:** Shows the path in the list view\n\n**Close Current:** Closes the current window before opening the new project\n\n**Environment Specific Projects:** Use `projects.[hostname].cson` instead of `projects.cson`\n\n**Sort By:** Sorts the projects list by selected option",
+  "readme": "# Project Manager\n\n![Project Manager](https://raw.github.com/danielbrodin/atom-project-manager/master/project-manager.gif)\n\nA package for saving your projects for fast and easy access.\n\n## Installation\n```sh\napm install project-manager\n```\nor find it in the Packages tab under settings\n\n## Usage\nAll commands can also be found in the Packages menu\n### List projects\n`ctrl-cmd-p` (mac) / `ctrl-shift-alt-p` (win & linux) or **Project Manager** in the Command Palette.\n\n### Save project\n**Project Manager: Save Project** in the Command Palette and write the title you want to save the project as.\n\n### Edit projects\nAll projects are saved in a `.cson` file which you can easily reach by searching for **Project Manager: Edit Projects** in the Command Palette.\n\n## Project Settings\n### `settings:`\nUnder settings you can set everything that you can have in the `config.cson` file which is what you see under the settings view.\nThe formatting should be as follows:\n```\n'settings':\n  'editor.tabLength': 2\n  'project-manager.showPath': true\n```\nThe settings will be updated on change, but can also manually be done from the command palette with **Project Manager: Reload Project Settings**\n\n### `devMode:`\nWill open the project in dev mode. The API for this doesn't work perfectly though so if you try to switch to a project that is already open in dev mode, a new window will open.\n\n### `icon:`\nThis changes the icon displayed next to the project title in the list view. The icon is class-based, so you can either use the classes already provided by Atom like `icon-squirrel` or make your own class (target `:before`). The GitHub [octicon](https://github.com/styleguide/css/7.0) font is available to use, and most, if not all classes, just replace `octicon-` with `icon-`.\n\n### `template:`\nYou can specify a template in the `projects.cson` file to share settings between projects. The settings will merge so you can still specify project specific settings.\n\n### `group:`\nYou can specify a group that the project belongs to and then sort the projects list after group.\n\n### Example\n```coffeeScript\n'Project Manager':\n  'title': 'Project Manager'\n  'devMode': true\n  'group': 'Atom'\n  'template': 'coffeescript-template'\n  'paths': [\n    '/path/to/project-manager'\n  ]\n  'settings':\n    'editor.showIndentGuide': false\n    'project-manager:showPath': true\n\n'coffeescript-template':\n  'icon': 'icon-coffeescript'\n  'settings':\n    'editor.tabLength': 2\n    'editor.preferredLineLength': 80\n```\n\n## Package Settings\n**Show Path:** Shows the path in the list view\n\n~~**Close Current:** Closes the current window before opening the new project~~ *(Currently disabled)*\n\n**Environment Specific Projects:** Use `projects.[hostname].cson` instead of `projects.cson`\n\n**Sort By:** Sorts the projects list by selected option",
   "readmeFilename": "README.md",
   "bugs": {
     "url": "https://github.com/danielbrodin/atom-project-manager/issues"
   },
   "homepage": "https://github.com/danielbrodin/atom-project-manager",
-  "_id": "project-manager@1.10.1",
+  "_id": "project-manager@1.10.2",
   "dist": {
-    "shasum": "1760308f6409876c0f523895a50a9024e7b98dae"
+    "shasum": "8e9b57d14f4edba99d14caa650686fe98b40dfe6"
   },
-  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114924-69208-6pvg5r/package.tgz",
-  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114924-69208-6pvg5r/package.tgz",
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141014-55870-zb4lvd/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141014-55870-zb4lvd/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
@@ -93,6 +93,79 @@
         "path": "node_modules/underscore-plus/node_modules/underscore/underscore.js"
       }
     ],
+    "extensions": {
+      ".coffee": [
+        "lib/project-manager-add-view.coffee",
+        "lib/project-manager-view.coffee",
+        "lib/project-manager.coffee"
+      ],
+      ".js": [
+        "node_modules/season/lib/cson.js",
+        "node_modules/season/lib/csonc.js",
+        "node_modules/season/node_modules/coffee-script/lib/coffee-script/browser.js",
+        "node_modules/season/node_modules/coffee-script/lib/coffee-script/cake.js",
+        "node_modules/season/node_modules/coffee-script/lib/coffee-script/coffee-script.js",
+        "node_modules/season/node_modules/coffee-script/lib/coffee-script/command.js",
+        "node_modules/season/node_modules/coffee-script/lib/coffee-script/grammar.js",
+        "node_modules/season/node_modules/coffee-script/lib/coffee-script/helpers.js",
+        "node_modules/season/node_modules/coffee-script/lib/coffee-script/index.js",
+        "node_modules/season/node_modules/coffee-script/lib/coffee-script/lexer.js",
+        "node_modules/season/node_modules/coffee-script/lib/coffee-script/nodes.js",
+        "node_modules/season/node_modules/coffee-script/lib/coffee-script/optparse.js",
+        "node_modules/season/node_modules/coffee-script/lib/coffee-script/parser.js",
+        "node_modules/season/node_modules/coffee-script/lib/coffee-script/register.js",
+        "node_modules/season/node_modules/coffee-script/lib/coffee-script/repl.js",
+        "node_modules/season/node_modules/coffee-script/lib/coffee-script/rewriter.js",
+        "node_modules/season/node_modules/coffee-script/lib/coffee-script/scope.js",
+        "node_modules/season/node_modules/coffee-script/lib/coffee-script/sourcemap.js",
+        "node_modules/season/node_modules/coffee-script/node_modules/mkdirp/examples/pow.js",
+        "node_modules/season/node_modules/coffee-script/node_modules/mkdirp/index.js",
+        "node_modules/season/node_modules/coffee-script/register.js",
+        "node_modules/season/node_modules/fs-plus/lib/fs-plus.js",
+        "node_modules/season/node_modules/fs-plus/node_modules/async/lib/async.js",
+        "node_modules/season/node_modules/fs-plus/node_modules/mkdirp/examples/pow.js",
+        "node_modules/season/node_modules/fs-plus/node_modules/mkdirp/index.js",
+        "node_modules/season/node_modules/fs-plus/node_modules/rimraf/bin.js",
+        "node_modules/season/node_modules/fs-plus/node_modules/rimraf/rimraf.js",
+        "node_modules/season/node_modules/optimist/example/bool.js",
+        "node_modules/season/node_modules/optimist/example/boolean_double.js",
+        "node_modules/season/node_modules/optimist/example/boolean_single.js",
+        "node_modules/season/node_modules/optimist/example/default_hash.js",
+        "node_modules/season/node_modules/optimist/example/default_singles.js",
+        "node_modules/season/node_modules/optimist/example/divide.js",
+        "node_modules/season/node_modules/optimist/example/line_count.js",
+        "node_modules/season/node_modules/optimist/example/line_count_options.js",
+        "node_modules/season/node_modules/optimist/example/line_count_wrap.js",
+        "node_modules/season/node_modules/optimist/example/nonopt.js",
+        "node_modules/season/node_modules/optimist/example/reflect.js",
+        "node_modules/season/node_modules/optimist/example/short.js",
+        "node_modules/season/node_modules/optimist/example/string.js",
+        "node_modules/season/node_modules/optimist/example/usage-options.js",
+        "node_modules/season/node_modules/optimist/example/xup.js",
+        "node_modules/season/node_modules/optimist/index.js",
+        "node_modules/season/node_modules/optimist/node_modules/wordwrap/example/center.js",
+        "node_modules/season/node_modules/optimist/node_modules/wordwrap/example/meat.js",
+        "node_modules/season/node_modules/optimist/node_modules/wordwrap/index.js",
+        "node_modules/underscore-plus/lib/underscore-plus.js",
+        "node_modules/underscore-plus/node_modules/underscore/underscore-min.js",
+        "node_modules/underscore-plus/node_modules/underscore/underscore.js"
+      ],
+      ".json": [
+        "node_modules/season/node_modules/coffee-script/node_modules/mkdirp/package.json",
+        "node_modules/season/node_modules/coffee-script/package.json",
+        "node_modules/season/node_modules/fs-plus/node_modules/async/component.json",
+        "node_modules/season/node_modules/fs-plus/node_modules/async/package.json",
+        "node_modules/season/node_modules/fs-plus/node_modules/mkdirp/package.json",
+        "node_modules/season/node_modules/fs-plus/node_modules/rimraf/package.json",
+        "node_modules/season/node_modules/fs-plus/package.json",
+        "node_modules/season/node_modules/optimist/node_modules/wordwrap/package.json",
+        "node_modules/season/node_modules/optimist/package.json",
+        "node_modules/season/package.json",
+        "node_modules/underscore-plus/node_modules/underscore/package.json",
+        "node_modules/underscore-plus/package.json",
+        "package.json"
+      ]
+    },
     "folders": [
       {
         "paths": [

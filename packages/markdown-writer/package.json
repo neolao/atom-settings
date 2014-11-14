@@ -1,7 +1,7 @@
 {
   "name": "markdown-writer",
   "main": "./lib/main",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "description": "Make Atom a better Markdown editor for blogs.",
   "activationEvents": [
     "markdown-writer:new-post",
@@ -62,10 +62,1111 @@
   },
   "readme": "# Markdown-Writer for Atom\n\nMakes [Atom](https://atom.io/) a better Markdown editor!\n\nWorks great with static blogs. Try it with [Jekyll](http://jekyllrb.com/), [Octopress](http://octopress.org/), [Hexo](http://hexo.io/) and any other static blog engines.\n\n![Insert Image](http://i.imgur.com/s9ekMns.gif)\n\nMore GIFs Here:\n\n- [Create New Post](http://i.imgur.com/BwntxhB.gif)\n- [Insert Reference Link](http://i.imgur.com/L67TqyF.gif)\n- [Remove Reference Link](http://i.imgur.com/TglzeJV.gif)\n\n## Features\n\n- **Create new post** with front matter.\n- **Create new draft** with front matter.\n- **Publish draft** moves file to `_posts` directory, updates `date` and optionally renames the filename using `title` in front matter.\n- **Manage tags and categories in front matter** (configuration required).\n- **Continue markdown lists** when you press `enter`.\n- **Insert link** (`shift-cmd-k`) and **automatically link to the text next time** (My favorite feature from Windows Live Writer).\n  - Insert inline link by default\n  - Insert reference link if title is specified. Use `-` for an empty title.\n  - Remove link (and its reference) after URL is deleted\n  - Search published posts by title (configuration required)\n- **Insert image** (`shift-cmd-i`) and its height and width auto-detected.\n- **Insert table** and shortcuts for **jumping to next cell and formatting table**.\n- **Toggle text styles**:\n  - `code` (`cmd-'`)\n  - **bold** (`cmd-b`)\n  - _italic_ (`cmd-i`)\n  - ~~strikethrough~~ (`cmd-h`)\n  - `'''codeblock'''` (`shift-cmd-\"`)\n  - `<kbd>key</kbd>` (`cmd + k`)\n  - `- unordered list` (`shift-cmd-U`)\n  - `0. ordered list` (`shift-cmd-O`)\n  - `> blockquote` (`shift-cmd->`)\n  - `- [ ] task list` (`markdown-writer:toggle-task`)\n- **Toggle headings**: `ctrl-alt-[1-5]` to switch among `H1` to `H5`.\n- **Helper commands**:\n  - Jump to previous heading (`cmd-j cmd-p`)\n  - Jump to next heading (`cmd-j cmd-n`)\n  - Jump to next tabel cell (`cmd-j cmd-t`)\n  - Jump to reference marker/definition (`cmd-j cmd-d`)\n  - Format table (`markdown-writer:format-table`)\n- **Markdown cheat sheet** (`Markdown Writer: Open Cheat Sheet`).\n\nYou can trigger these features using:\n\n- Command Palette (`shift-cmd-P`), enter `Markdown Writer`\n- Menu Bar `Packages -> Markdown Writer`.\n\n## Setup\n\nYou need to configure markdown-writer to use some of the features.\n\nGo to `Preferences` (`cmd-,`), search `markdown writer` package.\n\nDefault settings can be found [here](https://github.com/zhuochun/md-writer/blob/master/lib/config.coffee).\n\n### Basic Settings:\n\n- **siteEngine**: The static engine of your blog. This could alter behaviours as shown [here](https://github.com/zhuochun/md-writer/blob/master/lib/config.coffee#L52).\n- **siteLocalDir**: The root directory of your blog.\n- **siteDraftsDir**: The directory of drafts from the root of `siteLocalDir`. Default is `_draft/`.\n- **sitePostsDir**: The directory of posts from the root of `siteLocalDir`. Default is `_posts/{year}`. You can also use `{year}`, `{month}` and `{day}`.\n- **newPostFileName**: The filename format of new posts created. Default is `{year}-{month}-{day}-{title}{extension}`.\n- **fileExtension**: The file extension of posts/drafts. Default is `.markdown`.\n- **urlForTags**: The URL to tags `JSON` file. Refer to next section.\n- **urlForPosts**: The URL to posts `JSON` file. Refer to next section.\n- **urlForCategories**: The URL to categories `JSON` file. Refer to next section.\n\n### Advance Settings:\n\nTo change these settings, open your Atom Config file, find `markdown-writer` entry.\n\n- **publishRenameBasedOnTitle**: Determine whether publish rename filename based on title in front matter. Default is `false` (boolean).\n- **publishKeepFileExtname**: Determine whether publish keep draft's extname used. Default is `false` (boolean).\n- **siteLinkPath**: Define path (string) to a `.cson` file that stores all links added for automatic linking next time. Default uses `markdown-writer-links.cson` in Atom's config directory.\n- **frontMatter**: Define front matter (string) used when create new post/draft.\n- **codeblock**: Define fenced code block (object). Default uses GitHub's fenced code block.\n- **imageTag**: Define image tag inserted (string). Default uses `![alt](img-url)`.\n\nThis is an example of advance configuration:\n\n```coffee\n'markdown-writer':\n  # sync the saved links in dropbox\n  'siteLinkPath': '/Users/zhuochun/Dropbox/blog/links.cson'\n  # use Hexo front matter format\n  'frontMatter': \"\"\"\n  layout: <layout>\n  title: \"<title>\"\n  date: \"<date>\"\n  ---\n  \"\"\"\n  # use jekyll highlight code block\n  # change this requires reload, shift-cmd-P -> Window Reload\n  'codeblock':\n    'before': '{% highlight %}\\n'\n    'after': '\\n{% endhighlight %}'\n    'regexBefore': '{% highlight(?: .+)? %}\\n'\n    'regexAfter': '\\n{% endhighlight %}'\n  # use octopress img tag\n  'imageTag': \"{% img <align> <src> <width> <height> '{alt}' %}\"\n```\n\n## Populate Tags/Categories/Posts\n\n![Manage Tags](http://i.imgur.com/amt2m0Y.png)\n\nTo **manage tags/categories in front matter** or **search published posts when inserting links**, you need to provide `JSON` files that contains tags/categories/posts in your blog.\n\nThe `JSON` files should contain following information of your blog:\n\n```json\n{\n  \"tags\": [\"tag a\", \"tag b\", \"...\"],\n  \"categories\": [\"category a\", \"category b\", \"...\"],\n  \"posts\": [{\"title\": \"post a\", \"url\": \"url/to/post/a\"}]\n}\n```\n\nFor **Jekyll/Octopress** users, you can add [these scripts](https://gist.github.com/zhuochun/fe127356bcf8c07ae1fb) to your Jekyll directory and upload the generated `JSON` files.\n\nFor **Hexo** users, you can install [hexo-generator-atom-markdown-writer-meta](https://github.com/timnew/hexo-generator-atom-markdown-writer-meta) (Thanks to [@timnew](https://github.com/timnew)).\n\n## FAQs\n\n#### How to disable default key mappings, e.g. `ctrl-alt-[1-5]`?\n\nGo to `Atom -> Open your Keymap`, paste the following:\n\n```coffee\n'.platform-darwin .editor':\n  'ctrl-alt-1': 'unset!'\n  'ctrl-alt-2': 'unset!'\n  'ctrl-alt-3': 'unset!'\n  'ctrl-alt-4': 'unset!'\n  'ctrl-alt-5': 'unset!'\n```\n\nDefault mappings can be found in [keymaps/md.cson](https://github.com/zhuochun/md-writer/blob/master/keymaps/md.cson).\n\nA list of all commands can be found [here](https://github.com/zhuochun/md-writer/blob/master/package.json).\n\n## TODOs\n\n- Support multiple blog directories\n\n## Project\n\n- View [CHANGELOG][e45121fa] :notebook_with_decorative_cover:.\n- Bugs, suggestions & feature requests, [open an issue][e6ad7ed1] :octocat:.\n- License in [MIT][6a9a3773] :unlock:. Copyright (C) 2014 [Zhuochun][41ae693b].\n\n  [e45121fa]: https://github.com/zhuochun/md-writer/blob/master/CHANGELOG.md\n  [e6ad7ed1]: https://github.com/zhuochun/md-writer/issues\n  [6a9a3773]: https://github.com/zhuochun/md-writer/blob/master/LICENSE.md\n  [41ae693b]: https://github.com/zhuochun\n\n## Tips\n\n- A light theme targets Markdown: Copy [this Gist](https://gist.github.com/zhuochun/b3659bcea98fca56cb43) to your Stylesheet.\n  - Better highlights for all syntax in Markdown.\n- Jumping among your posts: `Cmd-t` or `Cmd-p`.\n- Markdown Preview: [markdown-preview](https://atom.io/packages/markdown-preview) package.\n",
   "readmeFilename": "README.md",
-  "_id": "markdown-writer@0.9.1",
+  "_id": "markdown-writer@0.10.0",
   "dist": {
-    "shasum": "0d877f54c73368835929b20159a27834eb074b20"
+    "shasum": "bc77362498ec385a56ef24b80326a05d9d37884d"
   },
-  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-11491-92280-cgr734/package.tgz",
-  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-11491-92280-cgr734/package.tgz"
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114103-62975-x4ixgo/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114103-62975-x4ixgo/package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [
+      {
+        "name": "fs-plus",
+        "version": "2.3.1",
+        "path": "node_modules/fs-plus/lib/fs-plus.js"
+      },
+      {
+        "name": "async",
+        "version": "0.2.10",
+        "path": "node_modules/fs-plus/node_modules/async/lib/async.js"
+      },
+      {
+        "name": "mkdirp",
+        "version": "0.3.5",
+        "path": "node_modules/fs-plus/node_modules/mkdirp/index.js"
+      },
+      {
+        "name": "rimraf",
+        "version": "2.2.8",
+        "path": "node_modules/fs-plus/node_modules/rimraf/rimraf.js"
+      },
+      {
+        "name": "underscore-plus",
+        "version": "1.6.1",
+        "path": "node_modules/fs-plus/node_modules/underscore-plus/lib/underscore-plus.js"
+      },
+      {
+        "name": "underscore",
+        "version": "1.6.0",
+        "path": "node_modules/fs-plus/node_modules/underscore-plus/node_modules/underscore/underscore.js"
+      },
+      {
+        "name": "guid",
+        "version": "0.0.12",
+        "path": "node_modules/guid/guid.js"
+      },
+      {
+        "name": "js-yaml",
+        "version": "3.2.2",
+        "path": "node_modules/js-yaml/index.js"
+      },
+      {
+        "name": "argparse",
+        "version": "0.1.15",
+        "path": "node_modules/js-yaml/node_modules/argparse/index.js"
+      },
+      {
+        "name": "underscore",
+        "version": "1.4.4",
+        "path": "node_modules/js-yaml/node_modules/argparse/node_modules/underscore/underscore.js"
+      },
+      {
+        "name": "underscore.string",
+        "version": "2.3.3",
+        "path": "node_modules/js-yaml/node_modules/argparse/node_modules/underscore.string/lib/underscore.string.js"
+      },
+      {
+        "name": "esprima",
+        "version": "1.0.4",
+        "path": "node_modules/js-yaml/node_modules/esprima/esprima.js"
+      },
+      {
+        "name": "request",
+        "version": "2.47.0",
+        "path": "node_modules/request/index.js"
+      },
+      {
+        "name": "aws-sign2",
+        "version": "0.5.0",
+        "path": "node_modules/request/node_modules/aws-sign2/index.js"
+      },
+      {
+        "name": "bl",
+        "version": "0.9.3",
+        "path": "node_modules/request/node_modules/bl/bl.js"
+      },
+      {
+        "name": "readable-stream",
+        "version": "1.0.33",
+        "path": "node_modules/request/node_modules/bl/node_modules/readable-stream/readable.js"
+      },
+      {
+        "name": "core-util-is",
+        "version": "1.0.1",
+        "path": "node_modules/request/node_modules/bl/node_modules/readable-stream/node_modules/core-util-is/lib/util.js"
+      },
+      {
+        "name": "inherits",
+        "version": "2.0.1",
+        "path": "node_modules/request/node_modules/bl/node_modules/readable-stream/node_modules/inherits/inherits.js"
+      },
+      {
+        "name": "isarray",
+        "version": "0.0.1",
+        "path": "node_modules/request/node_modules/bl/node_modules/readable-stream/node_modules/isarray/index.js"
+      },
+      {
+        "name": "string_decoder",
+        "version": "0.10.31",
+        "path": "node_modules/request/node_modules/bl/node_modules/readable-stream/node_modules/string_decoder/index.js"
+      },
+      {
+        "name": "caseless",
+        "version": "0.6.0",
+        "path": "node_modules/request/node_modules/caseless/index.js"
+      },
+      {
+        "name": "combined-stream",
+        "version": "0.0.7",
+        "path": "node_modules/request/node_modules/combined-stream/lib/combined_stream.js"
+      },
+      {
+        "name": "delayed-stream",
+        "version": "0.0.5",
+        "path": "node_modules/request/node_modules/combined-stream/node_modules/delayed-stream/lib/delayed_stream.js"
+      },
+      {
+        "name": "forever-agent",
+        "version": "0.5.2",
+        "path": "node_modules/request/node_modules/forever-agent/index.js"
+      },
+      {
+        "name": "form-data",
+        "version": "0.1.4",
+        "path": "node_modules/request/node_modules/form-data/lib/form_data.js"
+      },
+      {
+        "name": "async",
+        "version": "0.9.0",
+        "path": "node_modules/request/node_modules/form-data/node_modules/async/lib/async.js"
+      },
+      {
+        "name": "mime",
+        "version": "1.2.11",
+        "path": "node_modules/request/node_modules/form-data/node_modules/mime/mime.js"
+      },
+      {
+        "name": "hawk",
+        "version": "1.1.1",
+        "path": "node_modules/request/node_modules/hawk/index.js"
+      },
+      {
+        "name": "boom",
+        "version": "0.4.2",
+        "path": "node_modules/request/node_modules/hawk/node_modules/boom/index.js"
+      },
+      {
+        "name": "cryptiles",
+        "version": "0.2.2",
+        "path": "node_modules/request/node_modules/hawk/node_modules/cryptiles/index.js"
+      },
+      {
+        "name": "hoek",
+        "version": "0.9.1",
+        "path": "node_modules/request/node_modules/hawk/node_modules/hoek/index.js"
+      },
+      {
+        "name": "sntp",
+        "version": "0.2.4",
+        "path": "node_modules/request/node_modules/hawk/node_modules/sntp/index.js"
+      },
+      {
+        "name": "http-signature",
+        "version": "0.10.0",
+        "path": "node_modules/request/node_modules/http-signature/lib/index.js"
+      },
+      {
+        "name": "asn1",
+        "version": "0.1.11",
+        "path": "node_modules/request/node_modules/http-signature/node_modules/asn1/lib/index.js"
+      },
+      {
+        "name": "assert-plus",
+        "version": "0.1.2",
+        "path": "node_modules/request/node_modules/http-signature/node_modules/assert-plus/assert.js"
+      },
+      {
+        "name": "ctype",
+        "version": "0.5.2",
+        "path": "node_modules/request/node_modules/http-signature/node_modules/ctype/ctype.js"
+      },
+      {
+        "name": "json-stringify-safe",
+        "version": "5.0.0",
+        "path": "node_modules/request/node_modules/json-stringify-safe/stringify.js"
+      },
+      {
+        "name": "mime-types",
+        "version": "1.0.2",
+        "path": "node_modules/request/node_modules/mime-types/lib/index.js"
+      },
+      {
+        "name": "node-uuid",
+        "version": "1.4.1",
+        "path": "node_modules/request/node_modules/node-uuid/uuid.js"
+      },
+      {
+        "name": "oauth-sign",
+        "version": "0.4.0",
+        "path": "node_modules/request/node_modules/oauth-sign/index.js"
+      },
+      {
+        "name": "qs",
+        "version": "2.3.2",
+        "path": "node_modules/request/node_modules/qs/index.js"
+      },
+      {
+        "name": "stringstream",
+        "version": "0.0.4",
+        "path": "node_modules/request/node_modules/stringstream/stringstream.js"
+      },
+      {
+        "name": "tough-cookie",
+        "version": "0.12.1",
+        "path": "node_modules/request/node_modules/tough-cookie/lib/cookie.js"
+      },
+      {
+        "name": "punycode",
+        "version": "1.3.2",
+        "path": "node_modules/request/node_modules/tough-cookie/node_modules/punycode/punycode.js"
+      },
+      {
+        "name": "tunnel-agent",
+        "version": "0.4.0",
+        "path": "node_modules/request/node_modules/tunnel-agent/index.js"
+      },
+      {
+        "name": "season",
+        "version": "2.0.0",
+        "path": "node_modules/season/lib/cson.js"
+      },
+      {
+        "name": "cson-safe",
+        "version": "0.1.1",
+        "path": "node_modules/season/node_modules/cson-safe/lib/cson-safe.js"
+      },
+      {
+        "name": "coffee-script-redux",
+        "version": "2.0.0-beta8",
+        "path": "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/lib/module.js"
+      },
+      {
+        "name": "cscodegen",
+        "version": "0.1.0",
+        "path": "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/cscodegen/lib/cscodegen.js"
+      },
+      {
+        "name": "escodegen",
+        "version": "0.0.28",
+        "path": "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/escodegen/escodegen.js"
+      },
+      {
+        "name": "esprima",
+        "version": "1.0.4",
+        "path": "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/escodegen/node_modules/esprima/esprima.js"
+      },
+      {
+        "name": "estraverse",
+        "version": "1.3.2",
+        "path": "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/escodegen/node_modules/estraverse/estraverse.js"
+      },
+      {
+        "name": "esmangle",
+        "version": "0.0.17",
+        "path": "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/esmangle.js"
+      },
+      {
+        "name": "escope",
+        "version": "1.0.1",
+        "path": "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/escope/escope.js"
+      },
+      {
+        "name": "esprima",
+        "version": "1.0.4",
+        "path": "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/esprima/esprima.js"
+      },
+      {
+        "name": "esshorten",
+        "version": "0.0.2",
+        "path": "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/esshorten/lib/esshorten.js"
+      },
+      {
+        "name": "estraverse",
+        "version": "1.2.0",
+        "path": "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/esshorten/node_modules/estraverse/estraverse.js"
+      },
+      {
+        "name": "estraverse",
+        "version": "1.3.2",
+        "path": "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/estraverse/estraverse.js"
+      },
+      {
+        "name": "nopt",
+        "version": "2.1.2",
+        "path": "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/nopt/lib/nopt.js"
+      },
+      {
+        "name": "abbrev",
+        "version": "1.0.5",
+        "path": "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/nopt/node_modules/abbrev/abbrev.js"
+      },
+      {
+        "name": "source-map",
+        "version": "0.1.11",
+        "path": "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/lib/source-map.js"
+      },
+      {
+        "name": "amdefine",
+        "version": "0.1.0",
+        "path": "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/node_modules/amdefine/amdefine.js"
+      },
+      {
+        "name": "StringScanner",
+        "version": "0.0.3",
+        "path": "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/StringScanner/lib/StringScanner.js"
+      },
+      {
+        "name": "optimist",
+        "version": "0.4.0",
+        "path": "node_modules/season/node_modules/optimist/index.js"
+      },
+      {
+        "name": "wordwrap",
+        "version": "0.0.2",
+        "path": "node_modules/season/node_modules/optimist/node_modules/wordwrap/index.js"
+      },
+      {
+        "name": "underscore-plus",
+        "version": "1.6.1",
+        "path": "node_modules/season/node_modules/underscore-plus/lib/underscore-plus.js"
+      },
+      {
+        "name": "underscore",
+        "version": "1.6.0",
+        "path": "node_modules/season/node_modules/underscore-plus/node_modules/underscore/underscore.js"
+      }
+    ],
+    "extensions": {
+      ".coffee": [
+        "lib/commands.coffee",
+        "lib/config.coffee",
+        "lib/insert-image-view.coffee",
+        "lib/insert-link-view.coffee",
+        "lib/insert-table-view.coffee",
+        "lib/main.coffee",
+        "lib/manage-post-categories-view.coffee",
+        "lib/manage-post-tags-view.coffee",
+        "lib/new-draft-view.coffee",
+        "lib/new-post-view.coffee",
+        "lib/publish-draft.coffee",
+        "lib/style-line.coffee",
+        "lib/style-text.coffee",
+        "lib/utils.coffee",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/StringScanner/src/StringScanner.coffee",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/cscodegen/src/cscodegen.coffee"
+      ],
+      ".js": [
+        "node_modules/fs-plus/lib/fs-plus.js",
+        "node_modules/fs-plus/node_modules/async/lib/async.js",
+        "node_modules/fs-plus/node_modules/mkdirp/examples/pow.js",
+        "node_modules/fs-plus/node_modules/mkdirp/index.js",
+        "node_modules/fs-plus/node_modules/rimraf/bin.js",
+        "node_modules/fs-plus/node_modules/rimraf/rimraf.js",
+        "node_modules/fs-plus/node_modules/underscore-plus/lib/underscore-plus.js",
+        "node_modules/fs-plus/node_modules/underscore-plus/node_modules/underscore/underscore-min.js",
+        "node_modules/fs-plus/node_modules/underscore-plus/node_modules/underscore/underscore.js",
+        "node_modules/guid/ender.js",
+        "node_modules/guid/guid.js",
+        "node_modules/js-yaml/bin/js-yaml.js",
+        "node_modules/js-yaml/dist/js-yaml.js",
+        "node_modules/js-yaml/dist/js-yaml.min.js",
+        "node_modules/js-yaml/examples/custom_types.js",
+        "node_modules/js-yaml/examples/dumper.js",
+        "node_modules/js-yaml/examples/sample_document.js",
+        "node_modules/js-yaml/index.js",
+        "node_modules/js-yaml/lib/js-yaml/common.js",
+        "node_modules/js-yaml/lib/js-yaml/dumper.js",
+        "node_modules/js-yaml/lib/js-yaml/exception.js",
+        "node_modules/js-yaml/lib/js-yaml/loader.js",
+        "node_modules/js-yaml/lib/js-yaml/mark.js",
+        "node_modules/js-yaml/lib/js-yaml/schema/core.js",
+        "node_modules/js-yaml/lib/js-yaml/schema/default_full.js",
+        "node_modules/js-yaml/lib/js-yaml/schema/default_safe.js",
+        "node_modules/js-yaml/lib/js-yaml/schema/failsafe.js",
+        "node_modules/js-yaml/lib/js-yaml/schema/json.js",
+        "node_modules/js-yaml/lib/js-yaml/schema.js",
+        "node_modules/js-yaml/lib/js-yaml/type/binary.js",
+        "node_modules/js-yaml/lib/js-yaml/type/bool.js",
+        "node_modules/js-yaml/lib/js-yaml/type/float.js",
+        "node_modules/js-yaml/lib/js-yaml/type/int.js",
+        "node_modules/js-yaml/lib/js-yaml/type/js/function.js",
+        "node_modules/js-yaml/lib/js-yaml/type/js/regexp.js",
+        "node_modules/js-yaml/lib/js-yaml/type/js/undefined.js",
+        "node_modules/js-yaml/lib/js-yaml/type/map.js",
+        "node_modules/js-yaml/lib/js-yaml/type/merge.js",
+        "node_modules/js-yaml/lib/js-yaml/type/null.js",
+        "node_modules/js-yaml/lib/js-yaml/type/omap.js",
+        "node_modules/js-yaml/lib/js-yaml/type/pairs.js",
+        "node_modules/js-yaml/lib/js-yaml/type/seq.js",
+        "node_modules/js-yaml/lib/js-yaml/type/set.js",
+        "node_modules/js-yaml/lib/js-yaml/type/str.js",
+        "node_modules/js-yaml/lib/js-yaml/type/timestamp.js",
+        "node_modules/js-yaml/lib/js-yaml/type.js",
+        "node_modules/js-yaml/lib/js-yaml.js",
+        "node_modules/js-yaml/node_modules/argparse/examples/arguments.js",
+        "node_modules/js-yaml/node_modules/argparse/examples/choice.js",
+        "node_modules/js-yaml/node_modules/argparse/examples/constants.js",
+        "node_modules/js-yaml/node_modules/argparse/examples/help.js",
+        "node_modules/js-yaml/node_modules/argparse/examples/nargs.js",
+        "node_modules/js-yaml/node_modules/argparse/examples/parents.js",
+        "node_modules/js-yaml/node_modules/argparse/examples/prefix_chars.js",
+        "node_modules/js-yaml/node_modules/argparse/examples/sub_commands.js",
+        "node_modules/js-yaml/node_modules/argparse/examples/sum.js",
+        "node_modules/js-yaml/node_modules/argparse/examples/testformatters.js",
+        "node_modules/js-yaml/node_modules/argparse/index.js",
+        "node_modules/js-yaml/node_modules/argparse/lib/action/append/constant.js",
+        "node_modules/js-yaml/node_modules/argparse/lib/action/append.js",
+        "node_modules/js-yaml/node_modules/argparse/lib/action/count.js",
+        "node_modules/js-yaml/node_modules/argparse/lib/action/help.js",
+        "node_modules/js-yaml/node_modules/argparse/lib/action/store/constant.js",
+        "node_modules/js-yaml/node_modules/argparse/lib/action/store/false.js",
+        "node_modules/js-yaml/node_modules/argparse/lib/action/store/true.js",
+        "node_modules/js-yaml/node_modules/argparse/lib/action/store.js",
+        "node_modules/js-yaml/node_modules/argparse/lib/action/subparsers.js",
+        "node_modules/js-yaml/node_modules/argparse/lib/action/version.js",
+        "node_modules/js-yaml/node_modules/argparse/lib/action.js",
+        "node_modules/js-yaml/node_modules/argparse/lib/action_container.js",
+        "node_modules/js-yaml/node_modules/argparse/lib/argparse.js",
+        "node_modules/js-yaml/node_modules/argparse/lib/argument/error.js",
+        "node_modules/js-yaml/node_modules/argparse/lib/argument/exclusive.js",
+        "node_modules/js-yaml/node_modules/argparse/lib/argument/group.js",
+        "node_modules/js-yaml/node_modules/argparse/lib/argument_parser.js",
+        "node_modules/js-yaml/node_modules/argparse/lib/const.js",
+        "node_modules/js-yaml/node_modules/argparse/lib/help/added_formatters.js",
+        "node_modules/js-yaml/node_modules/argparse/lib/help/formatter.js",
+        "node_modules/js-yaml/node_modules/argparse/lib/namespace.js",
+        "node_modules/js-yaml/node_modules/argparse/node_modules/underscore/index.js",
+        "node_modules/js-yaml/node_modules/argparse/node_modules/underscore/underscore-min.js",
+        "node_modules/js-yaml/node_modules/argparse/node_modules/underscore/underscore.js",
+        "node_modules/js-yaml/node_modules/argparse/node_modules/underscore.string/dist/underscore.string.min.js",
+        "node_modules/js-yaml/node_modules/argparse/node_modules/underscore.string/lib/underscore.string.js",
+        "node_modules/js-yaml/node_modules/esprima/bin/esparse.js",
+        "node_modules/js-yaml/node_modules/esprima/bin/esvalidate.js",
+        "node_modules/js-yaml/node_modules/esprima/esprima.js",
+        "node_modules/request/index.js",
+        "node_modules/request/lib/cookies.js",
+        "node_modules/request/lib/copy.js",
+        "node_modules/request/lib/debug.js",
+        "node_modules/request/lib/helpers.js",
+        "node_modules/request/node_modules/aws-sign2/index.js",
+        "node_modules/request/node_modules/bl/bl.js",
+        "node_modules/request/node_modules/bl/node_modules/readable-stream/duplex.js",
+        "node_modules/request/node_modules/bl/node_modules/readable-stream/lib/_stream_duplex.js",
+        "node_modules/request/node_modules/bl/node_modules/readable-stream/lib/_stream_passthrough.js",
+        "node_modules/request/node_modules/bl/node_modules/readable-stream/lib/_stream_readable.js",
+        "node_modules/request/node_modules/bl/node_modules/readable-stream/lib/_stream_transform.js",
+        "node_modules/request/node_modules/bl/node_modules/readable-stream/lib/_stream_writable.js",
+        "node_modules/request/node_modules/bl/node_modules/readable-stream/node_modules/core-util-is/lib/util.js",
+        "node_modules/request/node_modules/bl/node_modules/readable-stream/node_modules/core-util-is/util.js",
+        "node_modules/request/node_modules/bl/node_modules/readable-stream/node_modules/inherits/inherits.js",
+        "node_modules/request/node_modules/bl/node_modules/readable-stream/node_modules/inherits/inherits_browser.js",
+        "node_modules/request/node_modules/bl/node_modules/readable-stream/node_modules/inherits/test.js",
+        "node_modules/request/node_modules/bl/node_modules/readable-stream/node_modules/isarray/build/build.js",
+        "node_modules/request/node_modules/bl/node_modules/readable-stream/node_modules/isarray/index.js",
+        "node_modules/request/node_modules/bl/node_modules/readable-stream/node_modules/string_decoder/index.js",
+        "node_modules/request/node_modules/bl/node_modules/readable-stream/passthrough.js",
+        "node_modules/request/node_modules/bl/node_modules/readable-stream/readable.js",
+        "node_modules/request/node_modules/bl/node_modules/readable-stream/transform.js",
+        "node_modules/request/node_modules/bl/node_modules/readable-stream/writable.js",
+        "node_modules/request/node_modules/caseless/index.js",
+        "node_modules/request/node_modules/caseless/test.js",
+        "node_modules/request/node_modules/combined-stream/lib/combined_stream.js",
+        "node_modules/request/node_modules/combined-stream/node_modules/delayed-stream/lib/delayed_stream.js",
+        "node_modules/request/node_modules/forever-agent/index.js",
+        "node_modules/request/node_modules/form-data/lib/form_data.js",
+        "node_modules/request/node_modules/form-data/node_modules/async/lib/async.js",
+        "node_modules/request/node_modules/form-data/node_modules/mime/mime.js",
+        "node_modules/request/node_modules/form-data/node_modules/mime/test.js",
+        "node_modules/request/node_modules/hawk/example/usage.js",
+        "node_modules/request/node_modules/hawk/index.js",
+        "node_modules/request/node_modules/hawk/lib/browser.js",
+        "node_modules/request/node_modules/hawk/lib/client.js",
+        "node_modules/request/node_modules/hawk/lib/crypto.js",
+        "node_modules/request/node_modules/hawk/lib/index.js",
+        "node_modules/request/node_modules/hawk/lib/server.js",
+        "node_modules/request/node_modules/hawk/lib/utils.js",
+        "node_modules/request/node_modules/hawk/node_modules/boom/index.js",
+        "node_modules/request/node_modules/hawk/node_modules/boom/lib/index.js",
+        "node_modules/request/node_modules/hawk/node_modules/cryptiles/index.js",
+        "node_modules/request/node_modules/hawk/node_modules/cryptiles/lib/index.js",
+        "node_modules/request/node_modules/hawk/node_modules/hoek/index.js",
+        "node_modules/request/node_modules/hawk/node_modules/hoek/lib/escape.js",
+        "node_modules/request/node_modules/hawk/node_modules/hoek/lib/index.js",
+        "node_modules/request/node_modules/hawk/node_modules/sntp/examples/offset.js",
+        "node_modules/request/node_modules/hawk/node_modules/sntp/examples/time.js",
+        "node_modules/request/node_modules/hawk/node_modules/sntp/index.js",
+        "node_modules/request/node_modules/hawk/node_modules/sntp/lib/index.js",
+        "node_modules/request/node_modules/http-signature/lib/index.js",
+        "node_modules/request/node_modules/http-signature/lib/parser.js",
+        "node_modules/request/node_modules/http-signature/lib/signer.js",
+        "node_modules/request/node_modules/http-signature/lib/util.js",
+        "node_modules/request/node_modules/http-signature/lib/verify.js",
+        "node_modules/request/node_modules/http-signature/node_modules/asn1/lib/ber/errors.js",
+        "node_modules/request/node_modules/http-signature/node_modules/asn1/lib/ber/index.js",
+        "node_modules/request/node_modules/http-signature/node_modules/asn1/lib/ber/reader.js",
+        "node_modules/request/node_modules/http-signature/node_modules/asn1/lib/ber/types.js",
+        "node_modules/request/node_modules/http-signature/node_modules/asn1/lib/ber/writer.js",
+        "node_modules/request/node_modules/http-signature/node_modules/asn1/lib/index.js",
+        "node_modules/request/node_modules/http-signature/node_modules/asn1/tst/ber/reader.test.js",
+        "node_modules/request/node_modules/http-signature/node_modules/asn1/tst/ber/writer.test.js",
+        "node_modules/request/node_modules/http-signature/node_modules/assert-plus/assert.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/ctf.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/ctio.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/ctype.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctf/tst.fail.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctf/tst.float.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctf/tst.int.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctf/tst.psinfo.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctf/tst.struct.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctf/tst.typedef.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctio/float/tst.rfloat.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctio/float/tst.wfloat.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctio/int/tst.64.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctio/int/tst.rint.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctio/int/tst.wbounds.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctio/int/tst.wint.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctio/uint/tst.64.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctio/uint/tst.roundtrip.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctio/uint/tst.ruint.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctio/uint/tst.wuint.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctype/tst.basicr.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctype/tst.basicw.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctype/tst.char.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctype/tst.endian.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctype/tst.oldwrite.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctype/tst.readSize.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctype/tst.structw.js",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctype/tst.writeStruct.js",
+        "node_modules/request/node_modules/json-stringify-safe/stringify.js",
+        "node_modules/request/node_modules/json-stringify-safe/test.js",
+        "node_modules/request/node_modules/mime-types/lib/index.js",
+        "node_modules/request/node_modules/node-uuid/benchmark/benchmark.js",
+        "node_modules/request/node_modules/node-uuid/uuid.js",
+        "node_modules/request/node_modules/oauth-sign/index.js",
+        "node_modules/request/node_modules/oauth-sign/test.js",
+        "node_modules/request/node_modules/qs/index.js",
+        "node_modules/request/node_modules/qs/lib/index.js",
+        "node_modules/request/node_modules/qs/lib/parse.js",
+        "node_modules/request/node_modules/qs/lib/stringify.js",
+        "node_modules/request/node_modules/qs/lib/utils.js",
+        "node_modules/request/node_modules/stringstream/example.js",
+        "node_modules/request/node_modules/stringstream/stringstream.js",
+        "node_modules/request/node_modules/tough-cookie/generate-pubsuffix.js",
+        "node_modules/request/node_modules/tough-cookie/lib/cookie.js",
+        "node_modules/request/node_modules/tough-cookie/lib/memstore.js",
+        "node_modules/request/node_modules/tough-cookie/lib/pubsuffix.js",
+        "node_modules/request/node_modules/tough-cookie/lib/store.js",
+        "node_modules/request/node_modules/tough-cookie/node_modules/punycode/punycode.js",
+        "node_modules/request/node_modules/tough-cookie/test.js",
+        "node_modules/request/node_modules/tunnel-agent/index.js",
+        "node_modules/request/request.js",
+        "node_modules/season/lib/cson.js",
+        "node_modules/season/lib/csonc.js",
+        "node_modules/season/node_modules/cson-safe/lib/cson-safe.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/lib/browser.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/lib/cli.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/lib/compiler.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/lib/functional-helpers.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/lib/helpers.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/lib/js-nodes.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/lib/module.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/lib/nodes.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/lib/optimiser.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/lib/parser.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/lib/preprocessor.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/lib/register.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/lib/repl.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/lib/run.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/StringScanner/lib/StringScanner.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/cscodegen/lib/cscodegen.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/escodegen/Gruntfile.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/escodegen/bin/escodegen.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/escodegen/bin/esgenerate.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/escodegen/escodegen.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/escodegen/node_modules/esprima/bin/esparse.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/escodegen/node_modules/esprima/bin/esvalidate.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/escodegen/node_modules/esprima/esprima.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/escodegen/node_modules/estraverse/estraverse.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/Gruntfile.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/bin/esmangle.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/annotate-directive.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/common.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/esmangle.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/evaluator.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/map.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/options.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass/concatenate-variable-definition.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass/dead-code-elimination.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass/drop-variable-definition.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass/eliminate-duplicate-function-declarations.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass/hoist-variable-to-arguments.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass/reduce-branch-jump.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass/reduce-multiple-if-statements.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass/reduce-sequence-expression.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass/remove-context-sensitive-expressions.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass/remove-empty-statement.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass/remove-side-effect-free-expressions.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass/remove-unreachable-branch.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass/remove-unused-label.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass/remove-wasted-blocks.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass/reordering-function-declarations.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass/transform-branch-to-expression.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass/transform-dynamic-to-static-property-access.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass/transform-dynamic-to-static-property-definition.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass/transform-immediate-function-call.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass/transform-logical-association.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass/transform-to-compound-assignment.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass/transform-to-sequence-expression.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass/transform-typeof-undefined.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass/tree-based-constant-folding.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/post/omit-parens-in-void-context-iife.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/post/rewrite-boolean.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/post/rewrite-conditional-expression.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/post/transform-infinity.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/post/transform-static-to-dynamic-property-access.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/query.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/set.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/escope/Gruntfile.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/escope/escope.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/esprima/bin/esparse.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/esprima/bin/esvalidate.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/esprima/esprima.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/esshorten/Gruntfile.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/esshorten/lib/esshorten.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/esshorten/lib/map.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/esshorten/lib/utility.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/esshorten/node_modules/estraverse/estraverse.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/estraverse/estraverse.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/nopt/bin/nopt.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/nopt/examples/my-program.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/nopt/lib/nopt.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/nopt/node_modules/abbrev/abbrev.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/nopt/node_modules/abbrev/test.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/Makefile.dryice.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/build/assert-shim.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/build/mini-require.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/build/suffix-browser.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/build/test-prefix.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/build/test-suffix.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/lib/source-map/array-set.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/lib/source-map/base64-vlq.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/lib/source-map/base64.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/lib/source-map/binary-search.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/lib/source-map/source-map-consumer.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/lib/source-map/source-map-generator.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/lib/source-map/source-node.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/lib/source-map/util.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/lib/source-map.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/node_modules/amdefine/amdefine.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/node_modules/amdefine/intercept.js",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/register.js",
+        "node_modules/season/node_modules/optimist/example/bool.js",
+        "node_modules/season/node_modules/optimist/example/boolean_double.js",
+        "node_modules/season/node_modules/optimist/example/boolean_single.js",
+        "node_modules/season/node_modules/optimist/example/default_hash.js",
+        "node_modules/season/node_modules/optimist/example/default_singles.js",
+        "node_modules/season/node_modules/optimist/example/divide.js",
+        "node_modules/season/node_modules/optimist/example/line_count.js",
+        "node_modules/season/node_modules/optimist/example/line_count_options.js",
+        "node_modules/season/node_modules/optimist/example/line_count_wrap.js",
+        "node_modules/season/node_modules/optimist/example/nonopt.js",
+        "node_modules/season/node_modules/optimist/example/reflect.js",
+        "node_modules/season/node_modules/optimist/example/short.js",
+        "node_modules/season/node_modules/optimist/example/string.js",
+        "node_modules/season/node_modules/optimist/example/usage-options.js",
+        "node_modules/season/node_modules/optimist/example/xup.js",
+        "node_modules/season/node_modules/optimist/index.js",
+        "node_modules/season/node_modules/optimist/node_modules/wordwrap/example/center.js",
+        "node_modules/season/node_modules/optimist/node_modules/wordwrap/example/meat.js",
+        "node_modules/season/node_modules/optimist/node_modules/wordwrap/index.js",
+        "node_modules/season/node_modules/underscore-plus/lib/underscore-plus.js",
+        "node_modules/season/node_modules/underscore-plus/node_modules/underscore/underscore-min.js",
+        "node_modules/season/node_modules/underscore-plus/node_modules/underscore/underscore.js"
+      ],
+      ".json": [
+        "node_modules/fs-plus/node_modules/async/component.json",
+        "node_modules/fs-plus/node_modules/async/package.json",
+        "node_modules/fs-plus/node_modules/mkdirp/package.json",
+        "node_modules/fs-plus/node_modules/rimraf/package.json",
+        "node_modules/fs-plus/node_modules/underscore-plus/node_modules/underscore/package.json",
+        "node_modules/fs-plus/node_modules/underscore-plus/package.json",
+        "node_modules/fs-plus/package.json",
+        "node_modules/guid/package.json",
+        "node_modules/js-yaml/bower.json",
+        "node_modules/js-yaml/examples/dumper.json",
+        "node_modules/js-yaml/node_modules/argparse/node_modules/underscore/package.json",
+        "node_modules/js-yaml/node_modules/argparse/node_modules/underscore.string/component.json",
+        "node_modules/js-yaml/node_modules/argparse/node_modules/underscore.string/package.json",
+        "node_modules/js-yaml/node_modules/argparse/package.json",
+        "node_modules/js-yaml/node_modules/esprima/package.json",
+        "node_modules/js-yaml/package.json",
+        "node_modules/request/node_modules/aws-sign2/package.json",
+        "node_modules/request/node_modules/bl/node_modules/readable-stream/node_modules/core-util-is/package.json",
+        "node_modules/request/node_modules/bl/node_modules/readable-stream/node_modules/inherits/package.json",
+        "node_modules/request/node_modules/bl/node_modules/readable-stream/node_modules/isarray/component.json",
+        "node_modules/request/node_modules/bl/node_modules/readable-stream/node_modules/isarray/package.json",
+        "node_modules/request/node_modules/bl/node_modules/readable-stream/node_modules/string_decoder/package.json",
+        "node_modules/request/node_modules/bl/node_modules/readable-stream/package.json",
+        "node_modules/request/node_modules/bl/package.json",
+        "node_modules/request/node_modules/caseless/package.json",
+        "node_modules/request/node_modules/combined-stream/node_modules/delayed-stream/package.json",
+        "node_modules/request/node_modules/combined-stream/package.json",
+        "node_modules/request/node_modules/forever-agent/package.json",
+        "node_modules/request/node_modules/form-data/node_modules/async/component.json",
+        "node_modules/request/node_modules/form-data/node_modules/async/package.json",
+        "node_modules/request/node_modules/form-data/node_modules/mime/package.json",
+        "node_modules/request/node_modules/form-data/package.json",
+        "node_modules/request/node_modules/hawk/node_modules/boom/package.json",
+        "node_modules/request/node_modules/hawk/node_modules/cryptiles/package.json",
+        "node_modules/request/node_modules/hawk/node_modules/hoek/package.json",
+        "node_modules/request/node_modules/hawk/node_modules/sntp/package.json",
+        "node_modules/request/node_modules/hawk/package.json",
+        "node_modules/request/node_modules/http-signature/node_modules/asn1/package.json",
+        "node_modules/request/node_modules/http-signature/node_modules/assert-plus/package.json",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/package.json",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctf/float.json",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctf/int.json",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctf/psinfo.json",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctf/struct.json",
+        "node_modules/request/node_modules/http-signature/node_modules/ctype/tst/ctf/typedef.json",
+        "node_modules/request/node_modules/http-signature/package.json",
+        "node_modules/request/node_modules/json-stringify-safe/package.json",
+        "node_modules/request/node_modules/mime-types/component.json",
+        "node_modules/request/node_modules/mime-types/lib/custom.json",
+        "node_modules/request/node_modules/mime-types/lib/mime.json",
+        "node_modules/request/node_modules/mime-types/lib/node.json",
+        "node_modules/request/node_modules/mime-types/package.json",
+        "node_modules/request/node_modules/node-uuid/component.json",
+        "node_modules/request/node_modules/node-uuid/package.json",
+        "node_modules/request/node_modules/oauth-sign/package.json",
+        "node_modules/request/node_modules/qs/package.json",
+        "node_modules/request/node_modules/stringstream/package.json",
+        "node_modules/request/node_modules/tough-cookie/node_modules/punycode/package.json",
+        "node_modules/request/node_modules/tough-cookie/package.json",
+        "node_modules/request/node_modules/tunnel-agent/package.json",
+        "node_modules/request/package.json",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/StringScanner/package.json",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/cscodegen/package.json",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/escodegen/node_modules/esprima/package.json",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/escodegen/node_modules/estraverse/package.json",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/escodegen/package.json",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/escope/bower.json",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/escope/package.json",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/esprima/package.json",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/esshorten/node_modules/estraverse/package.json",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/esshorten/package.json",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/estraverse/package.json",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/package.json",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/nopt/node_modules/abbrev/package.json",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/nopt/package.json",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/node_modules/amdefine/package.json",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/package.json",
+        "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/package.json",
+        "node_modules/season/node_modules/cson-safe/package.json",
+        "node_modules/season/node_modules/optimist/node_modules/wordwrap/package.json",
+        "node_modules/season/node_modules/optimist/package.json",
+        "node_modules/season/node_modules/underscore-plus/node_modules/underscore/package.json",
+        "node_modules/season/node_modules/underscore-plus/package.json",
+        "node_modules/season/package.json",
+        "package.json"
+      ]
+    },
+    "folders": [
+      {
+        "paths": [
+          "lib",
+          "",
+          "spec"
+        ],
+        "dependencies": {
+          "fs-plus": "2.x",
+          "request": "2.x",
+          "js-yaml": "3.x",
+          "guid": "0.0.12",
+          "season": "2.x"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/fs-plus/lib",
+          "node_modules/fs-plus"
+        ],
+        "dependencies": {
+          "underscore-plus": "1.x",
+          "mkdirp": "~0.3.5",
+          "rimraf": "~2.2.2",
+          "async": "~0.2.9"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/fs-plus/node_modules/underscore-plus/lib",
+          "node_modules/fs-plus/node_modules/underscore-plus"
+        ],
+        "dependencies": {
+          "underscore": "~1.6.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/js-yaml/bin",
+          "node_modules/js-yaml",
+          "node_modules/js-yaml/dist",
+          "node_modules/js-yaml/examples",
+          "node_modules/js-yaml/lib/js-yaml",
+          "node_modules/js-yaml/lib/js-yaml/schema",
+          "node_modules/js-yaml/lib/js-yaml/type",
+          "node_modules/js-yaml/lib/js-yaml/type/js",
+          "node_modules/js-yaml/lib"
+        ],
+        "dependencies": {
+          "argparse": "~ 0.1.11",
+          "esprima": "~ 1.0.2"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/js-yaml/node_modules/argparse/examples",
+          "node_modules/js-yaml/node_modules/argparse",
+          "node_modules/js-yaml/node_modules/argparse/lib/action/append",
+          "node_modules/js-yaml/node_modules/argparse/lib/action",
+          "node_modules/js-yaml/node_modules/argparse/lib/action/store",
+          "node_modules/js-yaml/node_modules/argparse/lib",
+          "node_modules/js-yaml/node_modules/argparse/lib/argument",
+          "node_modules/js-yaml/node_modules/argparse/lib/help"
+        ],
+        "dependencies": {
+          "underscore": "~1.4.3",
+          "underscore.string": "~2.3.1"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/request",
+          "node_modules/request/lib"
+        ],
+        "dependencies": {
+          "bl": "~0.9.0",
+          "caseless": "~0.6.0",
+          "forever-agent": "~0.5.0",
+          "form-data": "~0.1.0",
+          "json-stringify-safe": "~5.0.0",
+          "mime-types": "~1.0.1",
+          "node-uuid": "~1.4.0",
+          "qs": "~2.3.1",
+          "tunnel-agent": "~0.4.0",
+          "tough-cookie": ">=0.12.0",
+          "http-signature": "~0.10.0",
+          "oauth-sign": "~0.4.0",
+          "hawk": "1.1.1",
+          "aws-sign2": "~0.5.0",
+          "stringstream": "~0.0.4",
+          "combined-stream": "~0.0.5"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/request/node_modules/bl",
+          "node_modules/request/node_modules/bl/test"
+        ],
+        "dependencies": {
+          "readable-stream": "~1.0.26"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/request/node_modules/bl/node_modules/readable-stream",
+          "node_modules/request/node_modules/bl/node_modules/readable-stream/lib"
+        ],
+        "dependencies": {
+          "core-util-is": "~1.0.0",
+          "isarray": "0.0.1",
+          "string_decoder": "~0.10.x",
+          "inherits": "~2.0.1"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/request/node_modules/combined-stream/lib",
+          "node_modules/request/node_modules/combined-stream"
+        ],
+        "dependencies": {
+          "delayed-stream": "0.0.5"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/request/node_modules/form-data/lib",
+          "node_modules/request/node_modules/form-data"
+        ],
+        "dependencies": {
+          "combined-stream": "~0.0.4",
+          "mime": "~1.2.11",
+          "async": "~0.9.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/request/node_modules/hawk/example",
+          "node_modules/request/node_modules/hawk",
+          "node_modules/request/node_modules/hawk/lib",
+          "node_modules/request/node_modules/hawk/test"
+        ],
+        "dependencies": {
+          "hoek": "0.9.x",
+          "boom": "0.4.x",
+          "cryptiles": "0.2.x",
+          "sntp": "0.2.x"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/request/node_modules/hawk/node_modules/boom",
+          "node_modules/request/node_modules/hawk/node_modules/boom/lib",
+          "node_modules/request/node_modules/hawk/node_modules/boom/test"
+        ],
+        "dependencies": {
+          "hoek": "0.9.x"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/request/node_modules/hawk/node_modules/cryptiles",
+          "node_modules/request/node_modules/hawk/node_modules/cryptiles/lib",
+          "node_modules/request/node_modules/hawk/node_modules/cryptiles/test"
+        ],
+        "dependencies": {
+          "boom": "0.4.x"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/request/node_modules/hawk/node_modules/sntp/examples",
+          "node_modules/request/node_modules/hawk/node_modules/sntp",
+          "node_modules/request/node_modules/hawk/node_modules/sntp/lib",
+          "node_modules/request/node_modules/hawk/node_modules/sntp/test"
+        ],
+        "dependencies": {
+          "hoek": "0.9.x"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/request/node_modules/http-signature/lib",
+          "node_modules/request/node_modules/http-signature"
+        ],
+        "dependencies": {
+          "assert-plus": "0.1.2",
+          "asn1": "0.1.11",
+          "ctype": "0.5.2"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/request/node_modules/tough-cookie",
+          "node_modules/request/node_modules/tough-cookie/lib"
+        ],
+        "dependencies": {
+          "punycode": ">=0.2.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/season/lib",
+          "node_modules/season"
+        ],
+        "dependencies": {
+          "underscore-plus": "1.x",
+          "cson-safe": "~0.1.1",
+          "optimist": "~0.4.0",
+          "fs-plus": "2.x"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/season/node_modules/cson-safe/lib",
+          "node_modules/season/node_modules/cson-safe"
+        ],
+        "dependencies": {
+          "coffee-script-redux": "2.0.0-beta8"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/lib",
+          "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux"
+        ],
+        "dependencies": {
+          "StringScanner": "~0.0.3",
+          "nopt": "~2.1.2",
+          "esmangle": "~0.0.8",
+          "source-map": "0.1.11",
+          "escodegen": "~0.0.24"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/escodegen",
+          "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/escodegen/bin"
+        ],
+        "dependencies": {
+          "esprima": "~1.0.2",
+          "estraverse": "~1.3.0",
+          "source-map": ">= 0.1.2"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle",
+          "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/bin",
+          "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib",
+          "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/pass",
+          "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/lib/post"
+        ],
+        "dependencies": {
+          "esprima": "~ 1.0.2",
+          "escope": "~ 1.0.0",
+          "escodegen": "~ 0.0.28",
+          "estraverse": "~ 1.3.2",
+          "source-map": "~ 0.1.8",
+          "esshorten": "~ 0.0.2",
+          "optimist": "*"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/escope"
+        ],
+        "dependencies": {
+          "estraverse": ">= 0.0.2"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/esshorten",
+          "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/esmangle/node_modules/esshorten/lib"
+        ],
+        "dependencies": {
+          "escope": "~ 1.0.0",
+          "estraverse": "~ 1.2.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/nopt/bin",
+          "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/nopt/examples",
+          "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/nopt/lib",
+          "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/nopt"
+        ],
+        "dependencies": {
+          "abbrev": "1"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map",
+          "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/build",
+          "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/lib/source-map",
+          "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/lib",
+          "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/test",
+          "node_modules/season/node_modules/cson-safe/node_modules/coffee-script-redux/node_modules/source-map/test/source-map"
+        ],
+        "dependencies": {
+          "amdefine": ">=0.0.4"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/season/node_modules/optimist/example",
+          "node_modules/season/node_modules/optimist",
+          "node_modules/season/node_modules/optimist/test/_",
+          "node_modules/season/node_modules/optimist/test"
+        ],
+        "dependencies": {
+          "wordwrap": "~0.0.2"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/season/node_modules/underscore-plus/lib",
+          "node_modules/season/node_modules/underscore-plus"
+        ],
+        "dependencies": {
+          "underscore": "~1.6.0"
+        }
+      }
+    ]
+  }
 }
