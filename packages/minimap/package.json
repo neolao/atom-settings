@@ -1,7 +1,7 @@
 {
   "name": "minimap",
   "main": "./lib/minimap",
-  "version": "3.3.8",
+  "version": "3.3.13",
   "private": true,
   "description": "A preview of the full source code.",
   "author": {
@@ -43,12 +43,12 @@
     "url": "https://github.com/fundon/atom-minimap/issues"
   },
   "homepage": "https://github.com/fundon/atom-minimap",
-  "_id": "minimap@3.3.8",
+  "_id": "minimap@3.3.13",
   "dist": {
-    "shasum": "bf21ba874ccad131babe2bb63bf0504a4aa8170c"
+    "shasum": "022a64967c5ecab41f787791af2a86bd55e44ea5"
   },
-  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141014-55862-1kdwpc2/package.tgz",
-  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141014-55862-1kdwpc2/package.tgz",
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141021-9700-rpldla/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141021-9700-rpldla/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
@@ -84,7 +84,7 @@
       },
       {
         "name": "fs-plus",
-        "version": "2.3.1",
+        "version": "2.3.2",
         "path": "node_modules/fs-plus/lib/fs-plus.js"
       },
       {

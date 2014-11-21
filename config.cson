@@ -13,7 +13,6 @@
     'tabLength': 4
     'preferredLineLength': 120
     'fontSize': 21
-    'invisibles': {}
     'showIndentGuide': true
   'core':
     'themes': [
@@ -29,6 +28,7 @@
       'snippets'
       'feedback'
       'minimap'
+      'atom-beautify'
     ]
   'whitespace':
     'ignoreWhitespaceOnCurrentLine': false
@@ -60,7 +60,7 @@
     'sortByTitle': true
   'atom-ctags':
     'autoBuildTagsWhenActive': true
-    'cmdArgs': '--exclude=.git --exclude=vendor --exclude=web --exclude=tests'
+    'cmdArgs': '--exclude=.git --exclude=app --exclude=vendor --exclude=vendor_front --exclude=web --exclude=tests'
   'docblockr':
     'auto_add_method_tag': true
     'simple_mode': true
@@ -87,3 +87,7 @@
     'maximumOpenedTabs': 10
   'enhanced-package-list':
     'sourceFilter': 'user'
+  'atom-beautify':
+    '_analyticsUserId': '3e27096e-2708-460f-96c8-139f3245429c'
+  'symbols-tree-view':
+    'autoToggle': true
