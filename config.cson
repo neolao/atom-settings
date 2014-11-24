@@ -14,7 +14,6 @@
     'preferredLineLength': 120
     'fontSize': 21
     'showIndentGuide': true
-    'invisibles': {}
   'core':
     'themes': [
       'neolao-ui'
@@ -30,6 +29,8 @@
       'feedback'
       'minimap'
       'atom-beautify'
+      'tabs'
+      'tree-view'
     ]
   'whitespace':
     'ignoreWhitespaceOnCurrentLine': false
@@ -86,9 +87,15 @@
   'zentabs':
     'neverCloseUnsaved': true
     'maximumOpenedTabs': 10
-  'enhanced-package-list':
-    'sourceFilter': 'user'
   'atom-beautify':
     '_analyticsUserId': '3e27096e-2708-460f-96c8-139f3245429c'
   'symbols-tree-view':
     'autoToggle': true
+  'tabs':
+    'showIcons': true
+  'tree-view':
+    'hideVcsIgnoredFiles': false
+    'hideIgnoredNames': false
+    'showOnRightSide': false
+  'enhanced-package-list':
+    'sourceFilter': 'user'
