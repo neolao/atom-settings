@@ -1,6 +1,6 @@
 {
   "name": "zentabs",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "main": "./lib/zentabs",
   "description": "Keep the opened tabs amount below specified limit",
   "license": "MIT",
@@ -20,11 +20,12 @@
     "url": "https://github.com/ArnaudRinquin/atom-zentabs/issues"
   },
   "homepage": "https://github.com/ArnaudRinquin/atom-zentabs",
-  "_id": "zentabs@0.6.0",
+  "_id": "zentabs@0.6.1",
   "dist": {
-    "shasum": "1ed18f37eb7327d532d7208510311107b5a444c7"
+    "shasum": "d62e61b0d3f1ddb400d00e44bc036bdb1dd86972"
   },
-  "_from": "/Users/eric/.atom/.node-gyp/.atom/.apm/zentabs/0.6.0/package.tgz",
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141024-32593-16wllsa/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141024-32593-16wllsa/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
