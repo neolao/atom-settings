@@ -1,7 +1,7 @@
 {
   "name": "minimap",
   "main": "./lib/minimap",
-  "version": "3.3.13",
+  "version": "3.3.14",
   "private": true,
   "description": "A preview of the full source code.",
   "author": {
@@ -43,12 +43,12 @@
     "url": "https://github.com/fundon/atom-minimap/issues"
   },
   "homepage": "https://github.com/fundon/atom-minimap",
-  "_id": "minimap@3.3.13",
+  "_id": "minimap@3.3.14",
   "dist": {
-    "shasum": "022a64967c5ecab41f787791af2a86bd55e44ea5"
+    "shasum": "7833b47243f28922a610e14615e64db482a2526d"
   },
-  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141021-9700-rpldla/package.tgz",
-  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141021-9700-rpldla/package.tgz",
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141025-21019-d1uqor/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141025-21019-d1uqor/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [

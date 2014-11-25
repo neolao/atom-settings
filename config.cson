@@ -14,6 +14,7 @@
     'preferredLineLength': 120
     'fontSize': 21
     'showIndentGuide': true
+    'invisibles': {}
   'core':
     'themes': [
       'neolao-ui'
@@ -25,12 +26,12 @@
       'spell-check'
       'welcome'
       'symbols-view'
-      'snippets'
       'feedback'
       'minimap'
       'atom-beautify'
       'tabs'
       'tree-view'
+      'symbol-gen'
     ]
   'whitespace':
     'ignoreWhitespaceOnCurrentLine': false
@@ -97,5 +98,4 @@
     'hideVcsIgnoredFiles': false
     'hideIgnoredNames': false
     'showOnRightSide': false
-  'enhanced-package-list':
-    'sourceFilter': 'user'
+  'enhanced-package-list': {}
