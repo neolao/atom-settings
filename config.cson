@@ -101,3 +101,6 @@
     'showOnRightSide': false
   'enhanced-package-list':
     'sourceFilter': 'user'
+  'github-issues':
+    'username': 'udg-eric'
+  'git-log': {}
