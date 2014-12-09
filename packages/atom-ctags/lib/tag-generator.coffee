@@ -9,9 +9,9 @@ class TagGenerator
   constructor: (@path, @scopeName, @cmdArgs) ->
 
   parseTagLine: (line) ->
-    matches = line.match(/\/\^(.*)\$\/;"/)
+    matches = line.match(/\t\/\^(.*)\$\/;"/)
     if not matches
-      matches = line.match(/\/\^(.*)\/;"/)
+      matches = line.match(/\t\/\^(.*)\/;"/)
     return unless matches
 
     pattern = matches[1]
@@ -27,10 +27,11 @@ class TagGenerator
     --row
 
     sections = start.split(/\t+/)
-    name = sections[sections.length-3]
+    file = sections.pop()
+    name = sections.join("\t")
     return unless name
 
-    file: sections[sections.length-2]
+    file: file
     position: new Point(row, pattern.indexOf(name))
     pattern: pattern
     name: name

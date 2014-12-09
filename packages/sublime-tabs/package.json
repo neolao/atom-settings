@@ -1,7 +1,7 @@
 {
   "name": "sublime-tabs",
   "main": "./lib/sublime-tabs",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "description": "Sublime-style tabs",
   "repository": {
     "type": "git",
@@ -25,12 +25,12 @@
     "url": "https://github.com/ddavison/sublime-tabs/issues"
   },
   "homepage": "https://github.com/ddavison/sublime-tabs",
-  "_id": "sublime-tabs@0.4.7",
+  "_id": "sublime-tabs@0.4.8",
   "dist": {
-    "shasum": "3692216cb16f71925131c53778e10428bbe25763"
+    "shasum": "5101e9804c84cdf3d7fdaca9a7fe5f5023373449"
   },
-  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141024-90269-id1x4p/package.tgz",
-  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141024-90269-id1x4p/package.tgz",
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114112-90269-ya3og7/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114112-90269-ya3og7/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [

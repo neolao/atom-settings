@@ -1,7 +1,7 @@
 {
   "name": "jekyll",
   "main": "./lib/jekyll",
-  "version": "0.3.1",
+  "version": "0.4.2",
   "description": "A collection of snippets and tools for Jekyll",
   "activationEvents": [
     "jekyll:open-layout",
@@ -9,7 +9,9 @@
     "jekyll:open-config",
     "jekyll:open-include",
     "jekyll:open-data",
-    "jekyll:manage"
+    "jekyll:manage",
+    "jekyll:toolbar",
+    "jekyll:toggle-server"
   ],
   "repository": {
     "type": "git",
@@ -22,16 +24,115 @@
   "dependencies": {
     "fs-plus": "^2.0.4"
   },
-  "readme": "# Jekyll-Atom\n\nA collection of snippets and tools for [Jekyll] in [Atom]\n\n[![Jekyll Logo](https://raw.githubusercontent.com/Arcath/jekyll-atom/master/images/jekyll.png)](http://jekyllrb.com)\n\n# Configuring\n\nJekyll-Atom has a couple of settings that can be set through the [Atom] settings.\n\n`Layouts Dir` The path to your layouts, defaults to `_layouts/`\n\n`Layouts Type` The file type of your layouts, defaults to `.html`\n\n`Posts Dir` The path to your posts, defaults to `_posts/`\n\n`Posts Type` The file type of your posts, defaults to `.markdown`\n\n`Includes Dir` The path to your includes, defaults to `_includes/`\n\n`Data Dir` The path to your data, defaults to `_data/`\n\n`Server Options` The options passed to the Jekyll command to run your server, defaults to `serve, -w`\n\n`Jekyll Binary` The command needed to run Jekyll, defaults to `jekyll` use `which jekyll` to find out where your command is stored (might be needed when using rbenv/rvm etc...)\n\n# Usage\n\n## Jekyll Manager\n\nJekyll Manager is a management console for Jekyll that runs in Atom. With Jekyll Manager you can now do all your Jekyll Development without leaving your editor!\n\n![Jekyll Manager](https://raw.githubusercontent.com/Arcath/jekyll-atom/master/Jekyll-Manager.gif)\n\n## Functions\n\n### Open the layout for the current file\n\nWhen triggered this function looks through your file for `layout: foo` and then opens `LAYOUTS_DIR/foo.LAYOUT_FORMAT`\n\n### Open the include for the cursor position\n\nWhen triggered this function opens up the include for the current tag. For example if you had `{% include snippet.html %}` Atom would open `INCLUDES_DIR/snippet.html`\n\n### Create a new Post\n\nWhen triggered this function brings up a popup at the top of the screen for you to type in the title of your new post e.g. `Something Really Cool!` (on the date 2/4/2014). When you submit the form a new file of `POSTSDIR/2014-04-02-something-really-cool.POST_FORMAT` will be created with a very basic front matter and opened on the screen.\n\n### Open Config\n\nOpens `_config.yml`\n\n## Keyboard Shortcuts\n\n`Cmd-Alt-L` Open the layout for the current file\n\n`Cmd-Alt-J` Create a new post\n\n`Cmd-Shift-I` Open include\n\n## Snippets\n\nThere are a load of snippets provided by this plugin, please check the settings pane in atom for a full list.\n\n# Contributing\n\nFeel free to fork this repo and submit changes!\n\nWhen you fork Jekyll-Atom please:\n\n1. Create your feature branch (`git checkout -b my-new-feature`)\n2. Commit your changes (`git commit -am 'Add some feature'`)\n3. Push to the branch (`git push origin my-new-feature`)\n4. Create new Pull Request\n\n[Jekyll]: http://jekyllrb.com\n[Atom]: https://atom.io\n",
+  "readme": "# Jekyll-Atom\n\nA collection of snippets and tools for [Jekyll] in [Atom]\n\n[![Jekyll Logo](https://raw.githubusercontent.com/Arcath/jekyll-atom/master/images/jekyll.png)](http://jekyllrb.com)\n\n# Configuring\n\nJekyll-Atom has a couple of settings that can be set through the [Atom] settings.\n\n`Layouts Dir` The path to your layouts, defaults to `_layouts/`\n\n`Layouts Type` The file type of your layouts, defaults to `.html`\n\n`Posts Dir` The path to your posts, defaults to `_posts/`\n\n`Posts Type` The file type of your posts, defaults to `.markdown`\n\n`Includes Dir` The path to your includes, defaults to `_includes/`\n\n`Data Dir` The path to your data, defaults to `_data/`\n\n`Server Options` The options passed to the Jekyll command to run your server, defaults to `serve, -w`\n\n`Jekyll Binary` The command needed to run Jekyll, defaults to `jekyll` use `which jekyll` to find out where your command is stored (might be needed when using rbenv/rvm etc...)\n\n# Usage\n\n## Server Management\n\nJeykll-Atom can run your Jekyll Server right in Atom!\n\nBoth the toolbar (`Cmd-Alt-T`) and the management window (_Jekyll: Mange_ in the Command Palette) have a console for the stdout output and buttons to control the server.\n\nThe server runs in the background and can be started/stopped from anywhere using the Toggle Server command `Alt-Shift-T`.\n\n## Functions\n\n### Open the layout for the current file\n\nWhen triggered this function looks through your file for `layout: foo` and then opens `LAYOUTS_DIR/foo.LAYOUT_FORMAT`\n\n### Open the include for the cursor position\n\nWhen triggered this function opens up the include for the current tag. For example if you had `{% include snippet.html %}` Atom would open `INCLUDES_DIR/snippet.html`\n\n### Create a new Post\n\nWhen triggered this function brings up a popup at the top of the screen for you to type in the title of your new post e.g. `Something Really Cool!` (on the date 2/4/2014). When you submit the form a new file of `POSTSDIR/2014-04-02-something-really-cool.POST_FORMAT` will be created with a very basic front matter and opened on the screen.\n\n### Open Config\n\nOpens `_config.yml`\n\n### Open Data File\n\nWhen Triggered this function looks at the text around your cursor to find the data file to open. For Example triggering Open Data File whilst your cursor is within the `site.data.team` in this `{{ blah site.data.team }}` would result in `DATADIR/team.yml` being opened.\n\n## Keyboard Shortcuts\n\n`Cmd-Alt-L` Open the layout for the current file\n\n`Cmd-Alt-D` Open the Datafile\n\n`Cmd-Shift-I` Open include\n\n`Cmd-Alt-J` Create a new post\n\n`Cmd-Alt-T` Open the toolbar\n\n`Alt-Shift-T` Turn the server on/off\n\n## Snippets\n\nThere are a load of snippets provided by this plugin, please check the settings pane in atom for a full list.\n\n# Contributing\n\nFeel free to fork this repo and submit changes!\n\nWhen you fork Jekyll-Atom please:\n\n1. Create your feature branch (`git checkout -b my-new-feature`)\n2. Commit your changes (`git commit -am 'Add some feature'`)\n3. Push to the branch (`git push origin my-new-feature`)\n4. Create new Pull Request\n\n[Jekyll]: http://jekyllrb.com\n[Atom]: https://atom.io\n",
   "readmeFilename": "README.md",
   "bugs": {
     "url": "https://github.com/arcath/jekyll-atom/issues"
   },
   "homepage": "https://github.com/arcath/jekyll-atom",
-  "_id": "jekyll@0.3.1",
+  "_id": "jekyll@0.4.2",
   "dist": {
-    "shasum": "59194c6888cf360674c60b105bfa68852379e9fb"
+    "shasum": "aa0b2eef66d59f34ab88cce6a400ee4bc64c5a39"
   },
-  "_resolved": "/var/folders/q8/nyrt885s5kvdkjbsx784vjyc0000gn/T/d-114712-5636-wip7ph/package.tgz",
-  "_from": "/var/folders/q8/nyrt885s5kvdkjbsx784vjyc0000gn/T/d-114712-5636-wip7ph/package.tgz"
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114118-68027-165qeg9/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114118-68027-165qeg9/package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [
+      {
+        "name": "fs-plus",
+        "version": "2.3.2",
+        "path": "node_modules/fs-plus/lib/fs-plus.js"
+      },
+      {
+        "name": "async",
+        "version": "0.2.10",
+        "path": "node_modules/fs-plus/node_modules/async/lib/async.js"
+      },
+      {
+        "name": "mkdirp",
+        "version": "0.3.5",
+        "path": "node_modules/fs-plus/node_modules/mkdirp/index.js"
+      },
+      {
+        "name": "rimraf",
+        "version": "2.2.8",
+        "path": "node_modules/fs-plus/node_modules/rimraf/rimraf.js"
+      },
+      {
+        "name": "underscore-plus",
+        "version": "1.6.1",
+        "path": "node_modules/fs-plus/node_modules/underscore-plus/lib/underscore-plus.js"
+      },
+      {
+        "name": "underscore",
+        "version": "1.6.0",
+        "path": "node_modules/fs-plus/node_modules/underscore-plus/node_modules/underscore/underscore.js"
+      }
+    ],
+    "extensions": {
+      ".coffee": [
+        "lib/jekyll.coffee",
+        "lib/manage-view.coffee",
+        "lib/new-post-view.coffee",
+        "lib/server.coffee",
+        "lib/status-bar-view.coffee",
+        "lib/toolbar-view.coffee"
+      ],
+      ".js": [
+        "node_modules/fs-plus/lib/fs-plus.js",
+        "node_modules/fs-plus/node_modules/async/lib/async.js",
+        "node_modules/fs-plus/node_modules/mkdirp/examples/pow.js",
+        "node_modules/fs-plus/node_modules/mkdirp/index.js",
+        "node_modules/fs-plus/node_modules/rimraf/bin.js",
+        "node_modules/fs-plus/node_modules/rimraf/rimraf.js",
+        "node_modules/fs-plus/node_modules/underscore-plus/lib/underscore-plus.js",
+        "node_modules/fs-plus/node_modules/underscore-plus/node_modules/underscore/underscore-min.js",
+        "node_modules/fs-plus/node_modules/underscore-plus/node_modules/underscore/underscore.js"
+      ],
+      ".json": [
+        "node_modules/fs-plus/node_modules/async/component.json",
+        "node_modules/fs-plus/node_modules/async/package.json",
+        "node_modules/fs-plus/node_modules/mkdirp/package.json",
+        "node_modules/fs-plus/node_modules/rimraf/package.json",
+        "node_modules/fs-plus/node_modules/underscore-plus/node_modules/underscore/package.json",
+        "node_modules/fs-plus/node_modules/underscore-plus/package.json",
+        "node_modules/fs-plus/package.json",
+        "package.json"
+      ]
+    },
+    "folders": [
+      {
+        "paths": [
+          "lib",
+          "",
+          "spec"
+        ],
+        "dependencies": {
+          "fs-plus": "^2.0.4"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/fs-plus/lib",
+          "node_modules/fs-plus"
+        ],
+        "dependencies": {
+          "underscore-plus": "1.x",
+          "mkdirp": "~0.3.5",
+          "rimraf": "~2.2.2",
+          "async": "~0.2.9"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/fs-plus/node_modules/underscore-plus/lib",
+          "node_modules/fs-plus/node_modules/underscore-plus"
+        ],
+        "dependencies": {
+          "underscore": "~1.6.0"
+        }
+      }
+    ]
+  }
 }

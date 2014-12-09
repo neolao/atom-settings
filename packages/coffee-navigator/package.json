@@ -1,7 +1,7 @@
 {
   "name": "coffee-navigator",
   "main": "./lib/coffee-navigator",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Code navigation panel for Coffee Script",
   "repository": {
     "type": "git",
@@ -21,23 +21,23 @@
     "url": "https://github.com/suda/coffee-navigator/issues"
   },
   "homepage": "https://github.com/suda/coffee-navigator",
-  "_id": "coffee-navigator@0.0.13",
+  "_id": "coffee-navigator@0.0.14",
   "dist": {
-    "shasum": "df5a11edeff48c1fcdc61aec12e858ac9fd83c60"
+    "shasum": "3030bcc1e9ad88ebcf8ed120eeab49b11c217172"
   },
-  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141014-55857-1708r85/package.tgz",
-  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141014-55857-1708r85/package.tgz",
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114118-68019-1vm1obr/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114118-68019-1vm1obr/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
       {
         "name": "q",
-        "version": "1.1.1",
+        "version": "1.1.2",
         "path": "node_modules/q/q.js"
       },
       {
         "name": "underscore.string",
-        "version": "2.3.3",
+        "version": "2.4.0",
         "path": "node_modules/underscore.string/lib/underscore.string.js"
       }
     ],
@@ -47,19 +47,19 @@
         "lib/coffee-navigator.coffee",
         "lib/tag-generator.coffee"
       ],
-      ".js": [
-        "node_modules/q/benchmark/compare-with-callbacks.js",
-        "node_modules/q/benchmark/scenarios.js",
-        "node_modules/q/q.js",
-        "node_modules/q/queue.js",
-        "node_modules/underscore.string/dist/underscore.string.min.js",
-        "node_modules/underscore.string/lib/underscore.string.js"
-      ],
       ".json": [
         "node_modules/q/package.json",
+        "node_modules/underscore.string/bower.json",
         "node_modules/underscore.string/component.json",
         "node_modules/underscore.string/package.json",
         "package.json"
+      ],
+      ".js": [
+        "node_modules/q/q.js",
+        "node_modules/q/queue.js",
+        "node_modules/underscore.string/foo.js",
+        "node_modules/underscore.string/gulpfile.js",
+        "node_modules/underscore.string/lib/underscore.string.js"
       ]
     },
     "folders": [

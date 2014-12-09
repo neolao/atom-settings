@@ -1,6 +1,6 @@
 {
   "name": "atom-ctags",
-  "version": "2.4.1",
+  "version": "2.5.3",
   "main": "./lib/main",
   "description": "better autocomplete for atom",
   "license": "MIT",
@@ -21,12 +21,11 @@
     "url": "https://github.com/yongkangchen/atom-ctags/issues"
   },
   "homepage": "https://github.com/yongkangchen/atom-ctags",
-  "_id": "atom-ctags@2.4.1",
+  "_id": "atom-ctags@2.5.3",
   "dist": {
-    "shasum": "acc07df8be6d9a92f2152c32d54ac4f9e2483b31"
+    "shasum": "d82fdfa46839583503345757ef72bd40fe49e74e"
   },
-  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141021-9660-15efkqc/package.tgz",
-  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141021-9660-15efkqc/package.tgz",
+  "_from": "/Users/eric/.atom/.node-gyp/.atom/.apm/atom-ctags/2.5.3/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [

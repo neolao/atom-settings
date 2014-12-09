@@ -32,6 +32,7 @@
       'tabs'
       'tree-view'
       'symbol-gen'
+      'emmet'
     ]
   'whitespace':
     'ignoreWhitespaceOnCurrentLine': false
@@ -46,8 +47,7 @@
     'enableHighlight': true
   'linter':
     'showErrorInline': true
-    'showStatusBarWhenCursorIsInErrorRange': true
-    'showAllErrorsInStatusBar': true
+    'statusBar': 'Show all errors'
   'todo-show':
     'findTheseRegexes': [
       'FIXMEs'
@@ -64,6 +64,7 @@
   'atom-ctags':
     'autoBuildTagsWhenActive': true
     'cmdArgs': '--exclude=.git --exclude=app --exclude=vendor --exclude=vendor_front --exclude=web --exclude=tests'
+    'buildTimeout': 60000
   'docblockr':
     'auto_add_method_tag': true
     'simple_mode': true
@@ -98,4 +99,5 @@
     'hideVcsIgnoredFiles': false
     'hideIgnoredNames': false
     'showOnRightSide': false
-  'enhanced-package-list': {}
+  'enhanced-package-list':
+    'sourceFilter': 'user'

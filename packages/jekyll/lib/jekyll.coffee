@@ -1,8 +1,11 @@
-JekyllNewPostView = require './new-post-view'
-JekyllManageView = require './manage-view'
+{Emitter} = require 'atom'
+JekyllEmitter = new Emitter
 
-createManageView = (params) ->
-  manageView = new JekyllManageView(params)
+JekyllNewPostView = require './new-post-view'
+JekyllToolbarView = require './toolbar-view'
+JekyllManageView = require './manage-view'
+JekyllServer = require './server'
+JekyllStatusBar = require './status-bar-view'
 
 module.exports =
   jekyllNewPostView: null
@@ -23,17 +26,23 @@ module.exports =
     atom.workspaceView.command "jekyll:open-include", => @openInclude()
     atom.workspaceView.command "jekyll:open-data", => @openData()
     atom.workspaceView.command "jekyll:manage", => @manage()
-
-    atom.workspace.registerOpener (uri) ->
-      createManageView({uri}) if uri is 'atom://jekyll'
+    atom.workspaceView.command "jekyll:toolbar", => @toolbar()
+    atom.workspaceView.command "jekyll:toggle-server", => @toggleServer()
 
     @jekyllNewPostView = new JekyllNewPostView(state.jekyllNewPostViewState)
+    @jekyllServer = new JekyllServer
+    @jekyllServer.activate(JekyllEmitter)
+
+    @registerOpenView()
+
+    atom.workspaceView.statusBar?.appendRight(new JekyllStatusBar(JekyllEmitter))
 
   deactivate: ->
     @jekyllNewPostView.destroy()
 
   serialize: ->
     jekyllNewPostViewState: @jekyllNewPostView.serialize()
+    JekyllEmitter.emit 'jekyll:stop-server'
 
   showError: (message) ->
     console.log(message)
@@ -74,6 +83,15 @@ module.exports =
   manage: ->
     atom.workspaceView.open('atom://jekyll')
 
+  toolbar: ->
+    if @toolbarView
+      @toolbarPanel.show()
+      @toolbarView.refresh()
+    else
+      @toolbarView = new JekyllToolbarView(JekyllEmitter)
+      @toolbarPanel = atom.workspace.addBottomPanel(item: @toolbarView, visible: true, className: 'tool-panel panel-bottom')
+      @toolbarView.setPanel @toolbarPanel
+
   scan: (string, pattern) ->
     matches = []
     results = []
@@ -82,3 +100,11 @@ module.exports =
       results.push(matches)
 
     return results
+
+  registerOpenView: ->
+    atom.workspace.registerOpener (uri) ->
+      if uri is 'atom://jekyll'
+        return new JekyllManageView(JekyllEmitter)
+
+  toggleServer: ->
+    JekyllEmitter.emit 'jekyll:toggle-server'

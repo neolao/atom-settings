@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.14.1
+Added notifications
+
+## 1.14.0
+Added filters for project listing, ex: `group: atom`
+
+## 1.13.0
+- Improved loading of settings
+- Fixed deprecated warnings
+- Added tests for most things
+
+Big thanks to [@alvaromartin](https://github.com/alvaromartin)
+
+## 1.12.0
+Now using the new commands API
+
 ## 1.11.1
 Fixed link to octicons in readme
 

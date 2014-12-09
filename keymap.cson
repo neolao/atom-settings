@@ -24,11 +24,11 @@
     'alt-cmd-space': 'autocomplete-plus:activate'
     'alt-ctrl-space': 'autocomplete-plus:activate'
 
-'.platform-darwin .editor':
+'body.platform-darwin .editor':
     'cmd-d': 'editor:delete-line'
     'alt-cmd-down': 'editor:duplicate-lines'
     'cmd-alt-down': 'editor:duplicate-lines'
-
+    
 # Basculer vers la liste des fichiers
 '.platform-darwin':
   'ctrl-left': 'tree-view:toggle-focus'
