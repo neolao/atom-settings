@@ -14,6 +14,7 @@
     'preferredLineLength': 120
     'fontSize': 21
     'showIndentGuide': true
+    'invisibles': {}
   'core':
     'themes': [
       'neolao-ui'
@@ -48,14 +49,29 @@
     'statusBar': 'Show all errors'
   'todo-show':
     'findTheseRegexes': [
-      'FIXMEs'
-      '/FIXME ?:?(.+$)/g'
-      'TODOs'
-      '/TODO ?:?(.+$)/g'
       'TODOs'
       '/@todo ?:?(.+$)/g'
-      'CHANGEDs'
-      '/CHANGED ?:?(.+$)/g'
+      'FIXMEs'
+      '/(^.*FIXME.+$)/g'
+      'TODOs'
+      '/(^.*TODO.+$)/g'
+    ]
+    'ignoreThesePaths': [
+      '/app/'
+      '/data/'
+      '/docs/'
+      '/scripts/'
+      '/tests'
+      '/vendor/'
+      '/vendor_front/'
+      '/web/'
+      '/src/Shamp/'
+      '/src/Udg/AdminBundle/'
+      '/src/Udg/ApiBundle/'
+      '/src/Udg/CoreBundle/'
+      '/src/Udg/ProfilBundle/'
+      '/src/Udg/StatsBundle/'
+      '/src/Udg/WebBundle/'
     ]
   'project-manager':
     'sortByTitle': true
@@ -90,8 +106,7 @@
     'maximumOpenedTabs': 10
   'atom-beautify':
     '_analyticsUserId': '3e27096e-2708-460f-96c8-139f3245429c'
-  'symbols-tree-view':
-    'autoToggle': true
+  'symbols-tree-view': {}
   'tabs':
     'showIcons': true
   'tree-view':
