@@ -31,7 +31,6 @@
       'atom-beautify'
       'tabs'
       'tree-view'
-      'symbol-gen'
       'emmet'
     ]
   'whitespace':
@@ -62,9 +61,9 @@
   'project-manager':
     'sortByTitle': true
   'atom-ctags':
-    'autoBuildTagsWhenActive': true
     'cmdArgs': '--exclude=.git --exclude=app --exclude=vendor --exclude=vendor_front --exclude=web --exclude=tests'
     'buildTimeout': 60000
+    'autoBuildTagsWhenActive': true
   'docblockr':
     'auto_add_method_tag': true
     'simple_mode': true
@@ -78,6 +77,7 @@
     'enableUnderline': true
     'hideHighlightOnSelect': true
     'enableSelectionBorder': true
+    'enableBackgroundColor': false
   'highlight-selected':
     'highlightBackground': true
     'lightTheme': true
@@ -103,4 +103,3 @@
     'sourceFilter': 'user'
   'github-issues':
     'username': 'udg-eric'
-  'git-log': {}

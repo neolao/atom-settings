@@ -1,0 +1,41 @@
+{
+  "name": "quick-jump",
+  "main": "./lib/quick-jump",
+  "version": "0.0.4",
+  "description": "Quickly navigate the cursor to any position visible in the editor.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kelp404/quick-jump"
+  },
+  "license": "MIT",
+  "engines": {
+    "atom": ">=0.100.0"
+  },
+  "dependencies": {},
+  "readme": "#quick-jump\n\nAn Atom quick jump package.  \nQuickly navigate the cursor to any position visible in the editor like AceJump.\n\n![screenshot-png](https://raw.githubusercontent.com/kelp404/quick-jump/master/_images/quick-jump.png)\n\n1. `cmd-;` to start quick-jump. (windows is `ctrl-;`)\n2. Then you can press the char you want to jump to search in the editor.\n3. You can press `[a-z,0-9]` to navigate the cursor before the target, or press `cmd-[a-z,0-9]` to navigate the cursor after the target. Press `tab`, `shift-tab` to change the range of the search.\n\n\n+ Press `esc` to exit quick-jump.\n\n![screenshot-gif](https://raw.githubusercontent.com/kelp404/quick-jump/master/_images/quick-jump.gif)\n",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/kelp404/quick-jump/issues"
+  },
+  "homepage": "https://github.com/kelp404/quick-jump",
+  "_id": "quick-jump@0.0.4",
+  "dist": {
+    "shasum": "e010fc43518e88a0ec215b305244e509463ef756"
+  },
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141123-81785-18o95zo/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141123-81785-18o95zo/package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [],
+    "extensions": {
+      ".coffee": [
+        "lib/quick-jump-view.coffee",
+        "lib/quick-jump.coffee"
+      ],
+      ".json": [
+        "package.json"
+      ]
+    },
+    "folders": []
+  }
+}

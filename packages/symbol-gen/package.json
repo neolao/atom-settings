@@ -38,8 +38,46 @@
   "homepage": "https://github.com/weskinner/symbol-gen",
   "_id": "symbol-gen@0.1.8",
   "dist": {
-    "shasum": "b8ebacdf542bda87501dee5ff00339797f9d6271"
+    "shasum": "676989d79408c42f4c16e1d967151bb3a45b01f6"
   },
-  "_resolved": "/var/folders/0t/sjn1ngrj4379sbtpfhcw4n6m0000gp/T/d-11453-11578-h4sggk/package.tgz",
-  "_from": "/var/folders/0t/sjn1ngrj4379sbtpfhcw4n6m0000gp/T/d-11453-11578-h4sggk/package.tgz"
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141130-712-7sttna/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141130-712-7sttna/package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [
+      {
+        "name": "q",
+        "version": "1.0.1",
+        "path": "node_modules/q/q.js"
+      }
+    ],
+    "extensions": {
+      ".coffee": [
+        "lib/symbol-gen-view.coffee",
+        "lib/symbol-gen.coffee"
+      ],
+      ".js": [
+        "node_modules/q/benchmark/compare-with-callbacks.js",
+        "node_modules/q/benchmark/scenarios.js",
+        "node_modules/q/q.js",
+        "node_modules/q/queue.js"
+      ],
+      ".json": [
+        "node_modules/q/package.json",
+        "package.json"
+      ]
+    },
+    "folders": [
+      {
+        "paths": [
+          "lib",
+          "",
+          "spec"
+        ],
+        "dependencies": {
+          "q": "~1.0.0"
+        }
+      }
+    ]
+  }
 }

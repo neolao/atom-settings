@@ -1,7 +1,7 @@
 {
   "name": "minimap",
   "main": "./lib/minimap",
-  "version": "3.4.5",
+  "version": "3.4.9",
   "private": true,
   "description": "A preview of the full source code.",
   "author": {
@@ -43,12 +43,12 @@
     "url": "https://github.com/fundon/atom-minimap/issues"
   },
   "homepage": "https://github.com/fundon/atom-minimap",
-  "_id": "minimap@3.4.5",
+  "_id": "minimap@3.4.9",
   "dist": {
-    "shasum": "e3058e6d4b82bf9b2871c28fe5d8117fd14b4545"
+    "shasum": "fcaf54eb8c17c72998d24c4567c31663da31f6ec"
   },
-  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114118-68035-j4duwz/package.tgz",
-  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114118-68035-j4duwz/package.tgz",
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141123-79023-4x1dzg/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141123-79023-4x1dzg/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
@@ -59,7 +59,7 @@
       },
       {
         "name": "space-pen",
-        "version": "4.2.2",
+        "version": "4.3.0",
         "path": "node_modules/atom-space-pen-views/node_modules/space-pen/lib/space-pen.js"
       },
       {
@@ -74,7 +74,7 @@
       },
       {
         "name": "fs-plus",
-        "version": "2.3.2",
+        "version": "2.4.0",
         "path": "node_modules/fs-plus/lib/fs-plus.js"
       },
       {
@@ -134,7 +134,7 @@
       },
       {
         "name": "underscore-plus",
-        "version": "1.6.1",
+        "version": "1.6.6",
         "path": "node_modules/underscore-plus/lib/underscore-plus.js"
       },
       {
@@ -265,7 +265,7 @@
         "dependencies": {
           "fuzzaldrin": "^2.1.0",
           "grim": "^0.12.0",
-          "space-pen": "^4.2.2"
+          "space-pen": "^4.3.0"
         }
       },
       {
