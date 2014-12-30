@@ -14,7 +14,6 @@
     'preferredLineLength': 120
     'fontSize': 21
     'showIndentGuide': true
-    'invisibles': {}
   'core':
     'themes': [
       'neolao-ui'
