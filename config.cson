@@ -1,4 +1,4 @@
-'global':
+'*':
   'exception-reporting':
     'userId': '5c1b3e91-177a-1a3d-e8d5-6f5458113034'
   'release-notes':
@@ -9,18 +9,13 @@
     'userId': 'b53641952e75709991d2d77f556a6ab0a912fea0'
   'editor':
     'fontFamily': 'DejaVu Sans Mono'
-    'showInvisibles': true
-    'tabLength': 4
-    'preferredLineLength': 120
     'fontSize': 21
+    'showInvisibles': true
     'showIndentGuide': true
+    'preferredLineLength': 120
+    'tabLength': 4
     'invisibles': {}
   'core':
-    'themes': [
-      'neolao-ui'
-      'monokai'
-    ]
-    'projectHome': '/Users/eric/workspace'
     'disabledPackages': [
       'aural-coding'
       'spell-check'
@@ -33,10 +28,15 @@
       'tree-view'
       'emmet'
     ]
+    'themes': [
+      'neolao-ui'
+      'monokai'
+    ]
+    'projectHome': '/Users/eric/workspace'
   'whitespace':
+    'removeTrailingWhitespace': false
     'ignoreWhitespaceOnCurrentLine': false
     'ensureSingleTrailingNewline': false
-    'removeTrailingWhitespace': false
   'autoclose-html':
     'closeOnEndOfOpeningTag': true
     'makeNeverCloseElementsSelfClosing': true
@@ -73,8 +73,7 @@
       '/src/Udg/StatsBundle/'
       '/src/Udg/WebBundle/'
     ]
-  'project-manager':
-    'sortByTitle': true
+  'project-manager': {}
   'atom-ctags':
     'cmdArgs': '--exclude=.git --exclude=app --exclude=vendor --exclude=vendor_front --exclude=web --exclude=tests'
     'buildTimeout': 60000
@@ -86,13 +85,13 @@
   'autocomplete':
     'includeCompletionsFromAllBuffers': true
   'autocomplete-plus':
-    'includeCompletionsFromAllBuffers': true
     'autoActivationDelay': 500
+    'includeCompletionsFromAllBuffers': true
   'highlight-line':
-    'enableUnderline': true
-    'hideHighlightOnSelect': true
-    'enableSelectionBorder': true
     'enableBackgroundColor': false
+    'hideHighlightOnSelect': true
+    'enableUnderline': true
+    'enableSelectionBorder': true
   'highlight-selected':
     'highlightBackground': true
     'lightTheme': true
@@ -106,7 +105,6 @@
     'maximumOpenedTabs': 10
   'atom-beautify':
     '_analyticsUserId': '3e27096e-2708-460f-96c8-139f3245429c'
-  'symbols-tree-view': {}
   'tabs':
     'showIcons': true
   'tree-view':

@@ -1,8 +1,22 @@
+## 0.1.8
+
+- Actually test if a remote origin exists (getOrigin()) as opposed to remove branches
+- https://github.com/jacogr/atom-git-control/issues/8
+
+... getting things ticking on anything where a fetch or clone hasn't been done
+
+## 0.1.7
+
+- When a new folder is created, explicitly show all the files in it
+- https://github.com/jacogr/atom-git-control/issues/9
+
+... show untracked files
+
 ## 0.1.6
 
 - Don't do a fetch when there are no remotes
 - Don't make the push/pull/fetch items active without remotes
-- - https://github.com/jacogr/atom-git-control/issues/6
+- https://github.com/jacogr/atom-git-control/issues/6
 
 ... working with local-only repos
 

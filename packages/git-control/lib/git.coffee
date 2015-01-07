@@ -115,7 +115,10 @@ module.exports =
 
   hasRemotes: ->
     refs = repo.getReferences()
-    return refs.remotes and refs.remotes.length
+    return refs and refs.remotes and refs.remotes.length
+
+  hasOrigin: ->
+    return repo.getOriginUrl() isnt null
 
   add: (files) ->
     return noop() unless files.length
@@ -187,4 +190,4 @@ module.exports =
       return parseDefault(true)
 
   status: ->
-    return callGit 'status --porcelain', parseStatus
+    return callGit 'status --porcelain --untracked-files=all', parseStatus

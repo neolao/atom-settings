@@ -66,13 +66,46 @@
 }
 
 
-// The cursor
-.editor .cursor {
+// Cursor
+atom-text-editor::shadow .cursor {
     border-color: #ff0;
     border-width: 2px;
     box-shadow: 0 0 10px #ff0;
     width: 2px !important;
 }
+
+// Package: Highlight-line
+atom-text-editor::shadow .highlight.selection .region {
+    background: rgba(255, 255, 0, 0.15);
+    /*
+    background: rgba(255, 255, 0, 0.1);
+
+    &:first-child, &:last-child {
+        background: none;
+    }
+    */
+}
+atom-text-editor::shadow .line.highlight-line-multi-line-solid-top {
+    // background: rgba(255, 255, 0, 0.1) !important;
+    &:before {
+        content: "";
+        display: block;
+        height: 1px;
+        background: #ff0;
+        box-shadow: 0 0 10px #ff0;
+    }
+}
+atom-text-editor::shadow .line.highlight-line-multi-line-solid-bottom {
+    // background: rgba(255, 255, 0, 0.1) !important;
+    &:after {
+        content: "";
+        display: block;
+        height: 1px;
+        background: #ff0;
+        box-shadow: 0 0 10px #ff0;
+    }
+}
+
 
 // Package: Terminal
 .terminal {

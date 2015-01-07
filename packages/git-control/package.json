@@ -1,7 +1,7 @@
 {
   "name": "git-control",
   "main": "./lib/git-control",
-  "version": "0.1.6",
+  "version": "0.1.8",
   "description": "Provides a GUI interface to manage all commonly-used git commands.",
   "activationCommands": {
     "atom-workspace": "git-control:toggle"
@@ -24,12 +24,12 @@
     "url": "https://github.com/jacogr/atom-git-control/issues"
   },
   "homepage": "https://github.com/jacogr/atom-git-control",
-  "_id": "git-control@0.1.6",
+  "_id": "git-control@0.1.8",
   "dist": {
-    "shasum": "1b4c241cb752bbee64a208f040e5423a72230da2"
+    "shasum": "c4ef9a57da13cd4f654d54fb05113d865fe64b70"
   },
-  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141130-6637-h7sqrp/package.tgz",
-  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141130-6637-h7sqrp/package.tgz",
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-11507-66871-rxwpu1/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-11507-66871-rxwpu1/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
