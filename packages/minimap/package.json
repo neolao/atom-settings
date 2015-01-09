@@ -1,7 +1,7 @@
 {
   "name": "minimap",
   "main": "./lib/main",
-  "version": "3.5.3",
+  "version": "3.5.4",
   "private": true,
   "description": "A preview of the full source code.",
   "author": {
@@ -44,15 +44,20 @@
     "url": "https://github.com/fundon/atom-minimap/issues"
   },
   "homepage": "https://github.com/fundon/atom-minimap",
-  "_id": "minimap@3.5.3",
+  "_id": "minimap@3.5.4",
   "dist": {
-    "shasum": "3cebb02aaccb2e8233ec320683bc66c7a4d7a42a"
+    "shasum": "589248484a842c06f1496488f88125525a467a66"
   },
-  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-11507-66887-1bof42k/package.tgz",
-  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-11507-66887-1bof42k/package.tgz",
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-11509-19521-eary6o/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-11509-19521-eary6o/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
+      {
+        "name": "atom-space-pen-views",
+        "version": "2.0.3",
+        "path": "node_modules/atom-space-pen-views/lib/main.js"
+      },
       {
         "name": "fuzzaldrin",
         "version": "2.1.0",
@@ -60,7 +65,7 @@
       },
       {
         "name": "grim",
-        "version": "1.0.0",
+        "version": "1.1.0",
         "path": "node_modules/atom-space-pen-views/node_modules/grim/lib/grim.js"
       },
       {
@@ -80,7 +85,7 @@
       },
       {
         "name": "source-map",
-        "version": "0.1.42",
+        "version": "0.1.43",
         "path": "node_modules/atom-space-pen-views/node_modules/grim/node_modules/coffeestack/node_modules/source-map/lib/source-map.js"
       },
       {
@@ -277,13 +282,13 @@
         "lib/mixins/decoration-management.coffee",
         "lib/mixins/dom-styles-reader.coffee",
         "lib/mixins/plugin-management.coffee",
-        "lib/mixins/view-management.coffee",
-        "node_modules/atom-space-pen-views/lib/main.coffee",
-        "node_modules/atom-space-pen-views/lib/scroll-view.coffee",
-        "node_modules/atom-space-pen-views/lib/select-list-view.coffee",
-        "node_modules/atom-space-pen-views/lib/text-editor-view.coffee"
+        "lib/mixins/view-management.coffee"
       ],
       ".js": [
+        "node_modules/atom-space-pen-views/lib/main.js",
+        "node_modules/atom-space-pen-views/lib/scroll-view.js",
+        "node_modules/atom-space-pen-views/lib/select-list-view.js",
+        "node_modules/atom-space-pen-views/lib/text-editor-view.js",
         "node_modules/atom-space-pen-views/node_modules/fuzzaldrin/lib/filter.js",
         "node_modules/atom-space-pen-views/node_modules/fuzzaldrin/lib/fuzzaldrin.js",
         "node_modules/atom-space-pen-views/node_modules/fuzzaldrin/lib/matcher.js",
@@ -320,6 +325,7 @@
         "node_modules/atom-space-pen-views/node_modules/grim/node_modules/coffeestack/node_modules/source-map/lib/source-map/base64-vlq.js",
         "node_modules/atom-space-pen-views/node_modules/grim/node_modules/coffeestack/node_modules/source-map/lib/source-map/base64.js",
         "node_modules/atom-space-pen-views/node_modules/grim/node_modules/coffeestack/node_modules/source-map/lib/source-map/binary-search.js",
+        "node_modules/atom-space-pen-views/node_modules/grim/node_modules/coffeestack/node_modules/source-map/lib/source-map/mapping-list.js",
         "node_modules/atom-space-pen-views/node_modules/grim/node_modules/coffeestack/node_modules/source-map/lib/source-map/source-map-consumer.js",
         "node_modules/atom-space-pen-views/node_modules/grim/node_modules/coffeestack/node_modules/source-map/lib/source-map/source-map-generator.js",
         "node_modules/atom-space-pen-views/node_modules/grim/node_modules/coffeestack/node_modules/source-map/lib/source-map/source-node.js",

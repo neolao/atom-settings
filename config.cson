@@ -24,9 +24,11 @@
       'feedback'
       'minimap'
       'atom-beautify'
+      'emmet'
+      'enhanced-package-list'
+      'file-type-icons'
       'tabs'
       'tree-view'
-      'emmet'
     ]
     'themes': [
       'neolao-ui'
@@ -107,11 +109,11 @@
     '_analyticsUserId': '3e27096e-2708-460f-96c8-139f3245429c'
   'tabs':
     'showIcons': true
-  'tree-view':
-    'hideVcsIgnoredFiles': false
-    'hideIgnoredNames': false
-    'showOnRightSide': false
   'enhanced-package-list':
     'sourceFilter': 'user'
   'github-issues':
     'username': 'udg-eric'
+  'tree-view':
+    'hideVcsIgnoredFiles': false
+    'hideIgnoredNames': false
+    'showOnRightSide': false
