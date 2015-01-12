@@ -1,0 +1,45 @@
+{
+  "name": "indent-guide-improved",
+  "author": {
+    "name": "Akihiro HARAI"
+  },
+  "main": "./lib/indent-guide-improved",
+  "version": "1.0.0",
+  "description": "This draws indent guide more correctly and understandably.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/harai/indent-guide-improved"
+  },
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {},
+  "readme": "# indent-guide-improved package\n\nThis Atom Editor package draws indent guide more correctly and understandably.\n\n![screenshot](https://raw.githubusercontent.com/harai/indent-guide-improved/master/doc/demo.gif)\n\n# Usage\n\n1. Install this package.\n1. Switch off \"Show Indent Guide\" of [Edit]-[Preferences]-[Settings].\n",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/harai/indent-guide-improved/issues"
+  },
+  "homepage": "https://github.com/harai/indent-guide-improved",
+  "_id": "indent-guide-improved@1.0.0",
+  "dist": {
+    "shasum": "32a805d78427459f01fdc116532b354fd6a43be9"
+  },
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-115012-7207-1it2tbc/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-115012-7207-1it2tbc/package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [],
+    "extensions": {
+      ".coffee": [
+        "lib/guides.coffee",
+        "lib/indent-guide-improved-element.coffee",
+        "lib/indent-guide-improved.coffee"
+      ],
+      ".json": [
+        "package.json"
+      ]
+    },
+    "folders": []
+  }
+}

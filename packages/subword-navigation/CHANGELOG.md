@@ -1,3 +1,12 @@
+## 2.3.0 - 1/11/15
+* Fix deprecations
+
+## 2.2.1 - 1/10/15
+* Update required Atom version
+
+## 2.2.0 - 1/10/15
+* Fix command activation
+
 ## 2.1.0 - 11/28/14
 * Replace deprecated transaction functions
 

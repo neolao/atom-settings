@@ -113,7 +113,3 @@
     'sourceFilter': 'user'
   'github-issues':
     'username': 'udg-eric'
-  'tree-view':
-    'hideVcsIgnoredFiles': false
-    'hideIgnoredNames': false
-    'showOnRightSide': false

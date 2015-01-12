@@ -1,9 +1,9 @@
 {
   "name": "subword-navigation",
   "main": "./lib/main",
-  "version": "2.1.0",
+  "version": "2.3.0",
   "description": "Navigate camelCase and snake_case words",
-  "activationEvents": [],
+  "activationCommands": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/dsandstrom/atom-subword-navigation"
@@ -18,7 +18,7 @@
     }
   ],
   "engines": {
-    "atom": ">= 0.145.0"
+    "atom": ">= 0.168.0"
   },
   "devDependencies": {
     "fs-plus": "2.x",
@@ -27,21 +27,21 @@
   "dependencies": {
     "underscore-plus": "1.x"
   },
-  "readme": "# Subword Navigation\n###### An Atom Package - [Atom.io](https://atom.io/packages/subword-navigation) : [Github](https://github.com/dsandstrom/atom-subword-navigation) : [![Build Status](https://travis-ci.org/dsandstrom/atom-subword-navigation.svg?branch=master)](https://travis-ci.org/dsandstrom/atom-subword-navigation)\n\n**Harness the power of ALT as you battle the mighty camelCase and treacherous snake_case.**\n\nThis package allows you to move the cursor(s) to beginning and end of words, but also it stops at subwords (camelCase and snake_case).\n\n- Holding `shift` will highlight as you move left and right.\n\n- Along with highlight, you can delete to the previous/next subword.  However, I did not assign keybindings to them; they are BYOK to prevent conflicts.  Command names are at the bottom of the page.\n\n- Issues and pull requests are welcome.\n\n### Instructions\n\n|  Linux/Win  |            |            |\n|-------------|----------------|-----------------|\n| Move around | `alt-left`       | `alt-right `   |\n| Highlight   | `alt-shift-left` | `alt-shift-right` |\n| Delete      | *unset*          | *unset* |\n\n|     Mac     |            |            |\n|-------------|----------------|-----------------|\n| Move around | `ctrl-alt-left`  | `alt-right`       |\n| Highlight   | `ctrl-alt-shift-left` | `ctrl-alt-shift-right` |\n| Delete      | *unset* | *unset* |\n\n\n### Dependencies\nRequires Atom v0.145 and up\n\n\n### Commands\n```coffee\n'subword-navigation:move-right'\n'subword-navigation:move-left'\n'subword-navigation:select-right'\n'subword-navigation:select-left'\n'subword-navigation:delete-right'\n'subword-navigation:delete-left'\n```\n",
+  "readme": "# Subword Navigation\n###### An Atom Package - [Atom.io](https://atom.io/packages/subword-navigation) : [Github](https://github.com/dsandstrom/atom-subword-navigation) : [![Build Status](https://travis-ci.org/dsandstrom/atom-subword-navigation.svg?branch=master)](https://travis-ci.org/dsandstrom/atom-subword-navigation)\n\n**Harness the power of ALT as you battle the mighty camelCase and treacherous snake_case.**\n\nThis package allows you to move the cursor(s) to beginning and end of words, but also it stops at subwords (camelCase and snake_case).\n\n- Holding `shift` will highlight as you move left and right.\n\n- Along with highlight, you can delete to the previous/next subword.  However, I did not assign keybindings to them; they are BYOK to prevent conflicts.  Command names are at the bottom of the page.\n\n- Issues and pull requests are welcome.\n\n### Instructions\n\n|  Linux/Win  |            |            |\n|-------------|----------------|-----------------|\n| Move around | `alt-left`       | `alt-right `   |\n| Highlight   | `alt-shift-left` | `alt-shift-right` |\n| Delete      | *unset*          | *unset* |\n\n|     Mac     |            |            |\n|-------------|----------------|-----------------|\n| Move around | `ctrl-alt-left`  | `alt-right`       |\n| Highlight   | `ctrl-alt-shift-left` | `ctrl-alt-shift-right` |\n| Delete      | *unset* | *unset* |\n\n\n### Dependencies\nRequires Atom v0.168.0 and up\n\n\n### Commands\n```coffee\n'subword-navigation:move-right'\n'subword-navigation:move-left'\n'subword-navigation:select-right'\n'subword-navigation:select-left'\n'subword-navigation:delete-right'\n'subword-navigation:delete-left'\n```\n",
   "readmeFilename": "README.md",
   "homepage": "https://github.com/dsandstrom/atom-subword-navigation",
-  "_id": "subword-navigation@2.1.0",
+  "_id": "subword-navigation@2.3.0",
   "dist": {
-    "shasum": "df6abf110258ff733dd92573159c06a309727192"
+    "shasum": "38a2cf2f23ed549229ec0cb62893d0fae3ecea21"
   },
-  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114112-90277-11qjtt6/package.tgz",
-  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114112-90277-11qjtt6/package.tgz",
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-115012-4318-1umfyda/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-115012-4318-1umfyda/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
       {
         "name": "underscore-plus",
-        "version": "1.6.1",
+        "version": "1.6.6",
         "path": "node_modules/underscore-plus/lib/underscore-plus.js"
       },
       {
