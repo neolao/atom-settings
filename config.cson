@@ -1,115 +1,122 @@
-'*':
-  'exception-reporting':
-    'userId': '5c1b3e91-177a-1a3d-e8d5-6f5458113034'
-  'release-notes':
-    'viewedVersion': '0.94.0'
-  'welcome':
-    'showOnStartup': false
-  'metrics':
-    'userId': 'b53641952e75709991d2d77f556a6ab0a912fea0'
-  'editor':
-    'fontFamily': 'DejaVu Sans Mono'
-    'fontSize': 21
-    'showInvisibles': true
-    'showIndentGuide': true
-    'preferredLineLength': 120
-    'tabLength': 4
-    'invisibles': {}
-  'core':
-    'disabledPackages': [
-      'aural-coding'
-      'spell-check'
-      'welcome'
-      'symbols-view'
-      'feedback'
-      'minimap'
-      'atom-beautify'
-      'emmet'
-      'enhanced-package-list'
-      'file-type-icons'
-      'tabs'
-      'tree-view'
+"*":
+  "exception-reporting":
+    userId: "5c1b3e91-177a-1a3d-e8d5-6f5458113034"
+  "release-notes":
+    viewedVersion: "0.94.0"
+  welcome:
+    showOnStartup: false
+  metrics:
+    userId: "b53641952e75709991d2d77f556a6ab0a912fea0"
+  editor:
+    fontFamily: "DejaVu Sans Mono"
+    fontSize: 21
+    showInvisibles: true
+    showIndentGuide: true
+    preferredLineLength: 120
+    tabLength: 4
+    invisibles: {}
+  core:
+    disabledPackages: [
+      "aural-coding"
+      "spell-check"
+      "welcome"
+      "symbols-view"
+      "feedback"
+      "minimap"
+      "atom-beautify"
+      "emmet"
+      "enhanced-package-list"
+      "file-type-icons"
+      "tabs"
+      "tree-view"
+      "string-looper"
     ]
-    'themes': [
-      'neolao-ui'
-      'monokai'
+    themes: [
+      "neolao-ui"
+      "monokai"
     ]
-    'projectHome': '/Users/eric/workspace'
-  'whitespace':
-    'removeTrailingWhitespace': false
-    'ignoreWhitespaceOnCurrentLine': false
-    'ensureSingleTrailingNewline': false
-  'autoclose-html':
-    'closeOnEndOfOpeningTag': true
-    'makeNeverCloseElementsSelfClosing': true
-    'forceInline': 'title, h1, h2, h3, h4, h5, h6, p'
-  'highlight-column':
-    'opacity': 1
-    'enableHighlight': true
-  'linter':
-    'showErrorInline': true
-    'statusBar': 'Show all errors'
-  'todo-show':
-    'findTheseRegexes': [
-      'TODOs'
-      '/@todo ?:?(.+$)/g'
-      'FIXMEs'
-      '/(^.*FIXME.+$)/g'
-      'TODOs'
-      '/(^.*TODO.+$)/g'
+    projectHome: "/Users/eric/workspace"
+  whitespace:
+    removeTrailingWhitespace: false
+    ignoreWhitespaceOnCurrentLine: false
+    ensureSingleTrailingNewline: false
+  "autoclose-html":
+    closeOnEndOfOpeningTag: true
+    makeNeverCloseElementsSelfClosing: true
+    forceInline: "title, h1, h2, h3, h4, h5, h6, p"
+  "highlight-column":
+    opacity: 1
+    enableHighlight: true
+  linter:
+    showErrorInline: true
+    statusBar: "Show all errors"
+  "todo-show":
+    findTheseRegexes: [
+      "TODOs"
+      "/@todo ?:?(.+$)/g"
+      "FIXMEs"
+      "/(^.*FIXME.+$)/g"
+      "TODOs"
+      "/(^.*TODO.+$)/g"
     ]
-    'ignoreThesePaths': [
-      '/app/'
-      '/data/'
-      '/docs/'
-      '/scripts/'
-      '/tests'
-      '/vendor/'
-      '/vendor_front/'
-      '/web/'
-      '/src/Shamp/'
-      '/src/Udg/AdminBundle/'
-      '/src/Udg/ApiBundle/'
-      '/src/Udg/CoreBundle/'
-      '/src/Udg/ProfilBundle/'
-      '/src/Udg/StatsBundle/'
-      '/src/Udg/WebBundle/'
+    ignoreThesePaths: [
+      "/app/"
+      "/data/"
+      "/docs/"
+      "/scripts/"
+      "/tests"
+      "/vendor/"
+      "/vendor_front/"
+      "/web/"
+      "/src/Shamp/"
+      "/src/Udg/AdminBundle/"
+      "/src/Udg/ApiBundle/"
+      "/src/Udg/CoreBundle/"
+      "/src/Udg/ProfilBundle/"
+      "/src/Udg/StatsBundle/"
+      "/src/Udg/WebBundle/"
     ]
-  'project-manager': {}
-  'atom-ctags':
-    'cmdArgs': '--exclude=.git --exclude=app --exclude=vendor --exclude=vendor_front --exclude=web --exclude=tests'
-    'buildTimeout': 60000
-    'autoBuildTagsWhenActive': true
-  'docblockr':
-    'auto_add_method_tag': true
-    'simple_mode': true
-    'spacer_between_sections': true
-  'autocomplete':
-    'includeCompletionsFromAllBuffers': true
-  'autocomplete-plus':
-    'autoActivationDelay': 500
-    'includeCompletionsFromAllBuffers': true
-  'highlight-line':
-    'enableBackgroundColor': false
-    'hideHighlightOnSelect': true
-    'enableUnderline': true
-    'enableSelectionBorder': true
-  'highlight-selected':
-    'highlightBackground': true
-    'lightTheme': true
-    'hideHighlightOnSelectedWord': true
-  'merge-conflicts':
-    'gitPath': '/usr/bin/git'
-  'toolbar':
-    'visible': false
-  'zentabs':
-    'neverCloseUnsaved': true
-    'maximumOpenedTabs': 10
-  'atom-beautify':
-    '_analyticsUserId': '3e27096e-2708-460f-96c8-139f3245429c'
-  'tabs':
-    'showIcons': true
-  'enhanced-package-list':
-    'sourceFilter': 'user'
-  'github-issues':
-    'username': 'udg-eric'
+  "project-manager": {}
+  "atom-ctags":
+    cmdArgs: "--exclude=.git --exclude=app --exclude=vendor --exclude=vendor_front --exclude=web --exclude=tests"
+    buildTimeout: 60000
+    autoBuildTagsWhenActive: true
+  docblockr:
+    auto_add_method_tag: true
+    simple_mode: true
+    spacer_between_sections: true
+  autocomplete:
+    includeCompletionsFromAllBuffers: true
+  "autocomplete-plus":
+    autoActivationDelay: 500
+    includeCompletionsFromAllBuffers: true
+  "highlight-line":
+    hideHighlightOnSelect: true
+    enableUnderline: true
+    enableSelectionBorder: true
+  "highlight-selected":
+    highlightBackground: true
+    lightTheme: true
+    hideHighlightOnSelectedWord: true
+  "merge-conflicts":
+    gitPath: "/usr/bin/git"
+  toolbar:
+    visible: false
+  zentabs:
+    neverCloseUnsaved: true
+    maximumOpenedTabs: 10
+  "atom-beautify":
+    _analyticsUserId: "3e27096e-2708-460f-96c8-139f3245429c"
+  tabs:
+    showIcons: true
+  "enhanced-package-list":
+    sourceFilter: "user"
+  "github-issues":
+    username: "udg-eric"
+  "tree-view":
+    hideVcsIgnoredFiles: false
+    hideIgnoredNames: false
+    showOnRightSide: false
+  fonts:
+    fontFamily: "DejaVu Mono"
+  goto: {}

@@ -1,7 +1,7 @@
 {
   "name": "fonts",
   "main": "./lib/fonts",
-  "version": "0.3.1",
+  "version": "0.3.3",
   "description": "Lots of monospace fonts.",
   "repository": {
     "type": "git",
@@ -12,18 +12,16 @@
     "atom": ">0.50.0"
   },
   "dependencies": {},
-  "readme": "# Fonts package for Atom\n\nOh we do love our monospace fonts don't we? To celebrate typography and free choice, I've packaged all the great fonts I could get my hands on (45 of them at this point).\n\nThis package delivers them straight to Atom through the power of @font-face. You no longer need to hunt down and install your favourite font, instead you can now instantly try out any of the fonts in this package.\n\nFonts can be selected from a list in the settings for this package. Disable the package to re-enable the normal font settings.\n\n* [These fonts (and more) and download links](FONTS.md)\n\n## All fonts\nAnka/Coder, Anonymous Pro, Aurulent Sans Mono, Average Mono, BPmono, Bitstream Vera Sans Mono, Consolamono, Cousine, Cutive Mono, DejaVu Mono, Droid Sans Mono, Effects Eighty, Fantasque Sans Mono, Fifteen, Fira Mono, Fixedsys, GNU Freefont, GNU Unifont, Generic Mono, Hermit Light, Hermit, Inconsolata, Inconsolata-g, Latin Modern Mono Light, Latin Modern Mono, Lekton, Liberation Mono, Luxi Mono, M+ Light, M+ Medium, M+ Thin, M+, Meslo, Monofur, NotCourierSans, Nova Mono, Oxygen Mono, PT Mono, Profont, Proggy Clean, Quinze, Share Tech Mono, Source Code Pro Extra Light, Source Code Pro Light, Source Code Pro Medium, Source Code Pro, Sudo, TeX Gyre Cursor, Ubuntu Mono, VT323, Verily Serif Mono, saxMono\n\n## More programming fonts\nTest drive these fonts in your browser using the [Programming Fonts Test Drive App](http://app.programmingfonts.org)\n",
+  "readme": "# Fonts package for Atom\n\nOh we do love our monospace fonts don't we? To celebrate typography and free choice, I've packaged all the great fonts I could get my hands on (45 of them at this point).\n\nThis package delivers them straight to Atom through the power of @font-face. You no longer need to hunt down and install your favourite font, instead you can now instantly try out any of the fonts in this package.\n\nFonts can be selected from a list in the settings for this package. Disable the package to re-enable the normal font settings.\n\n* [These fonts (and more) and download links](http://programmingfonts.org/list)\n\n## All fonts\nAnka/Coder, Anonymous Pro, Aurulent Sans Mono, Average Mono, BPmono, Bitstream Vera Sans Mono, Consolamono, Cousine, Cutive Mono, DejaVu Mono, Droid Sans Mono, Effects Eighty, Fantasque Sans Mono, Fifteen, Fira Mono, Fixedsys, GNU Freefont, GNU Unifont, Generic Mono, Hermit Light, Hermit, Inconsolata, Inconsolata-g, Latin Modern Mono Light, Latin Modern Mono, Lekton, Liberation Mono, Luxi Mono, M+ Light, M+ Medium, M+ Thin, M+, Meslo, Monofur, NotCourierSans, Nova Mono, Oxygen Mono, PT Mono, Profont, Proggy Clean, Quinze, Share Tech Mono, Source Code Pro Extra Light, Source Code Pro Light, Source Code Pro Medium, Source Code Pro, Sudo, TeX Gyre Cursor, Ubuntu Mono, VT323, Verily Serif Mono, saxMono\n\n## More programming fonts\nTest drive these fonts in your browser using the [Programming Fonts Test Drive App](http://app.programmingfonts.org)\n",
   "readmeFilename": "README.md",
   "bugs": {
     "url": "https://github.com/braver/fonts/issues"
   },
   "homepage": "https://github.com/braver/fonts",
-  "_id": "fonts@0.3.1",
-  "dist": {
-    "shasum": "87b62a2485d4d22557584f7a6ef2a99e45811a8b"
-  },
-  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-115012-4311-1aj5jls/package.tgz",
-  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-115012-4311-1aj5jls/package.tgz",
+  "_id": "fonts@0.3.3",
+  "_shasum": "e234a5b734a165e91e8811d7e6ab8a2d037fab0f",
+  "_resolved": "file:../d-115027-96558-1092a0y/package.tgz",
+  "_from": "../d-115027-96558-1092a0y/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [],

@@ -2,14 +2,14 @@ entities = null
 
 module.exports =
   activate: (state) ->
-    atom.workspaceView.command 'html-entities:encode', ->
+    atom.commands.add 'atom-workspace', 'html-entities:encode', ->
       entitiesCoderDecoder('encode')
 
-    atom.workspaceView.command 'html-entities:decode', ->
+    atom.commands.add 'atom-workspace', 'html-entities:decode', ->
       entitiesCoderDecoder('decode')
 
 entitiesCoderDecoder = (action) ->
-  editor = atom.workspace.getActiveEditor()
+  editor = atom.workspace.getActiveTextEditor()
   return unless editor?
 
   entities ?= require 'entities'

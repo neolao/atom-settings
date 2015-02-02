@@ -23,6 +23,7 @@
     'alt-cmd-down': 'editor:duplicate-lines'
     'alt-cmd-space': 'autocomplete-plus:activate'
     'alt-ctrl-space': 'autocomplete-plus:activate'
+    'cmd-g': 'goto:declaration'
 
 # Traitement sur les lignes
 'body.platform-darwin .editor':
@@ -42,7 +43,9 @@
 # Confirmer une autocompletion avec Enter
 ".autocomplete-plus input.hidden-input":
     "enter": "autocomplete-plus:confirm"
-    
+
+
+
 # Bug bizarre avec Docblockr
 #'.editor:not(.mini)':
 #  'enter': 'docblockr:parse-inline'

@@ -4,7 +4,7 @@
     "name": "Matt Berkowitz"
   },
   "main": "./lib/autoclose-html",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "private": true,
   "description": "Automates closing of HTML Tags",
   "repository": {
@@ -34,12 +34,12 @@
     "url": "https://github.com/mattberkowitz/autoclose-html/issues"
   },
   "homepage": "https://github.com/mattberkowitz/autoclose-html",
-  "_id": "autoclose-html@0.13.0",
+  "_id": "autoclose-html@0.14.0",
   "dist": {
-    "shasum": "1fee7384ef4d0cd9fdc60ad72d503f40f163a2e0"
+    "shasum": "8808a3f11a54b7945e85f1964264baaceb20cc0b"
   },
-  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141115-39770-1skpgg5/package.tgz",
-  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141115-39770-1skpgg5/package.tgz",
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-115026-75777-1e0jf97/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-115026-75777-1e0jf97/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [],

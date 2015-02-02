@@ -1,7 +1,8 @@
 {CompositeDisposable, Point} = require 'atom'
 
-IndentGuideImprovedElement = require './indent-guide-improved-element'
-{toGuides} = require './guides.coffee'
+{createElementsForGuides, styleGuide} = require './indent-guide-improved-element'
+{getGuides} = require './guides.coffee'
+RowMap = require './row-map.coffee'
 
 module.exports =
   activate: (state) ->
@@ -9,27 +10,36 @@ module.exports =
       underlayer = editorElement.querySelector(".underlayer")
       if !underlayer?
         return
-      visibleRange = editor.getVisibleRowRange().map (row) ->
+
+      visibleScreenRange = editor.getVisibleRowRange()
+      basePixelPos = editor.pixelPositionForScreenPosition(new Point(visibleScreenRange[0], 0)).top
+      visibleRange = visibleScreenRange.map (row) ->
         editor.bufferPositionForScreenPosition(new Point(row, 0)).row
-      cursorRows = editor.getCursorBufferPositions().map (point) ->
-        point.row - visibleRange[0]
-      items = underlayer.querySelectorAll('.indent-guide-improved')
-      Array.prototype.forEach.call items, (node) ->
-        node.parentNode.removeChild(node)
-      indents = [visibleRange[0]..Math.min(visibleRange[1], editor.getLastBufferRow())].map (n) ->
-        if editor.lineTextForBufferRow(n).match(/^\s*$/)
+      getIndent = (row) ->
+        if editor.lineTextForBufferRow(row).match(/^\s*$/)
           null
         else
-          editor.indentationForBufferRow(n)
-      toGuides(indents, cursorRows).forEach (g) ->
-        underlayer.appendChild(
-          new IndentGuideImprovedElement().initialize(
-            g.point.translate(new Point(visibleRange[0], 0)),
-            g.length,
-            g.stack,
-            g.active,
-            editor.getTabLength(),
-            editor))
+          editor.indentationForBufferRow(row)
+      rowMap = new RowMap(editor.displayBuffer.rowMap.getRegions())
+      guides = getGuides(
+        visibleRange[0],
+        visibleRange[1],
+        editor.getLastBufferRow(),
+        editor.getCursorBufferPositions().map((point) -> point.row),
+        getIndent)
+      lineHeightPixel = editor.getLineHeightInPixels()
+      createElementsForGuides(underlayer, guides.map (g) ->
+        (el) -> styleGuide(
+          el,
+          g.point.translate(new Point(visibleRange[0], 0)),
+          g.length,
+          g.stack,
+          g.active,
+          editor,
+          rowMap,
+          basePixelPos,
+          lineHeightPixel,
+          visibleScreenRange[0]))
 
     handleEvents = (editor, editorElement) ->
       subscriptions = new CompositeDisposable

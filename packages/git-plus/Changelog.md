@@ -1,5 +1,26 @@
 ## Changelog
 
+### 4.3.8
+
+- minor
+
+### 4.3.7
+
+- More api upgrades
+- No longer showing git commands in regular command palette when project is not a repo
+
+### 4.3.6
+
+- Making changes to follow the api for atom 1.0.0
+
+### 4.3.5
+
+- Update css selectors and keymappings with new atom API standards
+
+### 4.3.2
+
+- Fix for `Checkout new branch`
+
 ### 4.3.1
 
 - `Git Show` can be cancelled with escape

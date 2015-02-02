@@ -21,3 +21,32 @@
         'body': '/**\n
                   * $1\n
                   */'
+
+# PHP
+'.source.php':
+    'class-function':
+        'prefix': 'fun'
+        'body': """
+/**
+ * ${4:Description}
+ */
+${3:public} function ${1:name}($2)
+{
+    $5
+}
+"""
+
+    'class-property':
+        'prefix': 'pro'
+        'body': """
+/**
+ * ${2:Description}
+ *
+ * @var ${3:string}
+ */
+protected $${1:name};
+"""
+
+    'class-parameter':
+        'prefix': '@param'
+        'body': '@param   ${2:string}      $${1:name}       ${3:Description}'

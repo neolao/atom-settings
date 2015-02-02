@@ -1,6 +1,6 @@
 {
   "name": "html-entities",
-  "version": "0.2.0",
+  "version": "0.3.1",
   "main": "./lib/html-entities",
   "description": "Encode and decode HTML entities",
   "repository": {
@@ -12,18 +12,59 @@
     "atom": ">0.50.0"
   },
   "dependencies": {
-    "entities": "^1.0.0"
+    "entities": "^1.1.1 "
   },
-  "readme": "# HTML Entities\n\nEncode and decode HTML entities from selected text or the current document.\n\n![Screenshot](https://f.cloud.github.com/assets/7937/2394928/0d5a0b98-a9c0-11e3-9126-b6ce7c76cef0.gif)\n",
+  "readme": "# HTML Entities [![Build Status](https://travis-ci.org/AbeEstrada/atom-html-entities.svg?branch=master)](https://travis-ci.org/AbeEstrada/atom-html-entities)\n\nEncode and decode HTML entities from selected text or the current document.\n\n![Screenshot](https://f.cloud.github.com/assets/7937/2394928/0d5a0b98-a9c0-11e3-9126-b6ce7c76cef0.gif)\n\nIf you want you can add this code to you `keymap.cson` to add a shortcut.\n\n    '.editor':\n      'f5': 'html-entities:encode'\n      'f6': 'html-entities:decode'\n\n`F5` and `F6` are optional.\n",
   "readmeFilename": "README.md",
   "bugs": {
     "url": "https://github.com/AbeEstrada/atom-html-entities/issues"
   },
   "homepage": "https://github.com/AbeEstrada/atom-html-entities",
-  "_id": "html-entities@0.2.0",
+  "_id": "html-entities@0.3.1",
   "dist": {
-    "shasum": "9f0ca3f1b8eafd1d0995e526fe1311a73cbbab53"
+    "shasum": "bfd930f60db54c00aab5406f2f833ebc0b3932d9"
   },
-  "_resolved": "/var/folders/0t/sjn1ngrj4379sbtpfhcw4n6m0000gp/T/d-11454-23267-1sfgzwl/package.tgz",
-  "_from": "/var/folders/0t/sjn1ngrj4379sbtpfhcw4n6m0000gp/T/d-11454-23267-1sfgzwl/package.tgz"
+  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-115026-75801-14ggr9r/package.tgz",
+  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-115026-75801-14ggr9r/package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [
+      {
+        "name": "entities",
+        "version": "1.1.1",
+        "path": "node_modules/entities/index.js"
+      }
+    ],
+    "extensions": {
+      ".coffee": [
+        "lib/html-entities.coffee"
+      ],
+      ".js": [
+        "node_modules/entities/index.js",
+        "node_modules/entities/lib/decode.js",
+        "node_modules/entities/lib/decode_codepoint.js",
+        "node_modules/entities/lib/encode.js"
+      ],
+      ".json": [
+        "node_modules/entities/maps/decode.json",
+        "node_modules/entities/maps/entities.json",
+        "node_modules/entities/maps/legacy.json",
+        "node_modules/entities/maps/xml.json",
+        "node_modules/entities/package.json",
+        "package.json"
+      ]
+    },
+    "folders": [
+      {
+        "paths": [
+          "lib",
+          "",
+          "spec"
+        ],
+        "dependencies": {
+          "entities": "^1.1.1 "
+        }
+      }
+    ]
+  }
 }
