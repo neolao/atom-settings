@@ -1,7 +1,7 @@
 {
   "name": "blackspace",
   "main": "./lib/blackspace",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Strips auto indentation whitespace",
   "repository": {
     "type": "git",
@@ -21,18 +21,16 @@
     "url": "https://github.com/iconara/blackspace/issues"
   },
   "homepage": "https://github.com/iconara/blackspace",
-  "_id": "blackspace@1.0.0",
-  "dist": {
-    "shasum": "d4df25e32d684f60947c1716e65493d47516c2ab"
-  },
-  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141130-9037-s6nqnl/package.tgz",
-  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141130-9037-s6nqnl/package.tgz",
+  "_id": "blackspace@1.0.2",
+  "_shasum": "b0e5365254555275236120cd0104fe2d193ad642",
+  "_resolved": "file:../d-115117-61680-1hhtpl0/package.tgz",
+  "_from": "../d-115117-61680-1hhtpl0/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
       {
         "name": "fs-plus",
-        "version": "2.4.0",
+        "version": "2.5.0",
         "path": "node_modules/fs-plus/lib/fs-plus.js"
       },
       {

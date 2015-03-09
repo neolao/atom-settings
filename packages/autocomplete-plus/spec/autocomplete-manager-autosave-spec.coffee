@@ -1,9 +1,9 @@
 temp = require('temp').track()
-path = require('path')
-fs = require('fs-plus')
+path = require 'path'
+fs = require 'fs-plus'
 
 describe 'Autocomplete Manager', ->
-  [directory, filePath, completionDelay, editorView, editor, autocompleteManager, didAutocomplete] = []
+  [directory, filePath, completionDelay, editorView, editor, mainModule, autocompleteManager, didAutocomplete] = []
 
   beforeEach ->
     runs ->
@@ -54,20 +54,20 @@ var quicksort = function () {
 
     # Activate the package
     waitsForPromise -> atom.packages.activatePackage('autocomplete-plus').then (a) ->
-      autocompleteManager = a.mainModule.autocompleteManager
-      spyOn(autocompleteManager, 'runAutocompletion').andCallThrough()
-      spyOn(autocompleteManager, 'showSuggestions').andCallThrough()
-      spyOn(autocompleteManager, 'showSuggestionList').andCallThrough()
-      spyOn(autocompleteManager, 'hideSuggestionList').andCallThrough()
-      autocompleteManager.onDidAutocomplete ->
+      mainModule = a.mainModule
+
+    waitsFor ->
+      mainModule.autocompleteManager?.ready
+
+    runs ->
+      autocompleteManager = mainModule.autocompleteManager
+      displaySuggestions = autocompleteManager.displaySuggestions
+      spyOn(autocompleteManager, 'displaySuggestions').andCallFake (suggestions, options) ->
+        displaySuggestions(suggestions, options)
         didAutocomplete = true
 
   afterEach ->
     didAutocomplete = false
-    jasmine.unspy(autocompleteManager, 'runAutocompletion')
-    jasmine.unspy(autocompleteManager, 'showSuggestions')
-    jasmine.unspy(autocompleteManager, 'showSuggestionList')
-    jasmine.unspy(autocompleteManager, 'hideSuggestionList')
 
   describe 'autosave compatibility', ->
     it 'keeps the suggestion list open while saving', ->

@@ -1,10 +1,30 @@
+{CompositeDisposable} = require 'atom'
+
 module.exports =
-  configDefaults:
-    autoBuildTagsWhenActive: false
-    buildTimeout: 5000
-    cmd:""
-    cmdArgs: ""
-    extraTagFiles: ""
+  disposables: new CompositeDisposable
+
+  config:
+    autoBuildTagsWhenActive:
+        title: 'Automatically rebuild tags'
+        description: 'Rebuild tags file each time a project path changes'
+        type: 'boolean'
+        default: false
+    buildTimeout:
+        title: 'Build timeout'
+        description: 'Time (in milliseconds) to wait for a tags rebuild to finish'
+        type: 'integer'
+        default: 5000
+    cmd:
+        type: 'string'
+        default: ""
+    cmdArgs:
+        type: 'string'
+        default: ""
+    extraTagFiles:
+        type: 'string'
+        default: ""
+
+  provider: null
 
   activate: ->
     @stack = []
@@ -13,12 +33,9 @@ module.exports =
 
     @ctagsCache.activate()
 
-    @ctagsComplete = require "./ctags-complete"
-    setTimeout((=> @ctagsComplete.activate(@ctagsCache)), 2000)
-
     if atom.config.get('atom-ctags.autoBuildTagsWhenActive')
       @createFileView().rebuild() if atom.project.getPath()
-      atom.project.on 'path-changed', (paths)=>
+      @disposables.add atom.project.onDidChangePaths (paths)=>
         @createFileView().rebuild()
 
     atom.workspaceView.command 'atom-ctags:rebuild', (e, cmdArgs)=>
@@ -48,7 +65,7 @@ module.exports =
     if not atom.packages.isPackageDisabled("symbols-view")
       atom.packages.disablePackage("symbols-view")
       alert "Warning from atom-ctags:
-              atom-ctags is for replace and enhance symbols-view package.
+              atom-ctags replaces and enhances the symbols-view package.
               Therefore, symbols-view has been disabled."
 
     initExtraTagsTime = null
@@ -62,6 +79,8 @@ module.exports =
 
 
   deactivate: ->
+    @disposables.dispose()
+
     if @fileView?
       @fileView.destroy()
       @fileView = null
@@ -78,7 +97,6 @@ module.exports =
       @goBackView.destroy()
       @goBackView = null
 
-    @ctagsComplete.deactivate()
     @ctagsCache.deactivate()
 
   createFileView: ->
@@ -93,3 +111,13 @@ module.exports =
       GoBackView = require './go-back-view'
       @goBackView = new GoBackView(@stack)
     @goBackView
+
+  getProvider: ->
+    return @provider if @provider?
+    CtagsProvider = require './ctags-provider'
+    @provider = new CtagsProvider()
+    @provider.ctagsCache = @ctagsCache
+    return @provider
+
+  provide: ->
+    return {provider: @getProvider()}

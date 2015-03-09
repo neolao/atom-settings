@@ -196,6 +196,16 @@ module.exports =
         type: 'integer'
         default: 250
         description: "Maximum characters per line (0 disables)"
+    html_wrap_attributes:
+        type: 'string'
+        default: "auto"
+        enum: ["auto", "force"]
+        description: "Wrap attributes to new lines [auto|force]"
+    html_wrap_attributes_indent_size:
+        type: 'integer'
+        default: defaultIndentSize
+        minimum: 0
+        description: "Indent wrapped attributes to after N characters"
     html_preserve_newlines:
         type: 'boolean'
         default: true
@@ -410,7 +420,7 @@ module.exports =
         beautifyHTML ?= require("js-beautify").html
         text = beautifyHTML(text, self.getOptions("html", allOptions))
         beautifyCompleted text
-      when "HTML (Liquid)", "HTML", "XML"
+      when "HTML (Liquid)", "HTML", "XML", "Marko"
         beautifyHTML ?= require("js-beautify").html
         text = beautifyHTML(text, self.getOptions("html", allOptions))
         beautifyCompleted text
@@ -422,7 +432,7 @@ module.exports =
         text = beautifyCSS(text, self.getOptions("css", allOptions))
         beautifyCompleted text
       when "Sass", "SCSS", "LESS"
-        beautifyLESS ?= require("./langs/less-beautify")
+        beautifyLESS ?= require("./langs/css-prettydiff-beautify")
         beautifyLESS text, self.getOptions("css", allOptions), beautifyCompleted
       when "SQL (Rails)", "SQL"
         beautifySQL ?= require("./langs/sql-beautify")

@@ -1,9 +1,8 @@
-{triggerAutocompletion, buildIMECompositionEvent, buildTextInputEvent} = require('./spec-helper')
-_ = require('underscore-plus')
-TestProvider = require('./lib/test-provider')
+{triggerAutocompletion, buildIMECompositionEvent, buildTextInputEvent} = require './spec-helper'
+_ = require 'underscore-plus'
 
 describe 'Autocomplete', ->
-  [completionDelay, editorView, editor, autocompleteManager] = []
+  [completionDelay, editorView, editor, mainModule, autocompleteManager] = []
 
   beforeEach ->
     runs ->
@@ -28,7 +27,13 @@ describe 'Autocomplete', ->
 
       # Activate the package
       waitsForPromise -> atom.packages.activatePackage('autocomplete-plus').then (a) ->
-        autocompleteManager = a.mainModule.autocompleteManager
+        mainModule = a.mainModule
+
+      waitsFor ->
+        mainModule.autocompleteManager?.ready
+
+      runs ->
+        autocompleteManager = mainModule.autocompleteManager
 
       runs ->
         editorView = atom.views.getView(editor)

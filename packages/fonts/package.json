@@ -1,7 +1,7 @@
 {
   "name": "fonts",
   "main": "./lib/fonts",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "description": "Lots of monospace fonts.",
   "repository": {
     "type": "git",
@@ -18,10 +18,10 @@
     "url": "https://github.com/braver/fonts/issues"
   },
   "homepage": "https://github.com/braver/fonts",
-  "_id": "fonts@0.3.3",
-  "_shasum": "e234a5b734a165e91e8811d7e6ab8a2d037fab0f",
-  "_resolved": "file:../d-115027-96558-1092a0y/package.tgz",
-  "_from": "../d-115027-96558-1092a0y/package.tgz",
+  "_id": "fonts@0.4.0",
+  "_shasum": "23f9a1835a841cbeaa13003d2a485f431b51c201",
+  "_resolved": "file:../d-115124-59032-4qwxgv/package.tgz",
+  "_from": "../d-115124-59032-4qwxgv/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [],

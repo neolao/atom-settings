@@ -28,11 +28,12 @@
       "enhanced-package-list"
       "file-type-icons"
       "tabs"
-      "tree-view"
       "string-looper"
+      "tree-view"
+      "tree-view"
     ]
     themes: [
-      "neolao-ui"
+      "one-dark-ui"
       "monokai"
     ]
     projectHome: "/Users/eric/workspace"
@@ -85,15 +86,17 @@
     auto_add_method_tag: true
     simple_mode: true
     spacer_between_sections: true
+    extend_double_slash: false
   autocomplete:
     includeCompletionsFromAllBuffers: true
   "autocomplete-plus":
     autoActivationDelay: 500
     includeCompletionsFromAllBuffers: true
   "highlight-line":
-    hideHighlightOnSelect: true
     enableUnderline: true
     enableSelectionBorder: true
+    enableBackgroundColor: false
+    hideHighlightOnSelect: true
   "highlight-selected":
     highlightBackground: true
     lightTheme: true
@@ -105,6 +108,8 @@
   zentabs:
     neverCloseUnsaved: true
     maximumOpenedTabs: 10
+    neverCloseNew: true
+    neverCloseDirty: true
   "atom-beautify":
     _analyticsUserId: "3e27096e-2708-460f-96c8-139f3245429c"
   tabs:
@@ -117,6 +122,13 @@
     hideVcsIgnoredFiles: false
     hideIgnoredNames: false
     showOnRightSide: false
+    sortFoldersBeforeFiles: true
   fonts:
     fontFamily: "DejaVu Mono"
   goto: {}
+  "symbols-tree-view": {}
+  "linter-phpcs":
+    phpcsExecutablePath: "/usr/bin/phpcs"
+    standard: "PSR2"
+    ignore: "*.blade.php,*.twig.php"
+    enableWarning: 1

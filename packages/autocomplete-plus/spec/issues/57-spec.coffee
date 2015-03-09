@@ -1,8 +1,7 @@
-{waitForAutocomplete, triggerAutocompletion, buildIMECompositionEvent, buildTextInputEvent} = require('../spec-helper')
-TestProvider = require('../lib/test-provider')
+{waitForAutocomplete, triggerAutocompletion, buildIMECompositionEvent, buildTextInputEvent} = require '../spec-helper'
 
 describe 'Autocomplete', ->
-  [editorView, editor, completionDelay, mainModule] = []
+  [mainModule, autocompleteManager, editorView, editor, completionDelay, mainModule] = []
 
   describe 'Issue 57 - Multiple selection completion', ->
     beforeEach ->
@@ -22,10 +21,14 @@ describe 'Autocomplete', ->
         editor = e
 
       # Activate the package
-      waitsForPromise ->
-        atom.packages.activatePackage('autocomplete-plus')
-          .then (a) ->
-            mainModule = a.mainModule
+      waitsForPromise -> atom.packages.activatePackage('autocomplete-plus').then (a) ->
+        mainModule = a.mainModule
+
+      waitsFor ->
+        mainModule.autocompleteManager?.ready
+
+      runs ->
+        autocompleteManager = mainModule.autocompleteManager
 
       runs ->
         editorView = atom.views.getView(editor)
@@ -35,13 +38,18 @@ describe 'Autocomplete', ->
         editor.getBuffer().insert([10, 0], 's:extra:s')
         editor.setSelectedBufferRanges([[[10, 1], [10, 1]], [[10, 9], [10, 9]]])
 
-        triggerAutocompletion(editor, false, 'h')
+        runs ->
+          triggerAutocompletion(editor, false, 'h')
+
+        waits(completionDelay)
 
         runs ->
+          editorView = atom.views.getView(editor)
+          console.log editorView.classList
           autocompleteManager = mainModule.autocompleteManager
+          expect(editorView.querySelector('.autocomplete-plus')).toExist()
 
-          suggestionListView = atom.views.getView(autocompleteManager.suggestionList)
-          atom.commands.dispatch(suggestionListView, 'autocomplete-plus:confirm')
+          atom.commands.dispatch(editorView, 'autocomplete-plus:confirm')
 
           expect(editor.lineTextForBufferRow(10)).toBe('shift:extra:shift')
           expect(editor.getCursorBufferPosition()).toEqual([10, 17])
@@ -61,13 +69,16 @@ describe 'Autocomplete', ->
           editor.getBuffer().insert([10, 0], 's:extra:a')
           editor.setSelectedBufferRanges([[[10, 1], [10, 1]], [[10, 9], [10, 9]]])
 
-          triggerAutocompletion(editor, false, 'h')
+          runs ->
+            triggerAutocompletion(editor, false, 'h')
+
+          waits(completionDelay)
 
           runs ->
             autocompleteManager = mainModule.autocompleteManager
 
-            suggestionListView = atom.views.getView(autocompleteManager.suggestionList)
-            atom.commands.dispatch(suggestionListView, 'autocomplete-plus:confirm')
+            editorView = atom.views.getView(editor)
+            atom.commands.dispatch(editorView, 'autocomplete-plus:confirm')
 
             expect(editor.lineTextForBufferRow(10)).toBe('sh:extra:ah')
             expect(editor.getSelections().length).toEqual(2)

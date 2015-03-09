@@ -2,8 +2,7 @@ childProcess = require 'child_process'
 
 module.exports =
   class JekyllServer
-    pwd: atom.project.getPath()
-    pid: 0
+    pwd: atom.project.getPaths()[0]
     process: null
     consoleLog: ''
     emitter: null
@@ -20,13 +19,20 @@ module.exports =
       @emitter.on 'jekyll:build-site', => @buildSite()
       @emitter.on 'jekyll:toggle-server', => @toggle()
 
-    status: ->
-      if @pid == 0
-        status = 'Off'
+    pid: ->
+      if @process is null
+        return 0
       else
-        status = 'On'
+        return @process.pid
 
-      @emitter.emit 'jekyll:server-status-reply', status
+    status: ->
+      @emitter.emit 'jekyll:server-status-reply', @rawStatus()
+
+    rawStatus: ->
+      if @pid() == 0
+        return 'Off'
+      else
+        return 'On'
 
     version: ->
       versionCommand = atom.config.get('jekyll.jekyllBinary') + " -v"
@@ -40,8 +46,14 @@ module.exports =
 
       @process = childProcess.spawn atom.config.get('jekyll.jekyllBinary'), atom.config.get('jekyll.serverOptions'), {cwd: @pwd}
       @process.stdout.setEncoding('utf8')
+      @emitter.emit 'jekyll:log-pid', @process.pid
 
-      @pid = @process.pid
+      @process.on 'error', (error) ->
+        if error.code is 'ENOENT'
+          atom.notifications.addError('Jekyll Binary Incorrect', {detail: "The Jekyll Binary #{error.path} is not valid.\r\nPlease go into Settings and change it"})
+        else
+          throw error
+
       @status()
 
       @process.stdout.on 'data', (data) ->
@@ -57,14 +69,16 @@ module.exports =
         JekyllServer.emitter.emit 'jekyll:console-message', with_brs
 
     stop: ->
-      killCMD = "kill " + @pid
-      @emitMessage "Stopping Server... <i>(" + killCMD + ")</i><br />"
+      @emitMessage "Stopping Server<br />"
+      @process.kill('SIGTERM')
 
-
-      childProcess.exec killCMD
       @process = null
-      @pid = 0
       @status()
+
+    deactivate: ->
+      if @process
+        @process.kill("SIGTERM")
+        @process = null
 
     preFillConsole: ->
       @emitter.emit 'jekyll:console-fill', JekyllServer.consoleLog
@@ -82,7 +96,9 @@ module.exports =
         JekyllServer.emitter.emit 'jekyll:console-message', stdout
 
     toggle: ->
-      if @pid is 0
+      if @pid() is 0
         @start()
+        atom.notifications.addSuccess('Jekyll Server Started')
       else
         @stop()
+        atom.notifications.addSuccess('Jekyll Server Stopped')

@@ -1,4 +1,5 @@
-{$, $$, ScrollView} = require 'atom'
+{ScrollView} = require 'atom-space-pen-views'
+{$} = require 'space-pen'
 
 module.exports =
 class ManagerView extends ScrollView
@@ -6,13 +7,13 @@ class ManagerView extends ScrollView
     @div class: "jekyll-manager-view pane-item", tabindex: -1, =>
       @div class: "controls", =>
         @div class: "jekyll-logo"
-        @a class: "button icon icon-tools", outlet: "openConfig", "Open Config"
-        @a class: "button icon icon-repo", outlet: "openDocs", "View Documentation"
+        @button class: "btn btn-primary button icon icon-tools", outlet: "openConfig", "Open Config"
+        @button class: "btn btn-primary button icon icon-repo", outlet: "openDocs", "View Documentation"
         @div class: "heading icon icon-server", "Server"
-        @a class: "button icon icon-playback-play", click: 'startServer', "Start Server"
-        @a class: "button icon icon-primitive-square", click: 'stopServer', "Stop Server"
+        @button class: "btn btn-primary button icon icon-playback-play", click: 'startServer', "Start Server"
+        @button class: "btn btn-primary button icon icon-primitive-square", click: 'stopServer', "Stop Server"
         @div class: "heading icon icon-device-desktop", "Site"
-        @a class: "button icon icon-sync", outlet: "regenSite", click: 'buildSite', "Build"
+        @button class: "btn btn-primary button icon icon-sync", outlet: "regenSite", click: 'buildSite', "Build"
       @div class: 'main', =>
         @div class: 'jekyll-status-bar', outlet: "statusBar", =>
           @div class: 'jekyll-version', outlet: "jekyllVersion"
@@ -36,7 +37,7 @@ class ManagerView extends ScrollView
     @bindEmitters()
 
   getInfo: ->
-    @jekyllPWD.html atom.project.getPath()
+    @jekyllPWD.html atom.project.getPaths()[0]
 
   afterAttach: ->
     @emitter.emit 'jekyll:pre-fill-console'
@@ -52,7 +53,7 @@ class ManagerView extends ScrollView
 
   bindEvents: ->
     @openConfig.on 'click', ->
-      atom.workspaceView.open("_config.yml")
+      atom.workspace.open("_config.yml")
 
     @openDocs.on 'click', ->
       require('shell').openExternal('http://jekyllrb.com/docs/home/')

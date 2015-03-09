@@ -1,4 +1,4 @@
-{waitForAutocomplete} = require('./spec-helper')
+{waitForAutocomplete} = require './spec-helper'
 
 describe 'CSS Language Support', ->
   [completionDelay, editorView, editor, autocompleteManager, mainModule, css] = []
@@ -30,6 +30,11 @@ describe 'CSS Language Support', ->
     # Activate the package
     waitsForPromise -> atom.packages.activatePackage('autocomplete-plus').then (a) ->
       mainModule = a.mainModule
+
+    waitsFor ->
+      mainModule.autocompleteManager?.ready
+
+    runs ->
       autocompleteManager = mainModule.autocompleteManager
 
   it 'includes completions for the scopes completion preferences', ->
@@ -47,7 +52,7 @@ describe 'CSS Language Support', ->
         suggestionListView = atom.views.getView(autocompleteManager.suggestionList)
         items = suggestionListView.querySelectorAll('li')
         expect(editorView.querySelector('.autocomplete-plus')).toExist()
-        expect(items.length).toBe(10)
+        expect(items.length).toBe(23)
         expect(items[0]).toHaveText('outline')
         expect(items[1]).toHaveText('outline-color')
         expect(items[2]).toHaveText('outline-width')

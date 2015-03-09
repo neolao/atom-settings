@@ -1,4 +1,4 @@
-# Jekyll-Atom
+# Jekyll-Atom [![Build Status](https://travis-ci.org/Arcath/jekyll-atom.svg?branch=master)](https://travis-ci.org/Arcath/jekyll-atom)
 
 A collection of snippets and tools for [Jekyll] in [Atom]
 
@@ -6,7 +6,7 @@ A collection of snippets and tools for [Jekyll] in [Atom]
 
 # Configuring
 
-Jekyll-Atom has a couple of settings that can be set through the [Atom] settings.
+Jekyll-Atom has a few settings that can be set through the [Atom] settings.
 
 `Layouts Dir` The path to your layouts, defaults to `_layouts/`
 
