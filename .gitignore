@@ -5,3 +5,4 @@
 /.node-gyp/
 
 /compile-cache/
+.apm/_locks
