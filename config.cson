@@ -9,7 +9,7 @@
     userId: "b53641952e75709991d2d77f556a6ab0a912fea0"
   editor:
     fontFamily: "DejaVu Sans Mono"
-    fontSize: 21
+    fontSize: 19
     showInvisibles: true
     showIndentGuide: true
     preferredLineLength: 120
@@ -37,10 +37,9 @@
       "monokai"
     ]
     projectHome: "/Users/eric/workspace"
+    followSymlinks: true
   whitespace:
-    removeTrailingWhitespace: false
     ignoreWhitespaceOnCurrentLine: false
-    ensureSingleTrailingNewline: false
   "autoclose-html":
     closeOnEndOfOpeningTag: true
     makeNeverCloseElementsSelfClosing: true
