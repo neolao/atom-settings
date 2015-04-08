@@ -1,6 +1,6 @@
 {
   "name": "language-docker",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "private": false,
   "description": "Dockerfile syntax highlighting",
   "repository": {
@@ -18,12 +18,10 @@
     "url": "https://github.com/jagregory/language-docker/issues"
   },
   "homepage": "https://github.com/jagregory/language-docker",
-  "_id": "language-docker@1.1.2",
-  "dist": {
-    "shasum": "ec33f8f8d4dd79562209447a4369e8a2738217f4"
-  },
-  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141115-39785-dadsy9/package.tgz",
-  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-1141115-39785-dadsy9/package.tgz",
+  "_id": "language-docker@1.1.3",
+  "_shasum": "9bcb9491ea4ad6834efb95fa602285cdd3c49e5c",
+  "_resolved": "file:../d-115220-8207-86llgi/package.tgz",
+  "_from": "../d-115220-8207-86llgi/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [],

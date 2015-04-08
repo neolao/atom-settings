@@ -1,24 +1,39 @@
 ###
-Requires http://pear.php.net/package/PHP_Beautifier
+Requires https://github.com/FriendsOfPHP/PHP-CS-Fixer
 ###
 getCmd = (inputPath, outputPath, options) ->
-  phpBeautifierPath = options.beautifier_path # jshint ignore: line
-  filters = options.filters
-  directoryFilters = options.directory_filters # jshint ignore: line
+  phpCsFixerPath = options.cs_fixer_path # jshint ignore: line
+  fixers = options.fixers
+  level = options.level # jshint ignore: line
 
-  cmd = "--input \"#{inputPath}\" --output \"#{outputPath}\""
+  levelOption = ""
+  fixerOption = ""
 
-  if filters
-    cmd += " --filters \"#{filters}\""
-  if directoryFilters
-    cmd += " --directory_filters \"#{directoryFilters}\""
+  if level
+    levelOption = " --level=#{level} "
+  if fixers
+    fixerOption = " --fixers=#{fixers} "
 
-  if phpBeautifierPath
+  if process.platform == 'win32'
+    cmd = "#{levelOption} #{fixerOption} \"#{inputPath}\") & move \"#{inputPath}\" \"#{outputPath}\""
+  else
+    cmd = "#{levelOption} #{fixerOption} \"#{inputPath}\") || (mv \"#{inputPath}\" \"#{outputPath}\")"
+
+  if phpCsFixerPath
+    isWin = /^win/.test(process.platform)
     # Use absolute path
-    "php \"#{phpBeautifierPath}\" #{cmd}"
+    if isWin
+        # Windows does require `php` prefix
+        # See https://github.com/Glavin001/atom-beautify/issues/269
+        "php (\"#{phpCsFixerPath}\" fix #{cmd}"
+    else
+        # Mac & Linux do not require `php` prefix
+        # See https://github.com/Glavin001/atom-beautify/pull/263
+        "(\"#{phpCsFixerPath}\" fix #{cmd}"
+
   else
     # Use command available in $PATH
-    "php_beautifier #{cmd}"
+    "(php-cs-fixer fix #{cmd}"
 
 "use strict"
 cliBeautify = require("./cli-beautify")

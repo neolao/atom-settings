@@ -1,3 +1,15 @@
+## 0.6.4 - Bugfixing
+* Fix issue #15 (add copy full line to default)
+* Fix issue #13
+
+## 0.6.3 - Bugfixing
+* Remove not needed injected libraries
+
+## 0.6.2 - Bugfixing
+* Update to the latest API changes
+* Fix issue #12
+* Several bugfixing and improvements
+
 ## 0.6.1 - Bugfixing
 * Fix conflict with cut-line package
 * Fix multiple windows bug

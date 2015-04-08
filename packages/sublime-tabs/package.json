@@ -1,7 +1,7 @@
 {
   "name": "sublime-tabs",
   "main": "./lib/sublime-tabs",
-  "version": "0.5.0",
+  "version": "0.5.2",
   "description": "Sublime-style tabs",
   "repository": {
     "type": "git",
@@ -25,16 +25,16 @@
     "url": "https://github.com/ddavison/sublime-tabs/issues"
   },
   "homepage": "https://github.com/ddavison/sublime-tabs",
-  "_id": "sublime-tabs@0.5.0",
-  "_shasum": "4850ad818cfd07d90a7de5678b863ff9c8055235",
-  "_resolved": "file:../d-11529-36100-1mr1sdy/package.tgz",
-  "_from": "../d-11529-36100-1mr1sdy/package.tgz",
+  "_id": "sublime-tabs@0.5.2",
+  "_shasum": "052e84676fbea1ba68de5f20753eb773954d4cbc",
+  "_resolved": "file:../d-115224-47074-1rp2wsd/package.tgz",
+  "_from": "../d-115224-47074-1rp2wsd/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
       {
         "name": "fs-plus",
-        "version": "2.5.0",
+        "version": "2.6.0",
         "path": "node_modules/fs-plus/lib/fs-plus.js"
       },
       {

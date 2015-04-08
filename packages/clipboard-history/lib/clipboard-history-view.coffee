@@ -1,4 +1,4 @@
-{ $$, EditorView, SelectListView } = require 'atom'
+{ $$, SelectListView } = require 'atom-space-pen-views'
 
 module.exports =
 
@@ -6,21 +6,24 @@ class ClipboardHistoryView extends SelectListView
 
   editor: null
   forceClear: false
+  workspaceView: atom.views.getView(atom.workspace)
 
   # Public methods
   ###############################
   initialize: (@history, @editorView) ->
     super
-    @addClass('overlay clipboard-history from-bottom')
+    @addClass('clipboard-history')
     @_handleEvents()
 
   copy: ->
-    @editor = atom.workspace.getActiveEditor()
+    @storeFocusedElement()
+    @editor = atom.workspace.getActiveTextEditor()
+
     if @editor
       selectedText = @editor.getSelectedText()
       if selectedText.length > 0
         @_add selectedText
-      else if atom.config.get 'clipboard-history.enableCutLine'
+      else if atom.config.get 'clipboard-history.enableCopyLine'
         @editor.buffer.beginTransaction()
         originalPosition = @editor.getCursorBufferPosition()
         @editor.selectLine()
@@ -30,6 +33,7 @@ class ClipboardHistoryView extends SelectListView
         if selectedText.length > 0
           atom.clipboard.metadata = atom.clipboard.metadata || {}
           atom.clipboard.metadata.fullline = true
+          atom.clipboard.metadata.fullLine = true
           @_add selectedText, atom.clipboard.metadata
 
   paste: ->
@@ -96,12 +100,16 @@ class ClipboardHistoryView extends SelectListView
       @history.splice(@history.indexOf(item), 1)
       @history.push(item)
       atom.clipboard.write(item.text)
-      atom.workspaceView.getActivePaneItem().insertText item.text,
+      atom.workspace.getActivePaneItem().insertText item.text,
         select: true
     @cancel()
 
   getFilterKey: ->
     'text'
+
+  cancelled: ->
+    @panel?.hide()
+
 
   # Helper methods
   ##############################
@@ -119,21 +127,26 @@ class ClipboardHistoryView extends SelectListView
       'date': Date.now()
 
   _handleEvents: ->
-    atom.workspaceView.command 'clipboard-history:copy', =>
-      @copy()
 
-    atom.workspaceView.command "clipboard-history:paste", =>
-      if @hasParent()
-        @cancel()
-      else
-        @paste()
+    atom.commands.add 'atom-workspace',
+      'clipboard-history:copy': (event) =>
+        @copy()
+
+    atom.commands.add 'atom-workspace',
+      'clipboard-history:paste': (event) =>
+        if @panel?.isVisible()
+          @cancel()
+        else
+          @paste()
 
   _setPosition: ->
-    @css('margin-left': 'auto', 'margin-right': 'auto', top: 200, bottom: 'inherit')
+    @panel.item.parent().css('margin-left': 'auto', 'margin-right': 'auto', top: 200, bottom: 'inherit')
 
   _attach: ->
+    @panel ?= atom.workspace.addModalPanel(item: this)
     @_setPosition()
-    atom.workspaceView.append this
+    @panel.show()
+
     @focusFilterEditor()
 
   _timeSince: (date) ->

@@ -9,14 +9,14 @@ class ZentabsController extends View
     @span ''
 
   initialize: (@pane) ->
+    @subscriptions = new CompositeDisposable
 
-    atom.commands.add 'atom-workspace', 'zentabs:cleanup', => @closeOverflowingTabs()
-    atom.commands.add 'atom-workspace', 'zentabs:pintab', @pinTab
-    atom.commands.add 'atom-workspace', 'zentabs:unpintab', @unpinTab
+    @subscriptions.add atom.commands.add 'atom-workspace', 'zentabs:cleanup', => @closeOverflowingTabs()
+    @subscriptions.add atom.commands.add 'atom-workspace', 'zentabs:pintab', @pinTab
+    @subscriptions.add atom.commands.add 'atom-workspace', 'zentabs:unpintab', @unpinTab
 
     @items = []
     @pinnedItems = []
-    @subscriptions = new CompositeDisposable
     @pushItem(item) for item in @pane.getItems()
 
     @subscriptions.add @pane.onDidDestroy (pane) =>
@@ -39,8 +39,6 @@ class ZentabsController extends View
     @updateActiveTab()
     @closeOverflowingTabs() unless atom.config.get 'zentabs.manualMode'
 
-    atom.workspace.addBottomPanel(item: this)
-
   destroy: =>
     @subscriptions.dispose()
 
@@ -54,7 +52,7 @@ class ZentabsController extends View
     _.remove @items, item
     @items.push item
 
-  getRepo: -> atom.project.getRepo()
+  getRepositories: -> atom.project.getRepositories()
 
   closeOverflowingTabs: (newItem)->
     maxTabs = atom.config.get 'zentabs.maximumOpenedTabs'
@@ -70,10 +68,11 @@ class ZentabsController extends View
         preventBecauseDirty = false
         preventBecauseNew = false
 
-        if repo = @getRepo()
-          if itemPath = olderItem.buffer?.file?.path
-            preventBecauseDirty = repo.isPathModified(itemPath) && neverCloseDirty
-            preventBecauseNew = repo.isPathNew(itemPath) && neverCloseNew
+        if itemPath = olderItem.buffer?.file?.path
+          @getRepositories().forEach (repo) ->
+            return unless repo
+            preventBecauseDirty = preventBecauseDirty || repo.isPathModified(itemPath) && neverCloseDirty
+            preventBecauseNew = preventBecauseNew || repo.isPathNew(itemPath) && neverCloseNew
 
         unless preventBecauseUnsaved || preventBecauseDirty || preventBecauseNew || newItem == olderItem
           @pane.destroyItem olderItem

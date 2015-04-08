@@ -36,7 +36,7 @@
     'cmd-alt-down': 'editor:duplicate-lines'
 
 # Basculer vers la liste des fichiers
-'.platform-darwin':
+'.platform-darwin .workspace .editor':
   'ctrl-left': 'tree-view:toggle-focus'
   'ctrl-right': 'tree-view:toggle-focus'
 

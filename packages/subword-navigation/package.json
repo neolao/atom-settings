@@ -1,7 +1,7 @@
 {
   "name": "subword-navigation",
   "main": "./lib/main",
-  "version": "2.5.3",
+  "version": "2.6.0",
   "description": "Navigate camelCase and snake_case words",
   "activationCommands": {},
   "repository": {
@@ -17,6 +17,9 @@
       "url": "https://github.com/dsandstrom/atom-ruby-block-converter/raw/master/LICENSE.md"
     }
   ],
+  "keywords": [
+    "navigation"
+  ],
   "engines": {
     "atom": ">= 0.168.0"
   },
@@ -30,10 +33,10 @@
   "readme": "# Subword Navigation\n###### An Atom Package - [Atom.io](https://atom.io/packages/subword-navigation) : [Github](https://github.com/dsandstrom/atom-subword-navigation) : [![Build Status](https://travis-ci.org/dsandstrom/atom-subword-navigation.svg?branch=master)](https://travis-ci.org/dsandstrom/atom-subword-navigation)\n\n**Harness the power of ALT as you battle the mighty camelCase and treacherous snake_case.**\n\nThis package allows you to move the cursor(s) to beginning and end of words, but also it stops at subwords (camelCase and snake_case).\n\n- Holding `shift` will highlight as you move left and right.\n- Along with highlight, you can delete to the previous/next subword.\n- If you have [vim-mode](https://atom.io/packages/vim-mode) enabled, `q` will be there to assist.  As of now, commands can't be called multiple times (eg. v2q doesn't work).\n- Issues and pull requests are welcome.\n\n\n### Instructions\n\n| Linux/Win   | Left             | Right             |\n|:------------|:-----------------|:------------------|\n| Move around | `alt-left`       | `alt-right `      |\n| Highlight   | `alt-shift-left` | `alt-shift-right` |\n| Delete      | `alt-backspace`  | `alt-delete `     |\n\n| Mac         | Left                  | Right                  |\n|:------------|:----------------------|:-----------------------|\n| Move around | `ctrl-alt-left`       | `alt-right`            |\n| Highlight   | `ctrl-alt-shift-left` | `ctrl-alt-shift-right` |\n| Delete      | `ctrl-alt-backspace`  | `ctrl-alt-delete `     |\n\n| Vim-Mode    | Left  | Right |\n|:------------|:------|:------|\n| Move around | `Q`   | `q`   |\n| Highlight   | `v Q` | `v q` |\n| Delete      | `d Q` | `d q` |\n\n\n### Dependencies\nRequires Atom v0.168.0 and up\n\n\n### Commands\n```coffee\n'subword-navigation:move-right'\n'subword-navigation:move-left'\n'subword-navigation:select-right'\n'subword-navigation:select-left'\n'subword-navigation:delete-right'\n'subword-navigation:delete-left'\n```\n",
   "readmeFilename": "README.md",
   "homepage": "https://github.com/dsandstrom/atom-subword-navigation",
-  "_id": "subword-navigation@2.5.3",
-  "_shasum": "623c8c376ca369ec2879e85070e0ee3ebb7fbf9e",
-  "_resolved": "file:../d-11529-36108-1xxuy5z/package.tgz",
-  "_from": "../d-11529-36108-1xxuy5z/package.tgz",
+  "_id": "subword-navigation@2.6.0",
+  "_shasum": "cc87ecccdcb2909590374340443e37048a927489",
+  "_resolved": "file:../d-11538-95823-1mo881q/package.tgz",
+  "_from": "../d-11538-95823-1mo881q/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [

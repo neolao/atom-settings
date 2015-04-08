@@ -1,0 +1,1 @@
+{"hostList":"[{\"alias\":\"\",\"hostname\":\"ns9.neolao.com\",\"directory\":\"/\",\"username\":\"neolao\",\"port\":\"22\",\"localFiles\":\"[]\",\"useAgent\":false,\"usePrivateKey\":false,\"usePassword\":true,\"password\":\"\",\"deserializer\":\"SftpHost\"}]","deserializer":"InterProcessData"}

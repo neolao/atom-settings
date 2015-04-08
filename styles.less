@@ -9,13 +9,14 @@
  */
 
 .config-menu {
-    font-size: 1em;
+    font-size: .8em;
 }
 
 // The tree view
 .tree-view {
     font-size: 1.7em;
-    
+
+    /*
     .list-tree li {
         min-height: 1.3em;
         &:before {
@@ -36,6 +37,7 @@
         line-height: 1.5em;
         padding: 1px 0;
     }
+    */
 }
 
 // The tab bar
@@ -53,7 +55,7 @@
     .title {
         font-size: 1.8em;
         margin: 0 .5em;
-        
+
         &:before {
             margin-right: 1em;
         }
@@ -70,7 +72,7 @@
     &.fuzzy-finder,
     &.command-palette,
     &.project-manager {
-        font-size: 2em;
+        font-size: 1.5em;
 
         li {
             line-height: 1.6em;
@@ -88,13 +90,19 @@
     }
 }
 
+.overlay.from-top {
+    width: 50%;
+    margin-top: 0;
+    margin-left: -25%;
+}
+
 .symbols-tree-view {
-    
+
 }
 
 // Search result
 .item-views {
-    font-size: 2em;
+    font-size: 1.5em;
 }
 
 // Linter

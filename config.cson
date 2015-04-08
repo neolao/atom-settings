@@ -9,12 +9,12 @@
     userId: "b53641952e75709991d2d77f556a6ab0a912fea0"
   editor:
     fontFamily: "DejaVu Sans Mono"
-    fontSize: 19
     showInvisibles: true
     showIndentGuide: true
     preferredLineLength: 120
     tabLength: 4
     invisibles: {}
+    fontSize: 21
   core:
     disabledPackages: [
       "aural-coding"
@@ -31,13 +31,14 @@
       "string-looper"
       "tree-view"
       "tree-view"
+      "tab-switcher"
     ]
+    projectHome: "/Users/eric/workspace"
+    followSymlinks: true
     themes: [
       "one-dark-ui"
       "monokai"
     ]
-    projectHome: "/Users/eric/workspace"
-    followSymlinks: true
   whitespace:
     ignoreWhitespaceOnCurrentLine: false
   "autoclose-html":

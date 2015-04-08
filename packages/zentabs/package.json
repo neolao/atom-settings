@@ -1,6 +1,6 @@
 {
   "name": "zentabs",
-  "version": "0.8.2",
+  "version": "0.8.4",
   "main": "./lib/zentabs",
   "description": "Keep the opened tabs amount below specified limit",
   "license": "MIT",
@@ -21,10 +21,10 @@
     "url": "https://github.com/ArnaudRinquin/atom-zentabs/issues"
   },
   "homepage": "https://github.com/ArnaudRinquin/atom-zentabs",
-  "_id": "zentabs@0.8.2",
-  "_shasum": "907e3e45e5940be85d86f57243c298532ffe7724",
-  "_resolved": "file:../d-115120-29803-99sb96/package.tgz",
-  "_from": "../d-115120-29803-99sb96/package.tgz",
+  "_id": "zentabs@0.8.4",
+  "_shasum": "55737a4845907661ab3274f54561aa7ae0ccef34",
+  "_resolved": "file:../d-115220-8239-1ph3eiy/package.tgz",
+  "_from": "../d-115220-8239-1ph3eiy/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
@@ -60,7 +60,7 @@
       },
       {
         "name": "fs-plus",
-        "version": "2.5.0",
+        "version": "2.6.0",
         "path": "node_modules/atom-space-pen-views/node_modules/grim/node_modules/coffeestack/node_modules/fs-plus/lib/fs-plus.js"
       },
       {

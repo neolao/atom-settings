@@ -21,17 +21,27 @@ module.exports =
 
     splitNameTag: (nameTag) ->
       index = nameTag.lastIndexOf(@splitSymbol)
-      return nameTag.substr(index+@splitSymbol.length)
+      if index >= 0
+        return nameTag.substr(index+@splitSymbol.length)
+      else
+        return nameTag
 
     buildMissedParent: (parents) ->
       parentTags = Object.keys(parents)
       parentTags.sort (a, b) =>
         {typeA, parent: nameA} = @splitParentTag(a)
         {typeB, parent: nameB} = @splitParentTag(b)
-        return nameA > nameB
+
+        if nameA < nameB
+          return -1
+        else if nameA > nameB
+          return 1
+        else
+          return 0
 
       for now, i in parentTags
         {type, parent: name} = @splitParentTag(now)
+
         if parents[now] is null
           parents[now] = {
             name: name,
@@ -39,18 +49,20 @@ module.exports =
             position: null,
             parent: null
           }
+
           @tags.push(parents[now])
 
-        if i >= 1
-          pre = parentTags[i-1]
-          {type, parent: name} = @splitParentTag(pre)
-          if now.indexOf(name) >= 0
-            parents[now].parent = pre
-            parents[now].name = @splitNameTag(parents[now].name)
+          if i >= 1
+            pre = parentTags[i-1]
+            {type, parent: name} = @splitParentTag(pre)
+            if now.indexOf(name) >= 0
+              parents[now].parent = pre
+              parents[now].name = @splitNameTag(parents[now].name)
 
     parse: ->
       roots = []
       parents = {}
+      types = {}
 
       # sort tags by row number
       @tags.sort (a, b) =>
@@ -60,14 +72,14 @@ module.exports =
       for tag in @tags
         parents[tag.parent] = null if tag.parent
 
-      # try to build up relationships between parent information an the real tag
+      # try to build up relationships between parent information and the real tag
       for tag in @tags
         if tag.parent
           {type, parent} = @splitParentTag(tag.parent)
           key = tag.type + ':' + parent + @splitSymbol + tag.name
         else
           key = tag.type + ':' + tag.name
-        parents[key] = tag if key of parents
+        parents[key] = tag
 
       # try to build up the missed parent
       @buildMissedParent(parents)
@@ -90,8 +102,9 @@ module.exports =
           parent.children.push(tag)
         else
           roots.push(tag)
+        types[tag.type] = null
 
-      return {label: 'root', icon: null, children: roots}
+      return {root: {label: 'root', icon: null, children: roots}, types: Object.keys(types)}
 
     getNearestTag: (row) ->
       left = 0

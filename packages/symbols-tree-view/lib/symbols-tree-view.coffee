@@ -3,6 +3,7 @@
 {TreeView} = require './tree-view'
 TagGenerator = require './tag-generator'
 TagParser = require './tag-parser'
+SymbolsContextMenu = require './symbols-context-menu'
 
 module.exports =
   class SymbolsTreeView extends View
@@ -12,6 +13,9 @@ module.exports =
     initialize: ->
       @treeView = new TreeView
       @append(@treeView)
+
+      @cachedStatus = {}
+      @contextMenu = new SymbolsContextMenu
 
       @treeView.onSelect ({node, item}) =>
         if item.position.row >= 0 and editor = atom.workspace.getActiveTextEditor()
@@ -36,33 +40,16 @@ module.exports =
 
           jQuery(from).animate(to, duration: @animationDuration, step: step, done: done)
 
-      @onChangeSide = atom.config.observe 'tree-view.showOnRightSide', (value) =>
-        if @hasParent()
-          @remove()
-          @populate()
-          @attach()
+      atom.config.observe 'symbols-tree-view.scrollAnimation', (enabled) =>
+        @animationDuration = if enabled then 300 else 0
 
-      @onChangeAnimation = atom.config.observe 'symbols-tree-view.scrollAnimation', (enabled) =>
-        @animationDuration = enabled ? 300 : 0
-
-      @onChangeAutoHide = atom.config.observe 'symbols-tree-view.autoHide', (autoHide) =>
-        minimalWidth = 5
-        originalWidth = 200
-
+      @minimalWidth = 5
+      @originalWidth = 200
+      atom.config.observe 'symbols-tree-view.autoHide', (autoHide) =>
         unless autoHide
-          @width(originalWidth)
-          @off('mouseenter mouseleave')
+          @width(@originalWidth)
         else
-          @width(minimalWidth)
-
-          @mouseenter (event) =>
-            @animate({width: originalWidth}, duration: @animationDuration)
-
-          @mouseleave (event) =>
-            if atom.config.get('tree-view.showOnRightSide')
-              @animate({width: minimalWidth}, duration: @animationDuration) if event.offsetX > 0
-            else
-              @animate({width: minimalWidth}, duration: @animationDuration) if event.offsetX <= 0
+          @width(@minimalWidth)
 
     getEditor: -> atom.workspace.getActiveTextEditor()
     getScopeName: -> atom.workspace.getActiveTextEditor()?.getGrammar()?.scopeName
@@ -76,6 +63,7 @@ module.exports =
         @show()
 
         @onEditorSave = editor.onDidSave (state) =>
+          filePath = editor.getPath()
           @generateTags(filePath)
 
         @onChangeRow = editor.onDidChangeCursorPosition ({oldBufferPosition, newBufferPosition}) =>
@@ -88,11 +76,42 @@ module.exports =
         tag = @parser.getNearestTag(row)
         @treeView.select(tag)
 
+    updateContextMenu: (types) ->
+      @contextMenu.clear()
+      editor = @getEditor()?.id
+
+      toggleTypeVisible = (type) =>
+        @treeView.toggleTypeVisible(type)
+        @nowTypeStatus[type] = !@nowTypeStatus[type]
+
+      toggleSortByName = =>
+        @nowSortStatus[0] = !@nowSortStatus[0]
+        if @nowSortStatus[0]
+          @treeView.sortByName()
+        else
+          @treeView.sortByRow()
+        @focusCurrentCursorTag()
+
+      if @cachedStatus[editor]
+        {@nowTypeStatus, @nowSortStatus} = @cachedStatus[editor]
+        for type, visible of @nowTypeStatus
+          @treeView.toggleTypeVisible(type) unless visible
+        @treeView.sortByName() if @nowSortStatus[0]
+      else
+        @cachedStatus[editor] = {nowTypeStatus: {}, nowSortStatus: [false]}
+        @cachedStatus[editor].nowTypeStatus[type] = true for type in types
+        {@nowTypeStatus, @nowSortStatus} = @cachedStatus[editor]
+
+      @contextMenu.addMenu(type, @nowTypeStatus[type], toggleTypeVisible) for type in types
+      @contextMenu.addSeparator()
+      @contextMenu.addMenu('sort by name', @nowSortStatus[0], toggleSortByName)
+
     generateTags: (filePath) ->
       new TagGenerator(filePath, @getScopeName()).generate().done (tags) =>
         @parser = new TagParser(tags, @getScopeName())
-        root = @parser.parse()
+        {root, types} = @parser.parse()
         @treeView.setRoot(root)
+        @updateContextMenu(types)
         @focusCurrentCursorTag()
 
     # Returns an object that can be retrieved when package is activated
@@ -103,23 +122,53 @@ module.exports =
       @element.remove()
 
     attach: ->
-      @onEditorChange = atom.workspace.onDidChangeActivePaneItem (editor) =>
-        @removeEventForEditor()
-        @populate()
-
       if atom.config.get('tree-view.showOnRightSide')
         @panel = atom.workspace.addLeftPanel(item: this)
       else
         @panel = atom.workspace.addRightPanel(item: this)
+      @contextMenu.attach()
+      @contextMenu.hide()
+
+    attached: ->
+      @onChangeEditor = atom.workspace.onDidChangeActivePaneItem (editor) =>
+        @removeEventForEditor()
+        @populate()
+
+      @onChangeAutoHide = atom.config.observe 'symbols-tree-view.autoHide', (autoHide) =>
+        unless autoHide
+          @off('mouseenter mouseleave')
+        else
+          @mouseenter (event) =>
+            @stop()
+            @animate({width: @originalWidth}, duration: @animationDuration)
+
+          @mouseleave (event) =>
+            @stop()
+            if atom.config.get('tree-view.showOnRightSide')
+              @animate({width: @minimalWidth}, duration: @animationDuration) if event.offsetX > 0
+            else
+              @animate({width: @minimalWidth}, duration: @animationDuration) if event.offsetX <= 0
+
+      @on "contextmenu", (event) =>
+        left = event.pageX
+        if left + @contextMenu.width() > atom.getSize().width
+          left = left - @contextMenu.width()
+        @contextMenu.css({left: left, top: event.pageY})
+        @contextMenu.show()
+        return false #disable original atom context menu
 
     removeEventForEditor: ->
-      @onEditorSave.dispose() if @onEditorSave
-      @onChangeRow.dispose() if @onChangeRow
+      @onEditorSave?.dispose()
+      @onChangeRow?.dispose()
+
+    detached: ->
+      @onChangeEditor?.dispose()
+      @onChangeAutoHide?.dispose()
+      @removeEventForEditor()
+      @off "contextmenu"
 
     remove: ->
       super
-      @onEditorChange.dispose() if @onEditorChange
-      @removeEventForEditor()
       @panel.destroy()
 
     # Toggle the visibility of this view

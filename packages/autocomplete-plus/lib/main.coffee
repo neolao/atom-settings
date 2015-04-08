@@ -88,7 +88,7 @@ module.exports =
       order: 13
     suggestionListFollows:
       title: 'Suggestions List Follows'
-      description: 'With "Cursor" the suggestion list appears at the cursor\'s position. With "Word" it appers at the beginning of the word that\'s being completed.'
+      description: 'With "Cursor" the suggestion list appears at the cursor\'s position. With "Word" it appears at the beginning of the word that\'s being completed.'
       type: 'string'
       default: 'Cursor'
       enum: ['Cursor', 'Word']
@@ -99,6 +99,14 @@ module.exports =
       default: 'Fuzzy'
       enum: ['Fuzzy', 'Symbol']
       order: 15
+    suppressActivationForEditorClasses:
+      title: 'Suppress Activation For Editor Classes'
+      description: 'Don\'t auto-activate when any of these classes are present in the editor.'
+      type: 'array'
+      default: ['vim-mode.command-mode', 'vim-mode.visual-mode', 'vim-mode.operator-pending-mode']
+      items:
+        type: 'string'
+      order: 16
 
   # Public: Creates AutocompleteManager instances for all active and future editors (soon, just a single AutocompleteManager)
   activate: ->
