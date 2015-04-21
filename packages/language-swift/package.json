@@ -1,6 +1,6 @@
 {
   "name": "language-swift",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Swift language support in Atom",
   "license": "MIT",
   "homepage": "https://github.com/darinmorrison/atom-language-swift",
@@ -16,10 +16,18 @@
   },
   "readme": "# Swift language support in Atom\n\nAdds syntax highlighting to Swift files in Atom.\n\nContributions are greatly appreciated. Please fork this repository and open an pull request to add snippets, make grammar tweaks, etc.\n",
   "readmeFilename": "README.md",
-  "_id": "language-swift@0.3.0",
-  "dist": {
-    "shasum": "cb83582acfba61775773f1536c86c54c0e4b2587"
-  },
-  "_resolved": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114819-43167-1xih4ah/package.tgz",
-  "_from": "/private/var/folders/4g/c93n4r8j787ckv_1dwrjgqwm0000gn/T/d-114819-43167-1xih4ah/package.tgz"
+  "_id": "language-swift@0.4.0",
+  "_shasum": "ba2bee40c028c30fc15897ab02125abd3db002c1",
+  "_resolved": "file:../d-115316-25042-113zvyy/package.tgz",
+  "_from": "../d-115316-25042-113zvyy/package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [],
+    "extensions": {
+      ".json": [
+        "package.json"
+      ]
+    },
+    "folders": []
+  }
 }

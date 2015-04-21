@@ -1,3 +1,9 @@
+# 0.4.2
+* Restored Quinze because the author seems to have resolved the issue
+
+# 0.4.1
+* Removed Quinze because of a possible malware issue
+
 # 0.4.0
 * Immediately see the font in effect in a preview editor.mini
 

@@ -104,6 +104,7 @@
   "merge-conflicts":
     gitPath: "/usr/bin/git"
   toolbar:
+    position: "Left"
     visible: false
   zentabs:
     neverCloseUnsaved: true

@@ -1,2 +1,3 @@
+- focus on critical issues (bugs, performance)
+
 - prompt should just "sit there" - i.e. mark-khan's issue
-- go through all issues, draw up list of what/where

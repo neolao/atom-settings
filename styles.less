@@ -16,6 +16,12 @@
 .tree-view {
     font-size: 1.7em;
 
+    .entry.file {
+        height: 1.5em;
+    }
+    .entry.directory .header {
+        height: 1.5em;
+    }
     /*
     .list-tree li {
         min-height: 1.3em;
@@ -66,6 +72,17 @@
 .editor {
     // font-family: "DejaVu Sans Mono" !important;
 }
+
+/*
+atom-text-editor[mini] {
+    background: transparent;
+    color: black !important;
+    &.is-focused {
+        background: transparent;
+        color: black !important;
+    }
+}
+*/
 
 .select-list {
 
@@ -122,7 +139,7 @@
 
 // Git control
 .git-control {
-    font-size: 1.5em;
+    font-size: 1.2em;
 
     .menu {
         border-bottom: solid 2px #ccc;

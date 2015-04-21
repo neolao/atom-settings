@@ -3,6 +3,7 @@
   'swift'
 ],
 'name': 'Swift'
+'firstLineMatch': '^#!\\s*/.*\\bswift'
 'patterns': [
   {
     'name': 'keyword.declaration.swift'

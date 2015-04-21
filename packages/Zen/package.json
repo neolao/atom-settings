@@ -1,7 +1,7 @@
 {
   "name": "Zen",
   "main": "./lib/zen",
-  "version": "0.11.4",
+  "version": "0.12.0",
   "private": true,
   "description": "Distraction free writing.",
   "activationCommands": {
@@ -15,7 +15,7 @@
   },
   "license": "MIT",
   "engines": {
-    "atom": ">0.50.0"
+    "atom": ">=0.174.0 <2.0.0"
   },
   "dependencies": {
     "jquery": "2.x.x"
@@ -31,10 +31,10 @@
     "url": "https://github.com/defunkt/zen/issues"
   },
   "homepage": "https://github.com/defunkt/zen",
-  "_id": "Zen@0.11.4",
-  "_shasum": "6ec0be83e6586baf72f21dafb35da278014e470c",
-  "_resolved": "file:../d-11538-95761-ok7c07/package.tgz",
-  "_from": "../d-11538-95761-ok7c07/package.tgz",
+  "_id": "Zen@0.12.0",
+  "_shasum": "ffd1be643878b320d88bd8f0ab0e1b42244e3cbb",
+  "_resolved": "file:../d-115313-27174-1ttgiph/package.tgz",
+  "_from": "../d-115313-27174-1ttgiph/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [

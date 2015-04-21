@@ -1,6 +1,6 @@
 {
   "name": "linter-phpcs",
-  "version": "0.0.12",
+  "version": "0.0.14",
   "main": "./lib/init",
   "linter-package": true,
   "activationEvents": [],
@@ -20,10 +20,10 @@
     "url": "https://github.com/AtomLinter/linter-phpcs/issues"
   },
   "homepage": "https://github.com/AtomLinter/linter-phpcs",
-  "_id": "linter-phpcs@0.0.12",
-  "_shasum": "6a7b7bce952f2f24c306dad3dbfbb48350f7cae3",
-  "_resolved": "file:../d-11529-31885-16v7gcu/package.tgz",
-  "_from": "../d-11529-31885-16v7gcu/package.tgz",
+  "_id": "linter-phpcs@0.0.14",
+  "_shasum": "ccc8726ca076b0dc1754c46964c75dc4f4171646",
+  "_resolved": "file:../d-115316-25050-16t1if5/package.tgz",
+  "_from": "../d-115316-25050-16t1if5/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [],
