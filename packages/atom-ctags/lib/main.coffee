@@ -1,4 +1,5 @@
-{$, CompositeDisposable} = require 'atom'
+$ = null
+{CompositeDisposable} = require 'atom'
 
 module.exports =
   disposables: new CompositeDisposable
@@ -34,10 +35,12 @@ module.exports =
     @ctagsCache.activate()
 
     if atom.config.get('atom-ctags.autoBuildTagsWhenActive')
-      @createFileView().rebuild() if atom.project.getPath()
-      @disposables.add atom.project.onDidChangePaths (paths)=>
-        @createFileView().rebuild()
-
+      setTimeout =>
+          @createFileView().rebuild() if atom.project.getPaths().length >= 1
+          @disposables.add atom.project.onDidChangePaths (paths)=>
+            @createFileView().rebuild()
+      ,1000
+    
     atom.commands.add 'atom-workspace', 'atom-ctags:rebuild', (e, cmdArgs)=>
       @ctagsCache.cmdArgs = cmdArgs if Array.isArray(cmdArgs)
       @createFileView().rebuild()
@@ -59,6 +62,7 @@ module.exports =
 
     atom.workspace.observeTextEditors (editor) ->
       editorView = atom.views.getView(editor)
+      {$} = require 'atom-space-pen-views' unless $
       $(editorView).on 'mousedown', (event) ->
         return unless event.altKey and event.which is 1
         atom.commands.dispatch atom.views.getView(atom.workspace), 'atom-ctags:go-to-declaration'
@@ -113,12 +117,9 @@ module.exports =
       @goBackView = new GoBackView(@stack)
     @goBackView
 
-  getProvider: ->
-    return @provider if @provider?
-    CtagsProvider = require './ctags-provider'
-    @provider = new CtagsProvider()
-    @provider.ctagsCache = @ctagsCache
-    return @provider
-
   provide: ->
-    return {provider: @getProvider()}
+    unless @provider?
+      CtagsProvider = require './ctags-provider'
+      @provider = new CtagsProvider()
+      @provider.ctagsCache = @ctagsCache
+    @provider

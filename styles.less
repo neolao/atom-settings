@@ -12,38 +12,51 @@
     font-size: .8em;
 }
 
-// The tree view
-.tree-view {
-    font-size: 1.7em;
+.workspace .horizontal .left {
+    font-size: 16px;
+}
+.workspace .horizontal .vertical {
+    font-size: 14px;
+}
 
-    .entry.file {
-        height: 1.5em;
-    }
-    .entry.directory .header {
-        height: 1.5em;
-    }
-    /*
-    .list-tree li {
-        min-height: 1.3em;
-        &:before {
+@media screen and (min-width: 2000px) {
+    // The tree view
+    .workspace .horizontal .left {
+        font-size: 20px;
+
+        .entry.file {
             height: 1.5em;
         }
-
-        &.expanded {
-            padding-bottom: .5em;
+        .entry.directory .header {
+            height: 1.5em;
         }
+        /*
+        .list-tree li {
+            min-height: 1.3em;
+            &:before {
+                height: 1.5em;
+            }
+
+            &.expanded {
+                padding-bottom: .5em;
+            }
+        }
+        .list-item.header {
+            padding: .0em 0;
+        }
+        .entry.directory {
+            padding: 1px 0;
+        }
+        .list-item.entry.file {
+            line-height: 1.5em;
+            padding: 1px 0;
+        }
+        */
     }
-    .list-item.header {
-        padding: .0em 0;
+
+    .workspace .horizontal .vertical {
+        font-size: 16px;
     }
-    .entry.directory {
-        padding: 1px 0;
-    }
-    .list-item.entry.file {
-        line-height: 1.5em;
-        padding: 1px 0;
-    }
-    */
 }
 
 // The tab bar
@@ -59,7 +72,7 @@
         }
     }
     .title {
-        font-size: 1.8em;
+        font-size: 1.4em;
         margin: 0 .5em;
 
         &:before {
@@ -188,6 +201,12 @@ atom-text-editor::shadow .cursor {
     border-width: 2px;
     box-shadow: 0 0 10px #ff0;
     width: 2px !important;
+}
+
+// Package: Symbols Tree
+.symbols-tree-view {
+    font-size: 1.5rem;
+    width: 300px !important;
 }
 
 // Package: Highlight-line

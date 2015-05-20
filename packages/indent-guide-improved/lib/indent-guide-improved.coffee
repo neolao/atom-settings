@@ -6,13 +6,16 @@ RowMap = require './row-map.coffee'
 
 module.exports =
   activate: (state) ->
+    # The original indent guides interfere with this package.
+    atom.config.set('editor.showIndentGuide', false);
+
     updateGuide = (editor, editorElement) ->
       underlayer = editorElement.querySelector(".underlayer")
       if !underlayer?
         return
 
       visibleScreenRange = editor.getVisibleRowRange()
-      basePixelPos = editor.pixelPositionForScreenPosition(new Point(visibleScreenRange[0], 0)).top
+      basePixelPos = editorElement.pixelPositionForScreenPosition(new Point(visibleScreenRange[0], 0)).top
       visibleRange = visibleScreenRange.map (row) ->
         editor.bufferPositionForScreenPosition(new Point(row, 0)).row
       getIndent = (row) ->

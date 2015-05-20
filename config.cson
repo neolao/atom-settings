@@ -10,28 +10,26 @@
   editor:
     fontFamily: "DejaVu Sans Mono"
     showInvisibles: true
-    showIndentGuide: true
     preferredLineLength: 120
     tabLength: 4
-    invisibles: {}
-    fontSize: 21
+    invisibles:
+      {}
+    fontSize: 22
   core:
     disabledPackages: [
-      "aural-coding"
-      "spell-check"
-      "welcome"
       "symbols-view"
-      "feedback"
-      "minimap"
-      "atom-beautify"
-      "emmet"
-      "enhanced-package-list"
-      "file-type-icons"
       "tabs"
-      "string-looper"
       "tree-view"
-      "tree-view"
-      "tab-switcher"
+      "enhanced-package-list"
+      "welcome"
+      "styleguide"
+      "package-generator"
+      "open-on-github"
+      "metrics"
+      "language-toml"
+      "language-ruby-on-rails"
+      "language-ruby"
+      "language-objective-c"
     ]
     projectHome: "/Users/eric/workspace"
     followSymlinks: true
@@ -44,13 +42,26 @@
   "autoclose-html":
     closeOnEndOfOpeningTag: true
     makeNeverCloseElementsSelfClosing: true
-    forceInline: "title, h1, h2, h3, h4, h5, h6, p"
+    forceInline: [
+      "title"
+      "h1"
+      "h2"
+      "h3"
+      "h4"
+      "h5"
+      "h6"
+      "p"
+    ]
   "highlight-column":
     opacity: 1
     enableHighlight: true
   linter:
     showErrorInline: true
     statusBar: "Show all errors"
+    ignoredLinterErrors: [
+      "php"
+      "phpcs"
+    ]
   "todo-show":
     findTheseRegexes: [
       "TODOs"
@@ -77,7 +88,8 @@
       "/src/Udg/StatsBundle/"
       "/src/Udg/WebBundle/"
     ]
-  "project-manager": {}
+  "project-manager":
+    {}
   "atom-ctags":
     cmdArgs: "--exclude=.git --exclude=app --exclude=vendor --exclude=vendor_front --exclude=web --exclude=tests"
     buildTimeout: 60000
@@ -126,10 +138,16 @@
     sortFoldersBeforeFiles: true
   fonts:
     fontFamily: "DejaVu Mono"
-  goto: {}
-  "symbols-tree-view": {}
+  goto:
+    {}
+  "symbols-tree-view":
+    {}
   "linter-phpcs":
     phpcsExecutablePath: "/usr/bin/phpcs"
     standard: "PSR2"
     ignore: "*.blade.php,*.twig.php"
     enableWarning: 1
+  "tool-bar":
+    visible: false
+  "terminal-panel":
+    {}

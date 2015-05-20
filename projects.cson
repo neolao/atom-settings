@@ -1,7 +1,8 @@
 'Académie du goût':
   'title': 'Académie du goût'
   'paths': [
-    '/Users/eric/workspace/udg'
+    '/Users/eric/workspace/udg',
+    '/Users/eric/workspace/paginationBundle'
   ]
 'ambed.io':
   'title': 'ambed.io'
