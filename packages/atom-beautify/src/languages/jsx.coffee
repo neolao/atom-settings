@@ -9,13 +9,15 @@ module.exports = {
     ###
     grammars: [
         "JSX"
+        "JavaScript (JSX)"
     ]
 
     ###
     Supported extensions
     ###
     extensions: [
-        "jsx"
+        "jsx",
+        "js"
     ]
 
 }

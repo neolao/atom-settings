@@ -1,7 +1,4 @@
 # This file handles all the fetching and displaying logic. It doesn't handle any of the pane magic.
-# Pane magic happens in show-todo.coffee.
-# Markup is in template/show-todo-template.html
-# Styling is in the stylesheets folder.
 
 path = require 'path'
 fs = require 'fs-plus'
@@ -14,6 +11,8 @@ ignore = require 'ignore'
 
 module.exports =
 class ShowTodoView extends ScrollView
+  maxLength: 120
+
   @content: ->
     @div class: 'show-todo-preview native-key-bindings', tabindex: -1
 
@@ -23,18 +22,22 @@ class ShowTodoView extends ScrollView
     @emitter = new Emitter
     @disposables = new CompositeDisposable
 
+    # Determine if you are searching full workspace or just open files
+    @searchWorkspace = @filePath isnt '/Open-TODOs'
+
   destroy: ->
+    @cancelScan()
     @detach()
     @disposables.dispose()
 
   getTitle: ->
-    "Todo-Show Results"
+    if @searchWorkspace then "Todo-Show Results" else "Todo-Show Open Files"
 
   getURI: ->
-    "todolist-preview://#{@getPath()}"
+    "todolist-preview:///#{@getPath()}"
 
   getPath: ->
-    "TODOs"
+    @filePath
 
   getProjectPath: ->
     atom.project.getPaths()[0]
@@ -45,7 +48,8 @@ class ShowTodoView extends ScrollView
   showLoading: ->
     @loading = true
     @html $$$ ->
-      @div class: 'markdown-spinner', 'Loading Todos...'
+      @div class: 'markdown-spinner'
+      @h5 class: 'text-center searched-count', 'Loading Todos...'
 
   showTodos: (regexes) ->
     @html $$$ ->
@@ -66,8 +70,19 @@ class ShowTodoView extends ScrollView
                 @tr =>
                   @td match.matchText
                   @td =>
-                    relativePath = atom.project.relativize(result.filePath)
-                    @a class: 'todo-url', 'data-uri': result.filePath, 'data-coords': match.range, relativePath
+                    @a class: 'todo-url', 'data-uri': result.filePath, 'data-coords': match.rangeString, result.relativePath
+
+      unless regexes.length
+        @section =>
+          @h1 'No results'
+          @table =>
+            @tr =>
+              @td =>
+                @h5 'Did not find any todos. Searched for:'
+                @ul =>
+                  for regex in atom.config.get('todo-show.findTheseRegexes') by 2
+                    @li regex
+                @h5 'Use your configuration to add more patterns.'
 
     @loading = false
 
@@ -88,60 +103,137 @@ class ShowTodoView extends ScrollView
     return false unless pattern
     new RegExp(pattern, flags)
 
-  # Scan project for the lookup that is passed
+  # Parses and strips result from scan
+  handleScanResult: (result, regex) ->
+    # Loop through the scan results
+    for match in result.matches
+      matchText = match.matchText
+
+      # Strip out the regex token from the found annotation
+      # not all objects will have an exec match
+      while (_match = regex?.exec(matchText))
+        matchText = _match.pop()
+
+      # Strip common block comment endings and whitespaces
+      matchText = matchText.replace(/(\*\/|-->|#>|-}|\]\])\s*$/, '').trim()
+
+      # Truncate long match strings
+      if matchText.length >= @maxLength
+        matchText = matchText.substring(0, @maxLength - 3) + '...'
+
+      match.matchText = matchText
+
+      # Make sure range is serialized to produce correct rendered format
+      # See https://github.com/jamischarles/atom-todo-show/issues/27
+      if match.range.serialize
+        match.rangeString = match.range.serialize().toString()
+      else
+        match.rangeString = match.range.toString()
+
+    result.relativePath = atom.project.relativize(result.filePath)
+    return result
+
+  # Scan project workspace for the lookup that is passed
   # returns a promise that the scan generates
   fetchRegexItem: (regexLookup) ->
-    maxLength = 120
-
-    regexObj = @makeRegexObj(regexLookup.regex)
-    return false unless regexObj
+    regex = @makeRegexObj(regexLookup.regex)
+    return false unless regex
 
     # Handle ignores from settings
     ignoresFromSettings = atom.config.get('todo-show.ignoreThesePaths')
     hasIgnores = ignoresFromSettings?.length > 0
     ignoreRules = ignore({ ignore:ignoresFromSettings })
 
-    return atom.workspace.scan regexObj, (e) ->
-      # Check against ignored paths
-      pathToTest = slash(e.filePath.substring(atom.project.getPaths()[0].length))
-      return if (hasIgnores && ignoreRules.filter([pathToTest]).length == 0)
+    # TODO: Use paths option as ignoreRules by adding them as an array
+    # of exclusions (!) after atom fix: https://github.com/atom/atom/pull/6386
+    # otherwise use full pattern; e.g. `!*/node_modules/**/*.*`
+    # This would hopefully also remove dependency on slash and ignore, while
+    # using default node-minimatch.
 
-      # Loop through the workspace file results
-      for regExMatch in e.matches
-        matchText = regExMatch.matchText
+    # Only track progress on first scan
+    options = {}
+    if !@firstRegex
+      @firstRegex = true
+      onPathsSearched = (nPaths) =>
+        if @loading
+          @find('.searched-count').text("#{nPaths} paths searched...")
+      options = {paths: '*', onPathsSearched}
 
-        # Strip out the regex token from the found annotation
-        # not all objects will have an exec match
-        while (match = regexObj.exec(matchText))
-          matchText = match.pop()
+    atom.workspace.scan regex, options, (result, error) =>
+      console.debug error.message if error
 
-        # Strip common block comment endings and whitespaces
-        matchText = matchText.replace(/(\*\/|-->|#>|-}|\]\])\s*$/, '').trim()
+      if result
+        # Check against ignored paths
+        pathToTest = slash(result.filePath.substring(atom.project.getPaths()[0].length))
+        return if (hasIgnores && ignoreRules.filter([pathToTest]).length == 0)
 
-        # Truncate long match strings
-        if matchText.length >= maxLength
-          matchText = matchText.substring(0, maxLength - 3) + '...'
+        regexLookup.results.push @handleScanResult(result, regex)
 
-        regExMatch.matchText = matchText
+  # Scan open files for the lookup that is passed
+  fetchOpenRegexItem: (regexLookup) ->
+    regex = @makeRegexObj(regexLookup.regex)
+    return false unless regex
 
-      regexLookup.results.push(e)
+    deferred = Q.defer()
+
+    for editor in atom.workspace.getTextEditors()
+      # Use same object layout as workspace scan with single match
+      result =
+        filePath: editor.getPath()
+        matches: []
+
+      editor.scan regex, (scanResult, error) ->
+        console.debug error.message if error
+
+        if scanResult
+          result.matches.push
+            matchText: scanResult.matchText
+            lineText: scanResult.matchText
+            range: [
+              [
+                scanResult.computedRange.start.row
+                scanResult.computedRange.start.column
+              ]
+              [
+                scanResult.computedRange.end.row
+                scanResult.computedRange.end.column
+              ]
+            ]
+
+      if result.matches.length > 0
+        regexLookup.results.push @handleScanResult(result, regex)
+
+    # No async operations, so just return a resolved promise
+    deferred.resolve()
+    deferred.promise
 
   renderTodos: ->
     @showLoading()
 
-    # fetch the reges from the settings
+    # Fetch the regexes from settings
     regexes = @buildRegexLookups(atom.config.get('todo-show.findTheseRegexes'))
 
-    # @FIXME: abstract this into a separate, testable function?
-    promises = []
+    # Scan for each regex and get promises
+    @searchPromises = []
     for regexObj in regexes
-      # scan the project for each regex, and get a promise in return
-      promise = @fetchRegexItem(regexObj)
-      promises.push(promise) # create array of promises so we can listen for completion
+      if @searchWorkspace
+        promise = @fetchRegexItem(regexObj)
+      else
+        promise = @fetchOpenRegexItem(regexObj)
 
-    # fire callback when ALL project scans are done
-    Q.all(promises).then () =>
-      @showTodos(@regexes = regexes)
+      @searchPromises.push(promise)
+
+    # Fire callback when ALL scans are done
+    Q.all(@searchPromises).then () =>
+      @regexes = regexes.filter (regex) ->
+        regex.results.length
+      @showTodos(@regexes)
+
+    return this
+
+  cancelScan: ->
+    for promise in @searchPromises
+      promise.cancel() if promise
 
   handleEvents: ->
     atom.commands.add @element,

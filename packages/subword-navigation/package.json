@@ -1,7 +1,7 @@
 {
   "name": "subword-navigation",
   "main": "./lib/main",
-  "version": "2.7.0",
+  "version": "2.8.0",
   "description": "Navigate camelCase and snake_case words",
   "activationCommands": {},
   "repository": {
@@ -23,20 +23,17 @@
   "engines": {
     "atom": ">= 0.168.0"
   },
-  "devDependencies": {
-    "fs-plus": "2.x",
-    "temp": "~0.6.0"
-  },
+  "devDependencies": {},
   "dependencies": {
     "underscore-plus": "1.x"
   },
-  "readme": "# Subword Navigation\n###### An Atom Package - [Atom.io](https://atom.io/packages/subword-navigation) : [Github](https://github.com/dsandstrom/atom-subword-navigation) : [![Build Status](https://travis-ci.org/dsandstrom/atom-subword-navigation.svg?branch=master)](https://travis-ci.org/dsandstrom/atom-subword-navigation)\n\n**Harness the power of ALT as you battle the mighty camelCase and treacherous snake_case.**\n\nThis package allows you to move the cursor(s) to beginning and end of words, but also it stops at subwords (camelCase and snake_case).\n\n- Holding `shift` will highlight as you move left and right.\n- Along with highlight, you can delete to the previous/next subword.\n- If you have [vim-mode](https://atom.io/packages/vim-mode) enabled, `q` will be there to assist.  As of now, commands can't be called multiple times (eg. v2q doesn't work).\n- Issues and pull requests are welcome.\n\n\n### Instructions\n\n| Linux/Win   | Left             | Right             |\n|:------------|:-----------------|:------------------|\n| Move around | `alt-left`       | `alt-right `      |\n| Highlight   | `alt-shift-left` | `alt-shift-right` |\n| Delete      | `alt-backspace`  | `alt-delete `     |\n\n| Mac         | Left                  | Right                  |\n|:------------|:----------------------|:-----------------------|\n| Move around | `ctrl-alt-left`       | `alt-right`            |\n| Highlight   | `ctrl-alt-shift-left` | `ctrl-alt-shift-right` |\n| Delete      | `ctrl-alt-backspace`  | `ctrl-alt-delete `     |\n\n| Vim-Mode    | Left  | Right |\n|:------------|:------|:------|\n| Move around | `Q`   | `q`   |\n| Highlight   | `v Q` | `v q` |\n| Delete      | `d Q` | `d q` |\n\n\n### Dependencies\nRequires Atom v0.168.0 and up\n\n\n### Commands\n```coffee\n'subword-navigation:move-right'\n'subword-navigation:move-left'\n'subword-navigation:select-right'\n'subword-navigation:select-left'\n'subword-navigation:delete-right'\n'subword-navigation:delete-left'\n```\n",
+  "readme": "# Subword Navigation\n###### An Atom Package - [Atom.io](https://atom.io/packages/subword-navigation) : [Github](https://github.com/dsandstrom/atom-subword-navigation) : [![Build Status](https://travis-ci.org/dsandstrom/atom-subword-navigation.svg?branch=master)](https://travis-ci.org/dsandstrom/atom-subword-navigation)\n\n**Harness the power of ALT as you battle the mighty camelCase and treacherous snake_case.**\n\nThis package allows you to move the cursor(s) to beginning and end of words, but also it stops at subwords (camelCase and snake_case).\n\n- Holding `shift` will highlight as you move left and right.\n- Along with highlight, you can delete to the previous/next subword.\n- If you have [vim-mode](https://atom.io/packages/vim-mode) enabled, `q` will be there to assist.  As of now, commands can't be called multiple times (eg. v2q doesn't work).\n- Issues and pull requests are welcome.\n\n\n### Instructions\n\n| Linux/Win   | Left             | Right             |\n|:------------|:-----------------|:------------------|\n| Move around | `alt-left`       | `alt-right `      |\n| Highlight   | `alt-shift-left` | `alt-shift-right` |\n| Delete      | `alt-backspace`  | `alt-delete `     |\n\n| Mac*        | Left                  | Right                  |\n|:------------|:----------------------|:-----------------------|\n| Move around | `ctrl-alt-left`       | `ctrl-alt-right`            |\n| Highlight   | `ctrl-alt-shift-left` | `ctrl-alt-shift-right` |\n| Delete      | `ctrl-alt-backspace`  | `ctrl-alt-delete `     |\n\n| Vim-Mode    | Left  | Right |\n|:------------|:------|:------|\n| Move around | `Q`   | `q`   |\n| Highlight   | `v Q` | `v q` |\n| Delete      | `d Q` | `d q` |\n\n\n### Dependencies\nRequires Atom v0.168.0 and up\n\n\n### Commands\n```coffee\n'subword-navigation:move-right'\n'subword-navigation:move-left'\n'subword-navigation:select-right'\n'subword-navigation:select-left'\n'subword-navigation:delete-right'\n'subword-navigation:delete-left'\n```\n\n### Notes\n\\* The reason Mac keymaps use `ctrl-alt` instead of just `alt` is because Atom already has a keymap set for `alt-left` and `alt-right` (move-to-beginning-of-word and move-to-end-of-word).\n",
   "readmeFilename": "README.md",
   "homepage": "https://github.com/dsandstrom/atom-subword-navigation",
-  "_id": "subword-navigation@2.7.0",
-  "_shasum": "7fb3931b2c21df523d27c8c7a8bdff892bf660a1",
-  "_resolved": "file:../d-115327-61117-x0uud3/package.tgz",
-  "_from": "../d-115327-61117-x0uud3/package.tgz",
+  "_id": "subword-navigation@2.8.0",
+  "_shasum": "c9dd7d8f48229d51c1b8415a23f60d0326441b53",
+  "_resolved": "file:../d-11558-14330-ogvg8g/package.tgz",
+  "_from": "../d-11558-14330-ogvg8g/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [

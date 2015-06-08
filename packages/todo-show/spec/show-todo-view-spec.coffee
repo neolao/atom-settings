@@ -1,4 +1,6 @@
 
+path = require 'path'
+
 ShowTodoView = require '../lib/show-todo-view'
 
 describe 'ShowTodoView fetching logic and data handling', ->
@@ -76,6 +78,34 @@ describe 'ShowTodoView fetching logic and data handling', ->
 
       expect(regexObj).toBe(false)
 
+  describe 'handleScanResult(result, regex)', ->
+    {result, regex} = []
+
+    beforeEach ->
+      regex = /TODO:?(.+$)/g
+      result =
+        filePath: "#{atom.project.getPaths()[0]}/sample.c"
+        matches: [
+          matchText: ' TODO: Comment in C '
+          range: [
+            [0, 1]
+            [0, 20]
+          ]
+        ]
+
+    it 'should handle results from workspace scan (also tested in fetchRegexItem)', ->
+      output = showTodoView.handleScanResult(result)
+      expect(output.matches[0].matchText).toEqual 'TODO: Comment in C'
+
+    it 'should remove regex part', ->
+      output = showTodoView.handleScanResult(result, regex)
+      expect(output.matches[0].matchText).toEqual 'Comment in C'
+
+    it 'should serialize range and relativize path', ->
+      output = showTodoView.handleScanResult(result, regex)
+      expect(output.relativePath).toEqual 'sample.c'
+      expect(output.matches[0].rangeString).toEqual '0,1,0,20'
+
   describe 'fetchRegexItem: (lookupObj)', ->
     todoLookup = []
 
@@ -85,12 +115,12 @@ describe 'ShowTodoView fetching logic and data handling', ->
         regex: '/TODO:?(.+$)/g'
         results: []
 
-    it 'should scan the workspace for the regex that is passed and fill lookups results', ->
+    it 'should scan the workspace for the regex that is passed and fill lookup results', ->
       waitsForPromise ->
         showTodoView.fetchRegexItem(todoLookup)
 
       runs ->
-        expect(todoLookup.results.length).toBe(2)
+        expect(todoLookup.results.length).toBe 2
         expect(todoLookup.results[0].matches[0].matchText).toBe 'Comment in C'
         expect(todoLookup.results[1].matches[0].matchText).toBe 'This is the first todo'
         expect(todoLookup.results[1].matches[1].matchText).toBe 'This is the second todo'
@@ -101,7 +131,7 @@ describe 'ShowTodoView fetching logic and data handling', ->
       waitsForPromise ->
         showTodoView.fetchRegexItem(todoLookup)
       runs ->
-        expect(todoLookup.results.length).toBe(1)
+        expect(todoLookup.results.length).toBe 1
         expect(todoLookup.results[0].matches[0].matchText).toBe 'Comment in C'
 
     it 'should handle other regexes', ->
@@ -169,11 +199,17 @@ describe 'ShowTodoView fetching logic and data handling', ->
       waitsForPromise ->
         showTodoView.fetchRegexItem(lookup)
       runs ->
-        matchText =  'Lorem ipsum dolor sit amet, dapibus rhoncus. Scelerisque quam,'
+        matchText = 'Lorem ipsum dolor sit amet, dapibus rhoncus. Scelerisque quam,'
         matchText += ' id ante molestias, ipsum lorem magnis et. A eleifend i...'
+
+        matchText2 = '_SpgLE84Ms1K4DSumtJDoNn8ZECZLL+VR0DoGydy54vUoSpgLE84Ms1K4DSum'
+        matchText2 += 'tJDoNn8ZECZLLVR0DoGydy54vUonRClXwLbFhX2gMwZgjx250ay+V0lF...'
 
         expect(lookup.results[0].matches[0].matchText.length).toBe 120
         expect(lookup.results[0].matches[0].matchText).toBe matchText
+
+        expect(lookup.results[0].matches[1].matchText.length).toBe 120
+        expect(lookup.results[0].matches[1].matchText).toBe matchText2
 
     it 'should strip common block comment endings', ->
       atom.project.setPaths [path.join(__dirname, 'fixtures/sample2')]
@@ -188,22 +224,40 @@ describe 'ShowTodoView fetching logic and data handling', ->
         expect(todoLookup.results[0].matches[3].matchText).toBe 'Haskell comment'
         expect(todoLookup.results[0].matches[4].matchText).toBe 'Lua comment'
 
-scan_mock = require './fixtures/atom_scan_mock_result.json'
+  describe 'fetchOpenRegexItem: (lookupObj)', ->
+    todoLookup = []
+
+    beforeEach ->
+      todoLookup =
+        title: 'TODOs'
+        regex: '/TODO:?(.+$)/g'
+        results: []
+      waitsForPromise ->
+        atom.workspace.open 'sample.c'
+
+    it 'should scan open files for the regex that is passed and fill lookup results', ->
+      waitsForPromise ->
+        showTodoView.fetchOpenRegexItem(todoLookup)
+
+      runs ->
+        expect(todoLookup.results.length).toBe 1
+        expect(todoLookup.results[0].matches.length).toBe 1
+        expect(todoLookup.results[0].matches[0].matchText).toBe 'Comment in C'
+
+    it 'should work with files outside of workspace', ->
+      waitsForPromise ->
+        atom.workspace.open '../sample2/sample.txt'
+
+      runs ->
+        waitsForPromise ->
+          showTodoView.fetchOpenRegexItem(todoLookup)
+
+        runs ->
+          expect(todoLookup.results.length).toBe 2
+          expect(todoLookup.results[0].matches[0].matchText).toBe 'Comment in C'
+          expect(todoLookup.results[1].matches[0].matchText).toBe 'C block comment'
 
 
 # TODO:
 # - make buildRegexLookups testable. Input, and output. It doesn't care about state. Functional goodness...
 # - look at symbol generator for extracting comment blocks
-
-
-# TODO: make some test fixtures? pages... load those in require those instead? We really just want to unit test it
-# and not run the whole thing... The more we can split it up the better...
-
-
-
-# Should truncate really long comments
-# Should only show TODOs in sections marked as 'comment'?
-
-
-# buildRegexLookups
-# test that regexes work from override settings as well as from default

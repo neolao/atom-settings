@@ -1,12 +1,14 @@
 {
   "name": "git-difftool",
   "main": "./lib/git-difftool",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Opens the current project in the diff tool you have configured in your .gitconfig",
-  "activationEvents": [
-    "git-difftool:diff-project",
-    "git-difftool:diff-file"
-  ],
+  "activationCommands": {
+    "atom-workspace": [
+      "git-difftool:diff-project",
+      "git-difftool:diff-file"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/felixkiss/atom-git-difftool"
@@ -22,10 +24,10 @@
     "url": "https://github.com/felixkiss/atom-git-difftool/issues"
   },
   "homepage": "https://github.com/felixkiss/atom-git-difftool",
-  "_id": "git-difftool@0.2.5",
-  "_shasum": "724abbb42099783111616022f75e7ba4d813caba",
-  "_resolved": "file:../d-115213-72489-r3rhhu/package.tgz",
-  "_from": "../d-115213-72489-r3rhhu/package.tgz",
+  "_id": "git-difftool@0.2.6",
+  "_shasum": "db9c881531b0018e7fa8b99bb93d21ceb4afd20b",
+  "_resolved": "file:../d-115425-18340-ymd9wp/package.tgz",
+  "_from": "../d-115425-18340-ymd9wp/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [],

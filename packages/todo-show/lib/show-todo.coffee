@@ -1,6 +1,4 @@
-# All this file really does is handle the following
-# 1) Defines Regex defaults
-# 2) Instantiates the commands, the panes, and then calls showTodoView.renderTodos()
+# This file handles configuration defaults, opening of pane and commands
 
 url = require 'url'
 
@@ -11,15 +9,23 @@ module.exports =
     # title, regex, title, regex...
     findTheseRegexes:
       type: 'array'
-      default: [
+      default: [ # based on atom/language-todo
         'FIXMEs'
-        '/FIXME:?(.+$)/g'
+        '/\\b@?FIXME:?(.+$)/g'
         'TODOs'
-        '/TODO:?(.+$)/g'
+        '/\\b@?TODO:?(.+$)/g'
         'CHANGEDs'
-        '/CHANGED:?(.+$)/g'
+        '/\\b@?CHANGED:?(.+$)/g'
         'XXXs'
-        '/XXX:?(.+$)/g'
+        '/\\b@?XXX:?(.+$)/g'
+        'IDEAs'
+        '/\\b@?IDEA:?(.+$)/g'
+        'HACKs'
+        '/\\b@?HACK:?(.+$)/g'
+        'NOTEs'
+        '/\\b@?NOTE:?(.+$)/g'
+        'REVIEWs'
+        '/\\b@?REVIEW:?(.+$)/g'
       ]
       items:
         type: 'string'
@@ -41,32 +47,33 @@ module.exports =
 
   activate: ->
     atom.commands.add 'atom-workspace', 'todo-show:find-in-project': =>
-      @show()
+      @show('todolist-preview:///TODOs')
 
-    # register the todolist URI, which will then open our custom view
+    atom.commands.add 'atom-workspace', 'todo-show:find-in-open-files': =>
+      @show('todolist-preview:///Open-TODOs')
+
+    # Register the todolist URI, which will then open our custom view
     atom.workspace.addOpener (uriToOpen) ->
       {protocol, host, pathname} = url.parse(uriToOpen)
       pathname = decodeURI(pathname) if pathname
       return unless protocol is 'todolist-preview:'
-      new ShowTodoView(filePath: pathname)
+      new ShowTodoView(filePath: pathname).renderTodos()
 
-  show: ->
-    uri = "todolist-preview://TODOs"
+  show: (uri) ->
     prevPane = atom.workspace.getActivePane()
     pane = atom.workspace.paneForItem(@showTodoView)
     direction = atom.config.get('todo-show.openListInDirection')
 
     if pane
       pane.destroyItem(@showTodoView)
-      # ignore core.destroyEmptyPanes and close empty pane
+      # Ignore core.destroyEmptyPanes and close empty pane
       pane.destroy() if pane.getItems().length is 0
       return
 
-    if direction == 'down'
-      prevPane.splitDown() if prevPane.parent.orientation != 'vertical'
-    else if direction == 'up'
-      prevPane.splitUp() if prevPane.parent.orientation != 'vertical'
+    if direction is 'down'
+      prevPane.splitDown() if prevPane.parent.orientation isnt 'vertical'
+    else if direction is 'up'
+      prevPane.splitUp() if prevPane.parent.orientation isnt 'vertical'
 
     atom.workspace.open(uri, split: direction).done (@showTodoView) =>
-      @showTodoView.renderTodos() if @showTodoView instanceof ShowTodoView
       prevPane.activate()

@@ -32,7 +32,7 @@ module.exports = class Uncrustify extends Beautifier
                     resolve cPath
             else
                 # Has custom config path
-                editor = atom.workspace.getActiveEditor()
+                editor = atom.workspace.getActiveTextEditor()
                 if editor?
                     basePath = path.dirname(editor.getPath())
                     # console.log(basePath);
@@ -75,7 +75,9 @@ module.exports = class Uncrustify extends Beautifier
                     outputFile = @tempFile("output", text)
                     "-l"
                     lang
-                ])
+                ], help: {
+                    link: "http://sourceforge.net/projects/uncrustify/"
+                })
                 .then(=>
                     @readFile(outputFile)
                 )

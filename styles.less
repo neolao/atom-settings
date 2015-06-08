@@ -12,16 +12,16 @@
     font-size: .8em;
 }
 
-.workspace .horizontal .left {
+atom-workspace .horizontal .left {
     font-size: 16px;
 }
-.workspace .horizontal .vertical {
+atom-workspace .horizontal .vertical {
     font-size: 14px;
 }
 
 @media screen and (min-width: 2000px) {
     // The tree view
-    .workspace .horizontal .left {
+    atom-workspace .horizontal .left {
         font-size: 20px;
 
         .entry.file {
@@ -54,7 +54,7 @@
         */
     }
 
-    .workspace .horizontal .vertical {
+    atom-workspace .horizontal .vertical {
         font-size: 16px;
     }
 }
@@ -82,7 +82,7 @@
 }
 
 // The editor
-.editor {
+atom-text-editor {
     // font-family: "DejaVu Sans Mono" !important;
 }
 
@@ -105,7 +105,7 @@ atom-text-editor[mini] {
         font-size: 1.5em;
 
         li {
-            line-height: 1.6em;
+            line-height: 1.5em;
         }
     }
     &.goto-view {
@@ -115,15 +115,20 @@ atom-text-editor[mini] {
         font-size: 2em;
 
         li {
-            line-height: 1.6em;
+            line-height: 1.5em;
         }
     }
 }
 
-.overlay.from-top {
+atom-panel.modal.from-top {
     width: 50%;
     margin-top: 0;
     margin-left: -25%;
+}
+@media screen and (min-width: 2000px) {
+    atom-panel.modal.from-top {
+        font-size: 20px;
+    }
 }
 
 .symbols-tree-view {

@@ -1,8 +1,8 @@
 # TODO-show package
 
-Finds all the TODO, FIXME, CHANGED, XXX comments in your project. Or anything else you want to fetch through settings.
+Finds all the TODO, FIXME, CHANGED, XXX, IDEA, HACK, NOTE, REVIEW comments in your project. Or anything else you want to fetch through settings.
 
-![](https://raw.github.com/jamischarles/atom-todo-show/master/screenshots/preview.png)
+![todo-show-package](https://raw.github.com/jamischarles/atom-todo-show/master/screenshots/preview.png)
 
 ## Exclude files/folders from scan
 __globally__:
@@ -19,7 +19,7 @@ __locally__: Ignores anything in your .gitignore file if the current project is 
 - how do we handle file changes?
 - ~~nicer styling~~
 - ignore TODOs outside of comment blocks
-- have nice message when no results are found
+- ~~have nice message when no results are found~~
 - ~~refactor and clean up code~~
 - ~~fix / add keymap shortcut~~
 - ~~add test cases~~

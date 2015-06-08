@@ -1,6 +1,6 @@
 {
   "name": "ScssBundle",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "SCSS syntax package for Atom",
   "repository": {
     "type": "git",
@@ -17,10 +17,18 @@
     "url": "https://github.com/EnriqueCanals/SCSSBundle/issues"
   },
   "homepage": "https://github.com/EnriqueCanals/SCSSBundle",
-  "_id": "ScssBundle@0.4.0",
-  "dist": {
-    "shasum": "c9aaa52909e9f0ebecb89c0f9512f620232db448"
-  },
-  "_resolved": "/var/folders/0t/sjn1ngrj4379sbtpfhcw4n6m0000gp/T/d-11453-17393-dp1h43/package.tgz",
-  "_from": "/var/folders/0t/sjn1ngrj4379sbtpfhcw4n6m0000gp/T/d-11453-17393-dp1h43/package.tgz"
+  "_id": "ScssBundle@0.5.0",
+  "_shasum": "07ed9c22804d3ee9c6c73675aa97289c23f93f94",
+  "_resolved": "file:../d-115425-18312-1xi2jzw/package.tgz",
+  "_from": "../d-115425-18312-1xi2jzw/package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [],
+    "extensions": {
+      ".json": [
+        "package.json"
+      ]
+    },
+    "folders": []
+  }
 }

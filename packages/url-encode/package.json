@@ -1,19 +1,21 @@
 {
   "name": "url-encode",
   "main": "./lib/url-encode",
-  "version": "0.2.0",
+  "version": "0.4.0",
   "description": "URL encode or decode the selected text.",
-  "activationEvents": [
-    "url-encode:encode",
-    "url-encode:decode"
-  ],
+  "activationCommands": {
+    "atom-workspace": [
+      "url-encode:encode",
+      "url-encode:decode"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/mmattozzi/url-encode"
   },
   "license": "MIT",
   "engines": {
-    "atom": ">0.50.0"
+    "atom": ">0.201.0"
   },
   "dependencies": {},
   "readme": "# url-encode package\n\n`cmd-u cmd-e` to URL encode selected text. `cmd-u cmd-d` to URL decode selected text.\n",
@@ -22,10 +24,21 @@
     "url": "https://github.com/mmattozzi/url-encode/issues"
   },
   "homepage": "https://github.com/mmattozzi/url-encode",
-  "_id": "url-encode@0.2.0",
-  "dist": {
-    "shasum": "b66218fe60c07ae3ad56b5f182bce7ccdb145585"
-  },
-  "_resolved": "/var/folders/q8/nyrt885s5kvdkjbsx784vjyc0000gn/T/d-114712-4541-1i9psqc/package.tgz",
-  "_from": "/var/folders/q8/nyrt885s5kvdkjbsx784vjyc0000gn/T/d-114712-4541-1i9psqc/package.tgz"
+  "_id": "url-encode@0.4.0",
+  "_shasum": "cf9d2c9db767d131b6fb0800b91c0de1867135d6",
+  "_resolved": "file:../d-115429-95446-dzczza/package.tgz",
+  "_from": "../d-115429-95446-dzczza/package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [],
+    "extensions": {
+      ".coffee": [
+        "lib/url-encode.coffee"
+      ],
+      ".json": [
+        "package.json"
+      ]
+    },
+    "folders": []
+  }
 }

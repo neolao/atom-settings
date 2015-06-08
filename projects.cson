@@ -2,7 +2,8 @@
   'title': 'Académie du goût'
   'paths': [
     '/Users/eric/workspace/udg',
-    '/Users/eric/workspace/paginationBundle'
+    '/Users/eric/workspace/paginationBundle',
+    '/Users/eric/workspace/CityAutocompleteFormTypeBundle'
   ]
 'ambed.io':
   'title': 'ambed.io'

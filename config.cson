@@ -17,9 +17,6 @@
     fontSize: 22
   core:
     disabledPackages: [
-      "symbols-view"
-      "tabs"
-      "tree-view"
       "enhanced-package-list"
       "welcome"
       "styleguide"
@@ -131,11 +128,6 @@
     sourceFilter: "user"
   "github-issues":
     username: "udg-eric"
-  "tree-view":
-    hideVcsIgnoredFiles: false
-    hideIgnoredNames: false
-    showOnRightSide: false
-    sortFoldersBeforeFiles: true
   fonts:
     fontFamily: "DejaVu Mono"
   goto:

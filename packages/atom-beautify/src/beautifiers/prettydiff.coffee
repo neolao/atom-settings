@@ -28,12 +28,15 @@ module.exports = class PrettyDiff extends Beautifier
         Sass: true
         JSON: true
         TSS: true
+        Twig: true
         LESS: true
+        Swig: true
+        Visualforce: true
     }
 
     beautify: (text, language, options) ->
 
-        return new @Promise((resolve, reject) ->
+        return new @Promise((resolve, reject) =>
             prettydiff = require("prettydiff")
             _ = require('lodash')
 
@@ -42,21 +45,34 @@ module.exports = class PrettyDiff extends Beautifier
             switch language
                 when "CSV"
                     lang = "csv"
-                when "EJS", "ERB", \
-                "Handlebars", "Mustache", \
-                # "Markup", "JSTL", "SGML", \ # Currently unsupported
-                "Spacebars", "XML"
+                when "EJS", "Twig"
+                    lang = "ejs"
+                when "ERB"
+                    lang = "html_ruby"
+                when "Handlebars", "Mustache", "Spacebars"
+                    lang = "handlebars"
+                when "SGML", "Swig"
                     lang = "markup"
+                when "XML", "Visualforce"
+                    lang = "xml"
                 when "HTML"
                     lang = "html"
-                when "JavaScript", "JSON", "JSX"
+                when "JavaScript"
                     lang = "javascript"
-                when "CSS", "LESS", "SCSS", "Sass"
+                when "JSON"
+                    lang = "json"
+                when "JSX"
+                    lang = "jsx"
+                when "JSTL"
+                    lang = "jsp"
+                when "CSS"
                     lang = "css"
+                when "LESS"
+                    lang = "less"
+                when "SCSS", "Sass"
+                    lang = "scss"
                 when "TSS"
                     lang = "tss"
-                # when "Plain text"
-                #     lang = "text"
                 else
                     lang = "auto"
 
@@ -70,6 +86,7 @@ module.exports = class PrettyDiff extends Beautifier
             _.merge(options, args)
 
             # Beautify
+            @verbose('prettydiff', options)
             output = prettydiff.api(options)
             result = output[0]
 
