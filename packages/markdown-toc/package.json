@@ -1,0 +1,42 @@
+{
+  "name": "markdown-toc",
+  "main": "./lib/markdown-toc",
+  "version": "0.2.1",
+  "description": "Generate TOC (table of contents) of headlines from parsed markdown file",
+  "activationCommands": {
+    "atom-workspace": "markdown-toc:toggle"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/voidplus/markdown-toc"
+  },
+  "bugs": {
+    "url": "https://github.com/voidplus/markdown-toc/issues"
+  },
+  "homepage": "https://github.com/voidplus/markdown-toc",
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {},
+  "readme": "# Markdown TOC\n\nGenerate TOC (*table of contents*) of headlines from parsed [markdown](http://en.wikipedia.org/wiki/Markdown) file.\n\n![Usage example](https://raw.githubusercontent.com/voidplus/markdown-toc/master/RECORD.gif)\n\n## Installation\n\n```bash\napm install markdown-toc\n```\n\n\n## Features\n\n- Depth control [1-6]\n- Auto linking via  anchor tags, e.g.  `# A 1` → `#a-1`\n- Enable or disable links\n- Update on save\n\n\n## Questions?\n\nDon't be shy and feel free to contact me via [Twitter](http://twitter.voidplus.de).\n\n\n## License\n\nThe package is Open Source Software released under the [License](LICENSE.md). It's developed by [Darius Morawiec](http://voidplus.de).",
+  "readmeFilename": "README.md",
+  "_id": "markdown-toc@0.2.1",
+  "_shasum": "b7c77b9ccf567ce7d49e38dc8963f92700c89a6b",
+  "_resolved": "file:../d-115511-15732-14lqave/package.tgz",
+  "_from": "../d-115511-15732-14lqave/package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [],
+    "extensions": {
+      ".coffee": [
+        "lib/Toc.coffee",
+        "lib/markdown-toc.coffee"
+      ],
+      ".json": [
+        "package.json"
+      ]
+    },
+    "folders": []
+  }
+}

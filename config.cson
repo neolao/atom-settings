@@ -14,7 +14,7 @@
     tabLength: 4
     invisibles:
       {}
-    fontSize: 22
+    fontSize: 17
   core:
     disabledPackages: [
       "enhanced-package-list"
@@ -143,3 +143,10 @@
     visible: false
   "terminal-panel":
     {}
+  "isotope-ui":
+    fontFamily: "Ubuntu"
+    fontWeight: "Regular"
+    spaciousMode: true
+    matchEditorFont: true
+  "one-dark-ui":
+    layoutMode: "Compact"

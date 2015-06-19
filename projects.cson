@@ -10,3 +10,8 @@
   'paths': [
     '/Users/eric/workspace/popio'
   ]
+'EntityFilterableBundle':
+  'title': 'EntityFilterableBundle'
+  'paths': [
+    '/Users/eric/workspace/EntityFilterableBundle'
+  ]

@@ -4,7 +4,7 @@
     "name": "Akihiro HARAI"
   },
   "main": "./lib/indent-guide-improved",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "This draws indent guide more correctly and understandably.",
   "repository": {
     "type": "git",
@@ -12,8 +12,13 @@
   },
   "license": "MIT",
   "engines": {
-    "atom": ">0.50.0"
+    "atom": ">0.206.0"
   },
+  "keywords": [
+    "indentation",
+    "ruler",
+    "ui"
+  ],
   "dependencies": {},
   "readme": "# indent-guide-improved package\n\nThis Atom Editor package draws indent guide more correctly and understandably.\n\n# Features\n\n* Active guide and stack guides are emphasized.\n* Guides break just before the trailing blank lines.\n\n![screenshot](https://raw.githubusercontent.com/harai/indent-guide-improved/master/doc/demo.gif)\n\n# Notice\n\n* Original \"Show Indent Guide\" feature is automatically switched off when this package is activated.\n",
   "readmeFilename": "README.md",
@@ -21,10 +26,10 @@
     "url": "https://github.com/harai/indent-guide-improved/issues"
   },
   "homepage": "https://github.com/harai/indent-guide-improved",
-  "_id": "indent-guide-improved@1.2.0",
-  "_shasum": "2d506af09e68a97997b67eea0e45765fde8210cd",
-  "_resolved": "file:../d-115418-24958-72z0xg/package.tgz",
-  "_from": "../d-115418-24958-72z0xg/package.tgz",
+  "_id": "indent-guide-improved@1.2.1",
+  "_shasum": "90e4507073f0ee620c06faa84f9f89adf2b66bfb",
+  "_resolved": "file:../d-11559-57808-1cl3zx0/package.tgz",
+  "_from": "../d-11559-57808-1cl3zx0/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [],

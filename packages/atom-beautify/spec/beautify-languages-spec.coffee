@@ -20,16 +20,26 @@ describe "BeautifyLanguages", ->
     "java", "javascript", "json", "less",
     "mustache", "objective-c", "perl", "php",
     "python", "ruby", "sass", "sql",
-    "typescript", "xml", "csharp", "gfm", "marko",
+    "xml", "csharp", "gfm", "marko",
     "tss", "go", "html-swig"
     ]
+  # All Atom packages that Atom Beautify is dependent on
+  dependentPackages = [
+      'autocomplete-plus'
+      'linter'
+      'atom-typescript'
+  ]
+  # Add language packages to dependentPackages
+  for lang in allLanguages
+    do (lang) ->
+      dependentPackages.push("language-#{lang}")
 
   beforeEach ->
     # Install all of the languages
-    for lang in allLanguages
-      do (lang) ->
+    for packageName in dependentPackages
+      do (packageName) ->
         waitsForPromise ->
-          atom.packages.activatePackage("language-#{lang}")
+          atom.packages.activatePackage(packageName)
 
     # Activate package
     waitsForPromise ->
@@ -37,8 +47,14 @@ describe "BeautifyLanguages", ->
         # Force activate package
         pack = atom.packages.getLoadedPackage("atom-beautify")
         pack.activateNow()
-        # Change logger level
-        # atom.config.set('atom-beautify._loggerLevel', 'verbose')
+        # Check if Windows
+        isWindows = process.platform is 'win32' or
+            process.env.OSTYPE is 'cygwin' or
+            process.env.OSTYPE is 'msys'
+        # Need more debugging on Windows
+        if isWindows
+            # Change logger level
+            atom.config.set('atom-beautify._loggerLevel', 'verbose')
         # Return promise
         return activationPromise
 
