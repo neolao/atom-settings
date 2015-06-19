@@ -14,7 +14,6 @@
     tabLength: 4
     invisibles:
       {}
-    fontSize: 17
   core:
     disabledPackages: [
       "enhanced-package-list"
