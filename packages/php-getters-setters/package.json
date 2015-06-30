@@ -1,7 +1,7 @@
 {
   "name": "php-getters-setters",
   "main": "./lib/php-getters-setters",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "description": "generate getters and setters for your php class",
   "repository": {
     "type": "git",
@@ -20,10 +20,10 @@
     "url": "https://github.com/francodacosta/atom-php-getters-setters/issues"
   },
   "homepage": "https://github.com/francodacosta/atom-php-getters-setters",
-  "_id": "php-getters-setters@0.5.4",
-  "_shasum": "e2260704e6dbd9016290df4da730ec3bede78211",
-  "_resolved": "file:../d-115511-41996-1t5vhso/package.tgz",
-  "_from": "../d-115511-41996-1t5vhso/package.tgz",
+  "_id": "php-getters-setters@0.5.5",
+  "_shasum": "cbe979025abaf4ebdd93e0fbb475fe4f9a451c83",
+  "_resolved": "file:../d-115526-3074-6uv13y/package.tgz",
+  "_from": "../d-115526-3074-6uv13y/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [

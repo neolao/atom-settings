@@ -3,7 +3,7 @@ var $ = view.$;
 import path = require('path');
 
 export interface ViewOptions {
-    /** This is needed to support good goto next / goto previous logic 
+    /** This is needed to support good goto next / goto previous logic
      *  We inform the parent about our navigation
      */
     goToLine: (filePath: string, line: number, col: number) => any;
@@ -14,7 +14,7 @@ export interface ViewOptions {
     /** which column */
     col: number;
     /** so, was that in some other file? */
-    file: string; 
+    file: string;
     /** lets you display a code snippet inside a pre tag */
     preview: string;
 }
@@ -28,24 +28,25 @@ export class LineMessageView extends view.View<ViewOptions> {
     static content() {
         return this.div({
             class: 'line-message'
-        },() => {
-                this.div({
-                    class: 'text-subtle inline-block',
-                    outlet: 'position',
-                    click: 'goToLine',
-                    style: 'cursor: pointer;'
-                });
-                this.div({
-                    class: 'message inline-block',
-                    outlet: 'contents'
-                });
-                this.pre({
-                    class: 'preview',
-                    outlet: 'code',
-                    click: 'goToLine',
-                    style: 'cursor: pointer;'
-                });
+        }, () => {
+            this.div({
+                class: 'text-subtle inline-block',
+                outlet: 'position',
+                click: 'goToLine',
+                style: 'cursor: pointer;'
             });
+            this.div({
+                class: 'message inline-block',
+                outlet: 'contents'
+            });
+
+            this.pre({
+                class: 'preview',
+                outlet: 'code',
+                click: 'goToLine',
+                style: 'cursor: pointer;'
+            });
+        });
     }
 
     init() {
@@ -65,7 +66,7 @@ export class LineMessageView extends view.View<ViewOptions> {
     }
 
     goToLine() {
-        this.options.goToLine(this.options.file,this.options.line, this.options.col);
+        this.options.goToLine(this.options.file, this.options.line, this.options.col);
     }
 
     getSummary() {

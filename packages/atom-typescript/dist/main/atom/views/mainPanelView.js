@@ -1,8 +1,7 @@
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var view = require('./view');
 var $ = view.$;
@@ -10,6 +9,7 @@ var lineMessageView = require('./lineMessageView');
 var atomUtils = require("../atomUtils");
 var parent = require("../../../worker/parent");
 var utils = require("../../lang/utils");
+var fileStatusCache_1 = require("../fileStatusCache");
 var panelHeaders = {
     error: 'Errors In Open Files',
     build: 'Last Build Output',
@@ -35,18 +35,20 @@ var MainPanelView = (function (_super) {
             }, text);
         };
         this.div({
-            class: 'am-panel tool-panel panel-bottom native-key-bindings atomts-main-panel',
+            class: 'atomts native-key-bindings layout horizontal',
             tabindex: '-1'
         }, function () {
             _this.div({
                 class: 'panel-resize-handle',
-                style: 'position: absolute; top: 0; left: 0; right: 0; height: 10px; cursor: row-resize; z-index: 3'
+                style: 'position: absolute; top: 0; left: 0; right: 0; height: 10px; cursor: row-resize; z-index: 3; -webkit-user-select:none'
             });
             _this.div({
-                class: 'panel-heading'
+                class: 'panel-heading layout horizontal',
+                style: '-webkit-user-select:none',
+                dblclick: 'toggle'
             }, function () {
                 _this.span({
-                    style: 'cursor: pointer; color: rgb(0, 148, 255)',
+                    style: 'cursor: pointer; color: rgb(0, 148, 255); -webkit-user-select:none',
                     click: 'toggle'
                 }, function () {
                     _this.span({ class: "icon-microscope" });
@@ -61,12 +63,36 @@ var MainPanelView = (function (_super) {
                     btn("references", panelHeaders.references);
                 });
                 _this.div({
-                    class: 'heading-summary',
-                    style: 'display:inline-block; margin-left:5px; width: calc(100% - 800px); max-height:12px; overflow: hidden; white-space:nowrap; text-overflow: ellipsis',
-                    outlet: 'summary'
+                    style: 'display:inline-block'
+                }, function () {
+                    _this.span({
+                        style: 'margin-left:10px; transition: color 1s',
+                        outlet: 'fileStatus'
+                    });
                 });
                 _this.div({
-                    class: 'heading-buttons pull-right',
+                    class: 'heading-summary flex',
+                    style: 'display:inline-block; margin-left:5px; margin-top:3px; overflow: hidden; white-space:nowrap; text-overflow: ellipsis',
+                    outlet: 'summary'
+                });
+                _this.progress({
+                    class: 'inline-block build-progress',
+                    style: 'display: none; color:red',
+                    outlet: 'buildProgress'
+                });
+                _this.span({ class: 'section-pending', outlet: 'sectionPending' }, function () {
+                    _this.span({
+                        outlet: 'txtPendingCount',
+                        style: 'cursor: pointer; margin-right: 7px;',
+                    });
+                    _this.span({
+                        class: 'loading loading-spinner-tiny inline-block',
+                        style: 'cursor: pointer; margin-right: 7px;',
+                        click: 'showPending'
+                    });
+                });
+                _this.div({
+                    class: 'heading-buttons',
                     style: 'width:50px; display:inline-block'
                 }, function () {
                     _this.span({
@@ -80,21 +106,6 @@ var MainPanelView = (function (_super) {
                         style: 'cursor: pointer',
                         outlet: 'btnSoftReset',
                         click: 'softReset'
-                    });
-                });
-                _this.progress({
-                    class: 'inline-block build-progress',
-                    style: 'display: none; color:red',
-                    outlet: 'buildProgress'
-                });
-                _this.span({ class: 'pull-right section-pending', outlet: 'sectionPending', style: 'width: 50px' }, function () {
-                    _this.span({
-                        outlet: 'txtPendingCount'
-                    });
-                    _this.span({
-                        class: 'loading loading-spinner-tiny inline-block',
-                        style: 'cursor: pointer; margin-right: 7px;',
-                        click: 'showPending'
                     });
                 });
             });
@@ -128,10 +139,28 @@ var MainPanelView = (function (_super) {
         });
         if (atomUtils.onDiskAndTs(editor)) {
             prom.then(function () {
-                atom.commands.dispatch(atom.views.getView(atom.workspace.getActiveTextEditor()), 'linter:lint');
+                atomUtils.triggerLinter();
                 return parent.errorsForFile({ filePath: editor.getPath() });
             })
                 .then(function (resp) { return errorView.setErrors(editor.getPath(), resp.errors); });
+        }
+    };
+    MainPanelView.prototype.updateFileStatus = function (filePath) {
+        var status = fileStatusCache_1.getFileStatus(filePath);
+        this.fileStatus.removeClass('icon-x icon-check text-error text-success text-warning');
+        if (status.modified) {
+            this.fileStatus.text('Js emit is outdated');
+            this.fileStatus.addClass('icon-x text-error');
+        }
+        else {
+            if (status.saveSynced) {
+                this.fileStatus.text('Js emit up to date');
+                this.fileStatus.addClass('icon-check text-success');
+            }
+            else {
+                this.fileStatus.text('No js emit requested yet');
+                this.fileStatus.addClass('icon-x text-warning');
+            }
         }
     };
     MainPanelView.prototype.showPending = function () {
@@ -255,7 +284,6 @@ var MainPanelView = (function (_super) {
     };
     MainPanelView.prototype.setErrorSummary = function (summary) {
         var message = summary.summary, className = summary.className, raw = summary.rawSummary || false, handler = summary.handler || undefined;
-        this.summary.attr('class', 'heading-summary');
         this.summary.html(message);
         if (className) {
             this.summary.addClass(className);
@@ -330,7 +358,6 @@ var MainPanelView = (function (_super) {
     return MainPanelView;
 })(view.View);
 exports.MainPanelView = MainPanelView;
-exports.panelView;
 var panel;
 function attach() {
     if (exports.panelView)
@@ -390,14 +417,10 @@ var errorView;
         }
     };
     function showEmittedMessage(output) {
-        if (output.success) {
-            var message = 'TS emit succeeded<br/>' + output.outputFiles.join('<br/>');
-            atomUtils.quickNotifySuccess(message);
-        }
-        else if (output.emitError) {
+        if (output.emitError) {
             atom.notifications.addError('TS Emit Failed');
         }
-        else {
+        else if (!output.success) {
             atomUtils.quickNotifyWarning('Compile failed but emit succeeded<br/>' + output.outputFiles.join('<br/>'));
         }
     }

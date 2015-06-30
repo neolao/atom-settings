@@ -1,3 +1,6 @@
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
 var parent = require("../../../worker/parent");
 var buildView = require("../buildView");
 var atomUtils = require("../atomUtils");
@@ -18,6 +21,8 @@ var simpleOverlaySelectionView_1 = require("../views/simpleOverlaySelectionView"
 var outputFileCommands = require("./outputFileCommands");
 var moveFilesHandling_1 = require("./moveFilesHandling");
 var escapeHtml = require('escape-html');
+var rView = require("../views/rView");
+__export(require("../components/componentRegistry"));
 function registerCommands() {
     outputFileCommands.register();
     moveFilesHandling_1.registerRenameHandling();
@@ -92,7 +97,7 @@ function registerCommands() {
                 return;
             }
             if (definitions.length > 1) {
-                simpleSelectionView_1.default({
+                simpleSelectionView_1.simpleSelectionView({
                     items: definitions,
                     viewForItem: function (item) {
                         return "\n                            <span>" + item.filePath + "</span>\n                            <div class=\"pull-right\">line: " + item.position.line + "</div>\n                        ";
@@ -135,7 +140,7 @@ function registerCommands() {
         //     console.log(res.text.length);
         //     // console.log(JSON.stringify({txt:res.text}))
         // });
-        atom.commands.dispatch(atom.views.getView(atom.workspace.getActiveTextEditor()), 'typescript:dependency-view');
+        atom.commands.dispatch(atom.views.getView(atom.workspace.getActiveTextEditor()), 'typescript:testing-r-view');
     });
     atom.commands.add('atom-text-editor', 'typescript:rename-refactor', function (e) {
         var editor = atom.workspace.getActiveTextEditor();
@@ -227,10 +232,10 @@ function registerCommands() {
             return;
         parent.getReferences(atomUtils.getFilePathPosition()).then(function (res) {
             mainPanelView_1.panelView.setReferences(res.references);
-            simpleSelectionView_1.default({
+            simpleSelectionView_1.simpleSelectionView({
                 items: res.references,
                 viewForItem: function (item) {
-                    return "\n                        <span>" + atom.project.relativize(item.filePath) + "</span>\n                        <div class=\"pull-right\">line: " + item.position.line + "</div>\n                        <pre style=\"clear:both\">" + item.preview + "</pre>\n                    ";
+                    return "<div>\n                        <span>" + atom.project.relativize(item.filePath) + "</span>\n                        <div class=\"pull-right\">line: " + item.position.line + "</div>\n                        <ts-view>" + item.preview + "</ts-view>\n                    <div>";
                 },
                 filterKey: utils.getName(function () { return res.references[0].filePath; }),
                 confirmed: function (definition) {
@@ -345,6 +350,17 @@ function registerCommands() {
                 }
             }, editor);
         });
+    });
+    atomUtils.registerOpener({
+        commandSelector: 'atom-workspace',
+        commandName: 'typescript:testing-r-view',
+        uriProtocol: rView.RView.protocol,
+        getData: function () { return atomUtils.getFilePath(); },
+        onOpen: function (data) { return new rView.RView({
+            icon: 'repo-forked',
+            title: 'React View',
+            filePath: data.filePath,
+        }); },
     });
     atom.commands.add('atom-workspace', 'typescript:sync', function (e) {
         if (!atomUtils.commandForTypeScript(e))

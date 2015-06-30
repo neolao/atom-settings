@@ -5,6 +5,7 @@ import lineMessageView = require('./lineMessageView');
 import atomUtils = require("../atomUtils");
 import parent = require("../../../worker/parent");
 import * as utils from "../../lang/utils";
+import {FileStatus,getFileStatus} from "../fileStatusCache";
 
 var panelHeaders = {
     error: 'Errors In Open Files',
@@ -16,6 +17,7 @@ import gotoHistory = require('../gotoHistory');
 
 export class MainPanelView extends view.View<any> {
 
+    private fileStatus: JQuery;
     private btnFold: JQuery;
     private btnSoftReset: JQuery;
     private summary: JQuery;
@@ -44,18 +46,20 @@ export class MainPanelView extends view.View<any> {
             }, text);
 
         this.div({
-            class: 'am-panel tool-panel panel-bottom native-key-bindings atomts-main-panel',
+            class: 'atomts native-key-bindings layout horizontal',
             tabindex: '-1'
         }, () => {
                 this.div({
                     class: 'panel-resize-handle',
-                    style: 'position: absolute; top: 0; left: 0; right: 0; height: 10px; cursor: row-resize; z-index: 3'
+                    style: 'position: absolute; top: 0; left: 0; right: 0; height: 10px; cursor: row-resize; z-index: 3; -webkit-user-select:none'
                 });
                 this.div({
-                    class: 'panel-heading'
+                    class: 'panel-heading layout horizontal',
+                    style: '-webkit-user-select:none',
+                    dblclick: 'toggle'
                 }, () => {
                         this.span({
-                            style: 'cursor: pointer; color: rgb(0, 148, 255)',
+                            style: 'cursor: pointer; color: rgb(0, 148, 255); -webkit-user-select:none',
                             click: 'toggle'
                         }, () => {
                                 this.span({ class: "icon-microscope" });
@@ -73,13 +77,40 @@ export class MainPanelView extends view.View<any> {
                             });
 
                         this.div({
-                            class: 'heading-summary',
-                            style: 'display:inline-block; margin-left:5px; width: calc(100% - 800px); max-height:12px; overflow: hidden; white-space:nowrap; text-overflow: ellipsis',
-                            outlet: 'summary'
+                            style: 'display:inline-block'
+                        }, () => {
+                            this.span({
+                                style: 'margin-left:10px; transition: color 1s', // Added transition to make it easy to see *yes I just did this compile*.
+                                outlet: 'fileStatus'
+                            });
                         });
 
                         this.div({
-                            class: 'heading-buttons pull-right',
+                            class: 'heading-summary flex',
+                            style: 'display:inline-block; margin-left:5px; margin-top:3px; overflow: hidden; white-space:nowrap; text-overflow: ellipsis',
+                            outlet: 'summary'
+                        });
+
+                        this.progress({
+                            class: 'inline-block build-progress',
+                            style: 'display: none; color:red',
+                            outlet: 'buildProgress'
+                        });
+
+                        this.span({ class: 'section-pending', outlet: 'sectionPending' }, () => {
+                            this.span({
+                                outlet: 'txtPendingCount',
+                                style: 'cursor: pointer; margin-right: 7px;',
+                            });
+                            this.span({
+                                class: 'loading loading-spinner-tiny inline-block',
+                                style: 'cursor: pointer; margin-right: 7px;',
+                                click: 'showPending'
+                            });
+                        });
+
+                        this.div({
+                            class: 'heading-buttons',
                             style: 'width:50px; display:inline-block'
                         }, () => {
                                 this.span({
@@ -95,23 +126,6 @@ export class MainPanelView extends view.View<any> {
                                     click: 'softReset'
                                 });
                             });
-
-                        this.progress({
-                            class: 'inline-block build-progress',
-                            style: 'display: none; color:red',
-                            outlet: 'buildProgress'
-                        });
-
-                        this.span({ class: 'pull-right section-pending', outlet: 'sectionPending', style: 'width: 50px' }, () => {
-                            this.span({
-                                outlet: 'txtPendingCount'
-                            });
-                            this.span({
-                                class: 'loading loading-spinner-tiny inline-block',
-                                style: 'cursor: pointer; margin-right: 7px;',
-                                click: 'showPending'
-                            });
-                        });
                     });
                 this.div({
                     class: 'panel-body atomts-panel-body padded',
@@ -148,14 +162,29 @@ export class MainPanelView extends view.View<any> {
         });
         if (atomUtils.onDiskAndTs(editor)) {
             prom.then(() => {
-                // also invalidate linter
-                atom.commands.dispatch(
-                    atom.views.getView(atom.workspace.getActiveTextEditor()),
-                    'linter:lint');
+                atomUtils.triggerLinter();
 
                 return parent.errorsForFile({ filePath: editor.getPath() })
             })
                 .then((resp) => errorView.setErrors(editor.getPath(), resp.errors));
+        }
+    }
+
+    ///////////// Change JS File Status
+    updateFileStatus(filePath: string) {
+        var status = getFileStatus(filePath);
+        this.fileStatus.removeClass('icon-x icon-check text-error text-success text-warning');
+        if (status.modified) {
+            this.fileStatus.text('Js emit is outdated');
+            this.fileStatus.addClass('icon-x text-error');
+        } else {
+            if (status.saveSynced) {
+                this.fileStatus.text('Js emit up to date');
+                this.fileStatus.addClass('icon-check text-success');
+            } else { // File hasn't been saved and compiled during the current run, so we don't know the state
+                this.fileStatus.text('No js emit requested yet');
+                this.fileStatus.addClass('icon-x text-warning');
+            }
         }
     }
 
@@ -313,8 +342,6 @@ export class MainPanelView extends view.View<any> {
             className = summary.className,
             raw = summary.rawSummary || false,
             handler = summary.handler || undefined;
-        // Reset the class-attributes on the old summary
-        this.summary.attr('class', 'heading-summary');
         // Set the new summary
         this.summary.html(message);
 
@@ -482,12 +509,9 @@ export module errorView {
     };
 
     export function showEmittedMessage(output: EmitOutput) {
-        if (output.success) {
-            var message = 'TS emit succeeded<br/>' + output.outputFiles.join('<br/>');
-            atomUtils.quickNotifySuccess(message);
-        } else if (output.emitError) {
+        if (output.emitError) {
             atom.notifications.addError('TS Emit Failed');
-        } else {
+        } else if (!output.success) {
             atomUtils.quickNotifyWarning('Compile failed but emit succeeded<br/>' + output.outputFiles.join('<br/>'));
         }
     }

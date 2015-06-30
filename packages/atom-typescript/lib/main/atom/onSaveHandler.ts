@@ -1,4 +1,4 @@
-
+import atomUtils = require("./atomUtils");
 
 ///ts:import=atomConfig
 import atomConfig = require('./atomConfig'); ///ts:import:generated
@@ -6,7 +6,9 @@ import atomConfig = require('./atomConfig'); ///ts:import:generated
 ///ts:import=parent
 import parent = require('../../worker/parent'); ///ts:import:generated
 
-import {errorView, show} from "./views/mainPanelView";
+import {errorView, show, panelView} from "./views/mainPanelView";
+
+import {getFileStatus} from "./fileStatusCache";
 
 ///ts:import=debugAtomTs
 import debugAtomTs = require('./debugAtomTs'); ///ts:import:generated
@@ -18,9 +20,7 @@ export function handle(event: { filePath: string; editor: AtomCore.IEditor }) {
     // Refresh errors for file
     textUpdated.then(() => {
         // also invalidate linter
-        atom.commands.dispatch(
-            atom.views.getView(atom.workspace.getActiveTextEditor()),
-            'linter:lint');
+        atomUtils.triggerLinter();
 
         parent.errorsForFile({ filePath: event.filePath })
             .then((resp) => errorView.setErrors(event.filePath, resp.errors));
@@ -34,6 +34,14 @@ export function handle(event: { filePath: string; editor: AtomCore.IEditor }) {
         if (fileDetails.project.compilerOptions.out) return;
 
         textUpdated.then(() => parent.emitFile({ filePath: event.filePath }))
-            .then((res) => errorView.showEmittedMessage(res));
+            .then((res) => {
+                let status = getFileStatus(event.filePath);
+                status.saveSynced = true;
+
+                // If there was a compilation error, the file differs from the one on the disk
+                status.modified = res.emitError;
+                panelView.updateFileStatus(event.filePath);
+                errorView.showEmittedMessage(res);
+            });
     });
 }

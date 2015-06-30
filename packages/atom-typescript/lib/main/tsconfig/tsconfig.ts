@@ -8,11 +8,12 @@ var types = simpleValidator.types;
 // do not want to force users to put magic numbers in their tsconfig files
 // Possible: Use require('typescript').parseConfigFile in TS1.5
 // NOTE: see the changes in `commandLineParser.ts` in the TypeScript sources to see what needs updating
-// When adding you need to :
 /**
- * 	Update the validation 
- * 	If its an enum : Update the enum map
- * 	If its a path : Update the `make relative` code
+ * When adding you need to
+ *  0 Add in this interface
+ * 	1 Add to the validation
+ * 	2 If its an enum : Update the enum map
+ * 	3 If its a path : Update the `make relative` code
  */
 interface CompilerOptions {
     allowNonTsExtensions?: boolean;
@@ -21,13 +22,16 @@ interface CompilerOptions {
     declaration?: boolean;
     diagnostics?: boolean;
     emitBOM?: boolean;
+    experimentalDecorators?: boolean;                 // Experimental. Needed for the next option `emitDecoratorMetadata` see : https://github.com/Microsoft/TypeScript/pull/3330
     emitDecoratorMetadata?: boolean;                  // Experimental. Emits addition type information for this reflection API https://github.com/rbuckton/ReflectDecorators
     help?: boolean;
     inlineSourceMap?: boolean;
     inlineSources?: boolean;
     locale?: string;
     mapRoot?: string;                                 // Optionally Specifies the location where debugger should locate map files after deployment
-    module?: string;                                  
+    module?: string;
+    noEmit?: boolean;
+    noEmitHelpers?: boolean;
     noEmitOnError?: boolean;
     noErrorTruncation?: boolean;
     noImplicitAny?: boolean;                          // Error on inferred `any` type
@@ -54,6 +58,7 @@ var compilerOptionsValidation: simpleValidator.ValidationInfo = {
     declaration: { type: types.boolean },
     diagnostics: { type: types.boolean },
     emitBOM: { type: types.boolean },
+    experimentalDecorators: { type: types.boolean },
     emitDecoratorMetadata: { type: types.boolean },
     help: { type: types.boolean },
     inlineSourceMap: { type: types.boolean },
@@ -61,6 +66,8 @@ var compilerOptionsValidation: simpleValidator.ValidationInfo = {
     locals: { type: types.string },
     mapRoot: { type: types.string },
     module: { type: types.string, validValues: ['commonjs', 'amd', 'system', 'umd'] },
+    noEmit: { type: types.boolean },
+    noEmitHelpers: { type: types.boolean },
     noEmitOnError: { type: types.boolean },
     noErrorTruncation: { type: types.boolean },
     noImplicitAny: { type: types.boolean },
@@ -85,7 +92,7 @@ interface TypeScriptProjectRawSpecification {
     version?: string;
     compilerOptions?: CompilerOptions;
     files?: string[];                                   // optional: paths to files
-    filesGlob?: string[];                               // optional: An array of 'glob / minimatch / RegExp' patterns to specify source files    
+    filesGlob?: string[];                               // optional: An array of 'glob / minimatch / RegExp' patterns to specify source files
     formatCodeOptions?: formatting.FormatCodeOptions;   // optional: formatting options
     compileOnSave?: boolean;                            // optional: compile on save. Ignored to build tools. Used by IDEs
 }
@@ -269,7 +276,7 @@ export function getDefaultProject(srcFile: string): TypeScriptProjectFileDetails
 
     var files = [srcFile];
     var typings = getDefinitionsForNodeModules(dir, files);
-    files = increaseProjectForReferenceAndImports(files);    
+    files = increaseProjectForReferenceAndImports(files);
     files = uniq(files.map(fsu.consistentPath));
 
     let project = {
@@ -361,13 +368,13 @@ export function getProjectSync(pathOrSrcFile: string): TypeScriptProjectFileDeta
     // Remove all relativeness
     projectSpec.files = projectSpec.files.map((file) => path.resolve(projectFileDirectory, file));
 
-    var package: UsefulFromPackageJson = null;
+    var pkg: UsefulFromPackageJson = null;
     try {
         var packagePath = travelUpTheDirectoryTreeTillYouFind(projectFileDirectory, 'package.json');
         if (packagePath) {
             let packageJSONPath = getPotentiallyRelativeFile(projectFileDirectory, packagePath);
             let parsedPackage = JSON.parse(fs.readFileSync(packageJSONPath).toString());
-            package = {
+            pkg = {
                 main: parsedPackage.main,
                 name: parsedPackage.name,
                 directory: path.dirname(packageJSONPath),
@@ -385,7 +392,7 @@ export function getProjectSync(pathOrSrcFile: string): TypeScriptProjectFileDeta
         filesGlob: projectSpec.filesGlob,
         formatCodeOptions: formatting.makeFormatCodeOptions(projectSpec.formatCodeOptions),
         compileOnSave: projectSpec.compileOnSave == undefined ? true : projectSpec.compileOnSave,
-        package,
+        package: pkg,
         typings: []
     };
 
@@ -494,16 +501,16 @@ function increaseProjectForReferenceAndImports(files: string[]): string[] {
                     return null;
                 }).filter(file=> !!file)
                     .concat(
-                    preProcessedFileInfo.importedFiles
-                        .filter((fileReference) => pathIsRelative(fileReference.fileName))
-                        .map(fileReference => {
-                        var file = path.resolve(dir, fileReference.fileName + '.ts');
-                        if (!fs.existsSync(file)) {
-                            file = path.resolve(dir, fileReference.fileName + '.d.ts');
-                        }
-                        return file;
-                    })
-                    )
+                        preProcessedFileInfo.importedFiles
+                            .filter((fileReference) => pathIsRelative(fileReference.fileName))
+                            .map(fileReference => {
+                                var file = path.resolve(dir, fileReference.fileName + '.ts');
+                                if (!fs.existsSync(file)) {
+                                    file = path.resolve(dir, fileReference.fileName + '.d.ts');
+                                }
+                                return file;
+                            })
+                        )
                 );
         });
 
@@ -548,7 +555,7 @@ function getDefinitionsForNodeModules(projectDir: string, files: string[]): { ou
     // These are INF powerful
     var ourTypings = files
         .filter(f=> path.basename(path.dirname(f)) == 'typings' && endsWith(f, '.d.ts')
-        || path.basename(path.dirname(path.dirname(f))) == 'typings' && endsWith(f, '.d.ts'));
+            || path.basename(path.dirname(path.dirname(f))) == 'typings' && endsWith(f, '.d.ts'));
     ourTypings.forEach(f=> typings[path.basename(f)] = { filePath: f, version: Infinity });
     var existing = createMap(files.map(fsu.consistentPath));
 
@@ -572,7 +579,7 @@ function getDefinitionsForNodeModules(projectDir: string, files: string[]): { ou
             if (fs.existsSync(file + '.d.ts')) {
                 return file + '.d.ts';
             }
-        });
+        }).filter(f=> !!f);
 
         // Only ones we don't have by name yet
         // TODO: replace INF with an actual version
@@ -593,24 +600,36 @@ function getDefinitionsForNodeModules(projectDir: string, files: string[]): { ou
         // For each sub directory of node_modules look at package.json and then `typescript.definition`
         var moduleDirs = getDirs(node_modules);
         for (let moduleDir of moduleDirs) {
-            var package_json = JSON.parse(fs.readFileSync(`${moduleDir}/package.json`).toString());
-            if (package_json.typescript) {
-                if (package_json.typescript.definition) {
-                    let file = path.resolve(moduleDir, './', package_json.typescript.definition);
+            try {
+                var package_json = JSON.parse(fs.readFileSync(`${moduleDir}/package.json`).toString());
+            }
+            catch (ex) {
+                // Can't read package.json ... no worries ... move on to other modules
+                continue;
+            }
+            if (package_json.typescript && package_json.typescript.definition) {
 
-                    typings[path.basename(file)] = {
-                        filePath: file,
-                        version: Infinity
-                    };
-                    // Also add any files that this `.d.ts` references as long as they don't conflict with what we have
-                    addAllReferencedFilesWithMaxVersion(file);
-                }
+                let file = path.resolve(moduleDir, './', package_json.typescript.definition);
+
+                typings[path.basename(file)] = {
+                    filePath: file,
+                    version: Infinity
+                };
+                // Also add any files that this `.d.ts` references as long as they don't conflict with what we have
+                addAllReferencedFilesWithMaxVersion(file);
             }
         }
 
     }
     catch (ex) {
+        if (ex.message == "not found") {
+            // Sure we didn't find node_modules
+            // Thats cool
+        }
         // this is best effort only at the moment
+        else {
+            console.error('Failed to read package.json from node_modules due to error:', ex, ex.stack);
+        }
     }
 
     var all = Object.keys(typings)
@@ -620,6 +639,7 @@ function getDefinitionsForNodeModules(projectDir: string, files: string[]): { ou
         .filter(x=> !existing[x]);
     var ours = all
         .filter(x=> existing[x]);
+
     return { implicit, ours };
 }
 
@@ -671,7 +691,9 @@ function uniq(arr: string[]): string[] {
     return Object.keys(map);
 }
 
-// Converts "C:\boo" , "C:\boo\foo.ts" => "./foo.ts"; Works on unix as well.
+/**
+ * Converts "C:\boo" , "C:\boo\foo.ts" => "./foo.ts"; Works on unix as well.
+ */
 export function makeRelativePath(relativeFolder: string, filePath: string) {
     var relativePath = path.relative(relativeFolder, filePath).split('\\').join('/');
     if (relativePath[0] !== '.') {
@@ -733,11 +755,11 @@ function getDirs(rootDir: string): string[] {
     for (var file of files) {
         if (file[0] != '.') {
             var filePath = `${rootDir}/${file}`
-        }
-        var stat = fs.statSync(filePath)
+            var stat = fs.statSync(filePath);
 
-        if (stat.isDirectory()) {
-            dirs.push(filePath)
+            if (stat.isDirectory()) {
+                dirs.push(filePath)
+            }
         }
     }
     return dirs

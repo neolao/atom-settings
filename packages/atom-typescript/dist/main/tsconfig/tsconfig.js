@@ -8,6 +8,7 @@ var compilerOptionsValidation = {
     declaration: { type: types.boolean },
     diagnostics: { type: types.boolean },
     emitBOM: { type: types.boolean },
+    experimentalDecorators: { type: types.boolean },
     emitDecoratorMetadata: { type: types.boolean },
     help: { type: types.boolean },
     inlineSourceMap: { type: types.boolean },
@@ -15,6 +16,8 @@ var compilerOptionsValidation = {
     locals: { type: types.string },
     mapRoot: { type: types.string },
     module: { type: types.string, validValues: ['commonjs', 'amd', 'system', 'umd'] },
+    noEmit: { type: types.boolean },
+    noEmitHelpers: { type: types.boolean },
     noEmitOnError: { type: types.boolean },
     noErrorTruncation: { type: types.boolean },
     noImplicitAny: { type: types.boolean },
@@ -211,13 +214,13 @@ function getProjectSync(pathOrSrcFile) {
         }
     }
     projectSpec.files = projectSpec.files.map(function (file) { return path.resolve(projectFileDirectory, file); });
-    var package = null;
+    var pkg = null;
     try {
         var packagePath = travelUpTheDirectoryTreeTillYouFind(projectFileDirectory, 'package.json');
         if (packagePath) {
             var packageJSONPath = getPotentiallyRelativeFile(projectFileDirectory, packagePath);
             var parsedPackage = JSON.parse(fs.readFileSync(packageJSONPath).toString());
-            package = {
+            pkg = {
                 main: parsedPackage.main,
                 name: parsedPackage.name,
                 directory: path.dirname(packageJSONPath),
@@ -233,7 +236,7 @@ function getProjectSync(pathOrSrcFile) {
         filesGlob: projectSpec.filesGlob,
         formatCodeOptions: formatting.makeFormatCodeOptions(projectSpec.formatCodeOptions),
         compileOnSave: projectSpec.compileOnSave == undefined ? true : projectSpec.compileOnSave,
-        package: package,
+        package: pkg,
         typings: []
     };
     var validationResult = validator.validate(projectSpec.compilerOptions);
@@ -354,7 +357,7 @@ function getDefinitionsForNodeModules(projectDir, files) {
             if (fs.existsSync(file + '.d.ts')) {
                 return file + '.d.ts';
             }
-        });
+        }).filter(function (f) { return !!f; });
         files = files
             .filter(function (f) { return !typings[path.basename(f)] || typings[path.basename(f)].version > Infinity; });
         files.forEach(function (f) { return typings[path.basename(f)] = { filePath: f, version: Infinity }; });
@@ -365,20 +368,28 @@ function getDefinitionsForNodeModules(projectDir, files) {
         var moduleDirs = getDirs(node_modules);
         for (var _i = 0; _i < moduleDirs.length; _i++) {
             var moduleDir = moduleDirs[_i];
-            var package_json = JSON.parse(fs.readFileSync(moduleDir + "/package.json").toString());
-            if (package_json.typescript) {
-                if (package_json.typescript.definition) {
-                    var file = path.resolve(moduleDir, './', package_json.typescript.definition);
-                    typings[path.basename(file)] = {
-                        filePath: file,
-                        version: Infinity
-                    };
-                    addAllReferencedFilesWithMaxVersion(file);
-                }
+            try {
+                var package_json = JSON.parse(fs.readFileSync(moduleDir + "/package.json").toString());
+            }
+            catch (ex) {
+                continue;
+            }
+            if (package_json.typescript && package_json.typescript.definition) {
+                var file = path.resolve(moduleDir, './', package_json.typescript.definition);
+                typings[path.basename(file)] = {
+                    filePath: file,
+                    version: Infinity
+                };
+                addAllReferencedFilesWithMaxVersion(file);
             }
         }
     }
     catch (ex) {
+        if (ex.message == "not found") {
+        }
+        else {
+            console.error('Failed to read package.json from node_modules due to error:', ex, ex.stack);
+        }
     }
     var all = Object.keys(typings)
         .map(function (typing) { return typings[typing].filePath; })
@@ -483,10 +494,10 @@ function getDirs(rootDir) {
         var file = files[_i];
         if (file[0] != '.') {
             var filePath = rootDir + "/" + file;
-        }
-        var stat = fs.statSync(filePath);
-        if (stat.isDirectory()) {
-            dirs.push(filePath);
+            var stat = fs.statSync(filePath);
+            if (stat.isDirectory()) {
+                dirs.push(filePath);
+            }
         }
     }
     return dirs;

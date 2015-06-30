@@ -29,6 +29,7 @@ JavaScript developers can now just open a `.ts` file and start hacking away like
 * Compile on save
 * Project Context Support (`tsconfig.json`)
 * Project Build Support
+* `package.json` Support
 * Format code
 * Goto Declaration
 * Find References
@@ -86,6 +87,26 @@ Shortcut: `F6`. If there are any errors they are shown as well.
 ![](https://raw.githubusercontent.com/TypeStrong/atom-typescript/master/docs/screens/build%20success.png)
 
 ![](https://raw.githubusercontent.com/TypeStrong/atom-typescript/master/docs/screens/build%20errors.png)
+
+## `package.json` Support
+Where a sample `package.json` (anywhere next to or above a `tsconfig.json`) looks like:
+```json
+{
+    "name": "awesome",
+    "main": "./dist/foo.js",
+    "typescript": {
+        "definition": "awesome.d.ts"
+    }
+}
+```
+
+And if you have `declaration:true` in your `tsconfig.json` then we would generate a `awesome.d.ts` file for you *on build* so that other TypeScript projects can do a simple `require('awesome')`.
+
+We have a sample NPM module : https://github.com/basarat/ts-npm-module and its usage is demoed in https://github.com/basarat/ts-npm-module-consume.
+
+Notes: 
+* Relative paths in `definition` are not supported. This is due to a limitation in how the TypeScript compiler does file lookup.
+* Other people will be able to do `require('awesome')` only if their IDE supports looking at `node_modules` like we do. Otherwise they can always explicitly `/// <reference` your `awesome.d.ts` that we generate to get the same effect.
 
 ## Format Code
 Shortcut : `ctrl+alt+l` or `cmd+alt+l`. Will format just the selection if you have something selected otherwise it will format the entire file.
@@ -182,3 +203,11 @@ Look at [CONTRIBUTING.md](https://github.com/TypeStrong/atom-typescript/blob/mas
 
 ## Changelog
 Breaking changes [available online](https://github.com/TypeStrong/atom-typescript/blob/master/docs/CHANGELOG.md).
+
+## Donating
+Support this project and [others by basarat][gratipay-basarat] via [gratipay][gratipay-basarat].
+
+[![Support via Gratipay][gratipay]][gratipay-basarat]
+
+[gratipay]: https://cdn.rawgit.com/gratipay/gratipay-badge/2.3.0/dist/gratipay.png
+[gratipay-basarat]: https://gratipay.com/basarat/

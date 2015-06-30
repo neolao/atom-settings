@@ -104,36 +104,15 @@ atom-text-editor[mini] {
 }
 */
 
-.select-list {
-
-    &.fuzzy-finder,
-    &.command-palette,
-    &.project-manager {
-        font-size: 1.5em;
-
-        li {
-            line-height: 1.5em;
-        }
-    }
-    &.goto-view {
-        border: solid 2px #ff0;
-        box-shadow: 0 0 10px #ff0;
-
-        font-size: 2em;
-
-        li {
-            line-height: 1.5em;
-        }
-    }
-}
-
-atom-panel.modal.from-top {
+// Overlay du haut
+atom-panel.modal.overlay.from-top {
+    font-size: 16px;
     width: 50%;
     margin-top: 0;
     margin-left: -25%;
 }
 @media screen and (min-width: 2000px) {
-    atom-panel.modal.from-top {
+    atom-panel.modal.overlay.from-top {
         font-size: 20px;
     }
 }

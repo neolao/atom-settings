@@ -15,12 +15,17 @@ import {panelView} from "../views/mainPanelView";
 import * as url from "url";
 import {AstView, astURI, astURIFull} from "../views/astView";
 import {DependencyView, dependencyURI} from "../views/dependencyView";
-import simpleSelectionView from "../views/simpleSelectionView";
+import {simpleSelectionView} from "../views/simpleSelectionView";
 import overlaySelectionView from "../views/simpleOverlaySelectionView";
 import * as outputFileCommands from "./outputFileCommands";
 import {registerRenameHandling} from "./moveFilesHandling";
 import {RefactoringsByFilePath} from "../../lang/fixmyts/quickFix";
 import escapeHtml = require('escape-html');
+import * as rView from "../views/rView";
+import {$} from "atom-space-pen-views";
+
+// Load all the web components
+export * from "../components/componentRegistry";
 
 export function registerCommands() {
 
@@ -42,22 +47,22 @@ export function registerCommands() {
         // otherwise open the file and change the buffer range
         atomUtils.getEditorsForAllPaths(refactorPaths)
             .then((editorMap) => {
-            refactorPaths.forEach((filePath) => {
-                var editor = editorMap[filePath];
-                editor.transact(() => {
-                    refactorings[filePath].forEach((refactoring) => {
-                        var range = atomUtils.getRangeForTextSpan(editor, refactoring.span);
-                        if (!refactoring.isNewTextSnippet) {
-                            editor.setTextInBufferRange(range, refactoring.newText);
-                        } else {
-                            let cursor = editor.getCursor();
-                            (<any>cursor).selection.setBufferRange(range);
-                            atomUtils.insertSnippet(refactoring.newText, editor, cursor);
-                        }
-                    });
-                })
+                refactorPaths.forEach((filePath) => {
+                    var editor = editorMap[filePath];
+                    editor.transact(() => {
+                        refactorings[filePath].forEach((refactoring) => {
+                            var range = atomUtils.getRangeForTextSpan(editor, refactoring.span);
+                            if (!refactoring.isNewTextSnippet) {
+                                editor.setTextInBufferRange(range, refactoring.newText);
+                            } else {
+                                let cursor = editor.getCursor();
+                                (<any>cursor).selection.setBufferRange(range);
+                                atomUtils.insertSnippet(refactoring.newText, editor, cursor);
+                            }
+                        });
+                    })
+                });
             });
-        });
     }
 
     // Setup custom commands NOTE: these need to be added to the keymaps
@@ -164,9 +169,13 @@ export function registerCommands() {
         //     // console.log(JSON.stringify({txt:res.text}))
         // });
 
+        // atom.commands.dispatch(
+        //     atom.views.getView(atom.workspace.getActiveTextEditor()),
+        //     'typescript:dependency-view');
+        //     
         atom.commands.dispatch(
             atom.views.getView(atom.workspace.getActiveTextEditor()),
-            'typescript:dependency-view');
+            'typescript:testing-r-view');
 
         // parent.getAST({ filePath: atom.workspace.getActiveEditor().getPath() }).then((res) => {
         //     console.log(res.root);
@@ -206,8 +215,8 @@ export function registerCommands() {
 
                     parent.getRenameFilesRefactorings({ oldPath: completePath, newPath: newText })
                         .then((res) => {
-                        applyRefactorings(res.refactorings);
-                    });
+                            applyRefactorings(res.refactorings);
+                        });
                 }
             });
             atom.notifications.addInfo('AtomTS: File rename comming soon!');
@@ -250,16 +259,16 @@ export function registerCommands() {
                         // otherwise open the file and change the buffer range
                         atomUtils.getEditorsForAllPaths(Object.keys(res.locations))
                             .then((editorMap) => {
-                            Object.keys(res.locations).forEach((filePath) => {
-                                var editor = editorMap[filePath];
-                                editor.transact(() => {
-                                    res.locations[filePath].forEach((textSpan) => {
-                                        var range = atomUtils.getRangeForTextSpan(editor, textSpan);
-                                        editor.setTextInBufferRange(range, newText);
-                                    });
-                                })
+                                Object.keys(res.locations).forEach((filePath) => {
+                                    var editor = editorMap[filePath];
+                                    editor.transact(() => {
+                                        res.locations[filePath].forEach((textSpan) => {
+                                            var range = atomUtils.getRangeForTextSpan(editor, textSpan);
+                                            editor.setTextInBufferRange(range, newText);
+                                        });
+                                    })
+                                });
                             });
-                        });
                     }
                 });
             });
@@ -282,11 +291,11 @@ export function registerCommands() {
             simpleSelectionView({
                 items: res.references,
                 viewForItem: (item) => {
-                    return `
+                    return `<div>
                         <span>${atom.project.relativize(item.filePath) }</span>
                         <div class="pull-right">line: ${item.position.line}</div>
-                        <pre style="clear:both">${item.preview}</pre>
-                    `;
+                        <ts-view>${item.preview}</ts-view>
+                    <div>`;
                 },
                 filterKey: utils.getName(() => res.references[0].filePath),
                 confirmed: (definition) => {
@@ -427,6 +436,18 @@ export function registerCommands() {
             }, editor);
         });
     });
+
+    atomUtils.registerOpener({
+        commandSelector: 'atom-workspace',
+        commandName: 'typescript:testing-r-view',
+        uriProtocol: rView.RView.protocol,
+        getData: () => { return atomUtils.getFilePath() },
+        onOpen: (data) => new rView.RView({
+            icon: 'repo-forked',
+            title: 'React View',
+            filePath: data.filePath,
+        }),
+    })
 
     atom.commands.add('atom-workspace', 'typescript:sync', (e) => {
         if (!atomUtils.commandForTypeScript(e)) return;

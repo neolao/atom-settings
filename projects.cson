@@ -5,6 +5,11 @@
     '/Users/eric/workspace/paginationBundle',
     '/Users/eric/workspace/CityAutocompleteFormTypeBundle'
   ]
+'opsdeploy':
+   'title': 'opsdeploy'
+   'paths': [
+     '/Users/eric/workspace/opsdeploy'
+   ]
 'ambed.io':
   'title': 'ambed.io'
   'paths': [
@@ -14,4 +19,9 @@
   'title': 'EntityFilterableBundle'
   'paths': [
     '/Users/eric/workspace/EntityFilterableBundle'
+  ]
+'PaginationBundle':
+  'title': 'PaginationBundle'
+  'paths': [
+    '/Users/eric/workspace/paginationBundle'
   ]

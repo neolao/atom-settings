@@ -62,7 +62,7 @@ class GitCommit
   # status - The current status as {String}.
   prepFile: (status) ->
     # format the status to be ignored in the commit message
-    status = status.replace(/\s*\(.*\)\n/g, '')
+    status = status.replace(/\s*\(.*\)\n/g, "\n")
     status = status.trim().replace(/\n/g, "\n#{@commentchar} ")
     fs.writeFileSync @filePath(),
       """#{@amend}
@@ -77,11 +77,16 @@ class GitCommit
   showFile: ->
     atom.workspace
       .open(@filePath(), searchAllPanes: true)
-      .done (textEditor) => @splitPane(textEditor)
+      .done (textEditor) =>
+        if atom.config.get('git-plus.openInPane')
+          @splitPane(atom.config.get('git-plus.splitPane'), textEditor)
+        else
+          @disposables.add textEditor.onDidSave => @commit()
+          @disposables.add textEditor.onDidDestroy =>
+            if @isAmending then @undoAmend() else @cleanup()
 
-  splitPane: (oldEditor) ->
+  splitPane: (splitDir, oldEditor) ->
     pane = atom.workspace.paneForURI(@filePath())
-    splitDir = if atom.config.get('git-plus.openInPane') then atom.config.get('git-plus.splitPane') else 'right'
     options = { copyActiveItem: true }
     hookEvents = (textEditor) =>
       oldEditor.destroy()
@@ -116,14 +121,10 @@ class GitCommit
         notifier.addSuccess data
         if @andPush
           new GitPush(@repo)
-        # Set @isAmending to false since it succeeded.
         @isAmending = false
-        # Destroying the active EditorView will trigger our cleanup method.
         @destroyActiveEditorView()
         # Activate the former active pane.
         @currentPane.activate() if @currentPane.alive
-        # Refreshing the atom repo status to refresh things like TreeView and diff gutter.
-        # Refresh git index to prevent bugs on our methods.
         git.refresh()
 
       stderr: (err) =>

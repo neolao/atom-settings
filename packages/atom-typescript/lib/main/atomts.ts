@@ -32,6 +32,7 @@ import {$} from "atom-space-pen-views";
 import documentationView = require('./atom/views/documentationView');
 import renameView = require('./atom/views/renameView');
 import mainPanelView = require("./atom/views/mainPanelView");
+import {getFileStatus} from "./atom/fileStatusCache";
 
 import editorSetup = require("./atom/editorSetup");
 
@@ -71,7 +72,6 @@ function onlyOnceStuff() {
     renameView.attach();
 }
 
-
 /** only called once we have our dependencies */
 function readyToActivate() {
 
@@ -108,9 +108,9 @@ function readyToActivate() {
             parent.errorsForFile({ filePath: filePath })
                 .then((resp) => errorView.setErrors(filePath, resp.errors));
 
+            mainPanelView.panelView.updateFileStatus(filePath);
             mainPanelView.show();
-        }
-        else {
+        } else {
             mainPanelView.hide();
         }
     });
@@ -151,10 +151,14 @@ function readyToActivate() {
                 }
 
                 // Setup additional observers on the editor
-                editorSetup.setupEditor(editor);                
+                editorSetup.setupEditor(editor);
 
                 // Observe editors changing
                 var changeObserver = editor.onDidStopChanging(() => {
+
+                    let status = getFileStatus(filePath);
+                    status.modified = editor.isModified();
+                    mainPanelView.panelView.updateFileStatus(filePath);
 
                     // If the file isn't saved and we just show an error to guide the user
                     if (!onDisk) {
@@ -194,14 +198,10 @@ function readyToActivate() {
 
                     var newText = diff.newText;
                     var oldText = diff.oldText;
-                    
-                    // Facepalm: sometimes atom inserts \r\n but says it added \n
-                    // Fix that:
-                    newText = editor.buffer.getTextInRange(diff.newRange);
 
                     var start = { line: diff.oldRange.start.row, col: diff.oldRange.start.column };
                     var end = { line: diff.oldRange.end.row, col: diff.oldRange.end.column };
-                    
+
                     // use this for faster language service host
                     var promise = parent.editText({ filePath, start, end, newText });
 
@@ -293,6 +293,11 @@ export function deserialize() {
 // Registering an autocomplete provider
 export function provide() {
     return [autoCompleteProvider.provider];
+}
+
+import * as linter from "../linter";
+export function provideLinter() {
+    return linter.provider;
 }
 
 export function consumeSnippets(snippetsManager) {

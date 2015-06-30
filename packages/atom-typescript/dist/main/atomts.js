@@ -15,6 +15,7 @@ var atom_space_pen_views_1 = require("atom-space-pen-views");
 var documentationView = require('./atom/views/documentationView');
 var renameView = require('./atom/views/renameView');
 var mainPanelView = require("./atom/views/mainPanelView");
+var fileStatusCache_1 = require("./atom/fileStatusCache");
 var editorSetup = require("./atom/editorSetup");
 var statusBar;
 var statusBarMessage;
@@ -45,6 +46,7 @@ function readyToActivate() {
             var filePath = editor.getPath();
             parent.errorsForFile({ filePath: filePath })
                 .then(function (resp) { return mainPanelView_1.errorView.setErrors(filePath, resp.errors); });
+            mainPanelView.panelView.updateFileStatus(filePath);
             mainPanelView.show();
         }
         else {
@@ -74,6 +76,9 @@ function readyToActivate() {
                 }
                 editorSetup.setupEditor(editor);
                 var changeObserver = editor.onDidStopChanging(function () {
+                    var status = fileStatusCache_1.getFileStatus(filePath);
+                    status.modified = editor.isModified();
+                    mainPanelView.panelView.updateFileStatus(filePath);
                     if (!onDisk) {
                         var root = { line: 0, col: 0 };
                         mainPanelView_1.errorView.setErrors(filePath, [{ startPos: root, endPos: root, filePath: filePath, message: "Please save file for it be processed by TypeScript", preview: "" }]);
@@ -94,7 +99,6 @@ function readyToActivate() {
                     // stack();
                     var newText = diff.newText;
                     var oldText = diff.oldText;
-                    newText = editor.buffer.getTextInRange(diff.newRange);
                     var start = { line: diff.oldRange.start.row, col: diff.oldRange.start.column };
                     var end = { line: diff.oldRange.end.row, col: diff.oldRange.end.column };
                     var promise = parent.editText({ filePath: filePath, start: start, end: end, newText: newText });
@@ -160,6 +164,11 @@ function provide() {
     return [autoCompleteProvider.provider];
 }
 exports.provide = provide;
+var linter = require("../linter");
+function provideLinter() {
+    return linter.provider;
+}
+exports.provideLinter = provideLinter;
 function consumeSnippets(snippetsManager) {
     atomUtils._setSnippetsManager(snippetsManager);
 }

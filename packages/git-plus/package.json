@@ -1,7 +1,7 @@
 {
   "name": "git-plus",
   "main": "./lib/git-plus",
-  "version": "5.1.0",
+  "version": "5.2.2",
   "description": "Do git things without the terminal",
   "keywords": [
     "git"
@@ -20,9 +20,11 @@
       "git-plus:status",
       "git-plus:push",
       "git-plus:pull",
+      "git-plus:pull-using-rebase",
       "git-plus:remove",
       "git-plus:remove-current-file",
       "git-plus:checkout",
+      "git-plus:checkout-remote",
       "git-plus:checkout-current-file",
       "git-plus:checkout-all-files",
       "git-plus:cherry-pick",
@@ -65,10 +67,10 @@
     "url": "https://github.com/akonwi/git-plus/issues"
   },
   "homepage": "https://github.com/akonwi/git-plus",
-  "_id": "git-plus@5.1.0",
-  "_shasum": "3c5e295068aa1369610b5daabdb144367d9f52b0",
-  "_resolved": "file:../d-11559-57800-1bnfx36/package.tgz",
-  "_from": "../d-11559-57800-1bnfx36/package.tgz",
+  "_id": "git-plus@5.2.2",
+  "_shasum": "c4bd98b15a1d467f55f1e2123e878f9b828d5053",
+  "_resolved": "file:../d-115529-16997-6n7ewr/package.tgz",
+  "_from": "../d-115529-16997-6n7ewr/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
@@ -248,6 +250,7 @@
         "lib/views/output-view.coffee",
         "lib/views/projects-list-view.coffee",
         "lib/views/pull-branch-list-view.coffee",
+        "lib/views/remote-branch-list-view.coffee",
         "lib/views/remote-list-view.coffee",
         "lib/views/remove-list-view.coffee",
         "lib/views/repo-list-view.coffee",

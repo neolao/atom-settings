@@ -1,4 +1,5 @@
 {CompositeDisposable, Point} = require 'atom'
+_ = require 'lodash'
 
 {createElementsForGuides, styleGuide} = require './indent-guide-improved-element'
 {getGuides} = require './guides.coffee'
@@ -7,7 +8,12 @@ RowMap = require './row-map.coffee'
 module.exports =
   activate: (state) ->
     # The original indent guides interfere with this package.
-    atom.config.set('editor.showIndentGuide', false);
+    atom.config.set('editor.showIndentGuide', false)
+
+    unless atom.config.get('editor.useShadowDOM')
+      msg = 'To use indent-guide-improved package, please check "Use Shadow DOM" in Settings.'
+      atom.notifications.addError(msg, {dismissable: true})
+      return
 
     updateGuide = (editor, editorElement) ->
       visibleScreenRange = editor.getVisibleRowRange()
@@ -20,6 +26,7 @@ module.exports =
         else
           editor.indentationForBufferRow(row)
       scrollTop = editor.getScrollTop()
+      scrollLeft = editor.getScrollLeft()
       rowMap = new RowMap(editor.displayBuffer.rowMap.getRegions())
       guides = getGuides(
         visibleRange[0],
@@ -40,13 +47,22 @@ module.exports =
           basePixelPos,
           lineHeightPixel,
           visibleScreenRange[0],
-          scrollTop))
+          scrollTop,
+          scrollLeft))
+
 
     handleEvents = (editor, editorElement) ->
+      up = () ->
+        updateGuide(editor, editorElement)
+
+      update = _.throttle(up , 30)
+      # update = up
+
       subscriptions = new CompositeDisposable
-      subscriptions.add editor.onDidChangeCursorPosition(=> updateGuide(editor, editorElement))
-      subscriptions.add editor.onDidChangeScrollTop(=> updateGuide(editor, editorElement))
-      subscriptions.add editor.onDidStopChanging(=> updateGuide(editor, editorElement))
+      subscriptions.add editor.onDidChangeCursorPosition(update)
+      subscriptions.add editor.onDidChangeScrollTop(update)
+      subscriptions.add editor.onDidChangeScrollLeft(update)
+      subscriptions.add editor.onDidStopChanging(update)
       subscriptions.add editor.onDidDestroy ->
         subscriptions.dispose()
 

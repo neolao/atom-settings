@@ -1,8 +1,7 @@
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var childprocess = require('child_process');
 var exec = childprocess.exec;
@@ -177,19 +176,16 @@ var Parent = (function (_super) {
             });
             this.child.on('close', function (code) {
                 if (_this.stopped) {
-                    console.log('ts worker successfully stopped', code);
                     return;
                 }
-                console.log('ts worker exited with code:', code);
                 if (code === orphanExitCode) {
-                    console.log('ts worker restarting');
                     _this.startWorker(childJsPath, terminalError, customArguments);
                 }
                 else if (_this.gotENOENTonSpawnNode) {
                     terminalError(new Error('gotENOENTonSpawnNode'));
                 }
                 else {
-                    console.log('ts worker restarting');
+                    console.log("ts worker restarting. Don't know why it stopped with code:", code);
                     _this.startWorker(childJsPath, terminalError, customArguments);
                 }
             });

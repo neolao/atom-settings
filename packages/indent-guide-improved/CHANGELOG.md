@@ -1,4 +1,18 @@
-## 1.2.0
+## 1.4.0
+### Improvement
+
+* Smoother scrolling
+
+## 1.3.0
+### Improvement
+
+* Supported horizontal scroll #14
+
+### Bugfix
+
+* Fixed a bug #13
+
+## 1.2.1
 ### Bugfix
 
 * Fixed a bug #12

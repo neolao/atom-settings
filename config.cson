@@ -12,8 +12,8 @@
     showInvisibles: true
     preferredLineLength: 120
     tabLength: 4
-    invisibles:
-      {}
+    invisibles: {}
+    fontSize: 20
   core:
     disabledPackages: [
       "enhanced-package-list"
@@ -84,8 +84,7 @@
       "/src/Udg/StatsBundle/"
       "/src/Udg/WebBundle/"
     ]
-  "project-manager":
-    {}
+  "project-manager": {}
   "atom-ctags":
     cmdArgs: "--exclude=.git --exclude=app --exclude=vendor --exclude=vendor_front --exclude=web --exclude=tests"
     buildTimeout: 60000
@@ -129,10 +128,8 @@
     username: "udg-eric"
   fonts:
     fontFamily: "DejaVu Mono"
-  goto:
-    {}
-  "symbols-tree-view":
-    {}
+  goto: {}
+  "symbols-tree-view": {}
   "linter-phpcs":
     phpcsExecutablePath: "/usr/bin/phpcs"
     standard: "PSR2"
@@ -140,8 +137,7 @@
     enableWarning: 1
   "tool-bar":
     visible: false
-  "terminal-panel":
-    {}
+  "terminal-panel": {}
   "isotope-ui":
     fontFamily: "Ubuntu"
     fontWeight: "Regular"
