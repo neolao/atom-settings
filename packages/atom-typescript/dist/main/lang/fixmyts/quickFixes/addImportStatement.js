@@ -29,7 +29,7 @@ var AddImportStatement = (function () {
         var relevantError = info.positionErrors.filter(function (x) { return x.code == 2304; })[0];
         if (!relevantError)
             return;
-        if (info.positionNode.kind !== 66)
+        if (info.positionNode.kind !== ts.SyntaxKind.Identifier)
             return;
         var matches = getIdentifierAndFileNames(relevantError, info.project);
         if (!matches)
@@ -48,7 +48,7 @@ var AddImportStatement = (function () {
                     length: 0
                 },
                 newText: "import " + identifierName + " = require(\"" + fileNameforFix.file + "\");" + os_1.EOL,
-                filePath: info.srcFile.fileName
+                filePath: info.sourceFile.fileName
             }];
         return refactorings;
     };

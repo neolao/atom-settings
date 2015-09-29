@@ -1,5 +1,6 @@
 var fsu = require("../utils/fsUtil");
 var simpleValidator = require('./simpleValidator');
+var stripBom = require('strip-bom');
 var types = simpleValidator.types;
 var compilerOptionsValidation = {
     allowNonTsExtensions: { type: simpleValidator.types.boolean },
@@ -8,15 +9,20 @@ var compilerOptionsValidation = {
     declaration: { type: types.boolean },
     diagnostics: { type: types.boolean },
     emitBOM: { type: types.boolean },
+    experimentalAsyncFunctions: { type: types.boolean },
     experimentalDecorators: { type: types.boolean },
     emitDecoratorMetadata: { type: types.boolean },
     help: { type: types.boolean },
     inlineSourceMap: { type: types.boolean },
     inlineSources: { type: types.boolean },
+    isolatedModules: { type: types.boolean },
     jsx: { type: types.string, validValues: ['preserve', 'react'] },
     locals: { type: types.string },
+    listFiles: { type: types.boolean },
     mapRoot: { type: types.string },
     module: { type: types.string, validValues: ['commonjs', 'amd', 'system', 'umd'] },
+    moduleResolution: { type: types.string, validValues: ['classic', 'node'] },
+    newLine: { type: types.string },
     noEmit: { type: types.boolean },
     noEmitHelpers: { type: types.boolean },
     noEmitOnError: { type: types.boolean },
@@ -32,6 +38,7 @@ var compilerOptionsValidation = {
     rootDir: { type: types.string },
     sourceMap: { type: types.boolean },
     sourceRoot: { type: types.string },
+    suppressExcessPropertyErrors: { type: types.boolean },
     suppressImplicitAnyIndexErrors: { type: types.boolean },
     target: { type: types.string, validValues: ['es3', 'es5', 'es6'] },
     version: { type: types.boolean },
@@ -45,7 +52,7 @@ exports.errors = {
     GET_PROJECT_JSON_PARSE_FAILED: 'Failed to JSON.parse the project file',
     GET_PROJECT_GLOB_EXPAND_FAILED: 'Failed to expand filesGlob in the project file',
     GET_PROJECT_PROJECT_FILE_INVALID_OPTIONS: 'Project file contains invalid options',
-    CREATE_FILE_MUST_EXIST: 'To create a project the file must exist',
+    CREATE_FILE_MUST_EXIST: 'The Typescript file must exist on disk in order to create a project',
     CREATE_PROJECT_ALREADY_EXISTS: 'Project file already exists',
 };
 function errorWithDetails(error, details) {
@@ -61,15 +68,17 @@ var projectFileName = 'tsconfig.json';
 var defaultFilesGlob = [
     "./**/*.ts",
     "./**/*.tsx",
-    "!node_modules/**/*.ts",
-    "!node_modules/**/*.tsx"
+    "!./node_modules/**/*",
 ];
-var invisibleFilesGlob = ["./**/*.ts"];
-var typeScriptVersion = '1.5.0-alpha';
+var invisibleFilesGlob = ["./**/*.ts", "./**/*.tsx"];
 exports.defaults = {
-    target: 1,
-    module: 1,
-    jsx: 2,
+    target: ts.ScriptTarget.ES5,
+    module: ts.ModuleKind.CommonJS,
+    moduleResolution: ts.ModuleResolutionKind.NodeJs,
+    isolatedModules: false,
+    jsx: ts.JsxEmit.React,
+    experimentalDecorators: true,
+    emitDecoratorMetadata: true,
     declaration: false,
     noImplicitAny: false,
     removeComments: true,
@@ -79,40 +88,35 @@ exports.defaults = {
 };
 var typescriptEnumMap = {
     target: {
-        'es3': 0,
-        'es5': 1,
-        'es6': 2,
-        'latest': 2
+        'es3': ts.ScriptTarget.ES3,
+        'es5': ts.ScriptTarget.ES5,
+        'es6': ts.ScriptTarget.ES6,
+        'latest': ts.ScriptTarget.Latest
     },
     module: {
-        'none': 0,
-        'commonjs': 1,
-        'amd': 2,
-        'system': 4,
-        'umd': 3,
+        'none': ts.ModuleKind.None,
+        'commonjs': ts.ModuleKind.CommonJS,
+        'amd': ts.ModuleKind.AMD,
+        'system': ts.ModuleKind.System,
+        'umd': ts.ModuleKind.UMD,
+    },
+    moduleResolution: {
+        'node': ts.ModuleResolutionKind.NodeJs,
+        'classic': ts.ModuleResolutionKind.Classic
     },
     jsx: {
-        'preserve': 1,
-        'react': 2
+        'preserve': ts.JsxEmit.Preserve,
+        'react': ts.JsxEmit.React
+    },
+    newLine: {
+        'CRLF': ts.NewLineKind.CarriageReturnLineFeed,
+        'LF': ts.NewLineKind.LineFeed
     }
 };
-var jsonEnumMap = {
-    target: (function () {
-        var map = {};
-        map[0] = 'es3';
-        map[1] = 'es5';
-        map[2] = 'es6';
-        map[2] = 'latest';
-        return map;
-    })(),
-    module: (function () {
-        var map = {};
-        map[0] = 'none';
-        map[1] = 'commonjs';
-        map[2] = 'amd';
-        return map;
-    })()
-};
+var jsonEnumMap = {};
+Object.keys(typescriptEnumMap).forEach(function (name) {
+    jsonEnumMap[name] = reverseKeysAndValues(typescriptEnumMap[name]);
+});
 function mixin(target, source) {
     for (var key in source) {
         target[key] = source[key];
@@ -142,15 +146,15 @@ function rawToTsCompilerOptions(jsonOptions, projectDir) {
 }
 function tsToRawCompilerOptions(compilerOptions) {
     var jsonOptions = mixin({}, compilerOptions);
-    if (compilerOptions.target !== undefined) {
-        jsonOptions.target = jsonEnumMap.target[compilerOptions.target];
-    }
-    if (compilerOptions.module !== undefined) {
-        jsonOptions.module = jsonEnumMap.module[compilerOptions.module];
-    }
+    Object.keys(compilerOptions).forEach(function (key) {
+        if (jsonEnumMap[key] && compilerOptions[key]) {
+            var value = compilerOptions[key];
+            jsonOptions[key] = jsonEnumMap[key][value];
+        }
+    });
     return jsonOptions;
 }
-function getDefaultProject(srcFile) {
+function getDefaultInMemoryProject(srcFile) {
     var dir = fs.lstatSync(srcFile).isDirectory() ? srcFile : path.dirname(srcFile);
     var files = [srcFile];
     var typings = getDefinitionsForNodeModules(dir, files);
@@ -161,7 +165,9 @@ function getDefaultProject(srcFile) {
         files: files,
         typings: typings.ours.concat(typings.implicit),
         formatCodeOptions: formatting.defaultFormatCodeOptions(),
-        compileOnSave: true
+        compileOnSave: true,
+        buildOnSave: false,
+        scripts: {}
     };
     return {
         projectFileDirectory: dir,
@@ -170,7 +176,7 @@ function getDefaultProject(srcFile) {
         inMemory: true
     };
 }
-exports.getDefaultProject = getDefaultProject;
+exports.getDefaultInMemoryProject = getDefaultInMemoryProject;
 function getProjectSync(pathOrSrcFile) {
     if (!fs.existsSync(pathOrSrcFile)) {
         throw new Error(exports.errors.GET_PROJECT_INVALID_PATH);
@@ -183,7 +189,7 @@ function getProjectSync(pathOrSrcFile) {
     catch (e) {
         var err = e;
         if (err.message == "not found") {
-            throw new Error(exports.errors.GET_PROJECT_NO_PROJECT_FOUND);
+            throw errorWithDetails(new Error(exports.errors.GET_PROJECT_NO_PROJECT_FOUND), { projectFilePath: fsu.consistentPath(pathOrSrcFile), errorMessage: err.message });
         }
     }
     projectFile = path.normalize(projectFile);
@@ -196,7 +202,7 @@ function getProjectSync(pathOrSrcFile) {
         throw new Error(exports.errors.GET_PROJECT_FAILED_TO_OPEN_PROJECT_FILE);
     }
     try {
-        projectSpec = JSON.parse(projectFileTextContent);
+        projectSpec = JSON.parse(stripBom(projectFileTextContent));
     }
     catch (ex) {
         throw errorWithDetails(new Error(exports.errors.GET_PROJECT_JSON_PARSE_FAILED), { projectFilePath: fsu.consistentPath(projectFile), error: ex.message });
@@ -248,7 +254,10 @@ function getProjectSync(pathOrSrcFile) {
         formatCodeOptions: formatting.makeFormatCodeOptions(projectSpec.formatCodeOptions),
         compileOnSave: projectSpec.compileOnSave == undefined ? true : projectSpec.compileOnSave,
         package: pkg,
-        typings: []
+        typings: [],
+        externalTranspiler: projectSpec.externalTranspiler == undefined ? undefined : projectSpec.externalTranspiler,
+        scripts: projectSpec.scripts || {},
+        buildOnSave: !!projectSpec.buildOnSave
     };
     var validationResult = validator.validate(projectSpec.compilerOptions);
     if (validationResult.errorMessage) {
@@ -259,6 +268,7 @@ function getProjectSync(pathOrSrcFile) {
     var typings = getDefinitionsForNodeModules(dir, project.files);
     project.files = project.files.concat(typings.implicit);
     project.typings = typings.ours.concat(typings.implicit);
+    project.files = project.files.concat(typings.packagejson);
     project.files = uniq(project.files.map(fsu.consistentPath));
     projectFileDirectory = removeTrailingSlash(fsu.consistentPath(projectFileDirectory));
     return {
@@ -278,7 +288,6 @@ function createProjectRootSync(srcFile, defaultOptions) {
     if (fs.existsSync(projectFilePath))
         throw new Error(exports.errors.CREATE_PROJECT_ALREADY_EXISTS);
     var projectSpec = {};
-    projectSpec.version = typeScriptVersion;
     projectSpec.compilerOptions = tsToRawCompilerOptions(defaultOptions || exports.defaults);
     projectSpec.filesGlob = defaultFilesGlob;
     fs.writeFileSync(projectFilePath, prettyJSON(projectSpec));
@@ -341,6 +350,7 @@ function increaseProjectForReferenceAndImports(files) {
     return files;
 }
 function getDefinitionsForNodeModules(projectDir, files) {
+    var packagejson = [];
     function versionStringToNumber(version) {
         var _a = version.split('.'), maj = _a[0], min = _a[1], patch = _a[2];
         return parseInt(maj) * 1000000 + parseInt(min);
@@ -381,6 +391,7 @@ function getDefinitionsForNodeModules(projectDir, files) {
             var moduleDir = moduleDirs[_i];
             try {
                 var package_json = JSON.parse(fs.readFileSync(moduleDir + "/package.json").toString());
+                packagejson.push(moduleDir + "/package.json");
             }
             catch (ex) {
                 continue;
@@ -409,7 +420,7 @@ function getDefinitionsForNodeModules(projectDir, files) {
         .filter(function (x) { return !existing[x]; });
     var ours = all
         .filter(function (x) { return existing[x]; });
-    return { implicit: implicit, ours: ours };
+    return { implicit: implicit, ours: ours, packagejson: packagejson };
 }
 function prettyJSON(object) {
     var cache = [];
@@ -520,3 +531,10 @@ function createMap(arr) {
     }, {});
 }
 exports.createMap = createMap;
+function reverseKeysAndValues(obj) {
+    var toret = {};
+    Object.keys(obj).forEach(function (key) {
+        toret[obj[key]] = key;
+    });
+    return toret;
+}

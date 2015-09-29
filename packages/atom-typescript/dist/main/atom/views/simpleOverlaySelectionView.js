@@ -1,7 +1,3 @@
-/**
- * A functional form of the SelectListView
- * Only one of these bad boys is allowed on the screen at one time
- */
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -13,11 +9,13 @@ function default_1(options, editor) {
         singleton = new SimpleOverlaySelectListView(options, editor);
     else {
         singleton.options = options;
+        singleton.editor = editor;
     }
     singleton.setItems();
     singleton.show();
     return singleton;
 }
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;
 var sp = require('atom-space-pen-views');
 var SimpleOverlaySelectListView = (function (_super) {

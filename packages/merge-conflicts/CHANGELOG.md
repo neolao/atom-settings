@@ -1,3 +1,25 @@
+## 1.3.6
+
+- Use transparency instead of `mix()` to allow selection to show through. [#181](https://github.com/smashwilson/merge-conflicts/pull/181)
+- Updated the README to include how-to instructions. [#178](https://github.com/smashwilson/merge-conflicts/pull/178)
+
+## 1.3.5
+
+- Using the "stage" button no longer triggers a crash. [#173](https://github.com/smashwilson/merge-conflicts/pull/173)
+
+## 1.3.4
+
+- Scroll the merge conflicts view when many conflicts exist. [#170](https://github.com/smashwilson/merge-conflicts/pull/170)
+- Prune some dead code. [#167](https://github.com/smashwilson/merge-conflicts/pull/167)
+
+## 1.3.3
+
+- With multiple projects, remember the git repository that you initially detected conflicts within. [#165](https://github.com/smashwilson/merge-conflicts/pull/165)
+- Handle projects with no git repository. [#164](https://github.com/smashwilson/merge-conflicts/pull/164)
+- Improve the "Git not found" error dialog. [#163](https://github.com/smashwilson/merge-conflicts/pull/163)
+- Use alt-m instead of ctrl-m in key bindings. [#162](https://github.com/smashwilson/merge-conflicts/pull/162)
+- Use Atom's built-in notification API. [#151](https://github.com/smashwilson/merge-conflicts/pull/151)
+
 ## 1.3.2
 
 - Use `atom.keymaps` instead of `atom.keymap` for 1.0 compatibility. [#144](https://github.com/smashwilson/merge-conflicts/pull/144)

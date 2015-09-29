@@ -13,7 +13,7 @@
     preferredLineLength: 120
     tabLength: 4
     invisibles: {}
-    fontSize: 20
+    fontSize: 24
   core:
     disabledPackages: [
       "enhanced-package-list"
@@ -33,6 +33,7 @@
       "one-dark-ui"
       "monokai"
     ]
+    excludeVcsIgnoredPaths: false
   whitespace:
     ignoreWhitespaceOnCurrentLine: false
   "autoclose-html":
@@ -145,3 +146,24 @@
     matchEditorFont: true
   "one-dark-ui":
     layoutMode: "Compact"
+  minimap:
+    scrollAnimation: true
+    scrollAnimationDuration: 200
+    charWidth: 2
+    displayMinimapOnLeft: true
+    plugins:
+      bookmarks: true
+      linter: true
+      "find-and-replace": true
+    textOpacity: 0.3
+  Clean2: {}
+  Zen:
+    fullscreen: false
+    tabs: "multiple"
+  "linter-php": {}
+  "git-plus": {}
+  "tree-view":
+    hideVcsIgnoredFiles: false
+".diff.source":
+  editor:
+    preferredLineLength: 120

@@ -1,5 +1,3 @@
-// Some docs
-// http://www.html5rocks.com/en/tutorials/webcomponents/customelements/ (look at lifecycle callback methods)
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -12,6 +10,7 @@ var TsView = (function (_super) {
     }
     TsView.prototype.createdCallback = function () {
         var preview = this.innerText;
+        this.innerText = "";
         var editorElement = this.editorElement = document.createElement('atom-text-editor');
         editorElement.setAttributeNode(document.createAttribute('gutter-hidden'));
         editorElement.removeAttribute('tabindex');

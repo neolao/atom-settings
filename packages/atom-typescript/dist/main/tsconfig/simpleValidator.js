@@ -1,6 +1,3 @@
-/// Not useful for user input validation
-// But great for simple config validation 
-// works only by "n" valid options
 exports.types = {
     string: 'string',
     boolean: 'boolean',
@@ -31,7 +28,7 @@ var SimpleValidator = (function () {
                 var value = config[k];
                 if (validationInfo.validValues && validationInfo.validValues.length) {
                     var validValues = validationInfo.validValues;
-                    if (!validValues.some(function (valid) { return valid === value; })) {
+                    if (!validValues.some(function (valid) { return valid.toLowerCase() === value.toLowerCase(); })) {
                         errors.invalidValues.push("Key: '" + k + "' has an invalid value: " + value);
                     }
                 }

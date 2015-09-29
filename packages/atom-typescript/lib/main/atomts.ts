@@ -6,9 +6,6 @@ import path = require('path');
 import fs = require('fs');
 import os = require('os');
 
-// Make sure we have the packages we depend upon
-var apd = require('atom-package-dependencies');
-
 import {errorView} from "./atom/views/mainPanelView";
 
 ///ts:import=autoCompleteProvider
@@ -32,6 +29,7 @@ import {$} from "atom-space-pen-views";
 import documentationView = require('./atom/views/documentationView');
 import renameView = require('./atom/views/renameView');
 import mainPanelView = require("./atom/views/mainPanelView");
+import * as semanticView from "./atom/views/semanticView";
 import {getFileStatus} from "./atom/fileStatusCache";
 
 import editorSetup = require("./atom/editorSetup");
@@ -54,7 +52,7 @@ import {debounce} from "./lang/utils";
 var hideIfNotActiveOnStart = debounce(() => {
     // Only show if this editor is active:
     var editor = atom.workspace.getActiveTextEditor();
-    if (!atomUtils.onDiskAndTs(editor)) {
+    if (!atomUtils.onDiskAndTsRelated(editor)) {
         mainPanelView.hide();
     }
 }, 100);
@@ -65,11 +63,15 @@ function onlyOnceStuff() {
     if (__onlyOnce) return;
     else __onlyOnce = true;
 
+    mainPanelView.attach();
+
     // Add the documentation view
     documentationView.attach();
 
     // Add the rename view
     renameView.attach();
+
+    semanticView.attach();
 }
 
 /** only called once we have our dependencies */
@@ -102,15 +104,29 @@ function readyToActivate() {
         if (atomUtils.onDiskAndTs(editor)) {
             var filePath = editor.getPath();
 
+            onlyOnceStuff();
+            parent.getProjectFileDetails({filePath}).then((res)=>{
+                mainPanelView.panelView.setTsconfigInUse(res.projectFilePath);
+            }).catch(err=>{
+                mainPanelView.panelView.setTsconfigInUse('');
+            });
+
             // Refresh errors stuff on change active tab.
             // Because the fix might be in the other file
             // or the other file might have made this file have an error
             parent.errorsForFile({ filePath: filePath })
-                .then((resp) => errorView.setErrors(filePath, resp.errors));
+                .then((resp) => {
+                    errorView.setErrors(filePath, resp.errors)
+                    atomUtils.triggerLinter();
+                });
 
             mainPanelView.panelView.updateFileStatus(filePath);
             mainPanelView.show();
-        } else {
+        }
+        else if (atomUtils.onDiskAndTsRelated(editor)){
+            mainPanelView.show();
+        }
+        else {
             mainPanelView.hide();
         }
     });
@@ -130,6 +146,11 @@ function readyToActivate() {
             try {
                 // Only once stuff
                 onlyOnceStuff();
+                parent.getProjectFileDetails({filePath}).then((res)=>{
+                    mainPanelView.panelView.setTsconfigInUse(res.projectFilePath);
+                }).catch(err=>{
+                    mainPanelView.panelView.setTsconfigInUse('');
+                });
 
                 // We only do analysis once the file is persisted to disk
                 var onDisk = false;
@@ -138,16 +159,28 @@ function readyToActivate() {
                 }
 
                 // Setup the TS reporter:
-                mainPanelView.attach();
                 hideIfNotActiveOnStart();
 
                 debugAtomTs.runDebugCode({ filePath, editor });
 
-                // Set errors in project per file
                 if (onDisk) {
+
+                    // Set errors in project per file
                     parent.updateText({ filePath: filePath, text: editor.getText() })
                         .then(() => parent.errorsForFile({ filePath: filePath }))
                         .then((resp) => errorView.setErrors(filePath, resp.errors));
+
+                    // Comparing potential emit to the existing js file
+                    parent.getOutputJsStatus({ filePath: filePath }).then((res) => {
+                        let status = getFileStatus(filePath);
+                        status.emitDiffers = res.emitDiffers;
+
+                        // Update status if the file compared above is currently in the active editor
+                        let ed = atom.workspace.getActiveTextEditor();
+                        if (ed && ed.getPath() === filePath) {
+                            mainPanelView.panelView.updateFileStatus(filePath);
+                        }
+                    });
                 }
 
                 // Setup additional observers on the editor
@@ -156,9 +189,13 @@ function readyToActivate() {
                 // Observe editors changing
                 var changeObserver = editor.onDidStopChanging(() => {
 
-                    let status = getFileStatus(filePath);
-                    status.modified = editor.isModified();
-                    mainPanelView.panelView.updateFileStatus(filePath);
+                    // The condition is required because on initial load this event fires
+                    // on every opened file, not just the active one
+                    if (editor === atom.workspace.getActiveTextEditor()) {
+                        let status = getFileStatus(filePath);
+                        status.modified = editor.isModified();
+                        mainPanelView.panelView.updateFileStatus(filePath);
+                    }
 
                     // If the file isn't saved and we just show an error to guide the user
                     if (!onDisk) {
@@ -249,29 +286,7 @@ function readyToActivate() {
 }
 
 export function activate(state: PackageState) {
-
-    // Don't activate if we have a dependency that isn't available
-    var linter = apd.require('linter');
-    var acp = apd.require('autocomplete-plus');
-
-    if (!linter || !acp) {
-        var notification = atom.notifications.addInfo('AtomTS: Some dependencies not found. Running "apm install" on these for you. Please wait for a success confirmation!', { dismissable: true });
-        apd.install(function() {
-            atom.notifications.addSuccess("AtomTS: Dependencies installed correctly. Enjoy TypeScript \u2665", { dismissable: true });
-            notification.dismiss();
-
-            // Packages don't get loaded automatically as a result of an install
-            if (!apd.require('linter')) atom.packages.loadPackage('linter');
-            if (!apd.require('autocomplete-plus')) atom.packages.loadPackage('autocomplete-plus');
-
-            // Hazah activate them and then activate us!
-            atom.packages.activatePackage('linter').then(() => atom.packages.activatePackage('autocomplete-plus')).then(() => readyToActivate());
-        });
-
-        return;
-    }
-
-    readyToActivate();
+    require('atom-package-deps').install('atom-typescript').then(waitForGrammarActivation).then(readyToActivate)
 }
 
 export function deactivate() {
@@ -302,4 +317,21 @@ export function provideLinter() {
 
 export function consumeSnippets(snippetsManager) {
     atomUtils._setSnippetsManager(snippetsManager);
+}
+
+function waitForGrammarActivation(): Promise<any> {
+    let activated = false;
+    let deferred = Promise.defer();
+    let editorWatch = atom.workspace.observeTextEditors((editor: AtomCore.IEditor) => {
+
+        // Just so we won't attach more events than necessary
+        if (activated) return;
+        editor.observeGrammar((grammar: AtomCore.IGrammar) => {
+            if (grammar.packageName === 'atom-typescript') {
+                activated = true;
+                deferred.resolve({});
+            }
+        });
+    });
+    return deferred.promise.then(() => editorWatch.dispose());
 }

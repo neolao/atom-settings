@@ -1,8 +1,3 @@
-// Help:
-// https://github.com/atom/first-mate/
-// https://github.com/fdecampredon/brackets-typescript/blob/master/src/main/mode.ts
-// https://github.com/p-e-w/language-javascript-semantic/blob/master/lib/javascript-semantic-grammar.coffee
-// TODO: update to latest : https://github.com/atom/atom/pull/6757
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -40,10 +35,10 @@ var TypeScriptSemanticGrammar = (function (_super) {
         else {
             this.trailingWhiteSpaceLength = 0;
         }
-        var finalLexState = firstLine ? 0
+        var finalLexState = firstLine ? ts.EndOfLineState.None
             : ruleStack && ruleStack.length ? ruleStack[0]
-                : 0;
-        if (finalLexState !== 0) {
+                : ts.EndOfLineState.None;
+        if (finalLexState !== ts.EndOfLineState.None) {
             return this.getAtomTokensForLine(line, finalLexState);
         }
         if (line.match(this.fullTripleSlashReferencePathRegEx)) {
@@ -128,7 +123,7 @@ var TypeScriptSemanticGrammar = (function (_super) {
     };
     TypeScriptSemanticGrammar.prototype.getTsTokensForLine = function (line, finalLexState) {
         var _this = this;
-        if (finalLexState === void 0) { finalLexState = 0; }
+        if (finalLexState === void 0) { finalLexState = ts.EndOfLineState.None; }
         var output = this.classifier.getClassificationsForLine(line, finalLexState, true);
         var ruleStack = [output.finalLexState];
         var classificationResults = output.entries;

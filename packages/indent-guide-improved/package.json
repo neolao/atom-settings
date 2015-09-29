@@ -4,15 +4,15 @@
     "name": "Akihiro HARAI"
   },
   "main": "./lib/indent-guide-improved",
-  "version": "1.4.0",
+  "version": "1.4.3",
   "description": "This draws indent guide more correctly and understandably.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/harai/indent-guide-improved"
+    "url": "git+https://github.com/harai/indent-guide-improved.git"
   },
   "license": "MIT",
   "engines": {
-    "atom": ">=0.208.0"
+    "atom": ">=1.0.0"
   },
   "keywords": [
     "indentation",
@@ -27,17 +27,17 @@
   "bugs": {
     "url": "https://github.com/harai/indent-guide-improved/issues"
   },
-  "homepage": "https://github.com/harai/indent-guide-improved",
-  "_id": "indent-guide-improved@1.4.0",
-  "_shasum": "a86ac352e25008a3bb02017e09d9975544bb2e40",
-  "_resolved": "file:../d-115526-3053-1k2cssq/package.tgz",
-  "_from": "../d-115526-3053-1k2cssq/package.tgz",
+  "homepage": "https://github.com/harai/indent-guide-improved#readme",
+  "_id": "indent-guide-improved@1.4.3",
+  "_shasum": "a3b750005ee44255847ad19750ceb21748b280e4",
+  "_resolved": "file:../d-11583-77948-13do6le/package.tgz",
+  "_from": "../d-11583-77948-13do6le/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
       {
         "name": "lodash",
-        "version": "3.9.3",
+        "version": "3.10.1",
         "path": "node_modules/lodash/index.js"
       }
     ],
@@ -94,6 +94,7 @@
         "node_modules/lodash/array.js",
         "node_modules/lodash/chain/chain.js",
         "node_modules/lodash/chain/commit.js",
+        "node_modules/lodash/chain/concat.js",
         "node_modules/lodash/chain/lodash.js",
         "node_modules/lodash/chain/plant.js",
         "node_modules/lodash/chain/reverse.js",
@@ -106,6 +107,7 @@
         "node_modules/lodash/chain/valueOf.js",
         "node_modules/lodash/chain/wrapperChain.js",
         "node_modules/lodash/chain/wrapperCommit.js",
+        "node_modules/lodash/chain/wrapperConcat.js",
         "node_modules/lodash/chain/wrapperPlant.js",
         "node_modules/lodash/chain/wrapperReverse.js",
         "node_modules/lodash/chain/wrapperToString.js",
@@ -172,6 +174,7 @@
         "node_modules/lodash/function/flow.js",
         "node_modules/lodash/function/flowRight.js",
         "node_modules/lodash/function/memoize.js",
+        "node_modules/lodash/function/modArgs.js",
         "node_modules/lodash/function/negate.js",
         "node_modules/lodash/function/once.js",
         "node_modules/lodash/function/partial.js",
@@ -187,6 +190,7 @@
         "node_modules/lodash/internal/LodashWrapper.js",
         "node_modules/lodash/internal/MapCache.js",
         "node_modules/lodash/internal/SetCache.js",
+        "node_modules/lodash/internal/arrayConcat.js",
         "node_modules/lodash/internal/arrayCopy.js",
         "node_modules/lodash/internal/arrayEach.js",
         "node_modules/lodash/internal/arrayEachRight.js",
@@ -194,6 +198,7 @@
         "node_modules/lodash/internal/arrayExtremum.js",
         "node_modules/lodash/internal/arrayFilter.js",
         "node_modules/lodash/internal/arrayMap.js",
+        "node_modules/lodash/internal/arrayPush.js",
         "node_modules/lodash/internal/arrayReduce.js",
         "node_modules/lodash/internal/arrayReduceRight.js",
         "node_modules/lodash/internal/arraySome.js",
@@ -274,6 +279,7 @@
         "node_modules/lodash/internal/createCompounder.js",
         "node_modules/lodash/internal/createCtorWrapper.js",
         "node_modules/lodash/internal/createCurry.js",
+        "node_modules/lodash/internal/createDefaults.js",
         "node_modules/lodash/internal/createExtremum.js",
         "node_modules/lodash/internal/createFind.js",
         "node_modules/lodash/internal/createFindIndex.js",
@@ -289,6 +295,7 @@
         "node_modules/lodash/internal/createPartial.js",
         "node_modules/lodash/internal/createPartialWrapper.js",
         "node_modules/lodash/internal/createReduce.js",
+        "node_modules/lodash/internal/createRound.js",
         "node_modules/lodash/internal/createSortedIndex.js",
         "node_modules/lodash/internal/createWrapper.js",
         "node_modules/lodash/internal/deburrLetter.js",
@@ -296,6 +303,7 @@
         "node_modules/lodash/internal/equalByTag.js",
         "node_modules/lodash/internal/equalObjects.js",
         "node_modules/lodash/internal/escapeHtmlChar.js",
+        "node_modules/lodash/internal/escapeRegExpChar.js",
         "node_modules/lodash/internal/escapeStringChar.js",
         "node_modules/lodash/internal/getData.js",
         "node_modules/lodash/internal/getFuncName.js",
@@ -325,6 +333,7 @@
         "node_modules/lodash/internal/mapHas.js",
         "node_modules/lodash/internal/mapSet.js",
         "node_modules/lodash/internal/mergeData.js",
+        "node_modules/lodash/internal/mergeDefaults.js",
         "node_modules/lodash/internal/metaMap.js",
         "node_modules/lodash/internal/pickByArray.js",
         "node_modules/lodash/internal/pickByCallback.js",
@@ -335,7 +344,6 @@
         "node_modules/lodash/internal/reorder.js",
         "node_modules/lodash/internal/replaceHolders.js",
         "node_modules/lodash/internal/setData.js",
-        "node_modules/lodash/internal/shimIsPlainObject.js",
         "node_modules/lodash/internal/shimKeys.js",
         "node_modules/lodash/internal/sortedUniq.js",
         "node_modules/lodash/internal/toIterable.js",
@@ -377,8 +385,11 @@
         "node_modules/lodash/lang/toPlainObject.js",
         "node_modules/lodash/lang.js",
         "node_modules/lodash/math/add.js",
+        "node_modules/lodash/math/ceil.js",
+        "node_modules/lodash/math/floor.js",
         "node_modules/lodash/math/max.js",
         "node_modules/lodash/math/min.js",
+        "node_modules/lodash/math/round.js",
         "node_modules/lodash/math/sum.js",
         "node_modules/lodash/math.js",
         "node_modules/lodash/number/inRange.js",
@@ -387,6 +398,7 @@
         "node_modules/lodash/object/assign.js",
         "node_modules/lodash/object/create.js",
         "node_modules/lodash/object/defaults.js",
+        "node_modules/lodash/object/defaultsDeep.js",
         "node_modules/lodash/object/extend.js",
         "node_modules/lodash/object/findKey.js",
         "node_modules/lodash/object/findLastKey.js",

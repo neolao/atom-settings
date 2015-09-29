@@ -1,5 +1,3 @@
-// Inspiration : https://atom.io/packages/ide-haskell
-// and https://atom.io/packages/ide-flow
 var atomUtils = require('./atomUtils');
 var parent = require('../../worker/parent');
 var path = require('path');
@@ -43,11 +41,7 @@ function attach(editorView, editor) {
     });
     subscriber.subscribe(scroll, 'mouseout', function (e) { return clearExprTypeTimeout(); });
     subscriber.subscribe(scroll, 'keydown', function (e) { return clearExprTypeTimeout(); });
-    atom.commands.add('atom-text-editor', 'editor:will-be-removed', function (e) {
-        if (e.currentTarget == editorView[0]) {
-            deactivate();
-        }
-    });
+    editor.onDidDestroy(function () { return deactivate(); });
     function showExpressionType(e) {
         if (exprTypeTooltip)
             return;

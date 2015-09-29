@@ -1,6 +1,7 @@
 # Get Atom defaults
-tabLength = atom?.config.get('editor.tabLength') ? 4
-softTabs = atom?.config.get('editor.softTabs') ? true
+scope = ['source.js']
+tabLength = atom?.config.get('editor.tabLength', scope: scope) ? 4
+softTabs = atom?.config.get('editor.softTabs', scope: scope) ? true
 defaultIndentSize = (if softTabs then tabLength else 1)
 defaultIndentChar = (if softTabs then " " else "\t")
 defaultIndentWithTabs = not softTabs
@@ -27,7 +28,7 @@ module.exports = {
   defaultBeautifier: "JS Beautify"
 
   ###
-  
+
   ###
   options:
     # JavaScript
@@ -105,5 +106,10 @@ module.exports = {
       type: 'boolean'
       default: false
       description: "End output with newline"
+    end_with_comma:
+      type: 'boolean'
+      default: false
+      description: "If a terminating comma should be inserted into \
+                  arrays, object literals, and destructured objects."
 
 }

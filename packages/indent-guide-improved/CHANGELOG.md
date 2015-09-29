@@ -1,3 +1,19 @@
+## 1.4.3
+### Bugfix
+
+* Cursor is swallowed by guide #19
+
+## 1.4.2
+### Bugfix
+
+* Fix guides which ignore code folding #15
+
+## 1.4.1
+### Bugfix
+
+* Fix broken guides which happen when the last line of the screen is blank.
+* Fix deactivation procedure. #16
+
 ## 1.4.0
 ### Improvement
 

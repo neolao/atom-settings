@@ -1,4 +1,3 @@
-/// <reference path='../../globals'/>
 var parent = require('../../worker/parent');
 var atomConfig = require('./atomConfig');
 var fs = require('fs');
@@ -51,7 +50,7 @@ exports.provider = {
                     var suggestionText = relativePath;
                     var suggestion = {
                         text: suggestionText,
-                        replacementPrefix: resp.endsInPunctuation ? '' : options.prefix,
+                        replacementPrefix: resp.endsInPunctuation ? '' : options.prefix.trim(),
                         rightLabelHTML: '<span>' + file.name + '</span>',
                         type: 'path'
                     };
@@ -102,12 +101,12 @@ exports.provider = {
                     }
                     else {
                         var prefix = options.prefix;
-                        if (c.name.startsWith('$')) {
+                        if (c.name && c.name.startsWith('$')) {
                             prefix = "$" + prefix;
                         }
                         return {
                             text: c.name,
-                            replacementPrefix: resp.endsInPunctuation ? '' : prefix,
+                            replacementPrefix: resp.endsInPunctuation ? '' : prefix.trim(),
                             rightLabel: c.display,
                             leftLabel: c.kind,
                             type: atomUtils.kindToType(c.kind),
@@ -137,7 +136,7 @@ exports.provider = {
             if (options.suggestion.atomTS_IsReference) {
                 options.editor.moveToBeginningOfLine();
                 options.editor.selectToEndOfLine();
-                options.editor.replaceSelectedText(null, function () { return '/// <reference path="' + options.suggestion.atomTS_IsReference.relativePath + '"/>'; });
+                options.editor.replaceSelectedText(null, function () { return '/// <reference path="' + options.suggestion.atomTS_IsReference.relativePath + '.ts"/>'; });
             }
             if (options.suggestion.atomTS_IsImport) {
                 options.editor.moveToBeginningOfLine();

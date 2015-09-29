@@ -1,6 +1,7 @@
 # Get Atom defaults
-tabLength = atom?.config.get('editor.tabLength') ? 4
-softTabs = atom?.config.get('editor.softTabs') ? true
+scope = ['text.html']
+tabLength = atom?.config.get('editor.tabLength', scope: scope) ? 4
+softTabs = atom?.config.get('editor.softTabs', scope: scope) ? true
 defaultIndentSize = (if softTabs then tabLength else 1)
 defaultIndentChar = (if softTabs then " " else "\t")
 defaultIndentWithTabs = not softTabs
@@ -81,5 +82,11 @@ module.exports = {
       type: 'boolean'
       default: false
       description: "End output with newline"
+    extra_liners:
+      type: 'array'
+      default: ['head', 'body', '/html']
+      items:
+        type: 'string'
+      description: "List of tags (defaults to [head,body,/html] that should have an extra newline before them."
 
 }

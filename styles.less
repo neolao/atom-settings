@@ -80,11 +80,22 @@ atom-workspace .horizontal .vertical {
 
 
 /**
+ * Minimap
+ */
+atom-text-editor::shadow atom-text-editor-minimap {
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.2);
+    width: 100px;
+    @media screen and (min-width: 2000px) {
+        width: 150px;
+    }
+}
+
+/**
  * Line numbers
  */
-.gutter-container .gutter .line-numbers {
-    .line-number {
-    }
+atom-text-editor .gutter .line-number {
+
 }
 
 

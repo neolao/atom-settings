@@ -1,6 +1,6 @@
 {
   "name": "zentabs",
-  "version": "0.8.4",
+  "version": "0.8.6",
   "main": "./lib/zentabs",
   "description": "Keep the opened tabs amount below specified limit",
   "license": "MIT",
@@ -21,10 +21,10 @@
     "url": "https://github.com/ArnaudRinquin/atom-zentabs/issues"
   },
   "homepage": "https://github.com/ArnaudRinquin/atom-zentabs",
-  "_id": "zentabs@0.8.4",
-  "_shasum": "55737a4845907661ab3274f54561aa7ae0ccef34",
-  "_resolved": "file:../d-11559-17422-5ey3a3/package.tgz",
-  "_from": "../d-11559-17422-5ey3a3/package.tgz",
+  "_id": "zentabs@0.8.6",
+  "_shasum": "758e095ddc9532097b5afb38f369a2742fe5150b",
+  "_resolved": "file:../d-115710-11598-1v2rphk/package.tgz",
+  "_from": "../d-115710-11598-1v2rphk/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
@@ -90,7 +90,7 @@
       },
       {
         "name": "amdefine",
-        "version": "0.1.1",
+        "version": "1.0.0",
         "path": "node_modules/atom-space-pen-views/node_modules/space-pen/node_modules/grim/node_modules/coffeestack/node_modules/source-map/node_modules/amdefine/amdefine.js"
       },
       {

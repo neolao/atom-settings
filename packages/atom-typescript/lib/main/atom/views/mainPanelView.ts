@@ -5,7 +5,7 @@ import lineMessageView = require('./lineMessageView');
 import atomUtils = require("../atomUtils");
 import parent = require("../../../worker/parent");
 import * as utils from "../../lang/utils";
-import {FileStatus,getFileStatus} from "../fileStatusCache";
+import { FileStatus, getFileStatus } from "../fileStatusCache";
 
 var panelHeaders = {
     error: 'Errors In Open Files',
@@ -17,6 +17,7 @@ import gotoHistory = require('../gotoHistory');
 
 export class MainPanelView extends view.View<any> {
 
+    private tsconfigInUse: JQuery;
     private fileStatus: JQuery;
     private btnFold: JQuery;
     private btnSoftReset: JQuery;
@@ -34,115 +35,134 @@ export class MainPanelView extends view.View<any> {
 
     private sectionPending: JQuery;
     private txtPendingCount: JQuery;
-    private pendingRequests: string[];
+    private pendingRequests: string[] = [];
 
     static content() {
         var btn = (view, text, className: string = '') =>
             this.button({
-                'class': "btn " + className,
+                'class': `btn btn-sm ${className}`,
                 'click': `${view}PanelSelectedClick`,
-                'outlet': `${view}PanelBtn`,
-                'style': 'top:-2px!important'
+                'outlet': `${view}PanelBtn`
             }, text);
 
         this.div({
-            class: 'atomts native-key-bindings layout horizontal',
+            class: 'atomts atomts-main-panel-view native-key-bindings',
             tabindex: '-1'
         }, () => {
-                this.div({
-                    class: 'panel-resize-handle',
-                    style: 'position: absolute; top: 0; left: 0; right: 0; height: 10px; cursor: row-resize; z-index: 3; -webkit-user-select:none'
-                });
-                this.div({
-                    class: 'panel-heading layout horizontal',
-                    style: '-webkit-user-select:none',
-                    dblclick: 'toggle'
+            this.div({
+                class: 'layout horizontal',
+                style: '-webkit-user-select: none; flex-wrap: wrap',
+                dblclick: 'toggle'
+            }, () => {
+                this.span({
+                  class: 'layout horizontal atomts-panel-header',
+                  style: 'align-items: center'
                 }, () => {
-                        this.span({
-                            style: 'cursor: pointer; color: rgb(0, 148, 255); -webkit-user-select:none',
-                            click: 'toggle'
-                        }, () => {
-                                this.span({ class: "icon-microscope" });
-                                this.span({ style: 'font-weight:bold' }, " TypeScript ");
-                            });
-
-                        this.div({
-                            class: 'btn-group',
-                            style: 'margin-left: 5px'
-                        },
-                            () => {
-                                btn("error", panelHeaders.error, 'selected')
-                                btn("build", panelHeaders.build)
-                                btn("references", panelHeaders.references)
-                            });
-
-                        this.div({
-                            style: 'display:inline-block'
-                        }, () => {
-                            this.span({
-                                style: 'margin-left:10px; transition: color 1s', // Added transition to make it easy to see *yes I just did this compile*.
-                                outlet: 'fileStatus'
-                            });
-                        });
-
-                        this.div({
-                            class: 'heading-summary flex',
-                            style: 'display:inline-block; margin-left:5px; margin-top:3px; overflow: hidden; white-space:nowrap; text-overflow: ellipsis',
-                            outlet: 'summary'
-                        });
-
-                        this.progress({
-                            class: 'inline-block build-progress',
-                            style: 'display: none; color:red',
-                            outlet: 'buildProgress'
-                        });
-
-                        this.span({ class: 'section-pending', outlet: 'sectionPending' }, () => {
-                            this.span({
-                                outlet: 'txtPendingCount',
-                                style: 'cursor: pointer; margin-right: 7px;',
-                            });
-                            this.span({
-                                class: 'loading loading-spinner-tiny inline-block',
-                                style: 'cursor: pointer; margin-right: 7px;',
-                                click: 'showPending'
-                            });
-                        });
-
-                        this.div({
-                            class: 'heading-buttons',
-                            style: 'width:50px; display:inline-block'
-                        }, () => {
-                                this.span({
-                                    class: 'heading-fold icon-unfold',
-                                    style: 'cursor: pointer; margin-right:10px',
-                                    outlet: 'btnFold',
-                                    click: 'toggle'
-                                });
-                                this.span({
-                                    class: 'heading-fold icon-sync',
-                                    style: 'cursor: pointer',
-                                    outlet: 'btnSoftReset',
-                                    click: 'softReset'
-                                });
-                            });
+                    this.span({
+                        style: 'cursor: pointer; color: rgb(0, 148, 255); -webkit-user-select: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 16px',
+                        click: 'toggle'
+                    }, () => {
+                        this.span({ class: 'icon-microscope' });
+                        this.span({ style: 'font-weight: bold' }, 'TypeScript');
                     });
+
+                    this.div({
+                        class: 'btn-group',
+                        style: 'margin-left: 6px; flex: 1 0 auto'
+                    }, () => {
+                        btn('error', panelHeaders.error, 'selected')
+                        btn('build', panelHeaders.build)
+                        btn('references', panelHeaders.references)
+                    });
+                });
+
+                this.span({
+                  class: 'layout horizontal atomts-panel-header',
+                  style: 'align-items: center; flex: 1 1 auto; line-height: 24px;' // Line height is equal to height of github loading icon
+                }, () => {
+                    this.div({
+                        style: 'cursor: pointer;',
+                        click: 'clickedCurrentTsconfigFilePath'
+                    }, () => {
+                        this.span({
+                            outlet: 'tsconfigInUse'
+                        });
+                    });
+
+                    this.div({
+                        style: 'overflow-x: visible; white-space: nowrap;'
+                    }, () => {
+                        this.span({
+                            style: 'margin-left: 10px; transition: color 1s', // Added transition to make it easy to see *yes I just did this compile*.
+                            outlet: 'fileStatus'
+                        });
+                    });
+
+                    this.div({
+                        class: 'heading-summary flex',
+                        style: 'margin-left: 5px; overflow: hidden; white-space:nowrap; text-overflow: ellipsis',
+                        outlet: 'summary'
+                    });
+
+                    this.progress({
+                        class: 'inline-block build-progress',
+                        style: 'display: none; color: red',
+                        outlet: 'buildProgress'
+                    });
+
+                    this.span({
+                        class: 'section-pending',
+                        outlet: 'sectionPending',
+                        click: 'showPending'
+                    }, () => {
+                        this.span({
+                            outlet: 'txtPendingCount',
+                            style: 'cursor: pointer; margin-left: 5px',
+                        });
+
+                        this.span({
+                            class: 'loading loading-spinner-tiny inline-block',
+                            style: 'cursor: pointer; margin-left: 5px'
+                        });
+                    });
+
+                    this.div({
+                        class: 'heading-buttons',
+                        style: 'margin-left: 5px'
+                    }, () => {
+                        this.span({
+                            class: 'heading-fold icon-unfold',
+                            style: 'cursor: pointer; margin-right: 10px',
+                            outlet: 'btnFold',
+                            click: 'toggle'
+                        });
+
+                        this.span({
+                            class: 'heading-fold icon-sync',
+                            style: 'cursor: pointer',
+                            outlet: 'btnSoftReset',
+                            click: 'softReset'
+                        });
+                    });
+                });
+
                 this.div({
-                    class: 'panel-body atomts-panel-body padded',
+                    class: 'panel-body atomts-panel-body',
                     outlet: 'errorBody',
-                    style: 'overflow-y: auto; display:none'
+                    style: 'overflow-y: auto; flex: 1 0 100%; display: none'
                 });
                 this.div({
-                    class: 'panel-body atomts-panel-body padded',
+                    class: 'panel-body atomts-panel-body',
                     outlet: 'buildBody',
-                    style: 'overflow-y: auto; display:none'
+                    style: 'overflow-y: auto; flex: 1 0 100%; display: none'
                 });
                 this.div({
-                    class: 'panel-body atomts-panel-body padded',
+                    class: 'panel-body atomts-panel-body',
                     outlet: 'referencesBody',
-                    style: 'overflow-y: auto; display:none'
+                    style: 'overflow-y: auto; flex: 1 0 100%; display: none'
                 });
             });
+        });
     }
 
 
@@ -170,22 +190,45 @@ export class MainPanelView extends view.View<any> {
         }
     }
 
+    ///////////// Current TSconfig
+    private fullTsconfigPath: string;
+    setTsconfigInUse(tsconfigFilePath: string) {
+        this.fullTsconfigPath = tsconfigFilePath;
+        if (!this.fullTsconfigPath) {
+            this.tsconfigInUse.text('no tsconfig.json');
+        }
+        else {
+            var path = atomUtils.getFilePathRelativeToAtomProject(tsconfigFilePath);
+            this.tsconfigInUse.text(`${path}`);
+        }
+    }
+    clickedCurrentTsconfigFilePath() {
+        if (!this.fullTsconfigPath) {
+            atom.notifications.addInfo("No tsconfig for current file")
+            return;
+        }
+        else{
+            atomUtils.openFile(this.fullTsconfigPath);
+        }
+    }
+
     ///////////// Change JS File Status
     updateFileStatus(filePath: string) {
-        var status = getFileStatus(filePath);
-        this.fileStatus.removeClass('icon-x icon-check text-error text-success text-warning');
-        if (status.modified) {
-            this.fileStatus.text('Js emit is outdated');
-            this.fileStatus.addClass('icon-x text-error');
-        } else {
-            if (status.saveSynced) {
-                this.fileStatus.text('Js emit up to date');
-                this.fileStatus.addClass('icon-check text-success');
-            } else { // File hasn't been saved and compiled during the current run, so we don't know the state
-                this.fileStatus.text('No js emit requested yet');
-                this.fileStatus.addClass('icon-x text-warning');
+        parent.getProjectFileDetails({ filePath }).then(fileDetails => {
+            if (!fileDetails.project.compileOnSave) {
+                this.fileStatus.addClass("hidden");
+            } else {
+                let status = getFileStatus(filePath);
+                this.fileStatus.removeClass('icon-x icon-check text-error text-success hidden');
+                if (status.emitDiffers || status.modified) {
+                    this.fileStatus.text('JS Outdated');
+                    this.fileStatus.addClass('icon-x text-error');
+                } else {
+                    this.fileStatus.text('JS Current');
+                    this.fileStatus.addClass('icon-check text-success');
+                }
             }
-        }
+        });
     }
 
     ///////////// Pending Requests
@@ -336,9 +379,9 @@ export class MainPanelView extends view.View<any> {
         this.errorBody.append(view.$);
     }
 
-    setErrorSummary(summary: any /*TODO: Type this*/) {
-        var
-            message = summary.summary,
+    /*TODO: Type this*/
+    setErrorSummary(summary: any) {
+        var message = summary.summary,
             className = summary.className,
             raw = summary.rawSummary || false,
             handler = summary.handler || undefined;
@@ -464,17 +507,27 @@ export function hide() {
 
 
 export module errorView {
-    var filePathErrors: utils.Dict<TSError[]> = new utils.Dict<any[]>();
+    const MAX_ERRORS = 50;
 
-    export var setErrors = (filePath: string, errorsForFile: TSError[]) => {
-        if (!errorsForFile.length) filePathErrors.clearValue(filePath);
-        else {
-            // Currently we are limiting errors
-            // To many errors crashes our display
-            if (errorsForFile.length > 50) errorsForFile = errorsForFile.slice(0, 50);
+    var filePathErrors: utils.Dict<CodeError[]> = new utils.Dict<any[]>();
 
-            filePathErrors.setValue(filePath, errorsForFile)
-        };
+    export var setErrors = (filePath: string, errorsForFile: CodeError[]) => {
+        if (!panelView || !panelView.clearError) {
+          // if not initialized, just quit; might happen when atom is first opened.
+          return;
+        }
+
+        if (!errorsForFile.length) {
+          filePathErrors.clearValue(filePath);
+        } else {
+          // Currently we are limiting errors
+          // Too many errors crashes our display
+          if (errorsForFile.length > MAX_ERRORS) {
+            errorsForFile = errorsForFile.slice(0, MAX_ERRORS);
+          }
+
+          filePathErrors.setValue(filePath, errorsForFile)
+        }
 
         // TODO: this needs to be optimized at some point
         panelView.clearError();
@@ -490,7 +543,7 @@ export module errorView {
         else {
             var totalErrorCount = 0;
             for (var path in filePathErrors.table) {
-                filePathErrors.getValue(path).forEach((error: TSError) => {
+                filePathErrors.getValue(path).forEach((error: CodeError) => {
                     totalErrorCount++;
                     panelView.addError(new lineMessageView.LineMessageView({
                         goToLine: (filePath, line, col) => gotoHistory.gotoLine(filePath, line, col, gotoHistory.errorsInOpenFiles),

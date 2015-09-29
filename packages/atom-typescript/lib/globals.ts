@@ -12,6 +12,12 @@
 
 /** Utility function to print stack trace from whereever */
 declare function stack();
+declare module NodeJS {
+    export interface Global {
+        stack: any;
+        ts: any;
+    }
+}
 
 interface Function {
     name?: string; // exists for named function on node / atom / "good" browsers ;)
@@ -27,6 +33,15 @@ declare module 'escape-html' {
     export = escape;
 }
 
+// courtesy @blakeembrey
+declare module 'strip-bom' {
+    import Buffer = require('buffer')
+
+    function stripBom(value: string): string
+    function stripBom(value: Buffer): Buffer
+
+    export = stripBom
+}
 
 declare module 'atom-space-pen-views' {
     import atom = require('atom');
@@ -44,9 +59,10 @@ declare module 'basarat-text-buffer' {
 }
 
 interface EmitOutput {
+    sourceFileName: string;
     outputFiles: string[];
     success: boolean;
-    errors: TSError[];
+    errors: CodeError[];
     emitError: boolean;
 }
 
@@ -66,10 +82,10 @@ interface BuildUpdate {
     errorCount: number;
     firstError: boolean;
     filePath: string;
-    errorsInFile: TSError[];
+    errorsInFile: CodeError[];
 }
 
-interface TSError {
+interface CodeError {
     filePath: string;
     startPos: EditorPosition;
     endPos: EditorPosition;
@@ -118,6 +134,18 @@ interface NavigateToItem {
     fileName: string;
 }
 
+/**
+ * used by semantic view
+ */
+interface SemanticTreeNode {
+    text: string;
+    kind: string;
+    kindModifiers: string;
+    start: EditorPosition;
+    end: EditorPosition;
+    subNodes: SemanticTreeNode[];
+}
+
 interface ReferenceDetails {
     filePath: string;
     position: EditorPosition
@@ -155,4 +183,5 @@ interface FileDependency {
 /** Provided by the atom team */
 interface String {
     startsWith(str: string): boolean;
+    endsWith(str: string): boolean;
 }

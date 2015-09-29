@@ -1,34 +1,69 @@
-# This file handles all the fetching and displaying logic. It doesn't handle any of the pane magic.
-
+{CompositeDisposable} = require 'atom'
+{ScrollView} = require 'atom-space-pen-views'
 path = require 'path'
 fs = require 'fs-plus'
-{Emitter, Disposable, CompositeDisposable, Point} = require 'atom'
-{$$$, ScrollView} = require 'atom-space-pen-views'
+_ = require 'underscore-plus'
 
 Q = require 'q'
 slash = require 'slash'
 ignore = require 'ignore'
 
+{TodoRegexView, TodoFileView, TodoNoneView, TodoEmptyView} = require './todo-item-view'
+
 module.exports =
 class ShowTodoView extends ScrollView
   maxLength: 120
+  matches: []
 
   @content: ->
-    @div class: 'show-todo-preview native-key-bindings', tabindex: -1
+    @div class: 'show-todo-preview native-key-bindings', tabindex: -1, =>
+      @div class: 'todo-action-items pull-right', =>
+        @a outlet: 'saveAsButton', class: 'icon icon-cloud-download'
+        @a outlet: 'refreshButton', class: 'icon icon-sync'
+
+      @div outlet: 'todoLoading', =>
+        @div class: 'markdown-spinner'
+        @h5 outlet: 'searchCount', class: 'text-center', "Loading Todos..."
+
+      @div outlet: 'todoList'
 
   constructor: ({@filePath}) ->
     super
-    @handleEvents()
-    @emitter = new Emitter
     @disposables = new CompositeDisposable
+    @handleEvents()
 
     # Determine if you are searching full workspace or just open files
     @searchWorkspace = @filePath isnt '/Open-TODOs'
 
+  handleEvents: ->
+    @disposables.add atom.commands.add @element,
+      'core:save-as': (event) =>
+        event.stopPropagation()
+        @saveAs()
+      'core:refresh': (event) =>
+        event.stopPropagation()
+        @getTodos()
+
+    # Persist pane size by saving to local storage
+    pane = atom.workspace.getActivePane()
+    @restorePaneFlex(pane) if atom.config.get('todo-show.rememberViewSize')
+    @disposables.add pane.observeFlexScale (flexScale) =>
+      @savePaneFlex(flexScale)
+
+    @saveAsButton.on 'click', => @saveAs()
+    @refreshButton.on 'click', => @getTodos()
+
   destroy: ->
     @cancelScan()
+    @disposables?.dispose()
     @detach()
-    @disposables.dispose()
+
+  savePaneFlex: (flex) ->
+    localStorage.setItem 'todo-show.flex', flex
+
+  restorePaneFlex: (pane) ->
+    flex = localStorage.getItem 'todo-show.flex'
+    pane.setFlexScale parseFloat(flex) if flex
 
   getTitle: ->
     if @searchWorkspace then "Todo-Show Results" else "Todo-Show Open Files"
@@ -42,57 +77,21 @@ class ShowTodoView extends ScrollView
   getProjectPath: ->
     atom.project.getPaths()[0]
 
-  onDidChangeTitle: -> new Disposable()
-  onDidChangeModified: -> new Disposable()
-
-  showLoading: ->
+  startLoading: ->
     @loading = true
-    @html $$$ ->
-      @div class: 'markdown-spinner'
-      @h5 class: 'text-center searched-count', 'Loading Todos...'
+    @matches = []
+    @todoList.empty()
+    @todoLoading.show()
 
-  showTodos: (regexes) ->
-    @html $$$ ->
-      @div class: 'todo-action-items pull-right', =>
-        @a class: 'todo-save-as', =>
-          @span class: 'icon icon-cloud-download'
-        @a class: 'todo-refresh', =>
-          @span class: 'icon icon-sync'
-
-      for regex in regexes
-        @section =>
-          @h1 =>
-            @span regex.title + ' '
-            @span class: 'regex', regex.regex
-          @table =>
-            for result in regex.results
-              for match in result.matches
-                @tr =>
-                  @td match.matchText
-                  @td =>
-                    @a class: 'todo-url', 'data-uri': result.filePath,
-                    'data-coords': match.rangeString, result.relativePath
-
-      unless regexes.length
-        @section =>
-          @h1 'No results'
-          @table =>
-            @tr =>
-              @td =>
-                @h5 'Did not find any todos. Searched for:'
-                @ul =>
-                  for regex in atom.config.get('todo-show.findTheseRegexes') by 2
-                    @li regex
-                @h5 'Use your configuration to add more patterns.'
-
+  stopLoading: ->
     @loading = false
+    @todoLoading.hide()
 
   # Get regexes to look for from settings
   buildRegexLookups: (settingsRegexes) ->
     for regex, i in settingsRegexes by 2
       'title': regex
       'regex': settingsRegexes[i+1]
-      'results': []
 
   # Pass in string and returns a proper RegExp object
   makeRegexObj: (regexStr) ->
@@ -104,35 +103,32 @@ class ShowTodoView extends ScrollView
     return false unless pattern
     new RegExp(pattern, flags)
 
-  # Parses and strips result from scan
-  handleScanResult: (result, regex) ->
-    # Loop through the scan results
-    for match in result.matches
-      matchText = match.matchText
+  handleScanMatch: (match, regex) ->
+    matchText = match.matchText
 
-      # Strip out the regex token from the found annotation
-      # not all objects will have an exec match
-      while (_match = regex?.exec(matchText))
-        matchText = _match.pop()
+    # Strip out the regex token from the found annotation
+    # not all objects will have an exec match
+    while (_match = regex?.exec(matchText))
+      matchText = _match.pop()
 
-      # Strip common block comment endings and whitespaces
-      matchText = matchText.replace(/(\*\/|-->|#>|-}|\]\])\s*$/, '').trim()
+    # Strip common block comment endings and whitespaces
+    matchText = matchText.replace(/(\*\/|\?>|-->|#>|-}|\]\])\s*$/, '').trim()
 
-      # Truncate long match strings
-      if matchText.length >= @maxLength
-        matchText = "#{matchText.substring(0, @maxLength - 3)}..."
+    # Truncate long match strings
+    if matchText.length >= @maxLength
+      matchText = "#{matchText.substring(0, @maxLength - 3)}..."
 
-      match.matchText = matchText
+    match.matchText = matchText || 'No details'
 
-      # Make sure range is serialized to produce correct rendered format
-      # See https://github.com/jamischarles/atom-todo-show/issues/27
-      if match.range.serialize
-        match.rangeString = match.range.serialize().toString()
-      else
-        match.rangeString = match.range.toString()
+    # Make sure range is serialized to produce correct rendered format
+    # See https://github.com/jamischarles/atom-todo-show/issues/27
+    if match.range.serialize
+      match.rangeString = match.range.serialize().toString()
+    else
+      match.rangeString = match.range.toString()
 
-    result.relativePath = atom.project.relativize(result.filePath)
-    return result
+    match.relativePath = atom.project.relativize(match.path)
+    return match
 
   # Scan project workspace for the lookup that is passed
   # returns a promise that the scan generates
@@ -156,19 +152,22 @@ class ShowTodoView extends ScrollView
     if !@firstRegex
       @firstRegex = true
       onPathsSearched = (nPaths) =>
-        if @loading
-          @find('.searched-count').text("#{nPaths} paths searched...")
+        @searchCount.text("#{nPaths} paths searched...") if @loading
       options = {paths: '*', onPathsSearched}
 
     atom.workspace.scan regex, options, (result, error) =>
       console.debug error.message if error
+      return unless result
 
-      if result
-        # Check against ignored paths
-        pathToTest = slash(result.filePath.substring(atom.project.getPaths()[0].length))
-        return if (hasIgnores && ignoreRules.filter([pathToTest]).length == 0)
+      # Check against ignored paths
+      pathToTest = slash(result.filePath.substring(atom.project.getPaths()[0].length))
+      return if (hasIgnores && ignoreRules.filter([pathToTest]).length == 0)
 
-        regexLookup.results.push @handleScanResult(result, regex)
+      for match in result.matches
+        match.title = regexLookup.title
+        match.regex = regexLookup.regex
+        match.path = result.filePath
+        @matches.push @handleScanMatch(match, regex)
 
   # Scan open files for the lookup that is passed
   fetchOpenRegexItem: (regexLookup) ->
@@ -178,38 +177,34 @@ class ShowTodoView extends ScrollView
     deferred = Q.defer()
 
     for editor in atom.workspace.getTextEditors()
-      # Use same object layout as workspace scan with single match
-      result =
-        filePath: editor.getPath()
-        matches: []
-
-      editor.scan regex, (scanResult, error) ->
+      editor.scan regex, (result, error) =>
         console.debug error.message if error
+        return unless result
 
-        if scanResult
-          result.matches.push
-            matchText: scanResult.matchText
-            lineText: scanResult.matchText
-            range: [
-              [
-                scanResult.computedRange.start.row
-                scanResult.computedRange.start.column
-              ]
-              [
-                scanResult.computedRange.end.row
-                scanResult.computedRange.end.column
-              ]
+        match =
+          title: regexLookup.title
+          regex: regexLookup.regex
+          path: editor.getPath()
+          matchText: result.matchText
+          lineText: result.matchText
+          range: [
+            [
+              result.computedRange.start.row
+              result.computedRange.start.column
             ]
-
-      if result.matches.length > 0
-        regexLookup.results.push @handleScanResult(result, regex)
+            [
+              result.computedRange.end.row
+              result.computedRange.end.column
+            ]
+          ]
+        @matches.push @handleScanMatch(match, regex)
 
     # No async operations, so just return a resolved promise
     deferred.resolve()
     deferred.promise
 
-  renderTodos: ->
-    @showLoading()
+  getTodos: ->
+    @startLoading()
 
     # Fetch the regexes from settings
     regexes = @buildRegexLookups(atom.config.get('todo-show.findTheseRegexes'))
@@ -226,64 +221,79 @@ class ShowTodoView extends ScrollView
 
     # Fire callback when ALL scans are done
     Q.all(@searchPromises).then () =>
-      @regexes = regexes.filter (regex) ->
-        regex.results.length
-      @showTodos(@regexes)
+      @stopLoading()
+      @renderTodos @matches
 
     return this
+
+  groupMatches: (matches, cb) ->
+    regexes = atom.config.get('todo-show.findTheseRegexes')
+    groupBy = atom.config.get('todo-show.groupMatchesBy')
+
+    switch groupBy
+      when 'file'
+        iteratee = 'relativePath'
+        sortedMatches = _.sortBy(matches, iteratee)
+      when 'none'
+        sortedMatches = _.sortBy(matches, 'matchText')
+        return cb(sortedMatches, groupBy)
+      else
+        iteratee = 'title'
+        sortedMatches = _.sortBy(matches, (match) ->
+          regexes.indexOf(match[iteratee])
+        )
+
+    for own key, group of _.groupBy(sortedMatches, iteratee)
+      cb(group, groupBy)
+
+  renderTodos: (matches) ->
+    unless matches.length
+      return @todoList.append new TodoEmptyView
+
+    @groupMatches(matches, (group, groupBy) =>
+      switch groupBy
+        when 'file'
+          @todoList.append new TodoFileView(group)
+        when 'none'
+          @todoList.append new TodoNoneView(group)
+        else
+          @todoList.append new TodoRegexView(group)
+    )
 
   cancelScan: ->
     for promise in @searchPromises
       promise.cancel() if promise
 
-  handleEvents: ->
-    atom.commands.add @element,
-      'core:save-as': (event) =>
-        event.stopPropagation()
-        @saveAs()
-      'core:refresh': (event) =>
-        event.stopPropagation()
-        @renderTodos()
+  getMarkdown: (matches) ->
+    markdown = []
+    @groupMatches(matches, (group, groupBy) ->
+      switch groupBy
+        when 'file'
+          out = "\n## #{group[0].relativePath || 'Unknown File'}\n\n"
+          for match in group
+            out += "- #{match.matchText || 'empty'}"
+            out += " `#{match.title}`" if match.title
+            out += "\n"
 
-    @on 'click', '.todo-url',  (e) =>
-      link = e.target
-      @openPath(link.dataset.uri, link.dataset.coords.split(','))
-    @on 'click', '.todo-save-as', =>
-      @saveAs()
-    @on 'click', '.todo-refresh', =>
-      @renderTodos()
+        when 'none'
+          out = "\n## All Matches\n\n"
+          for match in group
+            out += "- #{match.matchText || 'empty'}"
+            out += " _(#{match.title})_" if match.title
+            out += " `#{match.relativePath}`" if match.relativePath
+            out += " `:#{match.range[0][0] + 1}`" if match.range and match.range[0]
+            out += "\n"
 
-  # Open a new window, and load the file that we need.
-  # we call this from the results view. This will open the result file in the left pane.
-  openPath: (filePath, cursorCoords) ->
-    return unless filePath
-
-    atom.workspace.open(filePath, split: 'left').done =>
-      @moveCursorTo(cursorCoords)
-
-  # Open document and move cursor to positon
-  moveCursorTo: (cursorCoords) ->
-    lineNumber = parseInt(cursorCoords[0])
-    charNumber = parseInt(cursorCoords[1])
-
-    if textEditor = atom.workspace.getActiveTextEditor()
-      position = [lineNumber, charNumber]
-      textEditor.setCursorBufferPosition(position, autoscroll: false)
-      textEditor.scrollToCursorPosition(center: true)
-
-  getMarkdown: ->
-    @regexes.map((regex) ->
-      return unless regex.results.length
-
-      out = "\n## #{regex.title}\n\n"
-
-      for result in regex.results
-        for match in result.matches
-          out += "- #{match.matchText}"
-          out += " `#{result.relativePath}:#{match.range[0][0] + 1}`\n"
-
-      return out
-    ).join('')
+        else
+          out = "\n## #{group[0].title || 'No Title'}\n\n"
+          for match in group
+            out += "- #{match.matchText || 'empty'}"
+            out += " `#{match.relativePath}`" if match.relativePath
+            out += " `:#{match.range[0][0] + 1}`" if match.range and match.range[0]
+            out += "\n"
+      markdown.push out
+    )
+    markdown.join('')
 
   saveAs: ->
     return if @loading
@@ -292,6 +302,6 @@ class ShowTodoView extends ScrollView
     if @getProjectPath()
       filePath = path.join(@getProjectPath(), filePath)
 
-    if outputFilePath = atom.showSaveDialogSync(filePath)
-      fs.writeFileSync(outputFilePath, @getMarkdown())
+    if outputFilePath = atom.showSaveDialogSync(filePath.toLowerCase())
+      fs.writeFileSync(outputFilePath, @getMarkdown(@matches))
       atom.workspace.open(outputFilePath)

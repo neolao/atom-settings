@@ -7,6 +7,8 @@ RowMap = require './row-map.coffee'
 
 module.exports =
   activate: (state) ->
+    @currentSubscriptions = []
+
     # The original indent guides interfere with this package.
     atom.config.set('editor.showIndentGuide', false)
 
@@ -51,21 +53,32 @@ module.exports =
           scrollLeft))
 
 
-    handleEvents = (editor, editorElement) ->
+    handleEvents = (editor, editorElement) =>
       up = () ->
         updateGuide(editor, editorElement)
 
       update = _.throttle(up , 30)
-      # update = up
 
       subscriptions = new CompositeDisposable
       subscriptions.add editor.onDidChangeCursorPosition(update)
       subscriptions.add editor.onDidChangeScrollTop(update)
       subscriptions.add editor.onDidChangeScrollLeft(update)
       subscriptions.add editor.onDidStopChanging(update)
-      subscriptions.add editor.onDidDestroy ->
+      subscriptions.add editor.onDidDestroy =>
+        @currentSubscriptions.splice(@currentSubscriptions.indexOf(subscriptions), 1)
         subscriptions.dispose()
+      @currentSubscriptions.push(subscriptions)
 
     atom.workspace.observeTextEditors (editor) ->
       editorElement = atom.views.getView(editor)
       handleEvents(editor, editorElement)
+
+  deactivate: () ->
+    @currentSubscriptions.forEach (s) ->
+      s.dispose()
+    atom.workspace.getTextEditors().forEach (te) ->
+      v = atom.views.getView(te)
+      return unless v
+      Array.prototype.forEach.call(v.querySelectorAll('.indent-guide-improved'), (e) ->
+        e.parentNode.removeChild(e)
+      )

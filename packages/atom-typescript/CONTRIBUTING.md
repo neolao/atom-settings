@@ -1,3 +1,7 @@
+# FAQ 
+
+Please checkout [the FAQ](https://github.com/TypeStrong/atom-typescript/blob/master/docs/faq.md) before creating a new issue :rose:
+
 # TIP
 Before doing any meaningful work or even investigating [please create an issue for discussion](https://github.com/TypeStrong/atom-typescript/issues) so we don't have duplicate work and we don't step on your toes.
 
@@ -21,6 +25,9 @@ You still have to reload atom with `ctrl+alt+r` to test your changes.
 npm link
 ```
 
+## Pull
+Whenever you pull in latest changes, you should run `npm install`. Whenever we update to latest TypeScript we need to recompile all our js to make sure everybody gets the same code.
+
 ## Git
 You need to have git. Note on windows long file paths can be an issue so run:
 
@@ -31,13 +38,18 @@ And use `Shift+Delete` to delete files if simple `delete` doesn't work.
 
 # Various
 
+## NTypeScript
+We use a slightly modified (functionally equivalent) build of TypeScript called NTypeScript. The main motivation behind it is easier debugging and development workflow when consuming it as an NPM package. See [readme for details](https://github.com/TypeStrong/ntypescript#ntypescript).
+
+Update the version used by Atom-TypeScript using `npm install ntypescript@latest --save --save-exact` and then do some manual testing, and then rebuild the whole project.
+
 ## Publishing
 
 * If you have only fixed bugs in a backward-compatible way (or consider your changes very minimal), run `apm publish patch`.
 * If you have implemented new functionality, run `apm publish minor`.
 * For breaking changes run `apm publish major`. These must be justified with a reason documented in `changelog.md`
 
-Additional Notes: 
+Additional Notes:
 * The `apm` command does a lot for you *that you shouldn't do manually*. It automatically updates the `package.json` + `creates a git tag` + `pushes to git` + `pushes to apm`.
 * On windows : storing your github password using `git config --global credential.helper wincred` helps smooth out the `apm publish <type>` experience.
 
@@ -52,7 +64,7 @@ Some shortcuts:
 There are *lots of ways* to do this. The ones we use right now:
 
 * You can do `console.error` from `projectService` and it will get logged to the atom's console (`ctrl+alt+i`). That's the quickest.
-* You can call `projectService` in `sync` from the UI thread if you want to debug using atom's built in tools (`ctrl+alt+i`). Set `parent.debug` to true and it takes care of the rest. [Here is the code](https://github.com/TypeStrong/atom-typescript/blob/d88babd82a8390ef43acac474965bc6d2f65083b/lib/worker/parent.ts#L5).
+* You can call `projectService` in `sync` from the UI thread if you want to debug using atom's built in tools (`ctrl+alt+i`). Set `debugSync` to true in `./lib/worker/debug.ts`, and it takes care of the rest.
 
 Also [if there is an error in `projectService` it gets logged to the console as a rejected promise](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/debugPromises.gif).
 
@@ -84,21 +96,6 @@ Advantage: you only need to define the query/response interface once (in `projec
 
 ## Language Service Documentation
 The TypeScript Language service docs: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API
-
-## Depending upon other atom packages
-There isn't a documented way : https://discuss.atom.io/t/depending-on-other-packages/2360/16
-
-So using https://www.npmjs.com/package/atom-package-dependencies
-
-```js
-var apd = require('atom-package-dependencies');
-
-var mdp = apd.require('markdown-preview');
-mdp.toggle();
-
-// Also
-apd.install();
-```
 
 ## Showing errors in atom
 Done using the `linter` plugin. If you think about it. TypeScript is really just a super powerful version of `jshint` and that is the reason to use `linter` for errors.

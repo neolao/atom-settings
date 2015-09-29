@@ -1,9 +1,7 @@
 'Académie du goût':
   'title': 'Académie du goût'
   'paths': [
-    '/Users/eric/workspace/udg',
-    '/Users/eric/workspace/paginationBundle',
-    '/Users/eric/workspace/CityAutocompleteFormTypeBundle'
+    '/Users/eric/workspace/udg'
   ]
 'opsdeploy':
    'title': 'opsdeploy'
@@ -24,4 +22,24 @@
   'title': 'PaginationBundle'
   'paths': [
     '/Users/eric/workspace/paginationBundle'
+  ]
+'CityAutocompleteFormTypeBundle':
+  'title': 'CityAutocompleteFormTypeBundle'
+  'paths': [
+    '/Users/eric/workspace/CityAutocompleteFormTypeBundle'
+  ]
+'JeuxVideoVideoHostingBundle':
+  'title': 'JeuxVideoVideoHostingBundle'
+  'paths': [
+    '/Users/eric/workspace/JeuxVideoVideoHostingBundle'
+  ]
+'AlloCineVideoEncoderBundle':
+  'title': 'AlloCineVideoEncoderBundle'
+  'paths': [
+    '/Users/eric/workspace/AlloCineVideoEncoderBundle'
+  ]
+'WebediaCrmBundle':
+  'title': 'WebediaCrmBundle'
+  'paths': [
+    '/Users/eric/workspace/WebediaCrmBundle'
   ]

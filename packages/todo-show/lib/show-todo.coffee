@@ -1,35 +1,35 @@
-# This file handles configuration defaults, opening of pane and commands
-
+{CompositeDisposable} = require 'atom'
 url = require 'url'
 
 ShowTodoView = require './show-todo-view'
 
 module.exports =
   config:
-    # title, regex, title, regex...
+    # Title, regex, title, regex...
     findTheseRegexes:
       type: 'array'
-      default: [ # based on atom/language-todo
+      # Based on https://github.com/atom/language-todo
+      default: [
         'FIXMEs'
-        '/\\b@?FIXME:?\\s(.+$)/g'
+        '/\\bFIXME:?\\d*($|\\s.*$)/g'
         'TODOs'
-        '/\\b@?TODO:?\\s(.+$)/g'
+        '/\\bTODO:?\\d*($|\\s.*$)/g'
         'CHANGEDs'
-        '/\\b@?CHANGED:?\\s(.+$)/g'
+        '/\\bCHANGED:?\\d*($|\\s.*$)/g'
         'XXXs'
-        '/\\b@?XXX:?\\s(.+$)/g'
+        '/\\bXXX:?\\d*($|\\s.*$)/g'
         'IDEAs'
-        '/\\b@?IDEA:?\\s(.+$)/g'
+        '/\\bIDEA:?\\d*($|\\s.*$)/g'
         'HACKs'
-        '/\\b@?HACK:?\\s(.+$)/g'
+        '/\\bHACK:?\\d*($|\\s.*$)/g'
         'NOTEs'
-        '/\\b@?NOTE:?\\s(.+$)/g'
+        '/\\bNOTE:?\\d*($|\\s.*$)/g'
         'REVIEWs'
-        '/\\b@?REVIEW:?\\s(.+$)/g'
+        '/\\bREVIEW:?\\d*($|\\s.*$)/g'
       ]
       items:
         type: 'string'
-    # ignore filter using node-ignore
+    # Ignore filter using node-ignore
     ignoreThesePaths:
       type: 'array'
       default: [
@@ -39,36 +39,52 @@ module.exports =
       ]
       items:
         type: 'string'
-    # split direction to open list
+    # Split direction to open list
     openListInDirection:
       type: 'string'
       default: 'right'
       enum: ['up', 'right', 'down', 'left', 'ontop']
+    # Change list grouping / sorting
+    groupMatchesBy:
+      type: 'string'
+      default: 'regex'
+      enum: ['regex', 'file', 'none']
+    # Persist pane width / height
+    rememberViewSize:
+      type: 'boolean'
+      default: true
 
   activate: ->
-    atom.commands.add 'atom-workspace', 'todo-show:find-in-project': =>
-      @show('todolist-preview:///TODOs')
-
-    atom.commands.add 'atom-workspace', 'todo-show:find-in-open-files': =>
-      @show('todolist-preview:///Open-TODOs')
+    @disposables = new CompositeDisposable
+    @disposables.add atom.commands.add 'atom-workspace',
+      'todo-show:find-in-project': => @show('todolist-preview:///TODOs')
+      'todo-show:find-in-open-files': => @show('todolist-preview:///Open-TODOs')
 
     # Register the todolist URI, which will then open our custom view
-    atom.workspace.addOpener (uriToOpen) ->
+    @disposables.add atom.workspace.addOpener (uriToOpen) ->
       {protocol, host, pathname} = url.parse(uriToOpen)
       pathname = decodeURI(pathname) if pathname
       return unless protocol is 'todolist-preview:'
-      new ShowTodoView(filePath: pathname).renderTodos()
+      new ShowTodoView(filePath: pathname).getTodos()
+
+  deactivate: ->
+    @paneDisposables?.dispose()
+    @disposables?.dispose()
+
+  destroyPaneItem: ->
+    pane = atom.workspace.paneForItem(@showTodoView)
+    return false unless pane
+
+    pane.destroyItem(@showTodoView)
+    # Ignore core.destroyEmptyPanes and close empty pane
+    pane.destroy() if pane.getItems().length is 0
+    return true
 
   show: (uri) ->
     prevPane = atom.workspace.getActivePane()
-    pane = atom.workspace.paneForItem(@showTodoView)
     direction = atom.config.get('todo-show.openListInDirection')
 
-    if pane
-      pane.destroyItem(@showTodoView)
-      # Ignore core.destroyEmptyPanes and close empty pane
-      pane.destroy() if pane.getItems().length is 0
-      return
+    return if @destroyPaneItem()
 
     if direction is 'down'
       prevPane.splitDown() if prevPane.parent.orientation isnt 'vertical'

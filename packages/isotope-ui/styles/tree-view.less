@@ -29,6 +29,7 @@
       &:before {
         border-top-left-radius: @component-border-radius;
         border-bottom-left-radius: @component-border-radius;
+        background-color: @level-3-bg;
       }
     }
 
@@ -64,7 +65,7 @@
       &:not(.list-nested-item).selected,
       &.list-nested-item.selected > .list-item {
         &:before {
-          background: @level-1-bg;
+          background: fade(@level-3-bg, 60%);
         }
       }
     }

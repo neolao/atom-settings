@@ -1,4 +1,3 @@
-/// Functions that the parent allows the child to query
 var resolve = Promise.resolve.bind(Promise);
 var tsconfig = require('../main/tsconfig/tsconfig');
 var atomUtils;
@@ -66,6 +65,18 @@ function setConfigurationError(query) {
                     endPos: { line: 0, col: 0 },
                     message: "Failed to expand the glob for the project file",
                     preview: details.errorMessage,
+                }
+            ];
+        }
+        if (query.error.message === tsconfig.errors.GET_PROJECT_NO_PROJECT_FOUND) {
+            var details = query.error.details;
+            errors = [
+                {
+                    filePath: details.projectFilePath,
+                    startPos: { line: 0, col: 0 },
+                    endPos: { line: 0, col: 0 },
+                    message: "No project file found. Please use the 'Create tsconfig.json project file' command",
+                    preview: '',
                 }
             ];
         }

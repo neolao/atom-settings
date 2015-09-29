@@ -1,6 +1,7 @@
 # Get Atom defaults
-tabLength = atom?.config.get('editor.tabLength') ? 4
-softTabs = atom?.config.get('editor.softTabs') ? true
+scope = ['source.css']
+tabLength = atom?.config.get('editor.tabLength', scope: scope) ? 4
+softTabs = atom?.config.get('editor.softTabs', scope: scope) ? true
 defaultIndentSize = (if softTabs then tabLength else 1)
 defaultIndentChar = (if softTabs then " " else "\t")
 defaultIndentWithTabs = not softTabs
@@ -77,5 +78,9 @@ module.exports = {
       default: false
       description: "If lists of assignments or properties should be \
                 vertically aligned for faster and easier reading."
-
+    no_lead_zero:
+      type: 'boolean'
+      default: false
+      description: "If in CSS values leading 0s immediately preceeding \
+                a decimal should be removed or prevented."
 }

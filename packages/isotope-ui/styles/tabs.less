@@ -45,7 +45,7 @@
     max-width: @tab-max-width;
     height: ~"calc("@tab-height ~"- 4px)";
     line-height: ~"calc("@tab-height ~"- 4px)";
-    font-size: @scale-a-m * 1rem;
+    font-size: inherit;
     padding: 0;
     margin: 0;
     color: @tab-text-color;
@@ -130,7 +130,7 @@ atom-pane .tab-bar .tab.active {
   z-index: 1;
   background: fade(@level-3-bg, 60%);
   min-width: @tab-min-width;
-  border-color: @stroke;
+  // border-color: 1px solid @stroke;
   .title {
     padding-right: 20px; //overrule default
   }
@@ -169,13 +169,13 @@ atom-pane.active .tab-bar .tab.active {
       }
     }
     &[data-type="MarkdownPreviewView"] {
-      background-color: #fff;
-      color: contrast(#fff, @base-fg, @level-1-bg);
+      background-color: darken(@level-2-bg, 3%);
+      color: contrast(darken(@level-2-bg, 3%), @base-fg, @level-1-bg);
       & .close-icon {
-        color:contrast(#fff, @base-fg, @level-1-bg);
+        color:contrast(darken(@level-2-bg, 3%), @base-fg, @level-1-bg);
       }
       &:hover .close-icon {
-        color: contrast(#fff, @base-fg, @level-1-bg);
+        color: contrast(darken(@level-2-bg, 3%), @base-fg, @level-1-bg);
 
         &:hover {
           color: @ui-accent;
@@ -235,10 +235,14 @@ body:not([data-isotope-ui-minimal='true']) .tab-bar {
   }
   .tab {
     top: @tab-top-padding;
-    border-top-left-radius: @component-border-radius * 1.5;
-    border-top-right-radius: @component-border-radius * 1.5;
-    border: 1px solid transparent;
+    border-top-left-radius: @component-border-radius;
+    border-top-right-radius: @component-border-radius;
     height: ~"calc("@tab-height + @tab-top-padding ~"- 1px)";
+    border: 1px solid transparent;
+    border-bottom: none;
+    &.active {
+        border-color: @stroke;
+    }
   }
 }
 

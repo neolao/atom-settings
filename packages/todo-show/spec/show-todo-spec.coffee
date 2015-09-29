@@ -46,9 +46,6 @@ describe 'ShowTodo opening panes and executing commands', ->
         expect(workspaceElement.querySelector('.show-todo-preview')).toExist()
         expect(pane.parent.orientation).toBe 'vertical'
 
-        executeCommand ->
-          expect(workspaceElement.querySelector('.show-todo-preview')).not.toExist()
-
     it 'can open ontop of current view', ->
       atom.config.set 'todo-show.openListInDirection', 'ontop'
 
@@ -57,32 +54,93 @@ describe 'ShowTodo opening panes and executing commands', ->
         expect(workspaceElement.querySelector('.show-todo-preview')).toExist()
         expect(pane.parent.orientation).not.toExist()
 
-  describe 'when config changes', ->
-    configRegexes = 'todo-show.findTheseRegexes'
-    configPaths = 'todo-show.ignoreThesePaths'
-
-    # TODO: Test results from change of configs instead of just setting it
-
-    beforeEach ->
+    it 'has visible elements in view', ->
       executeCommand ->
+        element = showTodoModule.showTodoView.find('a').last()
+        expect(element.text()).toEqual 'sample.js'
+        expect(element.isVisible()).toBe true
 
-    it 'has default configs set', ->
-      defaultRegexes = atom.config.get(configRegexes)
-      expect(defaultRegexes).toBeDefined()
-      expect(defaultRegexes.length).toBeGreaterThan 3
+    it 'persists pane width', ->
+      executeCommand ->
+        pane = atom.workspace.paneForItem showTodoModule.showTodoView
+        originalFlex = pane.getFlexScale()
+        newFlex = originalFlex * 1.1
+        expect(typeof originalFlex).toEqual "number"
 
-      defaultPaths = atom.config.get(configPaths)
-      expect(defaultPaths).toBeDefined()
-      expect(defaultPaths.length).toBeGreaterThan 2
+        pane.setFlexScale(newFlex)
+        executeCommand ->
+          pane = atom.workspace.paneForItem showTodoModule.showTodoView
+          expect(pane).not.toExist()
+          executeCommand ->
+            pane = atom.workspace.paneForItem showTodoModule.showTodoView
+            expect(pane.getFlexScale()).toEqual newFlex
+            pane.setFlexScale(originalFlex)
 
-    it 'should be able to override defaults', ->
-      newRegexes = ['New Regex', '/ReGeX/g']
-      atom.config.set(configRegexes, newRegexes)
-      expect(atom.config.get(configRegexes)).toEqual(newRegexes)
+    it 'does not persist pane width if asked not to', ->
+      atom.config.set('todo-show.rememberViewSize', false)
 
-      newPaths = ['/foobar/']
-      atom.config.set(configPaths, newPaths)
-      expect(atom.config.get(configPaths)).toEqual(newPaths)
+      executeCommand ->
+        pane = atom.workspace.paneForItem showTodoModule.showTodoView
+        originalFlex = pane.getFlexScale()
+        newFlex = originalFlex * 1.1
+        expect(typeof originalFlex).toEqual "number"
+
+        pane.setFlexScale(newFlex)
+        executeCommand ->
+          executeCommand ->
+            pane = atom.workspace.paneForItem showTodoModule.showTodoView
+            expect(pane.getFlexScale()).not.toEqual newFlex
+            expect(pane.getFlexScale()).toEqual originalFlex
+
+    it 'persists horizontal pane height', ->
+      atom.config.set('todo-show.openListInDirection', 'down')
+
+      executeCommand ->
+        pane = atom.workspace.paneForItem showTodoModule.showTodoView
+        originalFlex = pane.getFlexScale()
+        newFlex = originalFlex * 1.1
+        expect(typeof originalFlex).toEqual "number"
+
+        pane.setFlexScale(newFlex)
+        executeCommand ->
+          pane = atom.workspace.paneForItem showTodoModule.showTodoView
+          expect(pane).not.toExist()
+          executeCommand ->
+            pane = atom.workspace.paneForItem showTodoModule.showTodoView
+            expect(pane.getFlexScale()).toEqual newFlex
+            pane.setFlexScale(originalFlex)
+
+    it 'groups matches by regex titles', ->
+      executeCommand ->
+        headers = showTodoModule.showTodoView.find('h1')
+        expect(headers).toHaveLength 8
+        expect(headers.eq(0).text().split(' ')[0]).toBe 'FIXMEs'
+        expect(headers.eq(1).text().split(' ')[0]).toBe 'TODOs'
+        expect(headers.eq(7).text().split(' ')[0]).toBe 'REVIEWs'
+
+    it 'can group matches by filename', ->
+      atom.config.set 'todo-show.groupMatchesBy', 'file'
+      executeCommand ->
+        headers = showTodoModule.showTodoView.find('h1')
+        expect(headers).toHaveLength 2
+        expect(headers.eq(0).text().split(' ')[0]).toBe 'sample.c'
+        expect(headers.eq(1).text().split(' ')[0]).toBe 'sample.js'
+
+        t1 = showTodoModule.showTodoView.find('table').eq(0).find('td').first().text()
+        t2 = showTodoModule.showTodoView.find('table').eq(1).find('td').first().text()
+        expect(t1).toBe 'Comment in C'
+        expect(t2).toBe 'Add more annnotations :)'
+
+    it 'can group matches by text (no grouping)', ->
+      atom.config.set 'todo-show.groupMatchesBy', 'none'
+      executeCommand ->
+        expect(showTodoModule.showTodoView.find('h1')).toHaveLength 1
+        expect(showTodoModule.showTodoView.find('table')).toHaveLength 1
+
+        t1 = showTodoModule.showTodoView.find('td').eq(0).text()
+        t2 = showTodoModule.showTodoView.find('td').eq(-2).text()
+        expect(t1).toBe 'Add more annnotations :) (FIXMEs)'
+        expect(t2.substring(0,3)).toBe 'two'
 
   describe 'when save-as button is clicked', ->
     it 'saves the list in markdown and opens it', ->
@@ -94,7 +152,28 @@ describe 'ShowTodo opening panes and executing commands', ->
 
       executeCommand ->
         spyOn(atom, 'showSaveDialogSync').andReturn(outputPath)
-        workspaceElement.querySelector('.show-todo-preview .todo-save-as').click()
+        showTodoModule.showTodoView.saveAs()
+
+      waitsFor ->
+        fs.existsSync(outputPath) && atom.workspace.getActiveTextEditor()?.getPath() is fs.realpathSync(outputPath)
+
+      runs ->
+        expect(fs.isFileSync(outputPath)).toBe true
+        expect(atom.workspace.getActiveTextEditor().getText()).toBe expectedOutput
+
+    it 'saves the list in markdown grouped by filename', ->
+      outputPath = temp.path(suffix: '.md')
+      expectedFilePath = atom.project.getDirectories()[0].resolve('../saved-output-grouped.md')
+      expectedOutput = fs.readFileSync(expectedFilePath).toString()
+
+      atom.config.set 'todo-show.findTheseRegexes', ['TODOs', '/\\b@?TODO:?\\s(.+$)/g']
+      atom.config.set 'todo-show.groupMatchesBy', 'file'
+
+      expect(fs.isFileSync(outputPath)).toBe false
+
+      executeCommand ->
+        spyOn(atom, 'showSaveDialogSync').andReturn(outputPath)
+        showTodoModule.showTodoView.saveAs()
 
       waitsFor ->
         fs.existsSync(outputPath) && atom.workspace.getActiveTextEditor()?.getPath() is fs.realpathSync(outputPath)
@@ -126,7 +205,11 @@ describe 'ShowTodo opening panes and executing commands', ->
           !showTodoModule.showTodoView.loading
 
     it 'does not show any results with no open files', ->
-      expect(showTodoModule.showTodoView.regexes.length).toBe 0
+      element = showTodoModule.showTodoView.find('h1').last()
+
+      expect(showTodoModule.showTodoView.matches.length).toBe 0
+      expect(element.text()).toContain 'No results'
+      expect(element.isVisible()).toBe true
 
     it 'only shows todos from open files', ->
       waitsForPromise ->
@@ -139,8 +222,8 @@ describe 'ShowTodo opening panes and executing commands', ->
           !showTodoModule.showTodoView.loading
 
         runs ->
-          todoRegex = showTodoModule.showTodoView.regexes[0]
-          expect(todoRegex.title).toBe 'TODOs'
-          expect(todoRegex.results.length).toBe 1
-          expect(todoRegex.results[0].matches.length).toBe 1
-          expect(todoRegex.results[0].matches[0].matchText).toBe 'Comment in C'
+          todoMatch = showTodoModule.showTodoView.matches[0]
+          expect(showTodoModule.showTodoView.matches).toHaveLength 1
+          expect(todoMatch.title).toBe 'TODOs'
+          expect(todoMatch.matchText).toBe 'Comment in C'
+          expect(todoMatch.relativePath).toBe 'sample.c'
