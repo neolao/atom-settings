@@ -77,9 +77,11 @@
 .list-tree {
 
   .icon {
-    &:before{
-      height: 100%;
-      line-height: 100%;
+    line-height: inherit;
+    position: relative;
+    &::before {
+      height: 16px;
+      line-height: 16px;
     }
   }
   button { //e.g. open file list package

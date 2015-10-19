@@ -3,17 +3,15 @@
 path = require 'path'
 fs = require 'fs-plus'
 _ = require 'underscore-plus'
-
 Q = require 'q'
-slash = require 'slash'
-ignore = require 'ignore'
 
 {TodoRegexView, TodoFileView, TodoNoneView, TodoEmptyView} = require './todo-item-view'
 
 module.exports =
 class ShowTodoView extends ScrollView
+  @URI: 'atom://todo-show/todos'
+  @URIopen: 'atom://todo-show/open-todos'
   maxLength: 120
-  matches: []
 
   @content: ->
     @div class: 'show-todo-preview native-key-bindings', tabindex: -1, =>
@@ -27,13 +25,11 @@ class ShowTodoView extends ScrollView
 
       @div outlet: 'todoList'
 
-  constructor: ({@filePath}) ->
+  constructor: (@searchWorkspace = true) ->
     super
     @disposables = new CompositeDisposable
+    @matches = []
     @handleEvents()
-
-    # Determine if you are searching full workspace or just open files
-    @searchWorkspace = @filePath isnt '/Open-TODOs'
 
   handleEvents: ->
     @disposables.add atom.commands.add @element,
@@ -68,14 +64,17 @@ class ShowTodoView extends ScrollView
   getTitle: ->
     if @searchWorkspace then "Todo-Show Results" else "Todo-Show Open Files"
 
-  getURI: ->
-    "todolist-preview:///#{@getPath()}"
+  getIconName: ->
+    "checklist"
 
-  getPath: ->
-    @filePath
+  getURI: ->
+    if @searchWorkspace then @constructor.URI else @constructor.URIopen
 
   getProjectPath: ->
     atom.project.getPaths()[0]
+
+  getProjectName: ->
+    atom.project.getDirectories()[0]?.getBaseName()
 
   startLoading: ->
     @loading = true
@@ -87,21 +86,31 @@ class ShowTodoView extends ScrollView
     @loading = false
     @todoLoading.hide()
 
+  showError: (message) ->
+    atom.notifications.addError 'todo-show', detail: message, dismissable: true
+
   # Get regexes to look for from settings
-  buildRegexLookups: (settingsRegexes) ->
-    for regex, i in settingsRegexes by 2
+  buildRegexLookups: (regexes) ->
+    if regexes.length % 2
+      @showError "Invalid number of regexes: #{regexes.length}"
+      return []
+
+    for regex, i in regexes by 2
       'title': regex
-      'regex': settingsRegexes[i+1]
+      'regex': regexes[i+1]
 
   # Pass in string and returns a proper RegExp object
-  makeRegexObj: (regexStr) ->
+  makeRegexObj: (regexStr = '') ->
     # Extract the regex pattern (anything between the slashes)
     pattern = regexStr.match(/\/(.+)\//)?[1]
     # Extract the flags (after last slash)
     flags = regexStr.match(/\/(\w+$)/)?[1]
 
-    return false unless pattern
-    new RegExp(pattern, flags)
+    if pattern
+      new RegExp(pattern, flags)
+    else
+      @showError "Invalid regex: #{regexStr or 'empty'}"
+      false
 
   handleScanMatch: (match, regex) ->
     matchText = match.matchText
@@ -136,32 +145,17 @@ class ShowTodoView extends ScrollView
     regex = @makeRegexObj(regexLookup.regex)
     return false unless regex
 
-    # Handle ignores from settings
-    ignoresFromSettings = atom.config.get('todo-show.ignoreThesePaths')
-    hasIgnores = ignoresFromSettings?.length > 0
-    ignoreRules = ignore({ ignore:ignoresFromSettings })
-
-    # TODO: Use paths option as ignoreRules by adding them as an array
-    # of exclusions (!) after atom fix: https://github.com/atom/atom/pull/6386
-    # otherwise use full pattern; e.g. `!*/node_modules/**/*.*`
-    # This would hopefully also remove dependency on slash and ignore, while
-    # using default node-minimatch.
+    options = {paths: @getIgnorePaths()}
 
     # Only track progress on first scan
-    options = {}
     if !@firstRegex
       @firstRegex = true
-      onPathsSearched = (nPaths) =>
+      options.onPathsSearched = (nPaths) =>
         @searchCount.text("#{nPaths} paths searched...") if @loading
-      options = {paths: '*', onPathsSearched}
 
     atom.workspace.scan regex, options, (result, error) =>
       console.debug error.message if error
       return unless result
-
-      # Check against ignored paths
-      pathToTest = slash(result.filePath.substring(atom.project.getPaths()[0].length))
-      return if (hasIgnores && ignoreRules.filter([pathToTest]).length == 0)
 
       for match in result.matches
         match.title = regexLookup.title
@@ -225,6 +219,14 @@ class ShowTodoView extends ScrollView
       @renderTodos @matches
 
     return this
+
+  getIgnorePaths: ->
+    ignores = atom.config.get('todo-show.ignoreThesePaths')
+    return ['*'] unless ignores?
+    if Object.prototype.toString.call(ignores) isnt '[object Array]'
+      @showError('ignoreThesePaths must be an array')
+      return ['*']
+    "!#{ignore}" for ignore in ignores
 
   groupMatches: (matches, cb) ->
     regexes = atom.config.get('todo-show.findTheseRegexes')
@@ -298,9 +300,9 @@ class ShowTodoView extends ScrollView
   saveAs: ->
     return if @loading
 
-    filePath = "#{path.parse(@getPath()).name}.md"
-    if @getProjectPath()
-      filePath = path.join(@getProjectPath(), filePath)
+    filePath = "#{@getProjectName() or 'todos'}.md"
+    if projectPath = @getProjectPath()
+      filePath = path.join(projectPath, filePath)
 
     if outputFilePath = atom.showSaveDialogSync(filePath.toLowerCase())
       fs.writeFileSync(outputFilePath, @getMarkdown(@matches))

@@ -1,6 +1,6 @@
 {
   "name": "atom-typescript",
-  "version": "7.0.1",
+  "version": "7.4.2",
   "main": "./dist/main/atomts",
   "bin": {
     "atbuild": "./dist/main/bin/atbuild"
@@ -45,10 +45,11 @@
     "babel": "^5.6.23",
     "basarat-text-buffer": "6.0.0",
     "d3": "^3.5.5",
+    "detect-indent": "^4.0.0",
     "emissary": "^1.3.3",
     "escape-html": "^1.0.1",
     "fuzzaldrin": "^2.1.0",
-    "glob-expand": "0.0.2",
+    "glob": "^5.0.15",
     "htmltojsx": "0.2.4",
     "immutable": "^3.7.3",
     "json2dts": "0.0.1",
@@ -56,7 +57,8 @@
     "ntypescript": "1.201509200205.1",
     "react": "^0.13.3",
     "season": "^5.1.4",
-    "strip-bom": "^2.0.0"
+    "tsconfig": "^2.0.1",
+    "xtend": "^4.0.0"
   },
   "devDependencies": {},
   "package-deps": [
@@ -67,12 +69,12 @@
     "javascript",
     "html"
   ],
-  "readme": "# Atom TypeScript\n\n[![Join the chat at https://gitter.im/TypeStrong/atom-typescript](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/TypeStrong/atom-typescript?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)\n\nJavaScript developers can now just open a `.ts` file and start hacking away like they are used to. No `grunt` no `Visual Studio`. Just pure coding.\n\n## Installation\n\n1. Install [atom](https://atom.io).\n2. `apm install atom-typescript` (`apm` needs `git` in your path)\n3. Fire up atom. Open a TypeScript file. Potentially wait for further installs (just `apm install linter` if its not there already).\n\n**Additional Notes**: [Some packages we love](https://github.com/TypeStrong/atom-typescript/blob/master/docs/packages.md).\n\n## Reviews\n*Featured on the TypeScript home page under tools http://www.typescriptlang.org/* and [demoed by **Anders Hejlsberg**](https://twitter.com/schwarty/status/593858817894404096).\n\n\"I was shocked at how good it felt to poke around on the compiler with it.\" [Jonathan Turner](https://twitter.com/jntrnr)  \n\"And guess what, it worked perfectly. Like everything else! Faster than Visual Studio!\" [Daniel Earwicker](http://stackoverflow.com/users/27423/daniel-earwicker)  \n\"It's a thing of beauty - they had me at '*Type information on hover*'. Discovering  `tsconfig.json` support as well was just an enormous bonus.\" [John Reilly](https://twitter.com/johnny_reilly)  \n\"This may be your best option for editing TypeScript at the moment - very nice!\" [Rasmus Schultz](https://twitter.com/mindplaydk)\n\n[*Add yours!*](https://github.com/TypeStrong/atom-typescript/issues/66)\n\n# Features\n* Autocomplete\n* Live error analysis\n* Type information on hover\n* Compile on save\n* Project Context Support (`tsconfig.json`)\n* Project Build Support\n* `package.json` Support\n* React Support\n* Format code\n* Goto Declaration\n* Find References\n* Block comment and uncomment\n* Goto history (goto next/previous error in open files, goto next/previous build)\n* Auto indent for new lines\n* TypeScript context menu\n* Symbols in Project\n* Symbols in File\n* Semantic View\n* Rename refactoring\n* Quick Fix\n* Toggle Breakpoint\n* Common Snippets\n* `import` / `/// <reference` relative path resolution\n* Output Toggle\n* AST visualizer\n* Dependency View\n* Sync\n\n# FAQ\nLocated online : https://github.com/TypeStrong/atom-typescript/blob/master/docs/faq.md\n\n----\n\n# Feature Details\n## Auto Complete\nInternally using AutoComplete+. Just start typing and hints will show up. Or you can explicitly trigger it using `ctrl+space` or `cmd+space`. Press `tab` to make a selection.\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/fastErrorCheckingAndAutoComplete2.gif)\n\n\n## Type information on hover\nJust hover\n\n![you definitely get the point](https://raw.githubusercontent.com/TypeStrong/atom-typescript/master/docs/screens/hover.png)\n\n## Compile on save\nTypeScript files will be compiled on save. Different notifications are given if `emit` was successful or not. [Configuration driven by `tsconfig.json`](https://github.com/TypeStrong/atom-typescript/blob/master/docs/tsconfig.md)\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript/master/docs/screens/compile%20success.png)\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript/master/docs/screens/compile%20error.png)\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript/master/docs/screens/emit%20error.png)\n\n## Project Support\nSupported via `tsconfig.json` ([read more](https://github.com/TypeStrong/atom-typescript/blob/master/docs/tsconfig.md)) which is going to be the defacto Project file format for the next versions of TypeScript.\n\nIt also supports `filesGlob` which will expand `files` for you based on `minmatch|glob|regex` (similar to grunt).\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript/master/docs/screens/proj.png)\n\n### Project Build Support\nShortcut: `F6`. If there are any errors they are shown as well.\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript/master/docs/screens/build%20success.png)\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript/master/docs/screens/build%20errors.png)\n\n## NPM Module Support\nWe have a sample NPM module : https://github.com/basarat/ts-npm-module  (trick : in tsconfig have `\"declaration\" : true` an in package.json have a `typings` field pointing to the `main` file) and its usage is demoed in https://github.com/basarat/ts-npm-module-consume.\n\n## React Support\n\n### Configuration tips\n\nCovered here : http://basarat.gitbooks.io/typescript/content/docs/jsx/tsx.html\n\n### Html to TSX\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/htmltotsx.gif)\n\n## Format Code\nShortcut : `ctrl+alt+l` or `cmd+alt+l`. Will format just the selection if you have something selected otherwise it will format the entire file.\n\n## Go to Declaration\nShortcut : `F12`. Will open the *first* declaration of the said item for now. (Note: some people call it Go to Definition)\n\n## Find References\nShortcut `shift+F12`. Also called *find usages*.\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/findReferences.png)\n\n## Block Comment and Uncomment\n`ctrl+/` or `cmd+/`. Does a block comment / uncomment of code.\n\n## Go to Next / Go to Previous\n`f8` and `shift+f8` respectively. This will go to next/previous *errors in open files* OR *build error* OR *references* based on which tab you have selected.\n\n## Context menu\nQuickly toggle the TypeScript panel OR select active TypeScript panel tab and other stuff using the context menu. `ctrl+;` or `cmd+;`.\n\n## Symbols View\nIntegrates with atom's symbols view (`ctrl+r` or `cmd+r`) to provide you with a list of searchable symbols in the current file.\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/symbolsView.gif)\n\n## Semantic View\nA bird's eye view of the current file. Use command `toggle semantic view`. The view updates while you edit the code. You can also click to jump to any portion of the file.\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/semanticView.png)\n\n## Project Symbols View\nAlso called Go To Type in other IDEs. Integrates with atom's project level symbols (`ctrl+shift+r` or `cmd+shift+r`) to provide you with a list of searchable symbols in the *entire typescript project*.\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/projectSymbolView.png)\n\n## Refactoring\n\n### Rename\n`f2` to initiate rename. `enter` to commit and `esc` to cancel.\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript/master/docs/screens/renameRefactoring.png)\n\n## Quick Fix\nPress the `TypeScript: Quick Fix` shortcut `alt+enter` at an error location to trigger quick fixes. Select the quick fix you want and press `enter` to commit e.g\n\n### Add class members\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/addClassMember.gif)\n\n### More Quick fixes\nWe are actively adding quick fixes so [**go here for an up to date list**](https://github.com/TypeStrong/atom-typescript/blob/master/docs/quickfix.md).\n\n## Toggle Breakpoint\nUse command `TypeScript: Toggle Breakpoint` shortcut `f9`:\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/toggleBreakpoint.gif)\n\n## tsconfig validation\nWe will validate it and help you to fix it :)\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/errorcases/invalidProjectOptions/invalidProjectOptions.gif)\n\n## Snippets\n### Relative Paths\nRelative paths have traditionally been a pain, not anymore. Use `import` or `ref` and press `tab` to trigger snippet.\n\n`ref`\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/ref%20snippet.gif)\n\n`import`\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/import%20snippet.gif)\n\nNote that within the path string you get autocomplete (`ctrl+space`/`cmd+space`) for all the files in the project by filename (works for both `ref` and `import`).\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/pathChange.gif)\n\n## Output Toggle\n`ctrl+shift+m` to toggle the output co**m**piled JS file for a give TypeScript file. The keyboard shortcut is consistent with atom's markdown preview.\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/outputToggle.gif)\n\n## AST Visualizer\nCommand : `Typescript: Ast`. Useful when authoring new features.\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/astVisualizer.gif)\n\nAlso command : `TypeScript: Ast Full` that includes the `trivia` (punctuation, comments etc. received from `ts.Node.getChildren()`) as well.\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/astFull.png)\n\n## Dependency View\nCommand : `Typescript: Dependency View`. A dependency viewer for insight into the project if you use external modules. You can zoom, pan, drag points around and hover over nodes. ([more details](https://github.com/TypeStrong/atom-typescript/blob/master/docs/dependency-view.md))\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/dependencyView/teaser.png)\n\n## Sync\nWe try to keep as much of the stuff in sync while you edit code. However *in dire circumstances*:\n\n* a soft sync is done when you save a file `ctrl+s` and we will completely reprocess the *active* file. This might not fix stuff if the error is because of *some other file on the file system*.\n* `ctrl+'` or `cmd+'` : If you deleted files in the background or renamed them or jumped git branches or *something weird just happened* then sync. No need to restart your IDE :).\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/sync.gif)\n\n## Contributing\n\nLook at [CONTRIBUTING.md](https://github.com/TypeStrong/atom-typescript/blob/master/CONTRIBUTING.md) for curiosity. We work hard to keep the code as approachable as possible and are highly keen on helping you help us.\n\n## Changelog\nBreaking changes [available online](https://github.com/TypeStrong/atom-typescript/blob/master/docs/CHANGELOG.md).\n\n## Donating\nSupport this project and [others by basarat][gratipay-basarat] via [gratipay][gratipay-basarat].\n\n[![Support via Gratipay][gratipay]][gratipay-basarat]\n\n[gratipay]: https://cdn.rawgit.com/gratipay/gratipay-badge/2.3.0/dist/gratipay.png\n[gratipay-basarat]: https://gratipay.com/basarat/\n",
+  "readme": "# Atom TypeScript\n\n[![Join the chat at https://gitter.im/TypeStrong/atom-typescript](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/TypeStrong/atom-typescript?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)\n\nJavaScript developers can now just open a `.ts` file and start hacking away like they are used to. No `grunt` no `Visual Studio`. Just pure coding.\n\n## Installation\n\n1. Install [atom](https://atom.io).\n2. `apm install atom-typescript` (`apm` needs `git` in your path)\n3. Fire up atom. Open a TypeScript file. Potentially wait for further installs (just `apm install linter` if its not there already).\n\n**Additional Notes**: [Some packages we love](https://github.com/TypeStrong/atom-typescript/blob/master/docs/packages.md).\n\n## Reviews\n*Featured on the TypeScript home page under tools http://www.typescriptlang.org/* and [demoed by **Anders Hejlsberg**](https://twitter.com/schwarty/status/593858817894404096).\n\n\"I was shocked at how good it felt to poke around on the compiler with it.\" [Jonathan Turner](https://twitter.com/jntrnr)  \n\"And guess what, it worked perfectly. Like everything else! Faster than Visual Studio!\" [Daniel Earwicker](http://stackoverflow.com/users/27423/daniel-earwicker)  \n\"It's a thing of beauty - they had me at '*Type information on hover*'. Discovering  `tsconfig.json` support as well was just an enormous bonus.\" [John Reilly](https://twitter.com/johnny_reilly)  \n\"This may be your best option for editing TypeScript at the moment - very nice!\" [Rasmus Schultz](https://twitter.com/mindplaydk)\n\n[*Add yours!*](https://github.com/TypeStrong/atom-typescript/issues/66)\n\n# Features\n* Autocomplete\n* Live error analysis\n* Type information on hover\n* Compile on save\n* Project Context Support (`tsconfig.json`)\n* Project Build Support\n* `package.json` Support\n* React Support\n* Format code\n* Goto Declaration\n* Find References\n* Block comment and uncomment\n* Goto history (goto next/previous error in open files, goto next/previous build)\n* Auto indent for new lines\n* TypeScript context menu\n* Symbols in Project\n* Symbols in File\n* Semantic View\n* Rename refactoring\n* Quick Fix\n* Toggle Breakpoint\n* Common Snippets\n* `import` / `/// <reference` relative path resolution\n* Output Toggle\n* AST visualizer\n* Dependency View\n* Sync\n\n# FAQ\nLocated online : https://github.com/TypeStrong/atom-typescript/blob/master/docs/faq.md\n\n----\n\n# Feature Details\n## Auto Complete\nInternally using AutoComplete+. Just start typing and hints will show up. Or you can explicitly trigger it using `ctrl+space` or `cmd+space`. Press `tab` to make a selection.\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/fastErrorCheckingAndAutoComplete2.gif)\n\n\n## Type information on hover\nJust hover\n\n![you definitely get the point](https://raw.githubusercontent.com/TypeStrong/atom-typescript/master/docs/screens/hover.png)\n\n## Compile on save\nTypeScript files will be compiled on save. Different notifications are given if `emit` was successful or not. [Configuration driven by `tsconfig.json`](https://github.com/TypeStrong/atom-typescript/blob/master/docs/tsconfig.md)\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript/master/docs/screens/compile%20success.png)\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript/master/docs/screens/compile%20error.png)\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript/master/docs/screens/emit%20error.png)\n\n## Project Support\nSupported via `tsconfig.json` ([read more](https://github.com/TypeStrong/atom-typescript/blob/master/docs/tsconfig.md)) which is going to be the defacto Project file format for the next versions of TypeScript.\n\nIt also supports `filesGlob` which will expand `files` for you based on `minmatch|glob|regex` (similar to grunt).\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript/master/docs/screens/proj.png)\n\n### Project Build Support\nShortcut: `F6`. If there are any errors they are shown as well.\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript/master/docs/screens/build%20success.png)\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript/master/docs/screens/build%20errors.png)\n\n## NPM Module Support\nWe have a sample NPM module : https://github.com/basarat/ts-npm-module  (trick : in tsconfig have `\"declaration\" : true` an in package.json have a `typings` field pointing to the `main` file) and its usage is demoed in https://github.com/basarat/ts-npm-module-consume.\n\n## React Support\n\n### Configuration tips\n\nCovered here : http://basarat.gitbooks.io/typescript/content/docs/jsx/tsx.html\n\n### Html to TSX\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/htmltotsx.gif)\n\n## Format Code\nShortcut : `ctrl+alt+l` or `cmd+alt+l`. Will format just the selection if you have something selected otherwise it will format the entire file.\n\n## Go to Declaration\nShortcut : `F12`. Will open the *first* declaration of the said item for now. (Note: some people call it Go to Definition)\n\n## Find References\nShortcut `shift+F12`. Also called *find usages*.\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/findReferences.png)\n\n## Block Comment and Uncomment\n`ctrl+/` or `cmd+/`. Does a block comment / uncomment of code.\n\n## Go to Next / Go to Previous\n`f8` and `shift+f8` respectively. This will go to next/previous *errors in open files* OR *build error* OR *references* based on which tab you have selected.\n\n## Context menu\nQuickly toggle the TypeScript panel OR select active TypeScript panel tab and other stuff using the context menu. `ctrl+;` or `cmd+;`.\n\n## Symbols View\nIntegrates with atom's symbols view (`ctrl+r` or `cmd+r`) to provide you with a list of searchable symbols in the current file.\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/symbolsView.gif)\n\n## Semantic View\nA bird's eye view of the current file. Use command `toggle semantic view`. The view updates while you edit the code. You can also click to jump to any portion of the file.\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/semanticView.png)\n\n## Project Symbols View\nAlso called Go To Type in other IDEs. Integrates with atom's project level symbols (`ctrl+shift+r` or `cmd+shift+r`) to provide you with a list of searchable symbols in the *entire typescript project*.\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/projectSymbolView.png)\n\n## Refactoring\n\n### Rename\n`f2` to initiate rename. `enter` to commit and `esc` to cancel.\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript/master/docs/screens/renameRefactoring.png)\n\n## Quick Fix\nPress the `TypeScript: Quick Fix` shortcut `alt+enter` at an error location to trigger quick fixes. Select the quick fix you want and press `enter` to commit e.g\n\n### Add class members\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/addClassMember.gif)\n\n### More Quick fixes\nWe are actively adding quick fixes so [**go here for an up to date list**](https://github.com/TypeStrong/atom-typescript/blob/master/docs/quickfix.md).\n\n## Toggle Breakpoint\nUse command `TypeScript: Toggle Breakpoint` shortcut `f9`:\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/toggleBreakpoint.gif)\n\n## tsconfig validation\nWe will validate it and help you to fix it :)\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/errorcases/invalidProjectOptions/invalidProjectOptions.gif)\n\n## Snippets\n### Relative Paths\nRelative paths have traditionally been a pain, not anymore. Use `import` or `ref` and press `tab` to trigger snippet.\n\n`ref`\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/ref%20snippet.gif)\n\n`import`\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/import%20snippet.gif)\n\nNote that within the path string you get autocomplete (`ctrl+space`/`cmd+space`) for all the files in the project by filename (works for both `ref` and `import`).\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/pathChange.gif)\n\n## Output Toggle\n`ctrl+shift+m` to toggle the output co**m**piled JS file for a give TypeScript file. The keyboard shortcut is consistent with atom's markdown preview.\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/outputToggle.gif)\n\n## AST Visualizer\nCommand : `Typescript: Ast`. Useful when authoring new features.\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/astVisualizer.gif)\n\nAlso command : `TypeScript: Ast Full` that includes the `trivia` (punctuation, comments etc. received from `ts.Node.getChildren()`) as well.\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/astFull.png)\n\n## Dependency View\nCommand : `Typescript: Dependency View`. A dependency viewer for insight into the project if you use external modules. You can zoom, pan, drag points around and hover over nodes. ([more details](https://github.com/TypeStrong/atom-typescript/blob/master/docs/dependency-view.md))\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/dependencyView/teaser.png)\n\n## Sync\nWe try to keep as much of the stuff in sync while you edit code. However *in dire circumstances*:\n\n* a soft sync is done when you save a file `ctrl+s` and we will completely reprocess the *active* file. This might not fix stuff if the error is because of *some other file on the file system*.\n* `ctrl+'` or `cmd+'` : If you deleted files in the background or renamed them or jumped git branches or *something weird just happened* then sync. No need to restart your IDE :).\n\n![](https://raw.githubusercontent.com/TypeStrong/atom-typescript-examples/master/screens/sync.gif)\n\n## Contributing\n\nLook at [CONTRIBUTING.md](https://github.com/TypeStrong/atom-typescript/blob/master/CONTRIBUTING.md) for curiosity. We work hard to keep the code as approachable as possible and are highly keen on helping you help us.\n\n## Changelog\nBreaking changes [available online](https://github.com/TypeStrong/atom-typescript/blob/master/docs/CHANGELOG.md).\n",
   "readmeFilename": "README.md",
-  "_id": "atom-typescript@7.0.1",
-  "_shasum": "0ec079bbe8fd3cc14261038edee8a4ed1a814559",
-  "_resolved": "file:../d-115829-12890-1sqb2kd/package.tgz",
-  "_from": "../d-115829-12890-1sqb2kd/package.tgz",
+  "_id": "atom-typescript@7.4.2",
+  "_shasum": "fe5169a7cc9ac521f3d6f31aa3042b4119d25cff",
+  "_resolved": "file:../d-115919-40033-142s35n/package.tgz",
+  "_from": "../d-115919-40033-142s35n/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
@@ -263,7 +265,7 @@
       },
       {
         "name": "bluebird",
-        "version": "2.10.1",
+        "version": "2.10.2",
         "path": "node_modules/babel/node_modules/babel-core/node_modules/bluebird/js/main/bluebird.js"
       },
       {
@@ -308,7 +310,7 @@
       },
       {
         "name": "core-js",
-        "version": "1.2.0",
+        "version": "1.2.2",
         "path": "node_modules/babel/node_modules/babel-core/node_modules/core-js/index.js"
       },
       {
@@ -488,7 +490,7 @@
       },
       {
         "name": "iconv-lite",
-        "version": "0.4.12",
+        "version": "0.4.13",
         "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/commoner/node_modules/iconv-lite/lib/index.js"
       },
       {
@@ -513,7 +515,7 @@
       },
       {
         "name": "defs",
-        "version": "1.1.0",
+        "version": "1.1.1",
         "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/build/es5/defs-main.js"
       },
       {
@@ -538,7 +540,7 @@
       },
       {
         "name": "esprima-fb",
-        "version": "8001.1001.0-dev-harmony-fb",
+        "version": "15001.1001.0-dev-harmony-fb",
         "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/esprima-fb/esprima.js"
       },
       {
@@ -568,8 +570,113 @@
       },
       {
         "name": "yargs",
-        "version": "1.3.3",
+        "version": "3.27.0",
         "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/index.js"
+      },
+      {
+        "name": "camelcase",
+        "version": "1.2.1",
+        "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/camelcase/index.js"
+      },
+      {
+        "name": "cliui",
+        "version": "2.1.0",
+        "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/index.js"
+      },
+      {
+        "name": "center-align",
+        "version": "0.1.1",
+        "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/center-align/index.js"
+      },
+      {
+        "name": "align-text",
+        "version": "0.1.3",
+        "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/center-align/node_modules/align-text/index.js"
+      },
+      {
+        "name": "kind-of",
+        "version": "2.0.1",
+        "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/center-align/node_modules/align-text/node_modules/kind-of/index.js"
+      },
+      {
+        "name": "is-buffer",
+        "version": "1.1.0",
+        "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/center-align/node_modules/align-text/node_modules/kind-of/node_modules/is-buffer/index.js"
+      },
+      {
+        "name": "longest",
+        "version": "1.0.1",
+        "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/center-align/node_modules/align-text/node_modules/longest/index.js"
+      },
+      {
+        "name": "repeat-string",
+        "version": "1.5.2",
+        "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/center-align/node_modules/align-text/node_modules/repeat-string/index.js"
+      },
+      {
+        "name": "right-align",
+        "version": "0.1.3",
+        "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/right-align/index.js"
+      },
+      {
+        "name": "align-text",
+        "version": "0.1.3",
+        "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/right-align/node_modules/align-text/index.js"
+      },
+      {
+        "name": "kind-of",
+        "version": "2.0.1",
+        "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/right-align/node_modules/align-text/node_modules/kind-of/index.js"
+      },
+      {
+        "name": "is-buffer",
+        "version": "1.1.0",
+        "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/right-align/node_modules/align-text/node_modules/kind-of/node_modules/is-buffer/index.js"
+      },
+      {
+        "name": "longest",
+        "version": "1.0.1",
+        "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/right-align/node_modules/align-text/node_modules/longest/index.js"
+      },
+      {
+        "name": "repeat-string",
+        "version": "1.5.2",
+        "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/right-align/node_modules/align-text/node_modules/repeat-string/index.js"
+      },
+      {
+        "name": "wordwrap",
+        "version": "0.0.2",
+        "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/wordwrap/index.js"
+      },
+      {
+        "name": "decamelize",
+        "version": "1.0.0",
+        "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/decamelize/index.js"
+      },
+      {
+        "name": "os-locale",
+        "version": "1.4.0",
+        "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/os-locale/index.js"
+      },
+      {
+        "name": "lcid",
+        "version": "1.0.0",
+        "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/os-locale/node_modules/lcid/index.js"
+      },
+      {
+        "name": "invert-kv",
+        "version": "1.0.0",
+        "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/os-locale/node_modules/lcid/node_modules/invert-kv/index.js"
+      },
+      {
+        "name": "window-size",
+        "version": "0.1.2",
+        "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/window-size/index.js"
+      },
+      {
+        "name": "y18n",
+        "version": "3.2.0",
+        "path": "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/y18n/index.js"
       },
       {
         "name": "esprima-fb",
@@ -698,7 +805,7 @@
       },
       {
         "name": "chokidar",
-        "version": "1.1.0",
+        "version": "1.2.0",
         "path": "node_modules/babel/node_modules/chokidar/index.js"
       },
       {
@@ -868,7 +975,7 @@
       },
       {
         "name": "is-glob",
-        "version": "2.0.0",
+        "version": "2.0.1",
         "path": "node_modules/babel/node_modules/chokidar/node_modules/anymatch/node_modules/micromatch/node_modules/parse-glob/node_modules/is-glob/index.js"
       },
       {
@@ -913,8 +1020,38 @@
       },
       {
         "name": "is-glob",
-        "version": "2.0.0",
+        "version": "2.0.1",
         "path": "node_modules/babel/node_modules/chokidar/node_modules/is-glob/index.js"
+      },
+      {
+        "name": "is-extglob",
+        "version": "1.0.0",
+        "path": "node_modules/babel/node_modules/chokidar/node_modules/is-glob/node_modules/is-extglob/index.js"
+      },
+      {
+        "name": "lodash.flatten",
+        "version": "3.0.2",
+        "path": "node_modules/babel/node_modules/chokidar/node_modules/lodash.flatten/index.js"
+      },
+      {
+        "name": "lodash._baseflatten",
+        "version": "3.1.4",
+        "path": "node_modules/babel/node_modules/chokidar/node_modules/lodash.flatten/node_modules/lodash._baseflatten/index.js"
+      },
+      {
+        "name": "lodash.isarguments",
+        "version": "3.0.4",
+        "path": "node_modules/babel/node_modules/chokidar/node_modules/lodash.flatten/node_modules/lodash._baseflatten/node_modules/lodash.isarguments/index.js"
+      },
+      {
+        "name": "lodash.isarray",
+        "version": "3.0.4",
+        "path": "node_modules/babel/node_modules/chokidar/node_modules/lodash.flatten/node_modules/lodash._baseflatten/node_modules/lodash.isarray/index.js"
+      },
+      {
+        "name": "lodash._isiterateecall",
+        "version": "3.0.9",
+        "path": "node_modules/babel/node_modules/chokidar/node_modules/lodash.flatten/node_modules/lodash._isiterateecall/index.js"
       },
       {
         "name": "readdirp",
@@ -978,12 +1115,12 @@
       },
       {
         "name": "util-deprecate",
-        "version": "1.0.1",
+        "version": "1.0.2",
         "path": "node_modules/babel/node_modules/chokidar/node_modules/readdirp/node_modules/readable-stream/node_modules/util-deprecate/node.js"
       },
       {
         "name": "commander",
-        "version": "2.8.1",
+        "version": "2.9.0",
         "path": "node_modules/babel/node_modules/commander/index.js"
       },
       {
@@ -1000,56 +1137,6 @@
         "name": "fs-readdir-recursive",
         "version": "0.1.2",
         "path": "node_modules/babel/node_modules/fs-readdir-recursive/index.js"
-      },
-      {
-        "name": "glob",
-        "version": "5.0.15",
-        "path": "node_modules/babel/node_modules/glob/glob.js"
-      },
-      {
-        "name": "inflight",
-        "version": "1.0.4",
-        "path": "node_modules/babel/node_modules/glob/node_modules/inflight/inflight.js"
-      },
-      {
-        "name": "wrappy",
-        "version": "1.0.1",
-        "path": "node_modules/babel/node_modules/glob/node_modules/inflight/node_modules/wrappy/wrappy.js"
-      },
-      {
-        "name": "inherits",
-        "version": "2.0.1",
-        "path": "node_modules/babel/node_modules/glob/node_modules/inherits/inherits.js"
-      },
-      {
-        "name": "minimatch",
-        "version": "3.0.0",
-        "path": "node_modules/babel/node_modules/glob/node_modules/minimatch/minimatch.js"
-      },
-      {
-        "name": "brace-expansion",
-        "version": "1.1.1",
-        "path": "node_modules/babel/node_modules/glob/node_modules/minimatch/node_modules/brace-expansion/index.js"
-      },
-      {
-        "name": "balanced-match",
-        "version": "0.2.0",
-        "path": "node_modules/babel/node_modules/glob/node_modules/minimatch/node_modules/brace-expansion/node_modules/balanced-match/index.js"
-      },
-      {
-        "name": "concat-map",
-        "version": "0.0.1",
-        "path": "node_modules/babel/node_modules/glob/node_modules/minimatch/node_modules/brace-expansion/node_modules/concat-map/index.js"
-      },
-      {
-        "name": "once",
-        "version": "1.3.2",
-        "path": "node_modules/babel/node_modules/glob/node_modules/once/once.js"
-      },
-      {
-        "name": "wrappy",
-        "version": "1.0.1",
-        "path": "node_modules/babel/node_modules/glob/node_modules/once/node_modules/wrappy/wrappy.js"
       },
       {
         "name": "lodash",
@@ -1070,11 +1157,6 @@
         "name": "minimist",
         "version": "0.0.8",
         "path": "node_modules/babel/node_modules/output-file-sync/node_modules/mkdirp/node_modules/minimist/index.js"
-      },
-      {
-        "name": "xtend",
-        "version": "4.0.0",
-        "path": "node_modules/babel/node_modules/output-file-sync/node_modules/xtend/immutable.js"
       },
       {
         "name": "path-exists",
@@ -1262,6 +1344,26 @@
         "path": "node_modules/d3/index.js"
       },
       {
+        "name": "detect-indent",
+        "version": "4.0.0",
+        "path": "node_modules/detect-indent/index.js"
+      },
+      {
+        "name": "repeating",
+        "version": "2.0.0",
+        "path": "node_modules/detect-indent/node_modules/repeating/index.js"
+      },
+      {
+        "name": "is-finite",
+        "version": "1.0.1",
+        "path": "node_modules/detect-indent/node_modules/repeating/node_modules/is-finite/index.js"
+      },
+      {
+        "name": "number-is-nan",
+        "version": "1.0.0",
+        "path": "node_modules/detect-indent/node_modules/repeating/node_modules/is-finite/node_modules/number-is-nan/index.js"
+      },
+      {
         "name": "emissary",
         "version": "1.3.3",
         "path": "node_modules/emissary/lib/emissary.js"
@@ -1332,44 +1434,59 @@
         "path": "node_modules/fuzzaldrin/lib/fuzzaldrin.js"
       },
       {
-        "name": "glob-expand",
-        "version": "0.0.2",
-        "path": "node_modules/glob-expand/build/code/expand.js"
-      },
-      {
         "name": "glob",
-        "version": "3.1.21",
-        "path": "node_modules/glob-expand/node_modules/glob/glob.js"
+        "version": "5.0.15",
+        "path": "node_modules/glob/glob.js"
       },
       {
-        "name": "graceful-fs",
-        "version": "1.2.3",
-        "path": "node_modules/glob-expand/node_modules/glob/node_modules/graceful-fs/graceful-fs.js"
+        "name": "inflight",
+        "version": "1.0.4",
+        "path": "node_modules/glob/node_modules/inflight/inflight.js"
+      },
+      {
+        "name": "wrappy",
+        "version": "1.0.1",
+        "path": "node_modules/glob/node_modules/inflight/node_modules/wrappy/wrappy.js"
       },
       {
         "name": "inherits",
-        "version": "1.0.0",
-        "path": "node_modules/glob-expand/node_modules/glob/node_modules/inherits/inherits.js"
+        "version": "2.0.1",
+        "path": "node_modules/glob/node_modules/inherits/inherits.js"
       },
       {
         "name": "minimatch",
-        "version": "0.2.14",
-        "path": "node_modules/glob-expand/node_modules/glob/node_modules/minimatch/minimatch.js"
+        "version": "3.0.0",
+        "path": "node_modules/glob/node_modules/minimatch/minimatch.js"
       },
       {
-        "name": "lru-cache",
-        "version": "2.5.0",
-        "path": "node_modules/glob-expand/node_modules/glob/node_modules/minimatch/node_modules/lru-cache/lib/lru-cache.js"
+        "name": "brace-expansion",
+        "version": "1.1.1",
+        "path": "node_modules/glob/node_modules/minimatch/node_modules/brace-expansion/index.js"
       },
       {
-        "name": "sigmund",
+        "name": "balanced-match",
+        "version": "0.2.0",
+        "path": "node_modules/glob/node_modules/minimatch/node_modules/brace-expansion/node_modules/balanced-match/index.js"
+      },
+      {
+        "name": "concat-map",
+        "version": "0.0.1",
+        "path": "node_modules/glob/node_modules/minimatch/node_modules/brace-expansion/node_modules/concat-map/index.js"
+      },
+      {
+        "name": "once",
+        "version": "1.3.2",
+        "path": "node_modules/glob/node_modules/once/once.js"
+      },
+      {
+        "name": "wrappy",
+        "version": "1.0.1",
+        "path": "node_modules/glob/node_modules/once/node_modules/wrappy/wrappy.js"
+      },
+      {
+        "name": "path-is-absolute",
         "version": "1.0.0",
-        "path": "node_modules/glob-expand/node_modules/glob/node_modules/minimatch/node_modules/sigmund/sigmund.js"
-      },
-      {
-        "name": "lodash",
-        "version": "1.2.1",
-        "path": "node_modules/glob-expand/node_modules/lodash/dist/lodash.js"
+        "path": "node_modules/glob/node_modules/path-is-absolute/index.js"
       },
       {
         "name": "htmltojsx",
@@ -1473,12 +1590,12 @@
       },
       {
         "name": "request",
-        "version": "2.64.0",
+        "version": "2.65.0",
         "path": "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/index.js"
       },
       {
         "name": "aws-sign2",
-        "version": "0.5.0",
+        "version": "0.6.0",
         "path": "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/aws-sign2/index.js"
       },
       {
@@ -1518,7 +1635,7 @@
       },
       {
         "name": "util-deprecate",
-        "version": "1.0.1",
+        "version": "1.0.2",
         "path": "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/bl/node_modules/readable-stream/node_modules/util-deprecate/node.js"
       },
       {
@@ -1558,13 +1675,8 @@
       },
       {
         "name": "har-validator",
-        "version": "1.8.0",
+        "version": "2.0.2",
         "path": "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/lib/index.js"
-      },
-      {
-        "name": "bluebird",
-        "version": "2.10.1",
-        "path": "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/bluebird.js"
       },
       {
         "name": "chalk",
@@ -1608,7 +1720,7 @@
       },
       {
         "name": "commander",
-        "version": "2.8.1",
+        "version": "2.9.0",
         "path": "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/commander/index.js"
       },
       {
@@ -1642,9 +1754,14 @@
         "path": "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/is-my-json-valid/node_modules/jsonpointer/jsonpointer.js"
       },
       {
-        "name": "xtend",
-        "version": "4.0.0",
-        "path": "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/is-my-json-valid/node_modules/xtend/immutable.js"
+        "name": "pinkie-promise",
+        "version": "1.0.0",
+        "path": "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/pinkie-promise/index.js"
+      },
+      {
+        "name": "pinkie",
+        "version": "1.0.0",
+        "path": "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/pinkie-promise/node_modules/pinkie/index.js"
       },
       {
         "name": "hawk",
@@ -1723,7 +1840,7 @@
       },
       {
         "name": "qs",
-        "version": "5.1.0",
+        "version": "5.2.0",
         "path": "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/qs/lib/index.js"
       },
       {
@@ -1733,7 +1850,7 @@
       },
       {
         "name": "tough-cookie",
-        "version": "2.0.0",
+        "version": "2.2.0",
         "path": "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/tough-cookie/lib/cookie.js"
       },
       {
@@ -1748,7 +1865,7 @@
       },
       {
         "name": "xmlhttprequest",
-        "version": "1.7.0",
+        "version": "1.8.0",
         "path": "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/xmlhttprequest/lib/XMLHttpRequest.js"
       },
       {
@@ -1768,7 +1885,7 @@
       },
       {
         "name": "yargs",
-        "version": "3.26.0",
+        "version": "3.27.0",
         "path": "node_modules/json2dts/node_modules/yargs/index.js"
       },
       {
@@ -1987,14 +2104,74 @@
         "path": "node_modules/season/node_modules/optimist/node_modules/wordwrap/index.js"
       },
       {
+        "name": "tsconfig",
+        "version": "2.0.1",
+        "path": "node_modules/tsconfig/dist/tsconfig.js"
+      },
+      {
+        "name": "array-uniq",
+        "version": "1.0.2",
+        "path": "node_modules/tsconfig/node_modules/array-uniq/index.js"
+      },
+      {
+        "name": "globby",
+        "version": "3.0.1",
+        "path": "node_modules/tsconfig/node_modules/globby/index.js"
+      },
+      {
+        "name": "array-union",
+        "version": "1.0.1",
+        "path": "node_modules/tsconfig/node_modules/globby/node_modules/array-union/index.js"
+      },
+      {
+        "name": "arrify",
+        "version": "1.0.0",
+        "path": "node_modules/tsconfig/node_modules/globby/node_modules/arrify/index.js"
+      },
+      {
+        "name": "object-assign",
+        "version": "4.0.1",
+        "path": "node_modules/tsconfig/node_modules/globby/node_modules/object-assign/index.js"
+      },
+      {
+        "name": "pify",
+        "version": "2.2.0",
+        "path": "node_modules/tsconfig/node_modules/globby/node_modules/pify/index.js"
+      },
+      {
+        "name": "parse-json",
+        "version": "2.2.0",
+        "path": "node_modules/tsconfig/node_modules/parse-json/index.js"
+      },
+      {
+        "name": "error-ex",
+        "version": "1.2.0",
+        "path": "node_modules/tsconfig/node_modules/parse-json/node_modules/error-ex/index.js"
+      },
+      {
+        "name": "pinkie-promise",
+        "version": "1.0.0",
+        "path": "node_modules/tsconfig/node_modules/pinkie-promise/index.js"
+      },
+      {
+        "name": "pinkie",
+        "version": "1.0.0",
+        "path": "node_modules/tsconfig/node_modules/pinkie-promise/node_modules/pinkie/index.js"
+      },
+      {
         "name": "strip-bom",
         "version": "2.0.0",
-        "path": "node_modules/strip-bom/index.js"
+        "path": "node_modules/tsconfig/node_modules/strip-bom/index.js"
       },
       {
         "name": "is-utf8",
         "version": "0.2.0",
-        "path": "node_modules/strip-bom/node_modules/is-utf8/is-utf8.js"
+        "path": "node_modules/tsconfig/node_modules/strip-bom/node_modules/is-utf8/is-utf8.js"
+      },
+      {
+        "name": "xtend",
+        "version": "4.0.0",
+        "path": "node_modules/xtend/immutable.js"
       }
     ],
     "extensions": {
@@ -2509,6 +2686,7 @@
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/fn/html-collection/index.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/fn/html-collection/iterator.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/fn/is-iterable.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/core-js/fn/json/stringify.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/fn/log.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/fn/map.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/fn/math/acosh.js",
@@ -2701,6 +2879,7 @@
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/fn/html-collection/index.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/fn/html-collection/iterator.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/fn/is-iterable.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/fn/json/stringify.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/fn/log.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/fn/map.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/fn/math/acosh.js",
@@ -2895,6 +3074,7 @@
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/modules/$.to-iobject.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/modules/$.to-length.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/modules/$.to-object.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/modules/$.typed-array.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/modules/$.uid.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/modules/$.unscope.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/modules/$.wks.js",
@@ -2999,6 +3179,15 @@
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/modules/es6.symbol.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/modules/es6.typed-arrays.array-buffer.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/modules/es6.typed-arrays.data-view.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/modules/es6.typed-arrays.float32-array.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/modules/es6.typed-arrays.float64-array.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/modules/es6.typed-arrays.int16-array.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/modules/es6.typed-arrays.int32-array.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/modules/es6.typed-arrays.int8-array.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/modules/es6.typed-arrays.uint16-array.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/modules/es6.typed-arrays.uint32-array.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/modules/es6.typed-arrays.uint8-array.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/modules/es6.typed-arrays.uint8-clamped-array.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/modules/es6.weak-map.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/modules/es6.weak-set.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/library/modules/es7.array.includes.js",
@@ -3100,6 +3289,7 @@
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/modules/$.to-iobject.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/modules/$.to-length.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/modules/$.to-object.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/core-js/modules/$.typed-array.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/modules/$.uid.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/modules/$.unscope.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/modules/$.wks.js",
@@ -3204,6 +3394,15 @@
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/modules/es6.symbol.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/modules/es6.typed-arrays.array-buffer.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/modules/es6.typed-arrays.data-view.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/core-js/modules/es6.typed-arrays.float32-array.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/core-js/modules/es6.typed-arrays.float64-array.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/core-js/modules/es6.typed-arrays.int16-array.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/core-js/modules/es6.typed-arrays.int32-array.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/core-js/modules/es6.typed-arrays.int8-array.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/core-js/modules/es6.typed-arrays.uint16-array.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/core-js/modules/es6.typed-arrays.uint32-array.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/core-js/modules/es6.typed-arrays.uint8-array.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/core-js/modules/es6.typed-arrays.uint8-clamped-array.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/modules/es6.weak-map.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/modules/es6.weak-set.js",
         "node_modules/babel/node_modules/babel-core/node_modules/core-js/modules/es7.array.includes.js",
@@ -3372,30 +3571,35 @@
         "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/stringset/examples.js",
         "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/stringset/stringset.js",
         "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/tryor/tryor.js",
-        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/example/bool.js",
-        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/example/boolean_double.js",
-        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/example/boolean_single.js",
-        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/example/count.js",
-        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/example/default_hash.js",
-        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/example/default_singles.js",
-        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/example/demand_count.js",
-        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/example/divide.js",
-        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/example/help.js",
-        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/example/implies.js",
-        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/example/implies_hash.js",
-        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/example/line_count.js",
-        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/example/line_count_options.js",
-        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/example/line_count_wrap.js",
-        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/example/nonopt.js",
-        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/example/requires_arg.js",
-        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/example/short.js",
-        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/example/strict.js",
-        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/example/string.js",
-        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/example/usage-options.js",
-        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/example/xup.js",
         "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/index.js",
-        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/lib/minimist.js",
-        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/lib/wordwrap.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/lib/completion.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/lib/parser.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/lib/usage.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/lib/validation.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/camelcase/index.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/index.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/center-align/index.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/center-align/node_modules/align-text/index.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/center-align/node_modules/align-text/node_modules/kind-of/index.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/center-align/node_modules/align-text/node_modules/kind-of/node_modules/is-buffer/index.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/center-align/node_modules/align-text/node_modules/longest/index.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/center-align/node_modules/align-text/node_modules/repeat-string/index.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/right-align/index.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/right-align/node_modules/align-text/index.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/right-align/node_modules/align-text/node_modules/kind-of/index.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/right-align/node_modules/align-text/node_modules/kind-of/node_modules/is-buffer/index.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/right-align/node_modules/align-text/node_modules/longest/index.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/right-align/node_modules/align-text/node_modules/repeat-string/index.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/wordwrap/example/center.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/wordwrap/example/meat.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/wordwrap/index.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/decamelize/index.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/os-locale/index.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/os-locale/node_modules/lcid/index.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/os-locale/node_modules/lcid/node_modules/invert-kv/index.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/window-size/cli.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/window-size/index.js",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/y18n/index.js",
         "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/options.js",
         "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/other/v8-bug.js",
         "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/other/v8-for-in-scope-2.js",
@@ -3587,6 +3791,12 @@
         "node_modules/babel/node_modules/chokidar/node_modules/glob-parent/test.js",
         "node_modules/babel/node_modules/chokidar/node_modules/is-binary-path/index.js",
         "node_modules/babel/node_modules/chokidar/node_modules/is-glob/index.js",
+        "node_modules/babel/node_modules/chokidar/node_modules/is-glob/node_modules/is-extglob/index.js",
+        "node_modules/babel/node_modules/chokidar/node_modules/lodash.flatten/index.js",
+        "node_modules/babel/node_modules/chokidar/node_modules/lodash.flatten/node_modules/lodash._baseflatten/index.js",
+        "node_modules/babel/node_modules/chokidar/node_modules/lodash.flatten/node_modules/lodash._baseflatten/node_modules/lodash.isarguments/index.js",
+        "node_modules/babel/node_modules/chokidar/node_modules/lodash.flatten/node_modules/lodash._baseflatten/node_modules/lodash.isarray/index.js",
+        "node_modules/babel/node_modules/chokidar/node_modules/lodash.flatten/node_modules/lodash._isiterateecall/index.js",
         "node_modules/babel/node_modules/chokidar/node_modules/readdirp/examples/callback-api.js",
         "node_modules/babel/node_modules/chokidar/node_modules/readdirp/examples/grep.js",
         "node_modules/babel/node_modules/chokidar/node_modules/readdirp/examples/stream-api-pipe.js",
@@ -3632,24 +3842,6 @@
         "node_modules/babel/node_modules/convert-source-map/example/comment-to-json.js",
         "node_modules/babel/node_modules/convert-source-map/index.js",
         "node_modules/babel/node_modules/fs-readdir-recursive/index.js",
-        "node_modules/babel/node_modules/glob/common.js",
-        "node_modules/babel/node_modules/glob/glob.js",
-        "node_modules/babel/node_modules/glob/node_modules/inflight/inflight.js",
-        "node_modules/babel/node_modules/glob/node_modules/inflight/node_modules/wrappy/wrappy.js",
-        "node_modules/babel/node_modules/glob/node_modules/inflight/test.js",
-        "node_modules/babel/node_modules/glob/node_modules/inherits/inherits.js",
-        "node_modules/babel/node_modules/glob/node_modules/inherits/inherits_browser.js",
-        "node_modules/babel/node_modules/glob/node_modules/inherits/test.js",
-        "node_modules/babel/node_modules/glob/node_modules/minimatch/minimatch.js",
-        "node_modules/babel/node_modules/glob/node_modules/minimatch/node_modules/brace-expansion/example.js",
-        "node_modules/babel/node_modules/glob/node_modules/minimatch/node_modules/brace-expansion/index.js",
-        "node_modules/babel/node_modules/glob/node_modules/minimatch/node_modules/brace-expansion/node_modules/balanced-match/example.js",
-        "node_modules/babel/node_modules/glob/node_modules/minimatch/node_modules/brace-expansion/node_modules/balanced-match/index.js",
-        "node_modules/babel/node_modules/glob/node_modules/minimatch/node_modules/brace-expansion/node_modules/concat-map/example/map.js",
-        "node_modules/babel/node_modules/glob/node_modules/minimatch/node_modules/brace-expansion/node_modules/concat-map/index.js",
-        "node_modules/babel/node_modules/glob/node_modules/once/node_modules/wrappy/wrappy.js",
-        "node_modules/babel/node_modules/glob/node_modules/once/once.js",
-        "node_modules/babel/node_modules/glob/sync.js",
         "node_modules/babel/node_modules/lodash/array/chunk.js",
         "node_modules/babel/node_modules/lodash/array/compact.js",
         "node_modules/babel/node_modules/lodash/array/difference.js",
@@ -4074,9 +4266,6 @@
         "node_modules/babel/node_modules/output-file-sync/node_modules/mkdirp/index.js",
         "node_modules/babel/node_modules/output-file-sync/node_modules/mkdirp/node_modules/minimist/example/parse.js",
         "node_modules/babel/node_modules/output-file-sync/node_modules/mkdirp/node_modules/minimist/index.js",
-        "node_modules/babel/node_modules/output-file-sync/node_modules/xtend/immutable.js",
-        "node_modules/babel/node_modules/output-file-sync/node_modules/xtend/mutable.js",
-        "node_modules/babel/node_modules/output-file-sync/node_modules/xtend/test.js",
         "node_modules/babel/node_modules/path-exists/index.js",
         "node_modules/babel/node_modules/path-is-absolute/index.js",
         "node_modules/babel/node_modules/slash/index.js",
@@ -4502,6 +4691,10 @@
         "node_modules/d3/src/xhr/text.js",
         "node_modules/d3/src/xhr/xhr.js",
         "node_modules/d3/src/xhr/xml.js",
+        "node_modules/detect-indent/index.js",
+        "node_modules/detect-indent/node_modules/repeating/index.js",
+        "node_modules/detect-indent/node_modules/repeating/node_modules/is-finite/index.js",
+        "node_modules/detect-indent/node_modules/repeating/node_modules/is-finite/node_modules/number-is-nan/index.js",
         "node_modules/emissary/lib/behavior.js",
         "node_modules/emissary/lib/emissary.js",
         "node_modules/emissary/lib/emitter.js",
@@ -4923,26 +5116,25 @@
         "node_modules/fuzzaldrin/lib/fuzzaldrin.js",
         "node_modules/fuzzaldrin/lib/matcher.js",
         "node_modules/fuzzaldrin/lib/scorer.js",
-        "node_modules/glob-expand/build/code/expand.js",
-        "node_modules/glob-expand/node_modules/glob/examples/g.js",
-        "node_modules/glob-expand/node_modules/glob/examples/usr-local.js",
-        "node_modules/glob-expand/node_modules/glob/glob.js",
-        "node_modules/glob-expand/node_modules/glob/node_modules/graceful-fs/graceful-fs.js",
-        "node_modules/glob-expand/node_modules/glob/node_modules/inherits/inherits.js",
-        "node_modules/glob-expand/node_modules/glob/node_modules/minimatch/minimatch.js",
-        "node_modules/glob-expand/node_modules/glob/node_modules/minimatch/node_modules/lru-cache/lib/lru-cache.js",
-        "node_modules/glob-expand/node_modules/glob/node_modules/minimatch/node_modules/sigmund/bench.js",
-        "node_modules/glob-expand/node_modules/glob/node_modules/minimatch/node_modules/sigmund/sigmund.js",
-        "node_modules/glob-expand/node_modules/lodash/dist/lodash.compat.js",
-        "node_modules/glob-expand/node_modules/lodash/dist/lodash.compat.min.js",
-        "node_modules/glob-expand/node_modules/lodash/dist/lodash.js",
-        "node_modules/glob-expand/node_modules/lodash/dist/lodash.legacy.js",
-        "node_modules/glob-expand/node_modules/lodash/dist/lodash.legacy.min.js",
-        "node_modules/glob-expand/node_modules/lodash/dist/lodash.min.js",
-        "node_modules/glob-expand/node_modules/lodash/dist/lodash.mobile.js",
-        "node_modules/glob-expand/node_modules/lodash/dist/lodash.mobile.min.js",
-        "node_modules/glob-expand/node_modules/lodash/dist/lodash.underscore.js",
-        "node_modules/glob-expand/node_modules/lodash/dist/lodash.underscore.min.js",
+        "node_modules/glob/common.js",
+        "node_modules/glob/glob.js",
+        "node_modules/glob/node_modules/inflight/inflight.js",
+        "node_modules/glob/node_modules/inflight/node_modules/wrappy/wrappy.js",
+        "node_modules/glob/node_modules/inflight/test.js",
+        "node_modules/glob/node_modules/inherits/inherits.js",
+        "node_modules/glob/node_modules/inherits/inherits_browser.js",
+        "node_modules/glob/node_modules/inherits/test.js",
+        "node_modules/glob/node_modules/minimatch/minimatch.js",
+        "node_modules/glob/node_modules/minimatch/node_modules/brace-expansion/example.js",
+        "node_modules/glob/node_modules/minimatch/node_modules/brace-expansion/index.js",
+        "node_modules/glob/node_modules/minimatch/node_modules/brace-expansion/node_modules/balanced-match/example.js",
+        "node_modules/glob/node_modules/minimatch/node_modules/brace-expansion/node_modules/balanced-match/index.js",
+        "node_modules/glob/node_modules/minimatch/node_modules/brace-expansion/node_modules/concat-map/example/map.js",
+        "node_modules/glob/node_modules/minimatch/node_modules/brace-expansion/node_modules/concat-map/index.js",
+        "node_modules/glob/node_modules/once/node_modules/wrappy/wrappy.js",
+        "node_modules/glob/node_modules/once/once.js",
+        "node_modules/glob/node_modules/path-is-absolute/index.js",
+        "node_modules/glob/sync.js",
         "node_modules/htmltojsx/gulpfile.js",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/lib/jsdom/browser/Window.js",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/lib/jsdom/browser/documentAdapter.js",
@@ -5515,50 +5707,11 @@
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/form-data/lib/browser.js",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/form-data/lib/form_data.js",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/form-data/node_modules/async/lib/async.js",
+        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/lib/async.js",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/lib/error.js",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/lib/index.js",
+        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/lib/runner.js",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/lib/schemas/index.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/browser/bluebird.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/browser/bluebird.min.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/any.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/assert.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/async.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/bind.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/bluebird.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/call_get.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/cancel.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/captured_trace.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/catch_filter.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/context.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/debuggability.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/direct_resolve.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/each.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/errors.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/es5.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/filter.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/finally.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/generators.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/join.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/map.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/method.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/nodeify.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/progress.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/promise.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/promise_array.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/promise_resolver.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/promisify.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/props.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/queue.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/race.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/reduce.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/schedule.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/settle.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/some.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/synchronous_inspection.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/thenables.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/timers.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/using.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/js/main/util.js",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/chalk/index.js",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/chalk/node_modules/ansi-styles/index.js",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/chalk/node_modules/escape-string-regexp/index.js",
@@ -5580,10 +5733,9 @@
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/is-my-json-valid/node_modules/generate-object-property/test.js",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/is-my-json-valid/node_modules/jsonpointer/jsonpointer.js",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/is-my-json-valid/node_modules/jsonpointer/test.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/is-my-json-valid/node_modules/xtend/immutable.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/is-my-json-valid/node_modules/xtend/mutable.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/is-my-json-valid/node_modules/xtend/test.js",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/is-my-json-valid/require.js",
+        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/pinkie-promise/index.js",
+        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/pinkie-promise/node_modules/pinkie/index.js",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/hawk/example/usage.js",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/hawk/lib/browser.js",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/hawk/lib/client.js",
@@ -5632,7 +5784,6 @@
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/qs/lib/utils.js",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/stringstream/example.js",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/stringstream/stringstream.js",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/tough-cookie/generate-pubsuffix.js",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/tough-cookie/lib/cookie.js",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/tough-cookie/lib/memstore.js",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/tough-cookie/lib/pathMatch.js",
@@ -6016,9 +6167,26 @@
         "node_modules/season/node_modules/optimist/node_modules/wordwrap/example/center.js",
         "node_modules/season/node_modules/optimist/node_modules/wordwrap/example/meat.js",
         "node_modules/season/node_modules/optimist/node_modules/wordwrap/index.js",
-        "node_modules/strip-bom/index.js",
-        "node_modules/strip-bom/node_modules/is-utf8/is-utf8.js",
-        "node_modules/strip-bom/node_modules/is-utf8/test.js"
+        "node_modules/tsconfig/dist/tsconfig.js",
+        "node_modules/tsconfig/dist/tsconfig.spec.js",
+        "node_modules/tsconfig/node_modules/array-uniq/index.js",
+        "node_modules/tsconfig/node_modules/globby/index.js",
+        "node_modules/tsconfig/node_modules/globby/node_modules/array-union/index.js",
+        "node_modules/tsconfig/node_modules/globby/node_modules/arrify/index.js",
+        "node_modules/tsconfig/node_modules/globby/node_modules/object-assign/index.js",
+        "node_modules/tsconfig/node_modules/globby/node_modules/pify/index.js",
+        "node_modules/tsconfig/node_modules/parse-json/index.js",
+        "node_modules/tsconfig/node_modules/parse-json/node_modules/error-ex/index.js",
+        "node_modules/tsconfig/node_modules/parse-json/vendor/parse.js",
+        "node_modules/tsconfig/node_modules/parse-json/vendor/unicode.js",
+        "node_modules/tsconfig/node_modules/pinkie-promise/index.js",
+        "node_modules/tsconfig/node_modules/pinkie-promise/node_modules/pinkie/index.js",
+        "node_modules/tsconfig/node_modules/strip-bom/index.js",
+        "node_modules/tsconfig/node_modules/strip-bom/node_modules/is-utf8/is-utf8.js",
+        "node_modules/tsconfig/node_modules/strip-bom/node_modules/is-utf8/test.js",
+        "node_modules/xtend/immutable.js",
+        "node_modules/xtend/mutable.js",
+        "node_modules/xtend/test.js"
       ],
       ".json": [
         "lib/tsconfig.json",
@@ -6139,6 +6307,36 @@
         "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/stringmap/package.json",
         "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/stringset/package.json",
         "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/tryor/package.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/locales/de.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/locales/en.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/locales/es.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/locales/fr.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/locales/ja.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/locales/pirate.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/locales/pt.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/locales/zh.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/camelcase/package.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/center-align/node_modules/align-text/node_modules/kind-of/node_modules/is-buffer/package.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/center-align/node_modules/align-text/node_modules/kind-of/package.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/center-align/node_modules/align-text/node_modules/longest/package.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/center-align/node_modules/align-text/node_modules/repeat-string/package.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/center-align/node_modules/align-text/package.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/center-align/package.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/right-align/node_modules/align-text/node_modules/kind-of/node_modules/is-buffer/package.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/right-align/node_modules/align-text/node_modules/kind-of/package.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/right-align/node_modules/align-text/node_modules/longest/package.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/right-align/node_modules/align-text/node_modules/repeat-string/package.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/right-align/node_modules/align-text/package.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/right-align/package.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/wordwrap/package.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/package.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/decamelize/package.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/os-locale/node_modules/lcid/lcid.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/os-locale/node_modules/lcid/node_modules/invert-kv/package.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/os-locale/node_modules/lcid/package.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/os-locale/package.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/window-size/package.json",
+        "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/y18n/package.json",
         "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/package.json",
         "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/package.json",
         "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/esprima-fb/package.json",
@@ -6216,7 +6414,13 @@
         "node_modules/babel/node_modules/chokidar/node_modules/is-binary-path/node_modules/binary-extensions/binary-extensions.json",
         "node_modules/babel/node_modules/chokidar/node_modules/is-binary-path/node_modules/binary-extensions/package.json",
         "node_modules/babel/node_modules/chokidar/node_modules/is-binary-path/package.json",
+        "node_modules/babel/node_modules/chokidar/node_modules/is-glob/node_modules/is-extglob/package.json",
         "node_modules/babel/node_modules/chokidar/node_modules/is-glob/package.json",
+        "node_modules/babel/node_modules/chokidar/node_modules/lodash.flatten/node_modules/lodash._baseflatten/node_modules/lodash.isarguments/package.json",
+        "node_modules/babel/node_modules/chokidar/node_modules/lodash.flatten/node_modules/lodash._baseflatten/node_modules/lodash.isarray/package.json",
+        "node_modules/babel/node_modules/chokidar/node_modules/lodash.flatten/node_modules/lodash._baseflatten/package.json",
+        "node_modules/babel/node_modules/chokidar/node_modules/lodash.flatten/node_modules/lodash._isiterateecall/package.json",
+        "node_modules/babel/node_modules/chokidar/node_modules/lodash.flatten/package.json",
         "node_modules/babel/node_modules/chokidar/node_modules/readdirp/examples/package.json",
         "node_modules/babel/node_modules/chokidar/node_modules/readdirp/node_modules/graceful-fs/package.json",
         "node_modules/babel/node_modules/chokidar/node_modules/readdirp/node_modules/minimatch/node_modules/brace-expansion/node_modules/balanced-match/package.json",
@@ -6237,20 +6441,9 @@
         "node_modules/babel/node_modules/commander/package.json",
         "node_modules/babel/node_modules/convert-source-map/package.json",
         "node_modules/babel/node_modules/fs-readdir-recursive/package.json",
-        "node_modules/babel/node_modules/glob/node_modules/inflight/node_modules/wrappy/package.json",
-        "node_modules/babel/node_modules/glob/node_modules/inflight/package.json",
-        "node_modules/babel/node_modules/glob/node_modules/inherits/package.json",
-        "node_modules/babel/node_modules/glob/node_modules/minimatch/node_modules/brace-expansion/node_modules/balanced-match/package.json",
-        "node_modules/babel/node_modules/glob/node_modules/minimatch/node_modules/brace-expansion/node_modules/concat-map/package.json",
-        "node_modules/babel/node_modules/glob/node_modules/minimatch/node_modules/brace-expansion/package.json",
-        "node_modules/babel/node_modules/glob/node_modules/minimatch/package.json",
-        "node_modules/babel/node_modules/glob/node_modules/once/node_modules/wrappy/package.json",
-        "node_modules/babel/node_modules/glob/node_modules/once/package.json",
-        "node_modules/babel/node_modules/glob/package.json",
         "node_modules/babel/node_modules/lodash/package.json",
         "node_modules/babel/node_modules/output-file-sync/node_modules/mkdirp/node_modules/minimist/package.json",
         "node_modules/babel/node_modules/output-file-sync/node_modules/mkdirp/package.json",
-        "node_modules/babel/node_modules/output-file-sync/node_modules/xtend/package.json",
         "node_modules/babel/node_modules/output-file-sync/package.json",
         "node_modules/babel/node_modules/path-exists/package.json",
         "node_modules/babel/node_modules/path-is-absolute/package.json",
@@ -6298,6 +6491,10 @@
         "node_modules/d3/component.json",
         "node_modules/d3/composer.json",
         "node_modules/d3/package.json",
+        "node_modules/detect-indent/node_modules/repeating/node_modules/is-finite/node_modules/number-is-nan/package.json",
+        "node_modules/detect-indent/node_modules/repeating/node_modules/is-finite/package.json",
+        "node_modules/detect-indent/node_modules/repeating/package.json",
+        "node_modules/detect-indent/package.json",
         "node_modules/emissary/node_modules/es6-weak-map/node_modules/d/package.json",
         "node_modules/emissary/node_modules/es6-weak-map/node_modules/es5-ext/node_modules/es6-symbol/package.json",
         "node_modules/emissary/node_modules/es6-weak-map/node_modules/es5-ext/package.json",
@@ -6313,14 +6510,17 @@
         "node_modules/escape-html/component.json",
         "node_modules/escape-html/package.json",
         "node_modules/fuzzaldrin/package.json",
-        "node_modules/glob-expand/node_modules/glob/node_modules/graceful-fs/package.json",
-        "node_modules/glob-expand/node_modules/glob/node_modules/inherits/package.json",
-        "node_modules/glob-expand/node_modules/glob/node_modules/minimatch/node_modules/lru-cache/package.json",
-        "node_modules/glob-expand/node_modules/glob/node_modules/minimatch/node_modules/sigmund/package.json",
-        "node_modules/glob-expand/node_modules/glob/node_modules/minimatch/package.json",
-        "node_modules/glob-expand/node_modules/glob/package.json",
-        "node_modules/glob-expand/node_modules/lodash/package.json",
-        "node_modules/glob-expand/package.json",
+        "node_modules/glob/node_modules/inflight/node_modules/wrappy/package.json",
+        "node_modules/glob/node_modules/inflight/package.json",
+        "node_modules/glob/node_modules/inherits/package.json",
+        "node_modules/glob/node_modules/minimatch/node_modules/brace-expansion/node_modules/balanced-match/package.json",
+        "node_modules/glob/node_modules/minimatch/node_modules/brace-expansion/node_modules/concat-map/package.json",
+        "node_modules/glob/node_modules/minimatch/node_modules/brace-expansion/package.json",
+        "node_modules/glob/node_modules/minimatch/package.json",
+        "node_modules/glob/node_modules/once/node_modules/wrappy/package.json",
+        "node_modules/glob/node_modules/once/package.json",
+        "node_modules/glob/node_modules/path-is-absolute/package.json",
+        "node_modules/glob/package.json",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/browser-request/package.json",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/cssom/package.json",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/cssstyle/package.json",
@@ -6382,7 +6582,6 @@
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/lib/schemas/request.json",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/lib/schemas/response.json",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/lib/schemas/timings.json",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/bluebird/package.json",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/chalk/node_modules/ansi-styles/package.json",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/chalk/node_modules/escape-string-regexp/package.json",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/chalk/node_modules/has-ansi/node_modules/ansi-regex/package.json",
@@ -6397,8 +6596,9 @@
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/is-my-json-valid/node_modules/generate-object-property/node_modules/is-property/package.json",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/is-my-json-valid/node_modules/generate-object-property/package.json",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/is-my-json-valid/node_modules/jsonpointer/package.json",
-        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/is-my-json-valid/node_modules/xtend/package.json",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/is-my-json-valid/package.json",
+        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/pinkie-promise/node_modules/pinkie/package.json",
+        "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/pinkie-promise/package.json",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/package.json",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/hawk/bower.json",
         "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/hawk/component.json",
@@ -6440,6 +6640,7 @@
         "node_modules/json2dts/node_modules/yargs/locales/ja.json",
         "node_modules/json2dts/node_modules/yargs/locales/pirate.json",
         "node_modules/json2dts/node_modules/yargs/locales/pt.json",
+        "node_modules/json2dts/node_modules/yargs/locales/zh.json",
         "node_modules/json2dts/node_modules/yargs/node_modules/camelcase/package.json",
         "node_modules/json2dts/node_modules/yargs/node_modules/cliui/node_modules/center-align/node_modules/align-text/node_modules/kind-of/node_modules/is-buffer/package.json",
         "node_modules/json2dts/node_modules/yargs/node_modules/cliui/node_modules/center-align/node_modules/align-text/node_modules/kind-of/package.json",
@@ -6494,8 +6695,20 @@
         "node_modules/season/node_modules/optimist/node_modules/wordwrap/package.json",
         "node_modules/season/node_modules/optimist/package.json",
         "node_modules/season/package.json",
-        "node_modules/strip-bom/node_modules/is-utf8/package.json",
-        "node_modules/strip-bom/package.json",
+        "node_modules/tsconfig/node_modules/array-uniq/package.json",
+        "node_modules/tsconfig/node_modules/globby/node_modules/array-union/package.json",
+        "node_modules/tsconfig/node_modules/globby/node_modules/arrify/package.json",
+        "node_modules/tsconfig/node_modules/globby/node_modules/object-assign/package.json",
+        "node_modules/tsconfig/node_modules/globby/node_modules/pify/package.json",
+        "node_modules/tsconfig/node_modules/globby/package.json",
+        "node_modules/tsconfig/node_modules/parse-json/node_modules/error-ex/package.json",
+        "node_modules/tsconfig/node_modules/parse-json/package.json",
+        "node_modules/tsconfig/node_modules/pinkie-promise/node_modules/pinkie/package.json",
+        "node_modules/tsconfig/node_modules/pinkie-promise/package.json",
+        "node_modules/tsconfig/node_modules/strip-bom/node_modules/is-utf8/package.json",
+        "node_modules/tsconfig/node_modules/strip-bom/package.json",
+        "node_modules/tsconfig/package.json",
+        "node_modules/xtend/package.json",
         "package.json",
         "tsd.json"
       ],
@@ -6503,8 +6716,7 @@
         "node_modules/babel/node_modules/babel-core/node_modules/js-tokens/regex.coffee",
         "node_modules/babel/node_modules/babel-core/node_modules/source-map-support/amd-test/script.coffee",
         "node_modules/babel/node_modules/babel-core/node_modules/source-map-support/browser-test/script.coffee",
-        "node_modules/babel/node_modules/babel-core/node_modules/source-map-support/header-test/script.coffee",
-        "node_modules/glob-expand/Gruntfile.coffee"
+        "node_modules/babel/node_modules/babel-core/node_modules/source-map-support/header-test/script.coffee"
       ]
     },
     "folders": [
@@ -6541,10 +6753,11 @@
           "babel": "^5.6.23",
           "basarat-text-buffer": "6.0.0",
           "d3": "^3.5.5",
+          "detect-indent": "^4.0.0",
           "emissary": "^1.3.3",
           "escape-html": "^1.0.1",
           "fuzzaldrin": "^2.1.0",
-          "glob-expand": "0.0.2",
+          "glob": "^5.0.15",
           "htmltojsx": "0.2.4",
           "immutable": "^3.7.3",
           "json2dts": "0.0.1",
@@ -6552,7 +6765,8 @@
           "ntypescript": "1.201509200205.1",
           "react": "^0.13.3",
           "season": "^5.1.4",
-          "strip-bom": "^2.0.0"
+          "tsconfig": "^2.0.1",
+          "xtend": "^4.0.0"
         }
       },
       {
@@ -7039,13 +7253,13 @@
           "alter": "~0.2.0",
           "ast-traverse": "~0.1.1",
           "breakable": "~1.0.0",
-          "esprima-fb": "~8001.1001.0-dev-harmony-fb",
+          "esprima-fb": "~15001.1001.0-dev-harmony-fb",
           "simple-fmt": "~0.1.0",
           "simple-is": "~0.2.0",
           "stringmap": "~0.2.2",
           "stringset": "~0.2.1",
           "tryor": "~0.1.2",
-          "yargs": "~1.3.2"
+          "yargs": "~3.27.0"
         }
       },
       {
@@ -7055,6 +7269,100 @@
         ],
         "dependencies": {
           "stable": "~0.1.3"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs",
+          "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/lib",
+          "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/locales"
+        ],
+        "dependencies": {
+          "camelcase": "^1.2.1",
+          "cliui": "^2.1.0",
+          "decamelize": "^1.0.0",
+          "os-locale": "^1.4.0",
+          "window-size": "^0.1.2",
+          "y18n": "^3.2.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui",
+          "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/test"
+        ],
+        "dependencies": {
+          "center-align": "^0.1.1",
+          "right-align": "^0.1.1",
+          "wordwrap": "0.0.2"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/center-align"
+        ],
+        "dependencies": {
+          "align-text": "^0.1.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/center-align/node_modules/align-text"
+        ],
+        "dependencies": {
+          "kind-of": "^2.0.0",
+          "longest": "^1.0.1",
+          "repeat-string": "^1.5.2"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/center-align/node_modules/align-text/node_modules/kind-of"
+        ],
+        "dependencies": {
+          "is-buffer": "^1.0.2"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/right-align"
+        ],
+        "dependencies": {
+          "align-text": "^0.1.1"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/right-align/node_modules/align-text"
+        ],
+        "dependencies": {
+          "kind-of": "^2.0.0",
+          "longest": "^1.0.1",
+          "repeat-string": "^1.5.2"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/cliui/node_modules/right-align/node_modules/align-text/node_modules/kind-of"
+        ],
+        "dependencies": {
+          "is-buffer": "^1.0.2"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/os-locale"
+        ],
+        "dependencies": {
+          "lcid": "^1.0.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/babel/node_modules/babel-core/node_modules/regenerator/node_modules/defs/node_modules/yargs/node_modules/os-locale/node_modules/lcid"
+        ],
+        "dependencies": {
+          "invert-kv": "^1.0.0"
         }
       },
       {
@@ -7154,6 +7462,7 @@
           "glob-parent": "^2.0.0",
           "is-binary-path": "^1.0.0",
           "is-glob": "^2.0.0",
+          "lodash.flatten": "^3.0.2",
           "path-is-absolute": "^1.0.0",
           "readdirp": "^2.0.0",
           "fsevents": "^1.0.0"
@@ -7293,6 +7602,14 @@
       },
       {
         "paths": [
+          "node_modules/babel/node_modules/chokidar/node_modules/anymatch/node_modules/micromatch/node_modules/parse-glob/node_modules/is-glob"
+        ],
+        "dependencies": {
+          "is-extglob": "^1.0.0"
+        }
+      },
+      {
+        "paths": [
           "node_modules/babel/node_modules/chokidar/node_modules/anymatch/node_modules/micromatch/node_modules/regex-cache"
         ],
         "dependencies": {
@@ -7322,6 +7639,32 @@
         ],
         "dependencies": {
           "binary-extensions": "^1.0.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/babel/node_modules/chokidar/node_modules/is-glob"
+        ],
+        "dependencies": {
+          "is-extglob": "^1.0.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/babel/node_modules/chokidar/node_modules/lodash.flatten"
+        ],
+        "dependencies": {
+          "lodash._baseflatten": "^3.0.0",
+          "lodash._isiterateecall": "^3.0.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/babel/node_modules/chokidar/node_modules/lodash.flatten/node_modules/lodash._baseflatten"
+        ],
+        "dependencies": {
+          "lodash.isarguments": "^3.0.0",
+          "lodash.isarray": "^3.0.0"
         }
       },
       {
@@ -7373,53 +7716,6 @@
         ],
         "dependencies": {
           "graceful-readlink": ">= 1.0.0"
-        }
-      },
-      {
-        "paths": [
-          "node_modules/babel/node_modules/glob"
-        ],
-        "dependencies": {
-          "inflight": "^1.0.4",
-          "inherits": "2",
-          "minimatch": "2 || 3",
-          "once": "^1.3.0",
-          "path-is-absolute": "^1.0.0"
-        }
-      },
-      {
-        "paths": [
-          "node_modules/babel/node_modules/glob/node_modules/inflight"
-        ],
-        "dependencies": {
-          "once": "^1.3.0",
-          "wrappy": "1"
-        }
-      },
-      {
-        "paths": [
-          "node_modules/babel/node_modules/glob/node_modules/minimatch"
-        ],
-        "dependencies": {
-          "brace-expansion": "^1.0.0"
-        }
-      },
-      {
-        "paths": [
-          "node_modules/babel/node_modules/glob/node_modules/minimatch/node_modules/brace-expansion"
-        ],
-        "dependencies": {
-          "balanced-match": "^0.2.0",
-          "concat-map": "0.0.1"
-        }
-      },
-      {
-        "paths": [
-          "node_modules/babel/node_modules/glob/node_modules/once",
-          "node_modules/babel/node_modules/glob/node_modules/once/test"
-        ],
-        "dependencies": {
-          "wrappy": "1"
         }
       },
       {
@@ -7613,6 +7909,30 @@
         ],
         "dependencies": {
           "underscore": "~1.6.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/detect-indent"
+        ],
+        "dependencies": {
+          "repeating": "^2.0.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/detect-indent/node_modules/repeating"
+        ],
+        "dependencies": {
+          "is-finite": "^1.0.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/detect-indent/node_modules/repeating/node_modules/is-finite"
+        ],
+        "dependencies": {
+          "number-is-nan": "^1.0.0"
         }
       },
       {
@@ -7870,34 +8190,49 @@
       },
       {
         "paths": [
-          "node_modules/glob-expand",
-          "node_modules/glob-expand/build/code"
+          "node_modules/glob"
         ],
         "dependencies": {
-          "glob": "~3.1.21",
-          "lodash": "1.2.x"
+          "inflight": "^1.0.4",
+          "inherits": "2",
+          "minimatch": "2 || 3",
+          "once": "^1.3.0",
+          "path-is-absolute": "^1.0.0"
         }
       },
       {
         "paths": [
-          "node_modules/glob-expand/node_modules/glob/examples",
-          "node_modules/glob-expand/node_modules/glob",
-          "node_modules/glob-expand/node_modules/glob/test"
+          "node_modules/glob/node_modules/inflight"
         ],
         "dependencies": {
-          "minimatch": "~0.2.11",
-          "graceful-fs": "~1.2.0",
-          "inherits": "1"
+          "once": "^1.3.0",
+          "wrappy": "1"
         }
       },
       {
         "paths": [
-          "node_modules/glob-expand/node_modules/glob/node_modules/minimatch",
-          "node_modules/glob-expand/node_modules/glob/node_modules/minimatch/test"
+          "node_modules/glob/node_modules/minimatch"
         ],
         "dependencies": {
-          "lru-cache": "2",
-          "sigmund": "~1.0.0"
+          "brace-expansion": "^1.0.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/glob/node_modules/minimatch/node_modules/brace-expansion"
+        ],
+        "dependencies": {
+          "balanced-match": "^0.2.0",
+          "concat-map": "0.0.1"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/glob/node_modules/once",
+          "node_modules/glob/node_modules/once/test"
+        ],
+        "dependencies": {
+          "wrappy": "1"
         }
       },
       {
@@ -8020,22 +8355,22 @@
           "bl": "~1.0.0",
           "caseless": "~0.11.0",
           "extend": "~3.0.0",
-          "forever-agent": "~0.6.0",
-          "form-data": "~1.0.0-rc1",
-          "json-stringify-safe": "~5.0.0",
-          "mime-types": "~2.1.2",
-          "node-uuid": "~1.4.0",
-          "qs": "~5.1.0",
-          "tunnel-agent": "~0.4.0",
-          "tough-cookie": ">=0.12.0",
+          "forever-agent": "~0.6.1",
+          "form-data": "~1.0.0-rc3",
+          "json-stringify-safe": "~5.0.1",
+          "mime-types": "~2.1.7",
+          "node-uuid": "~1.4.3",
+          "qs": "~5.2.0",
+          "tunnel-agent": "~0.4.1",
+          "tough-cookie": "~2.2.0",
           "http-signature": "~0.11.0",
           "oauth-sign": "~0.8.0",
           "hawk": "~3.1.0",
-          "aws-sign2": "~0.5.0",
+          "aws-sign2": "~0.6.0",
           "stringstream": "~0.0.4",
-          "combined-stream": "~1.0.1",
-          "isstream": "~0.1.1",
-          "har-validator": "^1.6.1"
+          "combined-stream": "~1.0.5",
+          "isstream": "~0.1.2",
+          "har-validator": "~2.0.2"
         }
       },
       {
@@ -8088,10 +8423,10 @@
           "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator"
         ],
         "dependencies": {
-          "bluebird": "^2.9.30",
-          "chalk": "^1.0.0",
+          "chalk": "^1.1.1",
           "commander": "^2.8.1",
-          "is-my-json-valid": "^2.12.0"
+          "is-my-json-valid": "^2.12.2",
+          "pinkie-promise": "^1.0.0"
         }
       },
       {
@@ -8150,6 +8485,14 @@
         ],
         "dependencies": {
           "is-property": "^1.0.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/htmltojsx/node_modules/jsdom-no-contextify/node_modules/request/node_modules/har-validator/node_modules/pinkie-promise"
+        ],
+        "dependencies": {
+          "pinkie": "^1.0.0"
         }
       },
       {
@@ -8432,7 +8775,60 @@
       },
       {
         "paths": [
-          "node_modules/strip-bom"
+          "node_modules/tsconfig/dist",
+          "node_modules/tsconfig"
+        ],
+        "dependencies": {
+          "array-uniq": "^1.0.2",
+          "glob": "^5.0.15",
+          "globby": "^3.0.1",
+          "parse-json": "^2.2.0",
+          "pinkie-promise": "^1.0.0",
+          "strip-bom": "^2.0.0",
+          "xtend": "^4.0.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/tsconfig/node_modules/globby"
+        ],
+        "dependencies": {
+          "array-union": "^1.0.1",
+          "arrify": "^1.0.0",
+          "glob": "^5.0.3",
+          "object-assign": "^4.0.1",
+          "pify": "^2.0.0",
+          "pinkie-promise": "^1.0.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/tsconfig/node_modules/globby/node_modules/array-union"
+        ],
+        "dependencies": {
+          "array-uniq": "^1.0.1"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/tsconfig/node_modules/parse-json",
+          "node_modules/tsconfig/node_modules/parse-json/vendor"
+        ],
+        "dependencies": {
+          "error-ex": "^1.2.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/tsconfig/node_modules/pinkie-promise"
+        ],
+        "dependencies": {
+          "pinkie": "^1.0.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/tsconfig/node_modules/strip-bom"
         ],
         "dependencies": {
           "is-utf8": "^0.2.0"

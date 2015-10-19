@@ -1,7 +1,6 @@
 import * as fsu from "../utils/fsUtil";
 
 import simpleValidator = require('./simpleValidator');
-import stripBom = require('strip-bom');
 var types = simpleValidator.types;
 
 // Most compiler options come from require('typescript').CompilerOptions, but
@@ -46,6 +45,7 @@ interface CompilerOptions {
     noLibCheck?: boolean;
     noResolve?: boolean;
     out?: string;
+    outFile?: string;                                 // new name for out
     outDir?: string;                                  // Redirect output structure to this directory
     preserveConstEnums?: boolean;
     removeComments?: boolean;                         // Do not emit comments in output
@@ -89,6 +89,7 @@ var compilerOptionsValidation: simpleValidator.ValidationInfo = {
     noLibCheck: { type: types.boolean },
     noResolve: { type: types.boolean },
     out: { type: types.string },
+    outFile: { type: types.string },
     outDir: { type: types.string },
     preserveConstEnums: { type: types.boolean },
     removeComments: { type: types.boolean },
@@ -118,6 +119,7 @@ interface UsefulFromPackageJson {
  */
 interface TypeScriptProjectRawSpecification {
     compilerOptions?: CompilerOptions;
+    exclude?: string[];                                 // optional: An array of 'glob / minimatch / RegExp' patterns to specify directories / files to exclude
     files?: string[];                                   // optional: paths to files
     filesGlob?: string[];                               // optional: An array of 'glob / minimatch / RegExp' patterns to specify source files
     formatCodeOptions?: formatting.FormatCodeOptions;   // optional: formatting options
@@ -159,7 +161,7 @@ export interface TypeScriptProjectFileDetails {
 //////////////////////////////////////////////////////////////////////
 
 export var errors = {
-    GET_PROJECT_INVALID_PATH: 'Invalid Path',
+    GET_PROJECT_INVALID_PATH: 'The path used to query for tsconfig.json does not exist',
     GET_PROJECT_NO_PROJECT_FOUND: 'No Project Found',
     GET_PROJECT_FAILED_TO_OPEN_PROJECT_FILE: 'Failed to fs.readFileSync the project file',
     GET_PROJECT_JSON_PARSE_FAILED: 'Failed to JSON.parse the project file',
@@ -193,23 +195,26 @@ function errorWithDetails<T>(error: Error, details: T): Error {
 
 import fs = require('fs');
 import path = require('path');
-import expand = require('glob-expand');
+import tsconfig = require('tsconfig');
 import os = require('os');
+import detectIndent = require('detect-indent');
+import extend = require('xtend');
 import formatting = require('./formatting');
 
 var projectFileName = 'tsconfig.json';
+
 /**
  * This is what we write to new files
  */
 var defaultFilesGlob = [
-    "./**/*.ts",
-    "./**/*.tsx",
-    "!./node_modules/**/*",
+    "**/*.ts",
+    "**/*.tsx",
+    "!node_modules/**",
 ];
 /**
  * This is what we use when the user doens't specify a files / filesGlob
  */
-var invisibleFilesGlob = ["./**/*.ts", "./**/*.tsx"];
+var invisibleFilesGlob = '{**/*.ts,**/*.tsx}';
 
 export var defaults: ts.CompilerOptions = {
     target: ts.ScriptTarget.ES5,
@@ -291,6 +296,11 @@ function rawToTsCompilerOptions(jsonOptions: CompilerOptions, projectDir: string
         compilerOptions.out = path.resolve(projectDir, compilerOptions.out);
     }
 
+    if (compilerOptions.outFile !== undefined) {
+        // Till out is removed. Support outFile by just copying it to `out`
+        compilerOptions.out = path.resolve(projectDir, compilerOptions.outFile);
+    }
+
     return compilerOptions;
 }
 
@@ -344,69 +354,45 @@ export function getProjectSync(pathOrSrcFile: string): TypeScriptProjectFileDeta
         throw new Error(errors.GET_PROJECT_INVALID_PATH);
     }
 
-    // Get the path directory
     var dir = fs.lstatSync(pathOrSrcFile).isDirectory() ? pathOrSrcFile : path.dirname(pathOrSrcFile);
+    var projectFile = tsconfig.resolveSync(dir);
 
-    // Keep going up till we find the project file
-    var projectFile = '';
-    try {
-        projectFile = travelUpTheDirectoryTreeTillYouFind(dir, projectFileName);
+    if (!projectFile) {
+      throw errorWithDetails<GET_PROJECT_NO_PROJECT_FOUND_Details>(
+          new Error(errors.GET_PROJECT_NO_PROJECT_FOUND), { projectFilePath: fsu.consistentPath(pathOrSrcFile), errorMessage: 'not found' });
     }
-    catch (e) {
-        let err: Error = e;
-        if (err.message == "not found") {
-            throw errorWithDetails<GET_PROJECT_NO_PROJECT_FOUND_Details>(
-                new Error(errors.GET_PROJECT_NO_PROJECT_FOUND), { projectFilePath: fsu.consistentPath(pathOrSrcFile), errorMessage: err.message });
-        }
-    }
-    projectFile = path.normalize(projectFile);
+
     var projectFileDirectory = path.dirname(projectFile) + path.sep;
 
     // We now have a valid projectFile. Parse it:
     var projectSpec: TypeScriptProjectRawSpecification;
+    var projectFileTextContent: string;
+
     try {
-        var projectFileTextContent = fs.readFileSync(projectFile, 'utf8');
+        projectFileTextContent = fs.readFileSync(projectFile, 'utf8');
     } catch (ex) {
         throw new Error(errors.GET_PROJECT_FAILED_TO_OPEN_PROJECT_FILE);
     }
+
     try {
-        projectSpec = JSON.parse(stripBom(projectFileTextContent));
+        projectSpec = tsconfig.parseFileSync(projectFileTextContent, projectFile);
     } catch (ex) {
         throw errorWithDetails<GET_PROJECT_JSON_PARSE_FAILED_Details>(
             new Error(errors.GET_PROJECT_JSON_PARSE_FAILED), { projectFilePath: fsu.consistentPath(projectFile), error: ex.message });
     }
 
-    // Setup default project options
-    if (!projectSpec.compilerOptions) projectSpec.compilerOptions = {};
-
-    // Our customizations for "tsconfig.json"
-    // Use grunt.file.expand type of logic
-    var cwdPath = path.relative(process.cwd(), path.dirname(projectFile));
-    if (!projectSpec.files && !projectSpec.filesGlob) { // If there is no files and no filesGlob, we create an invisible one.
-        var toExpand = invisibleFilesGlob;
-    }
-    if (projectSpec.filesGlob) { // If there is a files glob we will use that
-        var toExpand = projectSpec.filesGlob
-    }
-    if (toExpand) { // Expand whatever needs expanding
-        try {
-            projectSpec.files = expand({ filter: 'isFile', cwd: cwdPath }, toExpand);
-        }
-        catch (ex) {
-            throw errorWithDetails<GET_PROJECT_GLOB_EXPAND_FAILED_Details>(
-                new Error(errors.GET_PROJECT_GLOB_EXPAND_FAILED),
-                { glob: projectSpec.filesGlob, projectFilePath: fsu.consistentPath(projectFile), errorMessage: ex.message });
-        }
-    }
     if (projectSpec.filesGlob) { // for filesGlob we keep the files in sync
-        var prettyJSONProjectSpec = prettyJSON(projectSpec);
+        var relativeProjectSpec = extend(projectSpec, {
+          files: projectSpec.files.map(x => fsu.consistentPath(path.relative(projectFileDirectory, x))),
+          exclude: projectSpec.exclude.map(x => fsu.consistentPath(path.relative(projectFileDirectory, x)))
+        });
+
+        var prettyJSONProjectSpec = prettyJSON(relativeProjectSpec, detectIndent(projectFileTextContent).indent);
+
         if (prettyJSONProjectSpec !== projectFileTextContent) {
-            fs.writeFileSync(projectFile, prettyJSON(projectSpec));
+            fs.writeFileSync(projectFile, prettyJSONProjectSpec);
         }
     }
-
-    // Remove all relativeness
-    projectSpec.files = projectSpec.files.map((file) => path.resolve(projectFileDirectory, file));
 
     var pkg: UsefulFromPackageJson = null;
     try {
@@ -688,9 +674,10 @@ function getDefinitionsForNodeModules(projectDir: string, files: string[]): { ou
     return { implicit, ours, packagejson };
 }
 
-export function prettyJSON(object: any): string {
+export function prettyJSON(object: any, indent: string | number = 4): string {
     var cache = [];
-    var value = JSON.stringify(object,
+    var value = JSON.stringify(
+        object,
         // fixup circular reference
         function(key, value) {
             if (typeof value === 'object' && value !== null) {
@@ -703,8 +690,8 @@ export function prettyJSON(object: any): string {
             }
             return value;
         },
-    // indent 4 spaces
-        4);
+        indent
+    );
     value = value.split('\n').join(os.EOL) + os.EOL;
     cache = null;
     return value;

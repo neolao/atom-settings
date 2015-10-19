@@ -4,7 +4,6 @@
 /// <reference path="./typings/bluebird.d.ts"/>
 /// <reference path="./typings/codemirror.d.ts"/>
 /// <reference path="./typings/brackets.d.ts"/>
-/// <reference path="./typings/minimatch.d.ts"/>
 /// <reference path="./typings/mustache.d.ts"/>
 
 /// <reference path="../views/views.d.ts"/>
@@ -33,14 +32,14 @@ declare module 'escape-html' {
     export = escape;
 }
 
-// courtesy @blakeembrey
-declare module 'strip-bom' {
-    import Buffer = require('buffer')
+declare module 'detect-indent' {
+    function detectIndent (string: string): { amount: number; type?: string; indent: string };
+    export = detectIndent;
+}
 
-    function stripBom(value: string): string
-    function stripBom(value: Buffer): Buffer
-
-    export = stripBom
+declare module 'xtend' {
+    function extend <T, U> (dest: T, src: U): T & U;
+    export = extend;
 }
 
 declare module 'atom-space-pen-views' {
