@@ -6,13 +6,37 @@
 
 ## Usage
 
-Show git blame for the current editor with the command `ctrl-b`. Only works when `.editor` is active. Submodules? No problem. Click on the revision to be taken to the commit page on Github, Bitbucket, or your remote repository url of choice.
+### Toggling the gutter
+
+There a few ways to toggle the `git-blame` gutter.
+
+**Right Click**
+
+Right click the file you want to blame. Select `Toggle Git Blame` options from the dropdown.
+
+![right-click-activate](https://raw.githubusercontent.com/alexcorre/git-blame/master/images/right-click-activate.png)
+
+**Keyboard Shortcut**
+
+Show git blame for the currently active editor with the command `ctrl-b`. An editor pane is active if the the cursor is blinking on it.
+
+### Submodules
+
+Submodules? No problem, git-blame should take care of that.
+
+### See the revision diff
+
+Click on the revision hash in the gutter to be taken to the configured repository visual diff. See setting a custom remote repo url section below for support beyond bitbucket and github.
 
 ## Options
 
 ### Ignore White Space Diffs
 
 If this option is selected, the `git blame` command will be run with `-w` option.
+
+### Show Only Last Names
+
+If this option is selected, only the last word of the author's name will be displayed.
 
 ### Date Format String
 
@@ -68,3 +92,5 @@ https://github.com/alexcorre/git-blame/commit/12345
 * **0.4.3**: Remove further deprecations
 * **0.4.4**: Fix [#90](https://github.com/alexcorre/git-blame/issues/90)
 * **0.4.5**: Fix startup issues and the ability to click on a sha links. Thanks @filipminev
+* **0.4.6**: Add option to choose author name format. Thanks @javawizard
+* **0.4.7**: Make gutter width adjustable via settings. Thanks @wouterds

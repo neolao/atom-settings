@@ -1,7 +1,7 @@
 {
   "name": "fonts",
   "main": "./lib/fonts",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "Lots of monospace fonts.",
   "repository": {
     "type": "git",
@@ -19,16 +19,16 @@
     "typography",
     "@fontface"
   ],
-  "readme": "# Fonts package for Atom\n\nOh we do love our monospace fonts don't we? To celebrate typography and free choice, I've packaged all the great fonts I could get my hands on (over 45 of them at this point).\n\nThis package delivers them straight to Atom through the power of @font-face. You no longer need to hunt down and install your favourite font, instead you can now instantly try out any of the fonts in this package.\n\nFonts can be selected from a list in the settings for this package. Disable the package to re-enable the normal font settings.\n\n* [These fonts (and more) and download links](http://programmingfonts.org/list)\n\n## All fonts\nAnka/Coder, Anonymous Pro, Aurulent Sans Mono, Average Mono, BPmono, Bitstream Vera Sans Mono, Code New Roman, Consolamono, Cousine, Cutive Mono, DejaVu Mono, Droid Sans Mono, Effects Eighty, Fantasque Sans Mono, Fifteen, Fira Mono, Fixedsys, GNU Freefont, GNU Unifont, Generic Mono, Hack, Hermit Light, Hermit, Inconsolata, Inconsolata-g, Latin Modern Mono Light, Latin Modern Mono, Lekton, Liberation Mono, Luxi Mono, M+ Light, M+ Medium, M+ Thin, M+, Meslo, Monofur, NotCourierSans, Nova Mono, Office Code Pro, Oxygen Mono, PT Mono, Profont, Proggy Clean, Quinze, Roboto, Share Tech Mono, Source Code Pro Extra Light, Source Code Pro Light, Source Code Pro Medium, Source Code Pro, Sudo, TeX Gyre Cursor, Ubuntu Mono, VT323, Verily Serif Mono, saxMono\n\n## More programming fonts\nTest drive these fonts in your browser using the [Programming Fonts Test Drive App](http://app.programmingfonts.org)\n",
+  "readme": "# Fonts package for Atom\n\nOh we do love our monospace fonts don't we? To celebrate typography and free choice, I've packaged all the great fonts I could get my hands on (over 45 of them at this point).\n\nThis package delivers them straight to Atom through the power of @font-face. You no longer need to hunt down and install your favourite font, instead you can now instantly try out any of the fonts in this package.\n\n# How to use\n\n1. Install the package\n2. Go to the package's settings page\n3. Select a font from the drop-down list\n\n<img src=\"https://raw.githubusercontent.com/braver/fonts/master/howto.jpg\" height=\"150\" width=\"780\">\n\nDisable the package to re-enable the normal font settings.\n\n## All fonts\nAnka/Coder, Anonymous Pro, Aurulent Sans Mono, Average Mono, BPmono, Bitstream Vera Sans Mono, Code New Roman, Consolamono, Cousine, Cutive Mono, DejaVu Mono, Droid Sans Mono, Effects Eighty, Fantasque Sans Mono, Fifteen, Fira Mono, Fixedsys, GNU Freefont, GNU Unifont, Generic Mono, Hack, Hermit Light, Hermit, Inconsolata, Inconsolata-g, Latin Modern Mono Light, Latin Modern Mono, Lekton, Liberation Mono, Luxi Mono, M+ Light, M+ Medium, M+ Thin, M+, Meslo, Monofur, NotCourierSans, Nova Mono, Office Code Pro, Oxygen Mono, PT Mono, Profont, Proggy Clean, Quinze, Roboto, Share Tech Mono, Source Code Pro Extra Light, Source Code Pro Light, Source Code Pro Medium, Source Code Pro, Sudo, TeX Gyre Cursor, Ubuntu Mono, VT323, Verily Serif Mono, saxMono\n\n## More programming fonts\n\n* [These fonts (and more) and download links](http://programmingfonts.org/list)\n* Test drive these fonts in your browser using the [Programming Fonts Test Drive App](http://app.programmingfonts.org)\n",
   "readmeFilename": "README.md",
   "bugs": {
     "url": "https://github.com/braver/fonts/issues"
   },
   "homepage": "https://github.com/braver/fonts#readme",
-  "_id": "fonts@0.6.1",
-  "_shasum": "68d87cee644296071dcb6c7d8b2e4986711bbcfd",
-  "_resolved": "file:../d-115914-491-1hj1y69/package.tgz",
-  "_from": "../d-115914-491-1hj1y69/package.tgz",
+  "_id": "fonts@0.7.0",
+  "_shasum": "f63356b9cde3ddd5273b86800335654cceba9551",
+  "_resolved": "file:../d-115926-2777-1ftzkfs/package.tgz",
+  "_from": "../d-115926-2777-1ftzkfs/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [],

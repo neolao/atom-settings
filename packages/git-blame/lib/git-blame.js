@@ -54,6 +54,10 @@ module.exports = {
       type: 'string',
       default: 'Example -> https://github.com/<%- project %>/<%- repo %>/commit/<%- revision %>'
     },
+    "columnWidth": {
+      type: 'integer',
+      default: 210
+    },
     "dateFormatString": {
       type: 'string',
       default: 'YYYY-MM-DD'
@@ -61,6 +65,10 @@ module.exports = {
     "ignoreWhiteSpaceDiffs": {
       type: 'boolean',
       default: false
+    },
+    "showOnlyLastNames": {
+      type: 'boolean',
+      default: true
     }
   },
 
