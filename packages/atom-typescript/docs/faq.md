@@ -3,6 +3,10 @@
 ## I keep getting changes to tsconfig.json
 This is probably because of us keeping `files` updated with the `filesGlob` option. The reason why we do this is because the official `tsconfig.json` spec does not support `filesGlob`. Therefore we keep `files` in sync with the `filesGlob` so that your team mates can use whatever editor they prefer (sublime text, visual studio etc.).
 
+You can now disable this behavior by setting the `rewriteTsconfig` flag to `false` in your project's `tsconfig.json` under the `atom` key.
+
+[Further Details](https://github.com/TypeStrong/atom-typescript/blob/master/docs/tsconfig.md#atom)
+
 ## For really large projects atom-typescript gets slow
 If you have `tsconfig.json` in a folder that contains `node_modules`, atom-typescript might become slow (due to extensive file listing). Two possible fixes:
 * Move `tsconfig.json` into a sub folder e.g. `src`
@@ -50,7 +54,7 @@ You can set that in the package settings https://atom.io/docs/latest/using-atom-
 You probably deleted them or added them or moved them around. We don't watch the file system as it is memory intensive and unreliable across operating systems. You can ask atom-typescript to do a rescan of your file system using the `sync` command (https://github.com/TypeStrong/atom-typescript#sync)
 
 ## Failed to Update
-This can happen particularly on windows as it is not possible to delete a file if it is executing. Close all atom instances and run the following commands:
+This can happen particularly on windows ([relevant issue](https://github.com/TypeStrong/atom-typescript/issues/195)) as it is not possible to delete a file if it is executing. Close all atom instances and run the following commands:
 
 ```
 apm uninstall atom-typescript

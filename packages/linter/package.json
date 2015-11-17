@@ -4,7 +4,7 @@
   "author": {
     "name": "atom-community"
   },
-  "version": "1.9.1",
+  "version": "1.11.2",
   "description": "A Base Linter with Cow Powers",
   "repository": {
     "type": "git",
@@ -30,6 +30,11 @@
     }
   },
   "providedServices": {
+    "linter-indie": {
+      "versions": {
+        "1.0.0": "provideIndie"
+      }
+    },
     "linter-plus-self": {
       "versions": {
         "0.1.0": "provideLinter"
@@ -46,10 +51,10 @@
     "url": "https://github.com/atom-community/linter/issues"
   },
   "homepage": "https://github.com/atom-community/linter#readme",
-  "_id": "linter@1.9.1",
-  "_shasum": "0f8538e357bda45a8084854e1f60b36091d5aa42",
-  "_resolved": "file:../d-115926-2791-10ale5o/package.tgz",
-  "_from": "../d-115926-2791-10ale5o/package.tgz",
+  "_id": "linter@1.11.2",
+  "_shasum": "f5e6e28aebc0cd86941d9687ee94b7a55b053144",
+  "_resolved": "file:../d-1151017-7370-17gkczr/package.tgz",
+  "_from": "../d-1151017-7370-17gkczr/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
@@ -100,6 +105,8 @@
       ".js": [
         "lib/editor-linter.js",
         "lib/editor-registry.js",
+        "lib/indie-registry.js",
+        "lib/indie.js",
         "lib/linter-registry.js",
         "lib/linter-views.js",
         "lib/message-registry.js",

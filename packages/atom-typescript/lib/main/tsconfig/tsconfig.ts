@@ -17,6 +17,8 @@ var types = simpleValidator.types;
  */
 interface CompilerOptions {
     allowNonTsExtensions?: boolean;
+    allowUnreachableCode?: boolean;
+    allowUnusedLabels?: boolean;
     charset?: string;
     codepage?: number;
     declaration?: boolean;
@@ -40,7 +42,9 @@ interface CompilerOptions {
     noEmitHelpers?: boolean;
     noEmitOnError?: boolean;
     noErrorTruncation?: boolean;
+    noFallthroughCasesInSwitch?: boolean;
     noImplicitAny?: boolean;                          // Error on inferred `any` type
+    noImplicitReturns?: boolean;
     noLib?: boolean;
     noLibCheck?: boolean;
     noResolve?: boolean;
@@ -52,6 +56,7 @@ interface CompilerOptions {
     rootDir?: string;
     sourceMap?: boolean;                              // Generates SourceMaps (.map files)
     sourceRoot?: string;                              // Optionally specifies the location where debugger should locate TypeScript source files after deployment
+    stripInternal?: boolean;
     suppressExcessPropertyErrors?: boolean;           // Optionally disable strict object literal assignment checking
     suppressImplicitAnyIndexErrors?: boolean;
     target?: string;                                  // 'es3'|'es5' (default)|'es6'
@@ -60,8 +65,10 @@ interface CompilerOptions {
 }
 
 var compilerOptionsValidation: simpleValidator.ValidationInfo = {
-    allowNonTsExtensions: { type: simpleValidator.types.boolean },
-    charset: { type: simpleValidator.types.string },
+    allowNonTsExtensions: { type: types.boolean },
+    allowUnreachableCode: { type: types.boolean },
+    allowUnusedLabels: { type: types.boolean },
+    charset: { type: types.string },
     codepage: { type: types.number },
     declaration: { type: types.boolean },
     diagnostics: { type: types.boolean },
@@ -77,14 +84,16 @@ var compilerOptionsValidation: simpleValidator.ValidationInfo = {
     locals: { type: types.string },
     listFiles: { type: types.boolean },
     mapRoot: { type: types.string },
-    module: { type: types.string, validValues: ['commonjs', 'amd', 'system', 'umd'] },
+    module: { type: types.string, validValues: ['commonjs', 'amd', 'system', 'umd', 'es6', 'es2015'] },
     moduleResolution: { type: types.string, validValues: ['classic', 'node'] },
     newLine: { type: types.string },
     noEmit: { type: types.boolean },
     noEmitHelpers: { type: types.boolean },
     noEmitOnError: { type: types.boolean },
     noErrorTruncation: { type: types.boolean },
+    noFallthroughCasesInSwitch: { type: types.boolean },
     noImplicitAny: { type: types.boolean },
+    noImplicitReturns: { type: types.boolean },
     noLib: { type: types.boolean },
     noLibCheck: { type: types.boolean },
     noResolve: { type: types.boolean },
@@ -96,6 +105,7 @@ var compilerOptionsValidation: simpleValidator.ValidationInfo = {
     rootDir: { type: types.string },
     sourceMap: { type: types.boolean },
     sourceRoot: { type: types.string },
+    stripInternal: { type: types.boolean },
     suppressExcessPropertyErrors: { type: types.boolean },
     suppressImplicitAnyIndexErrors: { type: types.boolean },
     target: { type: types.string, validValues: ['es3', 'es5', 'es6'] },
@@ -127,6 +137,7 @@ interface TypeScriptProjectRawSpecification {
     buildOnSave?: boolean;
     externalTranspiler?: string | { name: string; options?: any };
     scripts?: { postbuild?: string };
+    atom?: { rewriteTsconfig?: boolean };
 }
 
 /**
@@ -144,6 +155,7 @@ export interface TypeScriptProjectSpecification {
     package?: UsefulFromPackageJson;
     externalTranspiler?: string | { name: string; options?: any };
     scripts: { postbuild?: string };
+    atom: { rewriteTsconfig: boolean };
 }
 
 ///////// FOR USE WITH THE API /////////////
@@ -243,8 +255,10 @@ var typescriptEnumMap = {
         'none': ts.ModuleKind.None,
         'commonjs': ts.ModuleKind.CommonJS,
         'amd': ts.ModuleKind.AMD,
-        'system': ts.ModuleKind.System,
         'umd': ts.ModuleKind.UMD,
+        'system': ts.ModuleKind.System,
+        'es6': ts.ModuleKind.ES6,
+        'es2015': ts.ModuleKind.ES2015,
     },
     moduleResolution: {
         'node': ts.ModuleResolutionKind.NodeJs,
@@ -333,7 +347,8 @@ export function getDefaultInMemoryProject(srcFile: string): TypeScriptProjectFil
         formatCodeOptions: formatting.defaultFormatCodeOptions(),
         compileOnSave: true,
         buildOnSave: false,
-        scripts: {}
+        scripts: {},
+        atom: { rewriteTsconfig: true },
     };
 
     return {
@@ -375,21 +390,16 @@ export function getProjectSync(pathOrSrcFile: string): TypeScriptProjectFileDeta
     }
 
     try {
-        projectSpec = tsconfig.parseFileSync(projectFileTextContent, projectFile);
+        projectSpec = tsconfig.parseFileSync(projectFileTextContent, projectFile, { resolvePaths: false });
     } catch (ex) {
         throw errorWithDetails<GET_PROJECT_JSON_PARSE_FAILED_Details>(
             new Error(errors.GET_PROJECT_JSON_PARSE_FAILED), { projectFilePath: fsu.consistentPath(projectFile), error: ex.message });
     }
 
     if (projectSpec.filesGlob) { // for filesGlob we keep the files in sync
-        var relativeProjectSpec = extend(projectSpec, {
-          files: projectSpec.files.map(x => fsu.consistentPath(path.relative(projectFileDirectory, x))),
-          exclude: projectSpec.exclude.map(x => fsu.consistentPath(path.relative(projectFileDirectory, x)))
-        });
+        var prettyJSONProjectSpec = prettyJSON(projectSpec, detectIndent(projectFileTextContent).indent);
 
-        var prettyJSONProjectSpec = prettyJSON(relativeProjectSpec, detectIndent(projectFileTextContent).indent);
-
-        if (prettyJSONProjectSpec !== projectFileTextContent) {
+        if (prettyJSONProjectSpec !== projectFileTextContent && projectSpec.atom && projectSpec.atom.rewriteTsconfig) {
             fs.writeFileSync(projectFile, prettyJSONProjectSpec);
         }
     }
@@ -414,7 +424,7 @@ export function getProjectSync(pathOrSrcFile: string): TypeScriptProjectFileDeta
 
     var project: TypeScriptProjectSpecification = {
         compilerOptions: {},
-        files: projectSpec.files,
+        files: projectSpec.files.map(x => path.resolve(projectFileDirectory, x)),
         filesGlob: projectSpec.filesGlob,
         formatCodeOptions: formatting.makeFormatCodeOptions(projectSpec.formatCodeOptions),
         compileOnSave: projectSpec.compileOnSave == undefined ? true : projectSpec.compileOnSave,
@@ -422,7 +432,8 @@ export function getProjectSync(pathOrSrcFile: string): TypeScriptProjectFileDeta
         typings: [],
         externalTranspiler: projectSpec.externalTranspiler == undefined ? undefined : projectSpec.externalTranspiler,
         scripts: projectSpec.scripts || {},
-        buildOnSave: !!projectSpec.buildOnSave
+        buildOnSave: !!projectSpec.buildOnSave,
+        atom: { rewriteTsconfig: true }
     };
 
     // Validate the raw compiler options before converting them to TS compiler options
@@ -513,32 +524,36 @@ function increaseProjectForReferenceAndImports(files: string[]): string[] {
             var preProcessedFileInfo = ts.preProcessFile(content, true),
                 dir = path.dirname(file);
 
+            let extensions = ['.ts', '.d.ts', '.tsx'];
+            function getIfExists(filePathNoExt: string) {
+                for (let ext of extensions) {
+                    if (fs.existsSync(filePathNoExt + ext)) {
+                        return filePathNoExt + ext;
+                    }
+                }
+            }
+
             referenced.push(
                 preProcessedFileInfo.referencedFiles.map(fileReference => {
                     // We assume reference paths are always relative
                     var file = path.resolve(dir, fsu.consistentPath(fileReference.fileName));
-                    // Try all three, by itself, .ts, .d.ts
+                    // Try by itself then with extensions
                     if (fs.existsSync(file)) {
                         return file;
                     }
-                    if (fs.existsSync(file + '.ts')) {
-                        return file + '.ts';
-                    }
-                    if (fs.existsSync(file + '.d.ts')) {
-                        return file + '.d.ts';
-                    }
-                    return null;
+                    return getIfExists(file);
                 }).filter(file=> !!file)
                     .concat(
                     preProcessedFileInfo.importedFiles
                         .filter((fileReference) => pathIsRelative(fileReference.fileName))
                         .map(fileReference => {
-                            var file = path.resolve(dir, fileReference.fileName + '.ts');
-                            if (!fs.existsSync(file)) {
-                                file = path.resolve(dir, fileReference.fileName + '.d.ts');
+                            let fileNoExt = path.resolve(dir, fileReference.fileName);
+                            let file = getIfExists(fileNoExt);
+                            if (!file) {
+                                file = getIfExists(`${file}/index`);
                             }
                             return file;
-                        })
+                        }).filter(file=> !!file)
                     )
             );
         });

@@ -13,7 +13,7 @@
     preferredLineLength: 120
     tabLength: 4
     invisibles: {}
-    fontSize: 24
+    fontSize: 22
   core:
     disabledPackages: [
       "enhanced-package-list"
@@ -164,6 +164,7 @@
   "git-plus": {}
   "tree-view":
     hideVcsIgnoredFiles: false
+  pigments: {}
 ".diff.source":
   editor:
     preferredLineLength: 120

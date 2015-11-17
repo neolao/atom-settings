@@ -295,8 +295,8 @@ var MainPanelView = (function (_super) {
         var title = panelHeaders.references + " ( <span class=\"text-highlight\" style=\"font-weight: bold\">Found: " + references.length + "</span> )";
         this.referencesPanelBtn.html(title);
         gotoHistory.referencesOutput.members = [];
-        for (var _i = 0; _i < references.length; _i++) {
-            var ref = references[_i];
+        for (var _i = 0, references_1 = references; _i < references_1.length; _i++) {
+            var ref = references_1[_i];
             var view = new lineMessageView.LineMessageView({
                 goToLine: function (filePath, line, col) { return gotoHistory.gotoLine(filePath, line, col, gotoHistory.referencesOutput); },
                 message: '',
@@ -311,6 +311,7 @@ var MainPanelView = (function (_super) {
     };
     MainPanelView.prototype.clearError = function () {
         this.clearedError = true;
+        this.clearSummary();
         this.errorBody.empty();
     };
     MainPanelView.prototype.addError = function (view) {
@@ -330,13 +331,17 @@ var MainPanelView = (function (_super) {
             handler(this.summary);
         }
     };
+    MainPanelView.prototype.clearSummary = function () {
+        this.summary.html('');
+        this.summary.off();
+    };
     MainPanelView.prototype.setErrorPanelErrorCount = function (fileErrorCount, totalErrorCount) {
         var title = panelHeaders.error + " ( <span class=\"text-success\">No Errors</span> )";
         if (totalErrorCount > 0) {
             title = panelHeaders.error + " (\n                <span class=\"text-highlight\" style=\"font-weight: bold\"> " + fileErrorCount + " </span>\n                <span class=\"text-error\" style=\"font-weight: bold;\"> file" + (fileErrorCount === 1 ? "" : "s") + " </span>\n                <span class=\"text-highlight\" style=\"font-weight: bold\"> " + totalErrorCount + " </span>\n                <span class=\"text-error\" style=\"font-weight: bold;\"> error" + (totalErrorCount === 1 ? "" : "s") + " </span>\n            )";
         }
         else {
-            this.summary.html('');
+            this.clearSummary();
             this.errorBody.html('<span class="text-success">No errors in open files \u2665</span>');
         }
         this.errorPanelBtn.html(title);
