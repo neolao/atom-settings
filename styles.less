@@ -35,6 +35,9 @@ atom-workspace .horizontal .left {
         }
     }
 }
+.tree-view.full-menu.list-tree {
+    background: #000;
+}
 // END tree view
 
 
@@ -128,9 +131,6 @@ atom-panel.modal.overlay.from-top {
     }
 }
 
-.symbols-tree-view {
-
-}
 
 // Search result
 .item-views {
@@ -205,11 +205,28 @@ atom-text-editor::shadow .cursor {
     width: 2px !important;
 }
 
+
 // Package: Symbols Tree
 .symbols-tree-view {
-    font-size: 1.5rem;
+    font-size: 1rem;
     width: 300px !important;
+    border-left: dashed 1px #999;
+    background: #334;
 }
+@media screen and (min-width: 1300px) {
+    .symbols-tree-view {
+        font-size: 1.2rem;
+        width: 400px !important;
+        border-left: dashed 2px #999;
+    }
+}
+@media screen and (min-width: 2000px) {
+    .symbols-tree-view {
+        font-size: 1.5rem;
+        width: 500px !important;
+    }
+}
+
 
 // Package: Highlight-line
 atom-text-editor::shadow .highlight.selection .region {

@@ -4,7 +4,7 @@
     "name": "Akihiro HARAI"
   },
   "main": "./lib/indent-guide-improved",
-  "version": "1.4.3",
+  "version": "1.4.5",
   "description": "This draws indent guide more correctly and understandably.",
   "repository": {
     "type": "git",
@@ -12,7 +12,7 @@
   },
   "license": "MIT",
   "engines": {
-    "atom": ">=1.0.0"
+    "atom": ">=1.2.0"
   },
   "keywords": [
     "indentation",
@@ -28,10 +28,10 @@
     "url": "https://github.com/harai/indent-guide-improved/issues"
   },
   "homepage": "https://github.com/harai/indent-guide-improved#readme",
-  "_id": "indent-guide-improved@1.4.3",
-  "_shasum": "a3b750005ee44255847ad19750ceb21748b280e4",
-  "_resolved": "file:../d-11583-77948-13do6le/package.tgz",
-  "_from": "../d-11583-77948-13do6le/package.tgz",
+  "_id": "indent-guide-improved@1.4.5",
+  "_shasum": "72d8507c5f59112e53d1498c3384c68a608683e8",
+  "_resolved": "file:../d-1151122-8308-bxjym6/package.tgz",
+  "_from": "../d-1151122-8308-bxjym6/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [

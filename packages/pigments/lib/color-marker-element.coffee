@@ -1,5 +1,7 @@
 {CompositeDisposable, Emitter} = require 'atom'
+{registerOrUpdateElement} = require 'atom-utils'
 
+SPEC_MODE = atom.inSpecMode()
 RENDERERS =
   'background': require './renderers/background'
   'outline': require './renderers/outline'
@@ -21,6 +23,8 @@ class ColorMarkerElement extends HTMLElement
   onDidRelease: (callback) ->
     @emitter.on 'did-release', callback
 
+  setContainer: (@bufferElement) ->
+
   getModel: -> @colorMarker
 
   setModel: (@colorMarker) ->
@@ -30,10 +34,10 @@ class ColorMarkerElement extends HTMLElement
     @subscriptions.add @colorMarker.marker.onDidDestroy => @release()
     @subscriptions.add @colorMarker.marker.onDidChange (data) =>
       {isValid} = data
-      if isValid then @render() else @release()
+      if isValid then @bufferElement.requestMarkerUpdate([this]) else @release()
 
     @subscriptions.add atom.config.observe 'pigments.markerType', (type) =>
-      @render()
+      @bufferElement.requestMarkerUpdate([this]) unless type is 'gutter'
 
     @render()
 
@@ -43,9 +47,13 @@ class ColorMarkerElement extends HTMLElement
     @clear()
 
   render: ->
+    return unless @colorMarker?
     return if @colorMarker.marker.displayBuffer.isDestroyed()
     @innerHTML = ''
     {style, regions, class: cls} = @renderer.render(@colorMarker)
+
+    if regions?.some((r) -> r.invalid) and !SPEC_MODE
+      return @bufferElement.requestMarkerUpdate([this])
 
     @appendChild(region) for region in regions if regions?
     if cls?
@@ -61,7 +69,7 @@ class ColorMarkerElement extends HTMLElement
     @lastMarkerScreenRange = @colorMarker.getScreenRange()
 
   checkScreenRange: ->
-    return unless @colorMarker?
+    return unless @colorMarker? and @lastMarkerScreenRange?
     unless @lastMarkerScreenRange.isEqual(@colorMarker.getScreenRange())
       @render()
 
@@ -82,10 +90,10 @@ class ColorMarkerElement extends HTMLElement
     @className = ''
     @style.cssText = ''
 
-module.exports = ColorMarkerElement =
-document.registerElement 'pigments-color-marker', {
-  prototype: ColorMarkerElement.prototype
-}
+module.exports =
+ColorMarkerElement =
+registerOrUpdateElement 'pigments-color-marker', ColorMarkerElement.prototype
 
 ColorMarkerElement.setMarkerType = (markerType) ->
+  return if markerType is 'gutter'
   @prototype.renderer = new RENDERERS[markerType]

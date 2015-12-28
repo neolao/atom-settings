@@ -1,3 +1,14 @@
+## 1.4.5
+### Bugfix
+
+* Fixed a bug #26
+* Removed deprecation warnings
+
+## 1.4.4
+### Bugfix
+
+* Fixed bugs #26 #28
+
 ## 1.4.3
 ### Bugfix
 

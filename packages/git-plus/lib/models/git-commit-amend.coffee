@@ -110,9 +110,9 @@ commit = (directory, filePath) ->
     git.refresh()
 
 cleanup = (currentPane, filePath) ->
-  currentPane.activate() if currentPane.alive
+  currentPane.activate() if currentPane.isAlive()
   disposables.dispose()
-  try fs.unlinkSync filePath
+  fs.unlink filePath
 
 module.exports = (repo) ->
   currentPane = atom.workspace.getActivePane()

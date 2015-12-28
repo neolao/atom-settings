@@ -8,13 +8,11 @@ notifications:
   email:
     on_success: never
     on_failure: change
-before_script:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-os: linux
-env: LPHP_OS=linux
-script: scripts/build_package.sh
+os: osx
+before_install:
+  # Updating PHP to 5.6
+  - curl -s http://php-osx.liip.ch/install.sh | bash -s 5.6
+  - export PATH=/usr/local/php5/bin:$PATH
+  - php --version
 
-language: php
-php:
-  - 5.6
+script: 'curl -s https://raw.githubusercontent.com/atom/ci/master/build-package.sh | sh'

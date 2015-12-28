@@ -1,4 +1,20 @@
 
+### 2.0.3 - 11/21/15
+
+Went back to 2.0.1 code.
+
+### 2.0.2 - 11/21/15
+
+Speeded up everything but editing.
+
+### 2.0.1 - 11/20/15
+
+Removed cruft from readme.
+
+### 2.0.0 - 11/20/15
+
+Rewritten from scratch.
+
 ### 0.4.0 - 6/4/15
 * supports lit CS, thanks @michaelforrest
 

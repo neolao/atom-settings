@@ -24,7 +24,7 @@ getTemplate = (cwd) ->
   git.getConfig('commit.template', cwd).then (filePath) ->
     if filePath then fs.readFileSync(Path.get(filePath.trim())).toString().trim() else ''
 
-prepFile = (status, filePath) ->
+prepFile = (status, filePath, diff) ->
   cwd = Path.dirname(filePath)
   git.getConfig('core.commentchar', cwd).then (commentchar) ->
     commentchar = if commentchar then commentchar.trim() else '#'
@@ -36,7 +36,9 @@ prepFile = (status, filePath) ->
         #{commentchar} Please enter the commit message for your changes. Lines starting
         #{commentchar} with '#{commentchar}' will be ignored, and an empty message aborts the commit.
         #{commentchar}
-        #{commentchar} #{status}"""
+        #{commentchar} #{status}
+
+        #{diff}"""
 
 destroyCommitEditor = ->
   atom.workspace?.getPanes().some (pane) ->
@@ -55,11 +57,13 @@ commit = (directory, filePath) ->
     notifier.addSuccess data
     destroyCommitEditor()
     git.refresh()
+  .catch (data) ->
+    notifier.addError data
 
 cleanup = (currentPane, filePath) ->
-  currentPane.activate() if currentPane.alive
+  currentPane.activate() if currentPane.isAlive()
   disposables.dispose()
-  try fs.unlinkSync filePath
+  fs.unlink filePath
 
 showFile = (filePath) ->
   atom.workspace.open(filePath, searchAllPanes: true).then (textEditor) ->
@@ -71,7 +75,7 @@ showFile = (filePath) ->
 module.exports = (repo, {stageChanges, andPush}={}) ->
   filePath = Path.join(repo.getPath(), 'COMMIT_EDITMSG')
   currentPane = atom.workspace.getActivePane()
-  init = -> getStagedFiles(repo).then (status) -> prepFile status, filePath
+  init = -> getStagedFiles(repo).then (status) -> prepFile status, filePath, ''
   startCommit = ->
     showFile filePath
     .then (textEditor) ->
@@ -82,7 +86,7 @@ module.exports = (repo, {stageChanges, andPush}={}) ->
     .catch (msg) -> notifier.addError msg
 
   if stageChanges
-    git.add(repo, update: stageChanges).then -> init().then -> startCommit()
+    git.add(repo, update: stageChanges).then(-> init()).then -> startCommit()
   else
     init().then -> startCommit()
     .catch (message) ->

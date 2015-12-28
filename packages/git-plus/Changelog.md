@@ -1,5 +1,35 @@
 ## Changelog
 
+### 5.8.3
+- Show errors from `Diff` command
+
+### 5.8.2
+- Fix for no notifications when changing branches
+
+### 5.8.1
+- Remove verbose commit feature because it isn't fully implemented
+
+### 5.8.0
+- Add setting for verbose commit panes
+
+### 5.7.1
+- Fix #349 (@joshbaldock)
+
+### 5.7.0
+- Added config options for pulling before pushing
+
+### 5.6.10
+- Fix #340 (@brettle)
+
+### 5.6.8
+- Fix #322 (@teefax)
+- Change format of list of commands in README (@capncodewash)
+
+### 5.6.6
+- Fix #322 (@mightydok)
+- Make all notifications dismissable (@jamen)
+- Fix height for long log outputs (@sxasraf)
+
 ### 5.6.5
 - Trigger checkout from clicking on branch name in status bar on atom-workspace
 - Update splitPaneDirection config to be an enum

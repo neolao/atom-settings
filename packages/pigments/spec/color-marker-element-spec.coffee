@@ -2,7 +2,6 @@ path = require 'path'
 Color = require '../lib/color'
 ColorMarker = require '../lib/color-marker'
 ColorMarkerElement = require '../lib/color-marker-element'
-{TextEditor} = require 'atom'
 
 stylesheetPath = path.resolve __dirname, '..', 'styles', 'pigments.less'
 stylesheet = atom.themes.loadStylesheet(stylesheetPath)
@@ -20,7 +19,7 @@ describe 'ColorMarkerElement', ->
 
     jasmineContent.appendChild(styleNode)
 
-    editor = new TextEditor({})
+    editor = atom.workspace.buildTextEditor({})
     editor.setText("""
     body {
       color: red;
@@ -47,6 +46,9 @@ describe 'ColorMarkerElement', ->
 
   it 'releases itself when the marker is destroyed', ->
     colorMarkerElement = new ColorMarkerElement
+    colorMarkerElement.setContainer
+      requestMarkerUpdate: ([marker]) -> marker.render()
+
     colorMarkerElement.setModel(colorMarker)
 
     eventSpy = jasmine.createSpy('did-release')
@@ -72,6 +74,9 @@ describe 'ColorMarkerElement', ->
       ColorMarkerElement.setMarkerType('background')
 
       colorMarkerElement = new ColorMarkerElement
+      colorMarkerElement.setContainer
+        requestMarkerUpdate: ([marker]) -> marker.render()
+
       colorMarkerElement.setModel(colorMarker)
 
       regions = colorMarkerElement.querySelectorAll('.region.background')
@@ -118,6 +123,9 @@ describe 'ColorMarkerElement', ->
       ColorMarkerElement.setMarkerType('outline')
 
       colorMarkerElement = new ColorMarkerElement
+      colorMarkerElement.setContainer
+        requestMarkerUpdate: ([marker]) -> marker.render()
+
       colorMarkerElement.setModel(colorMarker)
 
       regions = colorMarkerElement.querySelectorAll('.region.outline')
@@ -164,6 +172,9 @@ describe 'ColorMarkerElement', ->
       ColorMarkerElement.setMarkerType('underline')
 
       colorMarkerElement = new ColorMarkerElement
+      colorMarkerElement.setContainer
+        requestMarkerUpdate: ([marker]) -> marker.render()
+
       colorMarkerElement.setModel(colorMarker)
 
       regions = colorMarkerElement.querySelectorAll('.region.underline')
@@ -226,7 +237,7 @@ describe 'ColorMarkerElement', ->
       })
 
     beforeEach ->
-      editor = new TextEditor({})
+      editor = atom.workspace.buildTextEditor({})
       editor.setText("""
       body {
         background: red, green, blue;
@@ -246,6 +257,9 @@ describe 'ColorMarkerElement', ->
 
       markersElements = markers.map (colorMarker) ->
         colorMarkerElement = new ColorMarkerElement
+        colorMarkerElement.setContainer
+          requestMarkerUpdate: ([marker]) -> marker.render()
+
         colorMarkerElement.setModel(colorMarker)
 
         jasmineContent.appendChild(colorMarkerElement)
@@ -285,7 +299,7 @@ describe 'ColorMarkerElement', ->
       })
 
     beforeEach ->
-      editor = new TextEditor({})
+      editor = atom.workspace.buildTextEditor({})
       editor.setText("""
       body {
         background: red, green, blue;
@@ -305,6 +319,9 @@ describe 'ColorMarkerElement', ->
 
       markersElements = markers.map (colorMarker) ->
         colorMarkerElement = new ColorMarkerElement
+        colorMarkerElement.setContainer
+          requestMarkerUpdate: ([marker]) -> marker.render()
+
         colorMarkerElement.setModel(colorMarker)
 
         jasmineContent.appendChild(colorMarkerElement)

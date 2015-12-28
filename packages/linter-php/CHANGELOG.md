@@ -1,3 +1,18 @@
+# v1.1.6
+* Bump to include a fix in `atom-linter`.
+
+# v1.1.5
+* Bump to include a fix in `atom-linter`.
+
+# v1.1.4
+* Bump to include latest `package-deps`.
+
+# v1.l.3
+* Stop ignoring `php.ini`
+
+# v1.1.2
+* Update package dependencies to clear an Atom deprecation issue
+
 # v1.1.1
 * Only activate the package when a PHP file has been opened
 

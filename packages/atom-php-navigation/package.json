@@ -1,0 +1,245 @@
+{
+  "name": "atom-php-navigation",
+  "main": "./lib/atom-php-navigation",
+  "version": "0.5.2",
+  "description": "Navigation by project classes in atom editor.\nTo activate press cmd-alt-n.\nTo navigate press alt + click",
+  "keywords": [
+    "php",
+    "navigation",
+    "classes",
+    "project",
+    "files"
+  ],
+  "activationCommands": {
+    "atom-workspace": "atom-php-navigation:toggle"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/igogo5yo/atom-php-navigation.git"
+  },
+  "bugs": {
+    "url": "https://github.com/igogo5yo/atom-php-navigation/issues"
+  },
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {
+    "scandir": "~0.1.2",
+    "trim": "*",
+    "jquery": "*"
+  },
+  "readme": "# atom-php-navigation\n[![apm](https://img.shields.io/apm/v/atom-php-navigation.svg)]()\n[![apm](https://img.shields.io/apm/dm/atom-php-navigation.svg)]()\n[![apm](https://img.shields.io/apm/l/atom-php-navigation.svg)]()\n\nNavigation by project classes in atom editor\n\n![Usage](https://github.com/igogo5yo/atom-php-navigation/raw/master/resources/atom-php-navigation.gif)\n\n**to activate:**\n```\ncmd-alt-n\n```\n\n**to navigate:**\n```\nalt-mouseclick\n```\n",
+  "readmeFilename": "README.md",
+  "homepage": "https://github.com/igogo5yo/atom-php-navigation#readme",
+  "_id": "atom-php-navigation@0.5.2",
+  "_shasum": "551ceb422d37992738623077706c512f9678541a",
+  "_resolved": "file:../d-1151018-24982-1prcp2z/package.tgz",
+  "_from": "../d-1151018-24982-1prcp2z/package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [
+      {
+        "name": "jquery",
+        "version": "2.1.4",
+        "path": "node_modules/jquery/dist/jquery.js"
+      },
+      {
+        "name": "scandir",
+        "version": "0.1.2",
+        "path": "node_modules/scandir/lib/scandir.js"
+      },
+      {
+        "name": "ansi",
+        "version": "0.2.1",
+        "path": "node_modules/scandir/node_modules/ansi/lib/ansi.js"
+      },
+      {
+        "name": "commander",
+        "version": "2.9.0",
+        "path": "node_modules/scandir/node_modules/commander/index.js"
+      },
+      {
+        "name": "graceful-readlink",
+        "version": "1.0.1",
+        "path": "node_modules/scandir/node_modules/commander/node_modules/graceful-readlink/index.js"
+      },
+      {
+        "name": "mime",
+        "version": "1.2.11",
+        "path": "node_modules/scandir/node_modules/mime/mime.js"
+      },
+      {
+        "name": "trim",
+        "version": "0.0.1",
+        "path": "node_modules/trim/index.js"
+      }
+    ],
+    "extensions": {
+      ".coffee": [
+        "lib/atom-php-navigation-view.coffee",
+        "lib/atom-php-navigation.coffee"
+      ],
+      ".json": [
+        "node_modules/jquery/bower.json",
+        "node_modules/jquery/package.json",
+        "node_modules/scandir/node_modules/ansi/package.json",
+        "node_modules/scandir/node_modules/commander/node_modules/graceful-readlink/package.json",
+        "node_modules/scandir/node_modules/commander/package.json",
+        "node_modules/scandir/node_modules/mime/package.json",
+        "node_modules/scandir/package.json",
+        "node_modules/trim/component.json",
+        "node_modules/trim/package.json",
+        "package.json"
+      ],
+      ".js": [
+        "node_modules/jquery/dist/jquery.js",
+        "node_modules/jquery/dist/jquery.min.js",
+        "node_modules/jquery/src/ajax/jsonp.js",
+        "node_modules/jquery/src/ajax/load.js",
+        "node_modules/jquery/src/ajax/parseJSON.js",
+        "node_modules/jquery/src/ajax/parseXML.js",
+        "node_modules/jquery/src/ajax/script.js",
+        "node_modules/jquery/src/ajax/var/nonce.js",
+        "node_modules/jquery/src/ajax/var/rquery.js",
+        "node_modules/jquery/src/ajax/xhr.js",
+        "node_modules/jquery/src/ajax.js",
+        "node_modules/jquery/src/attributes/attr.js",
+        "node_modules/jquery/src/attributes/classes.js",
+        "node_modules/jquery/src/attributes/prop.js",
+        "node_modules/jquery/src/attributes/support.js",
+        "node_modules/jquery/src/attributes/val.js",
+        "node_modules/jquery/src/attributes.js",
+        "node_modules/jquery/src/callbacks.js",
+        "node_modules/jquery/src/core/access.js",
+        "node_modules/jquery/src/core/init.js",
+        "node_modules/jquery/src/core/parseHTML.js",
+        "node_modules/jquery/src/core/ready.js",
+        "node_modules/jquery/src/core/var/rsingleTag.js",
+        "node_modules/jquery/src/core.js",
+        "node_modules/jquery/src/css/addGetHookIf.js",
+        "node_modules/jquery/src/css/curCSS.js",
+        "node_modules/jquery/src/css/defaultDisplay.js",
+        "node_modules/jquery/src/css/hiddenVisibleSelectors.js",
+        "node_modules/jquery/src/css/support.js",
+        "node_modules/jquery/src/css/swap.js",
+        "node_modules/jquery/src/css/var/cssExpand.js",
+        "node_modules/jquery/src/css/var/getStyles.js",
+        "node_modules/jquery/src/css/var/isHidden.js",
+        "node_modules/jquery/src/css/var/rmargin.js",
+        "node_modules/jquery/src/css/var/rnumnonpx.js",
+        "node_modules/jquery/src/css.js",
+        "node_modules/jquery/src/data/Data.js",
+        "node_modules/jquery/src/data/accepts.js",
+        "node_modules/jquery/src/data/var/data_priv.js",
+        "node_modules/jquery/src/data/var/data_user.js",
+        "node_modules/jquery/src/data.js",
+        "node_modules/jquery/src/deferred.js",
+        "node_modules/jquery/src/deprecated.js",
+        "node_modules/jquery/src/dimensions.js",
+        "node_modules/jquery/src/effects/Tween.js",
+        "node_modules/jquery/src/effects/animatedSelector.js",
+        "node_modules/jquery/src/effects.js",
+        "node_modules/jquery/src/event/ajax.js",
+        "node_modules/jquery/src/event/alias.js",
+        "node_modules/jquery/src/event/support.js",
+        "node_modules/jquery/src/event.js",
+        "node_modules/jquery/src/exports/amd.js",
+        "node_modules/jquery/src/exports/global.js",
+        "node_modules/jquery/src/intro.js",
+        "node_modules/jquery/src/jquery.js",
+        "node_modules/jquery/src/manipulation/_evalUrl.js",
+        "node_modules/jquery/src/manipulation/support.js",
+        "node_modules/jquery/src/manipulation/var/rcheckableType.js",
+        "node_modules/jquery/src/manipulation.js",
+        "node_modules/jquery/src/offset.js",
+        "node_modules/jquery/src/outro.js",
+        "node_modules/jquery/src/queue/delay.js",
+        "node_modules/jquery/src/queue.js",
+        "node_modules/jquery/src/selector-native.js",
+        "node_modules/jquery/src/selector-sizzle.js",
+        "node_modules/jquery/src/selector.js",
+        "node_modules/jquery/src/serialize.js",
+        "node_modules/jquery/src/sizzle/dist/sizzle.js",
+        "node_modules/jquery/src/sizzle/dist/sizzle.min.js",
+        "node_modules/jquery/src/traversing/findFilter.js",
+        "node_modules/jquery/src/traversing/var/rneedsContext.js",
+        "node_modules/jquery/src/traversing.js",
+        "node_modules/jquery/src/var/arr.js",
+        "node_modules/jquery/src/var/class2type.js",
+        "node_modules/jquery/src/var/concat.js",
+        "node_modules/jquery/src/var/hasOwn.js",
+        "node_modules/jquery/src/var/indexOf.js",
+        "node_modules/jquery/src/var/pnum.js",
+        "node_modules/jquery/src/var/push.js",
+        "node_modules/jquery/src/var/rnotwhite.js",
+        "node_modules/jquery/src/var/slice.js",
+        "node_modules/jquery/src/var/strundefined.js",
+        "node_modules/jquery/src/var/support.js",
+        "node_modules/jquery/src/var/toString.js",
+        "node_modules/jquery/src/wrap.js",
+        "node_modules/scandir/example/basic.js",
+        "node_modules/scandir/lib/iplugin.js",
+        "node_modules/scandir/lib/libutil.js",
+        "node_modules/scandir/lib/plugins/delete.js",
+        "node_modules/scandir/lib/plugins/mv.js",
+        "node_modules/scandir/lib/plugins/video/vlc-convert.js",
+        "node_modules/scandir/lib/reporter/cli.js",
+        "node_modules/scandir/lib/reporter/json.js",
+        "node_modules/scandir/lib/reporter/unittest.js",
+        "node_modules/scandir/lib/scandir-app.js",
+        "node_modules/scandir/lib/scandir.js",
+        "node_modules/scandir/node_modules/ansi/examples/beep/index.js",
+        "node_modules/scandir/node_modules/ansi/examples/clear/index.js",
+        "node_modules/scandir/node_modules/ansi/examples/cursorPosition.js",
+        "node_modules/scandir/node_modules/ansi/examples/progress/index.js",
+        "node_modules/scandir/node_modules/ansi/examples/starwars.js",
+        "node_modules/scandir/node_modules/ansi/lib/ansi.js",
+        "node_modules/scandir/node_modules/ansi/lib/newlines.js",
+        "node_modules/scandir/node_modules/commander/index.js",
+        "node_modules/scandir/node_modules/commander/node_modules/graceful-readlink/index.js",
+        "node_modules/scandir/node_modules/mime/mime.js",
+        "node_modules/scandir/node_modules/mime/test.js",
+        "node_modules/trim/index.js"
+      ]
+    },
+    "folders": [
+      {
+        "paths": [
+          "lib",
+          "",
+          "spec"
+        ],
+        "dependencies": {
+          "scandir": "~0.1.2",
+          "trim": "*",
+          "jquery": "*"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/scandir/example",
+          "node_modules/scandir/lib",
+          "node_modules/scandir/lib/plugins",
+          "node_modules/scandir/lib/plugins/video",
+          "node_modules/scandir/lib/reporter",
+          "node_modules/scandir",
+          "node_modules/scandir/test"
+        ],
+        "dependencies": {
+          "commander": "2.x.x",
+          "mime": "1.2.x",
+          "ansi": "0.2.x"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/scandir/node_modules/commander"
+        ],
+        "dependencies": {
+          "graceful-readlink": ">= 1.0.0"
+        }
+      }
+    ]
+  }
+}

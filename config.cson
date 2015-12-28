@@ -13,7 +13,7 @@
     preferredLineLength: 120
     tabLength: 4
     invisibles: {}
-    fontSize: 22
+    fontSize: 19
   core:
     disabledPackages: [
       "enhanced-package-list"
@@ -34,6 +34,9 @@
       "monokai"
     ]
     excludeVcsIgnoredPaths: false
+    packagesWithKeymapsDisabled: [
+      "symbols-tree-view"
+    ]
   whitespace:
     ignoreWhitespaceOnCurrentLine: false
   "autoclose-html":
@@ -59,6 +62,7 @@
       "php"
       "phpcs"
     ]
+    errorPanelHeight: 32
   "todo-show":
     findTheseRegexes: [
       "TODOs"
@@ -130,7 +134,8 @@
   fonts:
     fontFamily: "DejaVu Mono"
   goto: {}
-  "symbols-tree-view": {}
+  "symbols-tree-view":
+    zAutoHideTypes: "variable class"
   "linter-phpcs":
     phpcsExecutablePath: "/usr/bin/phpcs"
     standard: "PSR2"
