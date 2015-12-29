@@ -170,6 +170,8 @@
   "tree-view":
     hideVcsIgnoredFiles: false
   pigments: {}
+  "markdown-preview":
+    useGitHubStyle: true
 ".diff.source":
   editor:
     preferredLineLength: 120
