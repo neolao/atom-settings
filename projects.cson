@@ -1,45 +1,50 @@
-'Académie du goût':
-  'title': 'Académie du goût'
-  'paths': [
-    '/Users/eric/workspace/udg'
+"Académie du goût":
+  title: "Académie du goût"
+  paths: [
+    "/Users/eric/workspace/udg"
   ]
-'opsdeploy':
-   'title': 'opsdeploy'
-   'paths': [
-     '/Users/eric/workspace/opsdeploy'
-   ]
-'ambed.io':
-  'title': 'ambed.io'
-  'paths': [
-    '/Users/eric/workspace/popio'
+opsdeploy:
+  title: "opsdeploy"
+  paths: [
+    "/Users/eric/workspace/opsdeploy"
   ]
-'EntityFilterableBundle':
-  'title': 'EntityFilterableBundle'
-  'paths': [
-    '/Users/eric/workspace/EntityFilterableBundle'
+"ambed.io":
+  title: "ambed.io"
+  paths: [
+    "/Users/eric/workspace/popio"
   ]
-'PaginationBundle':
-  'title': 'PaginationBundle'
-  'paths': [
-    '/Users/eric/workspace/paginationBundle'
+EntityFilterableBundle:
+  title: "EntityFilterableBundle"
+  paths: [
+    "/Users/eric/workspace/EntityFilterableBundle"
   ]
-'CityAutocompleteFormTypeBundle':
-  'title': 'CityAutocompleteFormTypeBundle'
-  'paths': [
-    '/Users/eric/workspace/CityAutocompleteFormTypeBundle'
+PaginationBundle:
+  title: "PaginationBundle"
+  paths: [
+    "/Users/eric/workspace/paginationBundle"
   ]
-'JeuxVideoVideoHostingBundle':
-  'title': 'JeuxVideoVideoHostingBundle'
-  'paths': [
-    '/Users/eric/workspace/JeuxVideoVideoHostingBundle'
+CityAutocompleteFormTypeBundle:
+  title: "CityAutocompleteFormTypeBundle"
+  paths: [
+    "/Users/eric/workspace/CityAutocompleteFormTypeBundle"
   ]
-'AlloCineVideoEncoderBundle':
-  'title': 'AlloCineVideoEncoderBundle'
-  'paths': [
-    '/Users/eric/workspace/AlloCineVideoEncoderBundle'
+JeuxVideoVideoHostingBundle:
+  title: "JeuxVideoVideoHostingBundle"
+  paths: [
+    "/Users/eric/workspace/JeuxVideoVideoHostingBundle"
   ]
-'WebediaCrmBundle':
-  'title': 'WebediaCrmBundle'
-  'paths': [
-    '/Users/eric/workspace/WebediaCrmBundle'
+AlloCineVideoEncoderBundle:
+  title: "AlloCineVideoEncoderBundle"
+  paths: [
+    "/Users/eric/workspace/AlloCineVideoEncoderBundle"
+  ]
+WebediaCrmBundle:
+  title: "WebediaCrmBundle"
+  paths: [
+    "/Users/eric/workspace/WebediaCrmBundle"
+  ]
+michalak:
+  title: "Michalak"
+  paths: [
+    "/Users/eric/workspace/christophemichalak"
   ]

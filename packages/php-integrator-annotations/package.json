@@ -1,7 +1,7 @@
 {
   "name": "php-integrator-annotations",
   "main": "./lib/Main",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Shows annotations (e.g. for overriden methods interface implementations) in your PHP source code.",
   "repository": {
     "type": "git",
@@ -35,10 +35,10 @@
     "url": "https://github.com/Gert-dev/php-integrator-annotations/issues"
   },
   "homepage": "https://github.com/Gert-dev/php-integrator-annotations#readme",
-  "_id": "php-integrator-annotations@0.2.2",
-  "_shasum": "f0301b396ed96a83de71e16a71ad25f8a6466e04",
-  "_resolved": "file:../d-1151023-6574-ryiad7/package.tgz",
-  "_from": "../d-1151023-6574-ryiad7/package.tgz",
+  "_id": "php-integrator-annotations@0.2.3",
+  "_shasum": "503b3700453235dae26e80c17008c429a5f603c2",
+  "_resolved": "file:../d-116015-21720-1y78vdt/package.tgz",
+  "_from": "../d-116015-21720-1y78vdt/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [

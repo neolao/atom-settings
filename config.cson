@@ -1,19 +1,32 @@
 "*":
-  "exception-reporting":
-    userId: "5c1b3e91-177a-1a3d-e8d5-6f5458113034"
-  "release-notes":
-    viewedVersion: "0.94.0"
-  welcome:
-    showOnStartup: false
-  metrics:
-    userId: "b53641952e75709991d2d77f556a6ab0a912fea0"
-  editor:
-    fontFamily: "DejaVu Sans Mono"
-    showInvisibles: true
-    preferredLineLength: 120
-    tabLength: 4
-    invisibles: {}
-    fontSize: 19
+  Clean2: {}
+  Zen:
+    fullscreen: false
+    tabs: "multiple"
+  "atom-beautify":
+    _analyticsUserId: "3e27096e-2708-460f-96c8-139f3245429c"
+  "atom-ctags":
+    autoBuildTagsWhenActive: true
+    buildTimeout: 60000
+    cmdArgs: "--exclude=.git --exclude=app --exclude=vendor --exclude=vendor_front --exclude=web --exclude=tests"
+  "autoclose-html":
+    closeOnEndOfOpeningTag: true
+    forceInline: [
+      "title"
+      "h1"
+      "h2"
+      "h3"
+      "h4"
+      "h5"
+      "h6"
+      "p"
+    ]
+    makeNeverCloseElementsSelfClosing: true
+  autocomplete:
+    includeCompletionsFromAllBuffers: true
+  "autocomplete-plus":
+    autoActivationDelay: 500
+    includeCompletionsFromAllBuffers: true
   core:
     disabledPackages: [
       "enhanced-package-list"
@@ -27,42 +40,96 @@
       "language-ruby"
       "language-objective-c"
     ]
-    projectHome: "/Users/eric/workspace"
+    excludeVcsIgnoredPaths: false
     followSymlinks: true
+    packagesWithKeymapsDisabled: [
+      "symbols-tree-view"
+    ]
+    projectHome: "/Users/eric/workspace"
     themes: [
       "one-dark-ui"
       "monokai"
     ]
-    excludeVcsIgnoredPaths: false
-    packagesWithKeymapsDisabled: [
-      "symbols-tree-view"
-    ]
-  whitespace:
-    ignoreWhitespaceOnCurrentLine: false
-  "autoclose-html":
-    closeOnEndOfOpeningTag: true
-    makeNeverCloseElementsSelfClosing: true
-    forceInline: [
-      "title"
-      "h1"
-      "h2"
-      "h3"
-      "h4"
-      "h5"
-      "h6"
-      "p"
-    ]
+  docblockr:
+    auto_add_method_tag: true
+    extend_double_slash: false
+    simple_mode: true
+    spacer_between_sections: true
+  editor:
+    fontFamily: "DejaVu Sans Mono"
+    fontSize: 20
+    invisibles: {}
+    preferredLineLength: 120
+    showInvisibles: true
+    tabLength: 4
+  "enhanced-package-list":
+    sourceFilter: "user"
+  "exception-reporting":
+    userId: "5c1b3e91-177a-1a3d-e8d5-6f5458113034"
+  fonts:
+    fontFamily: "DejaVu Mono"
+  "git-plus": {}
+  "github-issues":
+    username: "udg-eric"
+  goto: {}
   "highlight-column":
-    opacity: 1
     enableHighlight: true
+    opacity: 1
+  "highlight-line":
+    enableBackgroundColor: false
+    enableSelectionBorder: true
+    enableUnderline: true
+    hideHighlightOnSelect: true
+  "highlight-selected":
+    hideHighlightOnSelectedWord: true
+    highlightBackground: true
+    lightTheme: true
+  "isotope-ui":
+    fontFamily: "Ubuntu"
+    fontWeight: "Regular"
+    matchEditorFont: true
+    spaciousMode: true
   linter:
-    showErrorInline: true
-    statusBar: "Show all errors"
+    errorPanelHeight: 32
     ignoredLinterErrors: [
       "php"
       "phpcs"
     ]
-    errorPanelHeight: 32
+    showErrorInline: true
+    statusBar: "Show all errors"
+  "linter-php": {}
+  "linter-phpcs":
+    enableWarning: 1
+    ignore: "*.blade.php,*.twig.php"
+    phpcsExecutablePath: "/usr/bin/phpcs"
+    standard: "PSR2"
+  "markdown-preview":
+    useGitHubStyle: true
+  "merge-conflicts":
+    gitPath: "/usr/bin/git"
+  metrics:
+    userId: "b53641952e75709991d2d77f556a6ab0a912fea0"
+  minimap:
+    charWidth: 2
+    displayMinimapOnLeft: true
+    plugins:
+      bookmarks: true
+      "find-and-replace": true
+      linter: true
+    scrollAnimation: true
+    scrollAnimationDuration: 200
+    textOpacity: 0.3
+  "one-dark-ui":
+    layoutMode: "Compact"
+  pigments: {}
+  "project-manager": {}
+  "release-notes":
+    viewedVersion: "0.94.0"
+  "symbols-tree-view":
+    zAutoHideTypes: "variable class"
+  tabs:
+    showIcons: true
+  "terminal-panel": {}
   "todo-show":
     findTheseRegexes: [
       "TODOs"
@@ -89,89 +156,22 @@
       "/src/Udg/StatsBundle/"
       "/src/Udg/WebBundle/"
     ]
-  "project-manager": {}
-  "atom-ctags":
-    cmdArgs: "--exclude=.git --exclude=app --exclude=vendor --exclude=vendor_front --exclude=web --exclude=tests"
-    buildTimeout: 60000
-    autoBuildTagsWhenActive: true
-  docblockr:
-    auto_add_method_tag: true
-    simple_mode: true
-    spacer_between_sections: true
-    extend_double_slash: false
-  autocomplete:
-    includeCompletionsFromAllBuffers: true
-  "autocomplete-plus":
-    autoActivationDelay: 500
-    includeCompletionsFromAllBuffers: true
-  "highlight-line":
-    enableUnderline: true
-    enableSelectionBorder: true
-    enableBackgroundColor: false
-    hideHighlightOnSelect: true
-  "highlight-selected":
-    highlightBackground: true
-    lightTheme: true
-    hideHighlightOnSelectedWord: true
-  "merge-conflicts":
-    gitPath: "/usr/bin/git"
+  "tool-bar":
+    visible: false
   toolbar:
     position: "Left"
     visible: false
-  zentabs:
-    neverCloseUnsaved: true
-    maximumOpenedTabs: 10
-    neverCloseNew: true
-    neverCloseDirty: true
-  "atom-beautify":
-    _analyticsUserId: "3e27096e-2708-460f-96c8-139f3245429c"
-  tabs:
-    showIcons: true
-  "enhanced-package-list":
-    sourceFilter: "user"
-  "github-issues":
-    username: "udg-eric"
-  fonts:
-    fontFamily: "DejaVu Mono"
-  goto: {}
-  "symbols-tree-view":
-    zAutoHideTypes: "variable class"
-  "linter-phpcs":
-    phpcsExecutablePath: "/usr/bin/phpcs"
-    standard: "PSR2"
-    ignore: "*.blade.php,*.twig.php"
-    enableWarning: 1
-  "tool-bar":
-    visible: false
-  "terminal-panel": {}
-  "isotope-ui":
-    fontFamily: "Ubuntu"
-    fontWeight: "Regular"
-    spaciousMode: true
-    matchEditorFont: true
-  "one-dark-ui":
-    layoutMode: "Compact"
-  minimap:
-    scrollAnimation: true
-    scrollAnimationDuration: 200
-    charWidth: 2
-    displayMinimapOnLeft: true
-    plugins:
-      bookmarks: true
-      linter: true
-      "find-and-replace": true
-    textOpacity: 0.3
-  Clean2: {}
-  Zen:
-    fullscreen: false
-    tabs: "multiple"
-  "linter-php": {}
-  "git-plus": {}
   "tree-view":
     hideVcsIgnoredFiles: false
-  pigments: {}
-  "markdown-preview":
-    useGitHubStyle: true
+  welcome:
+    showOnStartup: false
+  whitespace:
+    ignoreWhitespaceOnCurrentLine: false
+  zentabs:
+    maximumOpenedTabs: 10
+    neverCloseDirty: true
+    neverCloseNew: true
+    neverCloseUnsaved: true
 ".diff.source":
   editor:
     preferredLineLength: 120

@@ -90,12 +90,13 @@ class Service
      * Refreshes the specified file. If no file is specified, all files are refreshed (which can take a while for large
      * projects!). This method is asynchronous and will return immediately.
      *
-     * @param {string} filename The full path to the file to refresh.
+     * @param {string}   filename               The full path to the file to refresh.
+     * @param {Callback} progressStreamCallback A method to invoke each time progress streaming data is received.
      *
      * @return {Promise}
     ###
-    reindex: (filename) ->
-        @proxy.reindex(filename)
+    reindex: (filename, progressStreamCallback) ->
+        @proxy.reindex(filename, progressStreamCallback)
 
     ###*
      * Gets the correct selector for the class or namespace that is part of the specified event.
@@ -185,6 +186,54 @@ class Service
         return members.constant if members.constant
 
         return null
+
+    ###*
+     * Same as {@see getClassMemberAt}, but only returns methods.
+     *
+     * @param {TextEditor} editor         The text editor to use.
+     * @param {Point}      bufferPosition The cursor location of the member.
+     * @param {string}     name           The name of the member to retrieve information about.
+     *
+     * @return {Object|null}
+    ###
+    getClassMethodAt: (editor, bufferPosition, name) ->
+        if @parser.isUsingProperty(editor, bufferPosition)
+            return null
+
+        className = @getResultingTypeAt(editor, bufferPosition, true)
+
+        return @getClassMethod(className, name)
+
+    ###*
+     * Same as {@see getClassMemberAt}, but only returns properties.
+     *
+     * @param {TextEditor} editor         The text editor to use.
+     * @param {Point}      bufferPosition The cursor location of the member.
+     * @param {string}     name           The name of the member to retrieve information about.
+     *
+     * @return {Object|null}
+    ###
+    getClassPropertyAt: (editor, bufferPosition, name) ->
+        if not @parser.isUsingProperty(editor, bufferPosition)
+            return null
+
+        className = @getResultingTypeAt(editor, bufferPosition, true)
+
+        return @getClassProperty(className, name)
+
+    ###*
+     * Same as {@see getClassMemberAt}, but only returns constants.
+     *
+     * @param {TextEditor} editor         The text editor to use.
+     * @param {Point}      bufferPosition The cursor location of the member.
+     * @param {string}     name           The name of the member to retrieve information about.
+     *
+     * @return {Object|null}
+    ###
+    getClassConstantAt: (editor, bufferPosition, name) ->
+        className = @getResultingTypeAt(editor, bufferPosition, true)
+
+        return @getClassConstant(className, name)
 
     ###*
      * Retrieves information about members of the specified class. Note that this always returns an object, as there may

@@ -3,41 +3,29 @@ AbstractProvider = require './AbstractProvider'
 module.exports =
 
 ##*
-# Provides code navigation for constants.
+# Provides code navigation for global constants.
 ##
 class ConstantProvider extends AbstractProvider
     ###*
      * @inheritdoc
     ###
-    hoverEventSelectors: '.constant.other.class'
+    hoverEventSelectors: '.constant.other.php'
 
     ###*
      * @inheritdoc
     ###
-    clickEventSelectors: '.constant.other.class'
-
-    ###*
-     * @inheritdoc
-    ###
-    getJumpToRegex: (term) ->
-        return ///const\s+#{term}///
+    clickEventSelectors: '.constant.other.php'
 
     ###*
      * @inheritdoc
     ###
     gotoFromWord: (editor, term) ->
-        bufferPosition = editor.getCursorBufferPosition()
+        constants = @service.getGlobalConstants()
 
-        member = @service.getClassMemberAt(editor, bufferPosition, term)
+        return unless constants and term of constants
+        return unless constants[term].filename
 
-        return unless member
-        return unless member.declaringStructure.filename
-
-        @jumpWord = term
-
-        if member.declaringStructure.filename == editor.getPath()
-            @jumpTo(editor, term, false)
-
-        atom.workspace.open(member.declaringStructure.filename, {
-            searchAllPanes: true
+        atom.workspace.open(constants[term].filename, {
+            initialLine    : (constants[term].startLine - 1),
+            searchAllPanes : true
         })

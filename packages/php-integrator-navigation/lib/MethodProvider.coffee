@@ -23,15 +23,15 @@ class MethodProvider extends AbstractProvider
         bufferPosition = editor.getCursorBufferPosition()
 
         try
-            member = @service.getClassMemberAt(editor, bufferPosition, term)
+            member = @service.getClassMethodAt(editor, bufferPosition, term)
 
         catch error
             return
 
         return unless member
+        return unless member.declaringStructure.filename
 
-        if member.declaringStructure.filename
-            atom.workspace.open(member.declaringStructure.filename, {
-                initialLine    : (member.startLine - 1),
-                searchAllPanes : true
-            })
+        atom.workspace.open(member.declaringStructure.filename, {
+            initialLine    : (member.declaringStructure.startLineMember - 1),
+            searchAllPanes : true
+        })

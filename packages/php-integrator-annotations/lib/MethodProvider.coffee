@@ -20,7 +20,7 @@ class MethodProvider extends AbstractProvider
             for name, method of currentClassInfo.methods
                 continue if not method.override and not method.implementation
 
-                regex = new RegExp("^([\\t\\ ]*)((?:public|protected|private)\\s+function\\s+" + name + "\\s*)\\(")
+                regex = new RegExp("^([\\t\\ ]*)((?:public|protected|private)\\s+(?:static\\s+)?function\\s+" + name + "\\s*)\\(")
 
                 editor.getBuffer().scan(regex, (matchInfo) =>
                     # Remove the spacing from the range.
@@ -72,7 +72,7 @@ class MethodProvider extends AbstractProvider
         # 'filename' can be false for overrides of members from PHP's built-in classes (e.g. Exception).
         if annotationInfo.extraData.declaringStructure.filename
             atom.workspace.open(annotationInfo.extraData.declaringStructure.filename, {
-                initialLine    : annotationInfo.extraData.startLine - 1,
+                initialLine    : annotationInfo.extraData.declaringStructure.startLineMember - 1,
                 searchAllPanes : true
             })
 

@@ -1,3 +1,7 @@
+## 0.3.0 (base 0.4.0)
+* Added navigation to the definition of global constants.
+* Fixed navigation not working in corner cases where a property and method existed with the same name.
+
 ## 0.2.4
 * Don't try to navigate to items that don't have a filename set. Fixes trying to alt-click internal classes such as 'DateTime' opening an empty file.
 

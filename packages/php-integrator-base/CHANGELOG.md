@@ -1,6 +1,84 @@
+## 0.4.7
+### Bugs Fixed
+* Bump the database version.
+
+## 0.4.6
+### Bugs Fixed
+* Fixed types sometimes showing up as [Object object] because the indexer was incorrectly saving an object instead of a string type.
+* Fixed built-in functions not having an empty array serialized to the throws_serialized field, resulting in warnings when iterating over them, which in turn caused problems on the CoffeeScript side.
+
+## 0.4.5
+### Bugs Fixed
+* Fixed magic properties ending up in the index with a dollar sign in their name.
+* Fixed built-in class constants being indexed by value instead of name. This also resulted in a constraint error in the database. (thanks to [@tocjent](https://github.com/tocjent))
+
+## 0.4.4
+### Bugs Fixed
+* Do not try to index structural elements that do not have a namespaced name, which can happen for anonymous PHP 7 classes.
+
+## 0.4.3
+### Bugs Fixed
+* Disable the xdebug nesting limit to -1, which was posing problems when resolving names.
+
+## 0.4.2
+### Bugs Fixed
+* Fixed the `indexes` folder not automatically being created.
+
+## 0.4.1
+### Bugs Fixed
+* Removed the 'old version' note from the README.
+
+## 0.4.0
+### Features and enhancements
+* The PHP side now no longer uses Reflection, but a php-parser-based incremental indexer. This has the following advantages:
+  * Composer is no longer required.
+  * Autoloading is no longer required.
+  * Multiple structural elements (classes) in a file will correctly end up in the index.
+  * Parsing is inherently more correct, no more misbehaving corner cases or regex-based parsing.
+  * Incremental indexing, no more composer classmap dumping on startup and a long indexing process.
+  * Paves the road for the future more detailed parsing, analyzing and better performance. (As a side-effect, the PHP side can also be used for other editors than Atom.)
+  * The package still requires PHP >= 5.4, but the code you're writing can be anything that php-parser 2 supports, which is currently PHP >= 5.2 up to (and including) PHP 7. Note that the CoffeeScript side has not changed and also does some regex-based parsing, which may still lack some functionality (especially with relation to PHP 7).
+
+* Made it possible to make magic members static. This is not documented in phpDocumentor's documentation, but useful and also used by PHPStorm:
+
+```php
+/**
+ * @method static void foo()
+ * @property static Foo $test
+ */
+class Foo
+{
+    ...
+}
+```
+
+* Added menu items for some commands.
+* The progress bar will now actually show progress, which is useful for large projects.
+* There is now a command available in the command palette to reindex your project (thanks to [@wcatron](https://github.com/wcatron)).
+* Similarly, there is now also a command available to forcibly reindex the project (i.e. remove the entire database first).
+
+### Bugs fixed
+* A progress bar will no longer be shown for windows opened without a project.
+* Methods returning `static` were not properly resolving to the current class if they were not overridden (they were resolving to the closest parent class that defined them).
+* Project and file paths that contain spaces should no longer pose a problem (thanks to [@wcatron](https://github.com/wcatron)).
+
+### Changes for developers
+* Changes to the service
+  * Constants and class properties will now retrieve their start line as well. These items not being available was previously manually worked around in the php-integrator-navigation package. This manual workaround is now present in the base package as CoffeeScript should not have to bend itself backwards to get this information because PHP Reflection didn't offer it.
+  * `declaringStructure` will now also contain a `startLineMember` property that indicates the start line of the member in the structural element.
+  * Retrieving types for the list of local variables has been disabled for now as the performance impact is too large in longer functions. It may be reactivated in a future release.
+  * Constructor information is no longer retrieved when fetching the class list as the performance hit is too large. In fact, this was also the case before the new indexer, but then a cache file was used, which was never properly updated with new classes and was the result of the very long indexing process at start-up.
+  * `deprecated` was renamed to `isDeprecated` for consistency.
+  * `wasFound` was removed when fetching class (structural element) information as a failure status is now returned instead.
+  * `class` was removed when fetching class (structural element) information as this information is already available in the `name` property.
+  * `isMethod` and `isProperty` were removed as they are no longer necessary since members are now in separate associative arrays.
+  * Added the more specific convenience methods `getClassMethodAt`, `getClassPropertyAt` and `getClassConstantAt`.
+  * `isTrait`, `isInterface` and `isClass` were replaced with a single string `type` property.
+  * Functions and methods no longer return a separate `parameters` and `optionals` property. The two have now been merged and provide more information (such as whether the parameters are a reference, variadic, optional, ...).
+
 ## 0.3.1
 ### Bugs Fixed
-* Fixed methods returning 'static', 'self' or '$this' not properly having their full type deduced.
+* Fixed methods returning `static`, `self` or `$this` not properly having their full type deduced.
 * Fixed inline type override annotations not being able to contain descriptions (e.g. `/** @var Class $foo Some description. */`).
 
 ## 0.3.0

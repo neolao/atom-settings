@@ -1,3 +1,7 @@
+## 0.2.3 (base 0.4.0)
+* Fixed static methods not being annotated.
+* Fixed clicking property override annotations not navigating to the correct line.
+
 ## 0.2.2
 * Properly wait for the language-php package to become active.
 
