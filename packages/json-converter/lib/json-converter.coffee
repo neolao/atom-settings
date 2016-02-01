@@ -65,7 +65,7 @@ module.exports = JsonConverter =
     csvDelimiterWrap:
       title: 'CSV Wrap Values in Quotes'
       type: 'string'
-      default: '"'
+      default: ''
     elasticIndex:
       title: 'Elasticsearch Index Name'
       type: 'string'
@@ -116,14 +116,14 @@ module.exports = JsonConverter =
 
     options =
       DELIMITER:
-        FIELD: atom.config.get('json-converter.csvDelimiterField')
+        FIELD: atom.config.get('json-converter.csvDelimiterField').replace('\\t', '\t')
         ARRAY: atom.config.get('json-converter.csvDelimiterArray')
         WRAP: atom.config.get('json-converter.csvDelimiterWrap')
       EOL: editor.getBuffer().lineEndingForRow(0)
 
     converter.csv2json(csv, (error, json) ->
       if not error
-        atom.workspace.open('').done((newEditor) ->
+        atom.workspace.open('').then((newEditor) ->
           newEditor.setGrammar(atom.grammars.selectGrammar('untitled.json'))
           indent = atom.config.get('json-converter.jsonIndet')
           text = JSON.stringify(json, null, indent)
@@ -146,13 +146,13 @@ module.exports = JsonConverter =
 
     options =
       DELIMITER:
-        FIELD: atom.config.get('json-converter.csvDelimiterField')
+        FIELD: atom.config.get('json-converter.csvDelimiterField').replace('\\t', '\t')
         ARRAY: atom.config.get('json-converter.csvDelimiterArray')
         WRAP: atom.config.get('json-converter.csvDelimiterWrap')
 
     converter.json2csv(json, (error, csv) ->
       if not error
-        atom.workspace.open('').done((newEditor) ->
+        atom.workspace.open('').then((newEditor) ->
           newEditor.setGrammar(atom.grammars.selectGrammar('untitled.csv'))
           newEditor.setText(csv)
         )
@@ -171,7 +171,7 @@ module.exports = JsonConverter =
       atom.notifications?.addError('jsonToYaml: JSON parse error',
         dismissable: true, detail: error.toString())
 
-    atom.workspace.open('').done((newEditor) ->
+    atom.workspace.open('').then((newEditor) ->
       newEditor.setGrammar(atom.grammars.selectGrammar('untitled.yaml'))
       indent = atom.config.get('json-converter.yamlIndent')
       text = YAML.safeDump(json, indent: indent)
@@ -189,7 +189,7 @@ module.exports = JsonConverter =
       atom.notifications?.addError('yamlToJson: YAML parse error',
         dismissable: true, detail: error.toString())
 
-    atom.workspace.open('').done((newEditor) ->
+    atom.workspace.open('').then((newEditor) ->
       newEditor.setGrammar(atom.grammars.selectGrammar('untitled.json'))
       indent = atom.config.get('json-converter.jsonIndet')
       text = JSON.stringify(json, null, indent)
@@ -204,13 +204,13 @@ module.exports = JsonConverter =
 
     options =
       DELIMITER:
-        FIELD: atom.config.get('json-converter.csvDelimiterField')
+        FIELD: atom.config.get('json-converter.csvDelimiterField').replace('\\t', '\t')
         ARRAY: atom.config.get('json-converter.csvDelimiterArray')
         WRAP: atom.config.get('json-converter.csvDelimiterWrap')
 
     converter.csv2json(csv, (error, docs) ->
       if not error
-        atom.workspace.open('').done((newEditor) ->
+        atom.workspace.open('').then((newEditor) ->
           newEditor.setGrammar(atom.grammars.selectGrammar('untitled.json'))
           text = expandAction(docs, opType).join('\r\n')
           newEditor.setText(text)
@@ -236,7 +236,7 @@ module.exports = JsonConverter =
 
     docs = if json instanceof Array then json else [json]
 
-    atom.workspace.open('').done((newEditor) ->
+    atom.workspace.open('').then((newEditor) ->
       newEditor.setGrammar(atom.grammars.selectGrammar('untitled.json'))
       text = expandAction(docs, opType).join('\r\n')
       newEditor.setText(text)

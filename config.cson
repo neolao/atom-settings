@@ -39,6 +39,7 @@
       "language-ruby-on-rails"
       "language-ruby"
       "language-objective-c"
+      "sublime-panes"
     ]
     excludeVcsIgnoredPaths: false
     followSymlinks: true
@@ -57,7 +58,7 @@
     spacer_between_sections: true
   editor:
     fontFamily: "DejaVu Sans Mono"
-    fontSize: 20
+    fontSize: 19
     invisibles: {}
     preferredLineLength: 120
     showInvisibles: true
@@ -161,8 +162,7 @@
   toolbar:
     position: "Left"
     visible: false
-  "tree-view":
-    hideVcsIgnoredFiles: false
+  "tree-view": {}
   welcome:
     showOnStartup: false
   whitespace:

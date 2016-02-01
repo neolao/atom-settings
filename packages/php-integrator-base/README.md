@@ -20,11 +20,16 @@ Currently the following is required in order to get the package up and running:
     * Docblocks with a `@var` tag for properties.
     * Docblocks with `@param` tags for functions and methods. Parameter type hints will also work.
     * Docblocks with a `@return` tag for functions and methods. Return types in PHP 7 will also work.
-    * IntellJ-style variable annotations `/** @var MyType $var */` as well as `/** @var $var MyType */` to override automatically deduced types or specify types in cases where it can't be automtically deduced.
+    * IntellJ-style variable annotations `/** @var MyType $var */` as well as `/** @var $var MyType */` to override automatically deduced types or specify types in cases where it can't be automatically deduced.
 
 Note that folders that aren't readable (no permission) will be silently ignored!
 
 Some features may or may not work outside these restrictions. **Don't forget to open the settings page after installing to set up the package!**
+
+#### Common problems
+Error reporting currently isn't ideal and is on the roadmap for improvement. A list of common problems:
+  * No sqlite extension enabled in `php.ini`.
+  * No `date.timezone` set in `php.ini` (some PHP versions complain about this).
 
 ## I'm a package developer - How do I use this?
 You can very easily start using the service by simply consuming the service in your package (see also the `package.json` and `Main.coffee` files of the packages listed above for an example). The service is a single exposed class, which is located in the [Service.coffee](https://github.com/Gert-dev/php-integrator-base/blob/master/lib/Service.coffee) file, along with docblocks explaining what they do and what they accept as parameters.
