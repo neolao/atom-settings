@@ -5,8 +5,11 @@ not provide any user-visible functionality. This is instead covered by various o
 'plug in' to the service:
   * **[php-integrator-autocomplete-plus](https://github.com/Gert-dev/php-integrator-autocomplete-plus)** - Provides intelligent PHP autocompletion in combination with autocomplete-plus.
   * **[php-integrator-navigation](https://github.com/Gert-dev/php-integrator-navigation)** - Provides code navigation and go to functionality.
-  * **[php-integrator-tooltips](https://github.com/Gert-dev/php-integrator-tooltips)** - Shows tooltips with documentation for your code.
-  * **[php-integrator-annotations](https://github.com/Gert-dev/php-integrator-annotations)** - Shows annotations in your code, such as for overridden methods and interface implementations.
+  * **[php-integrator-tooltips](https://github.com/Gert-dev/php-integrator-tooltips)** - Shows tooltips with documentation.
+  * **[php-integrator-annotations](https://github.com/Gert-dev/php-integrator-annotations)** - Shows annotations, such as for overridden methods and interface implementations.
+  * **[php-integrator-call-tips](https://github.com/Gert-dev/php-integrator-call-tips)** - Shows call tips containing parameters in your code. (Complements the autocompletion package.)
+  * **[php-integrator-refactoring](https://github.com/Gert-dev/php-integrator-refactoring)** - Provides basic refactoring capabilities.
+  * **[php-integrator-symbol-viewer](https://github.com/tocjent/php-integrator-symbol-viewer)** - Provides a side panel listing class symbols with search and filter features.
 
 The source code was originally based on the php-autocomplete-plus code base and provides various
 improvements as well as separation of the various components into separate packages.
@@ -35,13 +38,10 @@ Error reporting currently isn't ideal and is on the roadmap for improvement. A l
 You can very easily start using the service by simply consuming the service in your package (see also the `package.json` and `Main.coffee` files of the packages listed above for an example). The service is a single exposed class, which is located in the [Service.coffee](https://github.com/Gert-dev/php-integrator-base/blob/master/lib/Service.coffee) file, along with docblocks explaining what they do and what they accept as parameters.
 
 As the service allows fetching information about the code base, other packages can do all kinds of interesting things with it that brings Atom closer to an IDE for PHP, yet completely open-source. Here are some idea's of things that could be done with the service (besides what the existing packages listed above already do):
-* A symbol viewer that lists all the members of the classes in the current file.
 * A class diagram builder that creates a visual representation of the relations between all classes in a code base (i.e. their implemented interfaces, base classes and traits).
 * A refactoring package that allows:
   * ... automatically adding methods that are present in an interface of the current class but aren't present yet in the current file.
-  * ... automatically generating getters and setters for properties that don't have one yet.
-  * ... automatically creating methods and/or properties when they don't exist yet (e.g. on alt-enter).
-  * ... generating constructors.
+  * ... automatically creating methods and/or properties when they don't exist yet (e.g. on alt-enter).g
   * ... generating, updating and linting docblocks.
 
 ## What does not work?

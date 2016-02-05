@@ -1,7 +1,7 @@
 {
   "name": "php-integrator-base",
   "main": "./lib/Main",
-  "version": "0.4.8",
+  "version": "0.5.2",
   "description": "Base package for php-integrator that exposes services for querying PHP sources.",
   "repository": {
     "type": "git",
@@ -14,7 +14,7 @@
   "providedServices": {
     "php-integrator.service": {
       "versions": {
-        "1.0.0": "getService"
+        "0.5.0": "getService"
       }
     }
   },
@@ -26,7 +26,8 @@
     }
   },
   "dependencies": {
-    "fuzzaldrin": "^2.1.0",
+    "fuzzaldrin": "~2.1.0",
+    "event-kit": "~2.0.0",
     "jquery": "~2.1.4",
     "md5": "~2.0.0"
   },
@@ -37,19 +38,24 @@
     "integration",
     "php-integrator"
   ],
-  "readme": "# php-integrator-base\n\nPHP Integrator analyzes PHP projects and exposes a service that other packages can use to provide additional functionality, such as autocompletion, code navigation and tooltips. In itself it does\nnot provide any user-visible functionality. This is instead covered by various other packages which\n'plug in' to the service:\n  * **[php-integrator-autocomplete-plus](https://github.com/Gert-dev/php-integrator-autocomplete-plus)** - Provides intelligent PHP autocompletion in combination with autocomplete-plus.\n  * **[php-integrator-navigation](https://github.com/Gert-dev/php-integrator-navigation)** - Provides code navigation and go to functionality.\n  * **[php-integrator-tooltips](https://github.com/Gert-dev/php-integrator-tooltips)** - Shows tooltips with documentation for your code.\n  * **[php-integrator-annotations](https://github.com/Gert-dev/php-integrator-annotations)** - Shows annotations in your code, such as for overridden methods and interface implementations.\n\nThe source code was originally based on the php-autocomplete-plus code base and provides various\nimprovements as well as separation of the various components into separate packages.\n\n## What do I need to do to make it work?\nCurrently the following is required in order to get the package up and running:\n  * **PHP** - To run this package properly, you need at least PHP 5.4. The code you're actually writing can be anything ranging from PHP 5.2 up to (and including) PHP 7.0.\n    * **php-sqlite** - Required as back end for the indexing database.\n  * **PSR-compliant code** - Write code that follows the PSR standards, especially regarding namespacing.\n  * **Documentation** and **type hinting** - Write proper docblocks that follow the draft PSR-5 standard (inspired by phpDocumentor's implementation) or use type hinting as much as possible:\n    * Docblocks with a `@var` tag for properties.\n    * Docblocks with `@param` tags for functions and methods. Parameter type hints will also work.\n    * Docblocks with a `@return` tag for functions and methods. Return types in PHP 7 will also work.\n    * IntellJ-style variable annotations `/** @var MyType $var */` as well as `/** @var $var MyType */` to override automatically deduced types or specify types in cases where it can't be automatically deduced.\n\nNote that folders that aren't readable (no permission) will be silently ignored!\n\nSome features may or may not work outside these restrictions. **Don't forget to open the settings page after installing to set up the package!**\n\n#### Common problems\nError reporting currently isn't ideal and is on the roadmap for improvement. A list of common problems:\n  * No sqlite extension enabled in `php.ini`.\n  * No `date.timezone` set in `php.ini` (some PHP versions complain about this).\n\n## I'm a package developer - How do I use this?\nYou can very easily start using the service by simply consuming the service in your package (see also the `package.json` and `Main.coffee` files of the packages listed above for an example). The service is a single exposed class, which is located in the [Service.coffee](https://github.com/Gert-dev/php-integrator-base/blob/master/lib/Service.coffee) file, along with docblocks explaining what they do and what they accept as parameters.\n\nAs the service allows fetching information about the code base, other packages can do all kinds of interesting things with it that brings Atom closer to an IDE for PHP, yet completely open-source. Here are some idea's of things that could be done with the service (besides what the existing packages listed above already do):\n* A symbol viewer that lists all the members of the classes in the current file.\n* A class diagram builder that creates a visual representation of the relations between all classes in a code base (i.e. their implemented interfaces, base classes and traits).\n* A refactoring package that allows:\n  * ... automatically adding methods that are present in an interface of the current class but aren't present yet in the current file.\n  * ... automatically generating getters and setters for properties that don't have one yet.\n  * ... automatically creating methods and/or properties when they don't exist yet (e.g. on alt-enter).\n  * ... generating constructors.\n  * ... generating, updating and linting docblocks.\n\n## What does not work?\nMost of the issue reports indicate things that are missing, but indexing should be working fairly well in general. There are also some things that won't be supported because they are fairly complex to implement (usually for fairly little benefit). These limitations may also affect other packages using the provided service:\n\n* `static` and `self` behave mostly like `$this` in **non-static** contexts, i.e. they can also access non-static members.\n\n## Regarding donations\nDonations were not my primary intention when releasing this project as open source, but I do accept them and am very grateful for any donation you may give. As such, a link to the (PayPal) donation screen is located [here](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YKTNLZCRHMRTJ), at the bottom of the readme, hidden from initial sight and not even in the form of a fancy button ;-).\n\n![GPLv3 Logo](http://gplv3.fsf.org/gplv3-127x51.png)\n",
+  "readme": "# php-integrator-base\n\nPHP Integrator analyzes PHP projects and exposes a service that other packages can use to provide additional functionality, such as autocompletion, code navigation and tooltips. In itself it does\nnot provide any user-visible functionality. This is instead covered by various other packages which\n'plug in' to the service:\n  * **[php-integrator-autocomplete-plus](https://github.com/Gert-dev/php-integrator-autocomplete-plus)** - Provides intelligent PHP autocompletion in combination with autocomplete-plus.\n  * **[php-integrator-navigation](https://github.com/Gert-dev/php-integrator-navigation)** - Provides code navigation and go to functionality.\n  * **[php-integrator-tooltips](https://github.com/Gert-dev/php-integrator-tooltips)** - Shows tooltips with documentation.\n  * **[php-integrator-annotations](https://github.com/Gert-dev/php-integrator-annotations)** - Shows annotations, such as for overridden methods and interface implementations.\n  * **[php-integrator-call-tips](https://github.com/Gert-dev/php-integrator-call-tips)** - Shows call tips containing parameters in your code. (Complements the autocompletion package.)\n  * **[php-integrator-refactoring](https://github.com/Gert-dev/php-integrator-refactoring)** - Provides basic refactoring capabilities.\n  * **[php-integrator-symbol-viewer](https://github.com/tocjent/php-integrator-symbol-viewer)** - Provides a side panel listing class symbols with search and filter features.\n\nThe source code was originally based on the php-autocomplete-plus code base and provides various\nimprovements as well as separation of the various components into separate packages.\n\n## What do I need to do to make it work?\nCurrently the following is required in order to get the package up and running:\n  * **PHP** - To run this package properly, you need at least PHP 5.4. The code you're actually writing can be anything ranging from PHP 5.2 up to (and including) PHP 7.0.\n    * **php-sqlite** - Required as back end for the indexing database.\n  * **PSR-compliant code** - Write code that follows the PSR standards, especially regarding namespacing.\n  * **Documentation** and **type hinting** - Write proper docblocks that follow the draft PSR-5 standard (inspired by phpDocumentor's implementation) or use type hinting as much as possible:\n    * Docblocks with a `@var` tag for properties.\n    * Docblocks with `@param` tags for functions and methods. Parameter type hints will also work.\n    * Docblocks with a `@return` tag for functions and methods. Return types in PHP 7 will also work.\n    * IntellJ-style variable annotations `/** @var MyType $var */` as well as `/** @var $var MyType */` to override automatically deduced types or specify types in cases where it can't be automatically deduced.\n\nNote that folders that aren't readable (no permission) will be silently ignored!\n\nSome features may or may not work outside these restrictions. **Don't forget to open the settings page after installing to set up the package!**\n\n#### Common problems\nError reporting currently isn't ideal and is on the roadmap for improvement. A list of common problems:\n  * No sqlite extension enabled in `php.ini`.\n  * No `date.timezone` set in `php.ini` (some PHP versions complain about this).\n\n## I'm a package developer - How do I use this?\nYou can very easily start using the service by simply consuming the service in your package (see also the `package.json` and `Main.coffee` files of the packages listed above for an example). The service is a single exposed class, which is located in the [Service.coffee](https://github.com/Gert-dev/php-integrator-base/blob/master/lib/Service.coffee) file, along with docblocks explaining what they do and what they accept as parameters.\n\nAs the service allows fetching information about the code base, other packages can do all kinds of interesting things with it that brings Atom closer to an IDE for PHP, yet completely open-source. Here are some idea's of things that could be done with the service (besides what the existing packages listed above already do):\n* A class diagram builder that creates a visual representation of the relations between all classes in a code base (i.e. their implemented interfaces, base classes and traits).\n* A refactoring package that allows:\n  * ... automatically adding methods that are present in an interface of the current class but aren't present yet in the current file.\n  * ... automatically creating methods and/or properties when they don't exist yet (e.g. on alt-enter).g\n  * ... generating, updating and linting docblocks.\n\n## What does not work?\nMost of the issue reports indicate things that are missing, but indexing should be working fairly well in general. There are also some things that won't be supported because they are fairly complex to implement (usually for fairly little benefit). These limitations may also affect other packages using the provided service:\n\n* `static` and `self` behave mostly like `$this` in **non-static** contexts, i.e. they can also access non-static members.\n\n## Regarding donations\nDonations were not my primary intention when releasing this project as open source, but I do accept them and am very grateful for any donation you may give. As such, a link to the (PayPal) donation screen is located [here](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YKTNLZCRHMRTJ), at the bottom of the readme, hidden from initial sight and not even in the form of a fancy button ;-).\n\n![GPLv3 Logo](http://gplv3.fsf.org/gplv3-127x51.png)\n",
   "readmeFilename": "README.md",
   "bugs": {
     "url": "https://github.com/Gert-dev/php-integrator-base/issues"
   },
   "homepage": "https://github.com/Gert-dev/php-integrator-base#readme",
-  "_id": "php-integrator-base@0.4.8",
-  "_shasum": "90a1998c4d461f9e2ff98cf6f37bfd2cf21f45bd",
-  "_resolved": "file:../d-116026-3419-105zigf/package.tgz",
-  "_from": "../d-116026-3419-105zigf/package.tgz",
+  "_id": "php-integrator-base@0.5.2",
+  "_shasum": "2a008f52fd6fe38670833be675b7f32bc52c3268",
+  "_resolved": "file:../d-11615-19979-racrft/package.tgz",
+  "_from": "../d-11615-19979-racrft/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
+      {
+        "name": "event-kit",
+        "version": "2.0.0",
+        "path": "node_modules/event-kit/lib/event-kit.js"
+      },
       {
         "name": "fuzzaldrin",
         "version": "2.1.0",
@@ -97,7 +103,23 @@
         "lib/Widgets/Popover.coffee",
         "lib/Widgets/StatusBarManager.coffee"
       ],
+      ".json": [
+        "node_modules/event-kit/api.json",
+        "node_modules/event-kit/package.json",
+        "node_modules/fuzzaldrin/package.json",
+        "node_modules/jquery/bower.json",
+        "node_modules/jquery/package.json",
+        "node_modules/md5/node_modules/charenc/package.json",
+        "node_modules/md5/node_modules/crypt/package.json",
+        "node_modules/md5/node_modules/is-buffer/package.json",
+        "node_modules/md5/package.json",
+        "package.json"
+      ],
       ".js": [
+        "node_modules/event-kit/lib/composite-disposable.js",
+        "node_modules/event-kit/lib/disposable.js",
+        "node_modules/event-kit/lib/emitter.js",
+        "node_modules/event-kit/lib/event-kit.js",
         "node_modules/fuzzaldrin/lib/filter.js",
         "node_modules/fuzzaldrin/lib/fuzzaldrin.js",
         "node_modules/fuzzaldrin/lib/matcher.js",
@@ -193,16 +215,6 @@
         "node_modules/md5/node_modules/crypt/crypt.js",
         "node_modules/md5/node_modules/is-buffer/index.js",
         "node_modules/md5/test.js"
-      ],
-      ".json": [
-        "node_modules/fuzzaldrin/package.json",
-        "node_modules/jquery/bower.json",
-        "node_modules/jquery/package.json",
-        "node_modules/md5/node_modules/charenc/package.json",
-        "node_modules/md5/node_modules/crypt/package.json",
-        "node_modules/md5/node_modules/is-buffer/package.json",
-        "node_modules/md5/package.json",
-        "package.json"
       ]
     },
     "folders": [
@@ -213,6 +225,7 @@
           "",
           "php",
           "php/vendor/composer",
+          "php/vendor/corneltek/getoptionkit",
           "php/vendor/doctrine/annotations",
           "php/vendor/doctrine/cache",
           "php/vendor/doctrine/collections",
@@ -225,7 +238,8 @@
           "spec/Parser"
         ],
         "dependencies": {
-          "fuzzaldrin": "^2.1.0",
+          "fuzzaldrin": "~2.1.0",
+          "event-kit": "~2.0.0",
           "jquery": "~2.1.4",
           "md5": "~2.0.0"
         }

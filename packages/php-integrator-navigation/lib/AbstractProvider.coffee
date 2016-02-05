@@ -1,5 +1,3 @@
-{TextEditor} = require 'atom'
-
 $ = require 'jquery'
 SubAtom = require 'sub-atom'
 
@@ -23,6 +21,23 @@ class AbstractProvider
      * The service (that can be used to query the source code and contains utility methods).
     ###
     service: null
+
+    ###*
+     * Contains global package settings.
+    ###
+    config: null
+
+    ###*
+     * The subatom that is used to register events for each editor.
+    ###
+    subAtom: null
+
+    ###*
+     * Constructor.
+     *
+     * @param {Config} config
+    ###
+    constructor: (@config) ->
 
     ###*
      * Initializes this provider.
@@ -78,7 +93,7 @@ class AbstractProvider
     ###
     registerEventsForPane: (pane) ->
         for paneItem in pane.items
-            if paneItem instanceof TextEditor
+            if atom.workspace.isTextEditor(paneItem)
                 @registerEvents(paneItem)
 
     ###*
@@ -100,13 +115,19 @@ class AbstractProvider
             scrollViewElement = $(textEditorElement.shadowRoot).find('.scroll-view')
 
             @subAtom.add scrollViewElement, 'mousemove', @hoverEventSelectors, (event) =>
-                return unless event.altKey
+                return unless @areEventMouseModifiersValid(event)
 
                 selector = @getHoverSelectorFromEvent(event)
 
                 return unless selector
 
-                $(selector).addClass('php-integrator-navigation-navigation-possible')
+                bufferPosition = atom.views.getView(editor).component.screenPositionForMouseEvent(event)
+
+                if @isValid(editor, bufferPosition, $(selector).text())
+                    $(selector).addClass('php-integrator-navigation-navigation-possible')
+
+                else
+                    $(selector).addClass('php-integrator-navigation-navigation-impossible')
 
             @subAtom.add scrollViewElement, 'mouseout', @hoverEventSelectors, (event) =>
                 selector = @getHoverSelectorFromEvent(event)
@@ -114,9 +135,10 @@ class AbstractProvider
                 return unless selector
 
                 $(selector).removeClass('php-integrator-navigation-navigation-possible')
+                $(selector).removeClass('php-integrator-navigation-navigation-impossible')
 
             @subAtom.add scrollViewElement, 'click', @clickEventSelectors, (event) =>
-                return unless event.altKey
+                return unless @areEventMouseModifiersValid(event)
 
                 selector = @getClickSelectorFromEvent(event)
 
@@ -124,16 +146,48 @@ class AbstractProvider
 
                 return unless not event.handled
 
-                @gotoFromWord(editor, $(selector).text())
+                bufferPosition = atom.views.getView(editor).component.screenPositionForMouseEvent(event)
+
+                @gotoFromWord(editor, bufferPosition, $(selector).text())
                 event.handled = true
+
+    ###*
+     * Indicates if the specified event has the correct mouse modifier kesy held down.
+     *
+     * @param  {TextEditor} editor TextEditor to search for namespace of term.
+     * @param {Point}       bufferPosition
+     * @param  {string}     term   Term to search for.
+     *
+     * @return {boolean}
+    ###
+    areEventMouseModifiersValid: (event) ->
+        return false if @config.get('navigationRequireAltKey') and not event.altKey
+        return false if @config.get('navigationRequireMetaKey') and not event.metaKey
+        return false if @config.get('navigationRequireCtrlKey') and not event.ctrlKey
+        return false if @config.get('navigationRequireShiftKey') and not event.shiftKey
+
+        return true
+
+    ###*
+     * Indicates if the specified term is valid for navigating to.
+     *
+     * @param {TextEditor} editor         TextEditor to search for namespace of term.
+     * @param {Point}      bufferPosition
+     * @param {string}     term           Term to search for.
+     *
+     * @return {boolean}
+    ###
+    isValid: (editor, bufferPosition, term) ->
+        throw new Error("This method is abstract and must be implemented!")
 
     ###*
      * Goto from the term given.
      *
-     * @param  {TextEditor} editor TextEditor to search for namespace of term.
-     * @param  {string}     term   Term to search for.
+     * @param {TextEditor} editor         TextEditor to search for namespace of term.
+     * @param {Point}      bufferPosition
+     * @param {string}     term           Term to search for.
     ###
-    gotoFromWord: (editor, term) ->
+    gotoFromWord: (editor, bufferPosition, term) ->
         throw new Error("This method is abstract and must be implemented!")
 
     ###*
