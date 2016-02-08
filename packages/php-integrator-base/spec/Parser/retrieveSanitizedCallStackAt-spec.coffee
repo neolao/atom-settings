@@ -22,15 +22,6 @@ describe "retrieveSanitizedCallStackAt", ->
         runs ->
             editor.setGrammar(grammar)
 
-    it "correctly stops at keywords such as parent and self.", ->
-        source = "self::foo"
-        editor.setText(source)
-        expect(parser.retrieveSanitizedCallStackAt(editor, {row: 0, column: source.length})).toEqual(['self', 'foo'])
-
-        source = "parent::foo->test"
-        editor.setText(source)
-        expect(parser.retrieveSanitizedCallStackAt(editor, {row: 0, column: source.length})).toEqual(['parent', 'foo', 'test'])
-
     it "correctly stops at basic function calls.", ->
         source =
             """
@@ -200,6 +191,49 @@ describe "retrieveSanitizedCallStackAt", ->
         bufferPosition.column = 0
 
         expect(parser.retrieveSanitizedCallStackAt(editor, bufferPosition, false)).toEqual(expectedResult)
+
+    it "correctly stops in ternary operators.", ->
+        source =
+            """
+            <?php
+
+            $a = $b ? $c->foo() : $d->bar();
+            """
+
+        editor.setText(source)
+
+        expectedResult = [
+            '$c',
+            'foo()'
+        ]
+
+        bufferPosition =
+            row: editor.getLineCount() - 1
+            column: 19
+
+        expect(parser.retrieveSanitizedCallStackAt(editor, bufferPosition)).toEqual(expectedResult)
+
+        bufferPosition =
+            row: editor.getLineCount() - 1
+            column: 10
+
+        expect(parser.retrieveSanitizedCallStackAt(editor, bufferPosition, false)).toEqual(expectedResult)
+
+        expectedResult = [
+            '$d',
+            'bar()'
+        ]
+
+        bufferPosition.column = 31
+
+        expect(parser.retrieveSanitizedCallStackAt(editor, bufferPosition)).toEqual(expectedResult)
+
+        bufferPosition =
+            row: editor.getLineCount() - 1
+            column: 22
+
+        expect(parser.retrieveSanitizedCallStackAt(editor, bufferPosition, false)).toEqual(expectedResult)
+
 
     it "correctly stops when when the bracket syntax is used for dynamic access to members.", ->
         source =
