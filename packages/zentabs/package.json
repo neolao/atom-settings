@@ -1,6 +1,6 @@
 {
   "name": "zentabs",
-  "version": "0.8.6",
+  "version": "0.8.7",
   "main": "./lib/zentabs",
   "description": "Keep the opened tabs amount below specified limit",
   "license": "MIT",
@@ -9,11 +9,43 @@
     "url": "git+https://github.com/ArnaudRinquin/atom-zentabs.git"
   },
   "engines": {
-    "atom": ">=0.174.0 <2.0.0"
+    "atom": ">=1.0.0 <2.0.0"
   },
   "dependencies": {
     "underscore-plus": "1.x",
     "atom-space-pen-views": "^2.0.3"
+  },
+  "configSchema": {
+    "maximumOpenedTabs": {
+      "type": "integer",
+      "default": 5,
+      "minimum": 1,
+      "description": "The maximum number of tabs before we start removing old ones"
+    },
+    "manualMode": {
+      "type": "boolean",
+      "default": false,
+      "description": "If enabled, you will need to use a shortcut in order to trigger a tab cleanup."
+    },
+    "showPinnedIcon": {
+      "type": "boolean",
+      "default": true
+    },
+    "neverCloseUnsaved": {
+      "type": "boolean",
+      "default": false,
+      "description": "If enabled, we will avoid trying to close unsaved files"
+    },
+    "neverCloseNew": {
+      "type": "boolean",
+      "default": false,
+      "description": "If enabled, we will avoid trying to close files that are not yet added to the project repo"
+    },
+    "neverCloseDirty": {
+      "type": "boolean",
+      "default": false,
+      "description": "If enabled, we will avoid trying to close files that have not been committed to your repo"
+    }
   },
   "readme": "# ZenTabs atom package\n\nKeep your opened tabs below a maximum limit, closing the oldest one first.\n\nInspired by travmik's SublimeText [ZenTabs](https://github.com/travmik/ZenTabs) package.\n\nSee it in action with a 5 tabs limit:\n\n![screencast](http://i.imgur.com/nxx4E1y.gif)\n\n## Pin tabs\n\nYou can right click tabs to pin/unpin them. It basically works as a whitelist.\n\n![pinned-screecast](http://i.imgur.com/2n0VJHH.gif)\n\n## Options\n* `maximumOpenedTabs:5`: the maximum amount of tabs that will be keep open\n* `manualMode:false`: disable automatic tab closing but still allow you to cleanup tabs through the key bindings\n* `showPinnedIcon:true`: Show a lock icon next to pinned tabs title\n* `neverCloseUnsaved:false`: If set to true, unsaved files won't be closed\n* `neverCloseNew:false`: If set to true, files with a `new` git status won't be closed\n* `neverCloseDirty:false`: If set to true, files with a `modified` git status won't be closed\n\n## Key bindings\n\n`zentabs:cleanup`, default `alt-shift-t`: triggers a tab cleanup\n",
   "readmeFilename": "README.md",
@@ -21,10 +53,10 @@
     "url": "https://github.com/ArnaudRinquin/atom-zentabs/issues"
   },
   "homepage": "https://github.com/ArnaudRinquin/atom-zentabs#readme",
-  "_id": "zentabs@0.8.6",
-  "_shasum": "758e095ddc9532097b5afb38f369a2742fe5150b",
-  "_resolved": "file:../d-116015-21358-elk55t/package.tgz",
-  "_from": "../d-116015-21358-elk55t/package.tgz",
+  "_id": "zentabs@0.8.7",
+  "_shasum": "9e7c57d26f5c0a906b6d1f8936cd6b825f12e627",
+  "_resolved": "file:../d-116115-59669-yoifat/package.tgz",
+  "_from": "../d-116115-59669-yoifat/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
