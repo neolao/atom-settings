@@ -35,9 +35,12 @@ class IndexDataAdapter
     {
         return $this->resolveStructuralElement(
             $this->storage->getStructuralElementRawInfo($id),
-            $this->storage->getParentFqsens($id),
+            $this->storage->getStructuralElementRawParents($id),
+            $this->storage->getStructuralElementRawChildren($id),
             $this->storage->getStructuralElementRawInterfaces($id),
+            $this->storage->getStructuralElementRawImplementors($id),
             $this->storage->getStructuralElementRawTraits($id),
+            $this->storage->getStructuralElementRawTraitUsers($id),
             $this->storage->getStructuralElementRawConstants($id),
             $this->storage->getStructuralElementRawProperties($id),
             $this->storage->getStructuralElementRawMethods($id)
@@ -48,62 +51,99 @@ class IndexDataAdapter
      * Resolves structural element information from the specified raw data.
      *
      * @param array|\Traversable $element
-     * @param array|\Traversable $parentFqsens
+     * @param array|\Traversable $parents
+     * @param array|\Traversable $children
      * @param array|\Traversable $interfaces
+     * @param array|\Traversable $implementors
      * @param array|\Traversable $traits
+     * @param array|\Traversable $traitUsers
      * @param array|\Traversable $constants
      * @param array|\Traversable $properties
      * @param array|\Traversable $methods
+     *
+     * @todo Could mayhaps benefit from some refactoring...
      *
      * @return array
      */
     public function resolveStructuralElement(
         $element,
-        $parentFqsens,
+        $parents,
+        $children,
         $interfaces,
+        $implementors,
         $traits,
+        $traitUsers,
         $constants,
         $properties,
         $methods
     ) {
         $result = [
-            'name'         => $element['fqsen'],
-            'startLine'    => $element['start_line'],
-            'shortName'    => $element['name'],
-            'filename'     => $element['path'],
-            'type'         => $element['type_name'],
-            'isAbstract'   => !!$element['is_abstract'],
-            'isBuiltin'    => !!$element['is_builtin'],
-            'parents'      => array_values($parentFqsens),
-            'isDeprecated' => !!$element['is_deprecated'],
-            'descriptions' => [
+            'name'               => $element['fqsen'],
+            'startLine'          => (int) $element['start_line'],
+            'endLine'            => (int) $element['end_line'],
+            'shortName'          => $element['name'],
+            'filename'           => $element['path'],
+            'type'               => $element['type_name'],
+            'isAbstract'         => !!$element['is_abstract'],
+            'isBuiltin'          => !!$element['is_builtin'],
+            'isDeprecated'       => !!$element['is_deprecated'],
+
+            'descriptions'       => [
                 'short' => $element['short_description'],
                 'long'  => $element['long_description']
             ],
-            'constants'    => [],
-            'properties'   => [],
-            'methods'      => []
+
+            'parents'            => [],
+            'interfaces'         => [],
+            'traits'             => [],
+
+            'directParents'      => [],
+            'directInterfaces'   => [],
+            'directTraits'       => [],
+            'directChildren'     => [],
+            'directImplementors' => [],
+            'directTraitUsers'   => [],
+
+            'constants'          => [],
+            'properties'         => [],
+            'methods'            => []
         ];
+
+        foreach ($children as $child) {
+            $result['directChildren'][] = $child['fqsen'];
+        }
+
+        foreach ($implementors as $implementor) {
+            $result['directImplementors'][] = $implementor['fqsen'];
+        }
+
+        foreach ($traitUsers as $trait) {
+            $result['directTraitUsers'][] = $trait['fqsen'];
+        }
 
         // Take all members from the base class as a starting point. Note that there can only be multiple base classes
         // for interfaces.
-        foreach ($parentFqsens as $seId => $fqsen) {
-            $baseClassInfo = $this->getStructuralElementInfo($seId);
+        foreach ($parents as $parent) {
+            $parentInfo = $this->getStructuralElementInfo($parent['id']);
 
-            if ($baseClassInfo) {
+            if ($parentInfo) {
                 if (!$result['descriptions']['short']) {
-                    $result['descriptions']['short'] = $baseClassInfo['descriptions']['short'];
+                    $result['descriptions']['short'] = $parentInfo['descriptions']['short'];
                 }
 
                 if (!$result['descriptions']['long']) {
-                    $result['descriptions']['long'] = $baseClassInfo['descriptions']['long'];
+                    $result['descriptions']['long'] = $parentInfo['descriptions']['long'];
                 }
 
-                $result['constants']  = array_merge($result['constants'], $baseClassInfo['constants']);
-                $result['properties'] = array_merge($result['properties'], $baseClassInfo['properties']);
-                $result['methods']    = array_merge($result['methods'], $baseClassInfo['methods']);
+                $result['constants']  = array_merge($result['constants'], $parentInfo['constants']);
+                $result['properties'] = array_merge($result['properties'], $parentInfo['properties']);
+                $result['methods']    = array_merge($result['methods'], $parentInfo['methods']);
 
-                $result['parents'] = array_merge($result['parents'], $baseClassInfo['parents']);
+                $result['traits']     = array_merge($result['traits'], $parentInfo['traits']);
+                $result['interfaces'] = array_merge($result['interfaces'], $parentInfo['interfaces']);
+                $result['parents']    = array_merge($result['parents'], [$parentInfo['name']], $parentInfo['parents']);
+
+                $result['directParents'][] = $parentInfo['name'];
             }
         }
 
@@ -111,6 +151,9 @@ class IndexDataAdapter
         // never overwrite any existing members as they have a lower priority than inherited members.
         foreach ($interfaces as $interface) {
             $interface = $this->getStructuralElementInfo($interface['id']);
+
+            $result['interfaces'][] = $interface['name'];
+            $result['directInterfaces'][] = $interface['name'];
 
             foreach ($interface['constants'] as $constant) {
                 if (!isset($result['constants'][$constant['name']])) {
@@ -136,6 +179,9 @@ class IndexDataAdapter
 
         foreach ($traits as $trait) {
             $trait = $this->getStructuralElementInfo($trait['id']);
+
+            $result['traits'][] = $trait['name'];
+            $result['directTraits'][] = $trait['name'];
 
             foreach ($trait['constants'] as $constant) {
                 if (isset($traitAliases[$constant['name']])) {
@@ -167,7 +213,8 @@ class IndexDataAdapter
                     'declaringClass' => [
                         'name'            => $element['fqsen'],
                         'filename'        => $element['path'],
-                        'startLine'       => $element['start_line'],
+                        'startLine'       => (int) $element['start_line'],
+                        'endLine'         => (int) $element['end_line'],
                         'type'            => $element['type_name']
                     ]
                 ]);
@@ -210,7 +257,8 @@ class IndexDataAdapter
                     'declaringClass' => [
                         'name'            => $element['fqsen'],
                         'filename'        => $element['path'],
-                        'startLine'       => $element['start_line'],
+                        'startLine'       => (int) $element['start_line'],
+                        'endLine'         => (int) $element['end_line'],
                         'type'            => $element['type_name'],
                     ]
                 ]);
@@ -262,7 +310,8 @@ class IndexDataAdapter
                     'declaringClass' => [
                         'name'            => $element['fqsen'],
                         'filename'        => $element['path'],
-                        'startLine'       => $element['start_line'],
+                        'startLine'       => (int) $element['start_line'],
+                        'endLine'         => (int) $element['end_line'],
                         'type'            => $element['type_name'],
                     ]
                 ]);
@@ -283,16 +332,19 @@ class IndexDataAdapter
                 'declaringClass' => [
                     'name'            => $element['fqsen'],
                     'filename'        => $element['path'],
-                    'startLine'       => $element['start_line'],
+                    'startLine'       => (int) $element['start_line'],
+                    'endLine'         => (int) $element['end_line'],
                     'type'            => $element['type_name'],
                 ],
 
                 'declaringStructure' => [
                     'name'            => $element['fqsen'],
                     'filename'        => $element['path'],
-                    'startLine'       => $element['start_line'],
+                    'startLine'       => (int) $element['start_line'],
+                    'endLine'         => (int) $element['end_line'],
                     'type'            => $element['type_name'],
-                    'startLineMember' => $rawConstantData['start_line']
+                    'startLineMember' => (int) $rawConstantData['start_line'],
+                    'endLineMember'   => (int) $rawConstantData['end_line']
                 ]
             ]);
         }
@@ -310,7 +362,8 @@ class IndexDataAdapter
                 $overriddenPropertyData = [
                     'declaringClass'     => $existingProperty['declaringClass'],
                     'declaringStructure' => $existingProperty['declaringStructure'],
-                    'startLine'          => $existingProperty['startLine']
+                    'startLine'          => (int) $existingProperty['startLine'],
+                    'endLine'            => (int) $existingProperty['end_line']
                 ];
 
                 if ($this->isInheritingDocumentation($property)) {
@@ -324,16 +377,19 @@ class IndexDataAdapter
                 'declaringClass' => [
                     'name'            => $element['fqsen'],
                     'filename'        => $element['path'],
-                    'startLine'       => $element['start_line'],
+                    'startLine'       => (int) $element['start_line'],
+                    'endLine'         => (int) $element['end_line'],
                     'type'            => $element['type_name'],
                 ],
 
                 'declaringStructure' => [
                     'name'            => $element['fqsen'],
                     'filename'        => $element['path'],
-                    'startLine'       => $element['start_line'],
+                    'startLine'       => (int) $element['start_line'],
+                    'endLine'         => (int) $element['end_line'],
                     'type'            => $element['type_name'],
-                    'startLineMember' => $rawPropertyData['start_line']
+                    'startLineMember' => (int) $rawPropertyData['start_line'],
+                    'endLineMember'   => (int) $rawPropertyData['end_line']
                 ]
             ]);
 
@@ -366,13 +422,15 @@ class IndexDataAdapter
                     $implementedMethodData = [
                         'declaringClass'     => $existingMethod['declaringClass'],
                         'declaringStructure' => $existingMethod['declaringStructure'],
-                        'startLine'          => $existingMethod['startLine']
+                        'startLine'          => (int) $existingMethod['startLine'],
+                        'endLine'            => (int) $existingMethod['endLine']
                     ];
                 } else {
                     $overriddenMethodData = [
                         'declaringClass'     => $existingMethod['declaringClass'],
                         'declaringStructure' => $existingMethod['declaringStructure'],
-                        'startLine'          => $existingMethod['startLine']
+                        'startLine'          => (int) $existingMethod['startLine'],
+                        'endLine'            => (int) $existingMethod['endLine']
                     ];
                 }
 
@@ -388,16 +446,19 @@ class IndexDataAdapter
                 'declaringClass' => [
                     'name'            => $element['fqsen'],
                     'filename'        => $element['path'],
-                    'startLine'       => $element['start_line'],
+                    'startLine'       => (int) $element['start_line'],
+                    'endLine'         => (int) $element['end_line'],
                     'type'            => $element['type_name'],
                 ],
 
                 'declaringStructure' => [
                     'name'            => $element['fqsen'],
                     'filename'        => $element['path'],
-                    'startLine'       => $element['start_line'],
+                    'startLine'       => (int) $element['start_line'],
+                    'endLine'         => (int) $element['end_line'],
                     'type'            => $element['type_name'],
-                    'startLineMember' => $rawMethodData['start_line']
+                    'startLineMember' => (int) $rawMethodData['start_line'],
+                    'endLineMember'   => (int) $rawMethodData['end_line']
                 ]
             ]);
 
@@ -491,7 +552,8 @@ class IndexDataAdapter
         return [
             'name'          => $rawInfo['name'],
             'isBuiltin'     => false,
-            'startLine'     => $rawInfo['start_line'],
+            'startLine'     => (int) $rawInfo['start_line'],
+            'endLine'       => (int) $rawInfo['end_line'],
             'filename'      => $rawInfo['path'],
 
             'parameters'    => $parameters,
@@ -521,7 +583,8 @@ class IndexDataAdapter
     {
         return [
             'name'               => $rawInfo['name'],
-            'startLine'          => $rawInfo['start_line'],
+            'startLine'          => (int) $rawInfo['start_line'],
+            'endLine'            => (int) $rawInfo['end_line'],
             'isMagic'            => !!$rawInfo['is_magic'],
             'isPublic'           => ($rawInfo['access_modifier'] === 'public'),
             'isProtected'        => ($rawInfo['access_modifier'] === 'protected'),
@@ -557,7 +620,8 @@ class IndexDataAdapter
         return [
             'name'         => $rawInfo['name'],
             'isBuiltin'    => !!$rawInfo['is_builtin'],
-            'startLine'    => $rawInfo['start_line'],
+            'startLine'    => (int) $rawInfo['start_line'],
+            'endLine'      => (int) $rawInfo['end_line'],
             'filename'     => $rawInfo['path'],
 
             'isPublic'     => true,
@@ -590,13 +654,18 @@ class IndexDataAdapter
      */
     protected function isInheritingDocumentation(array $processedData)
     {
-        // Ticket #86 - Add support for inheriting the entire docblock from the parent if the current docblock contains
-        // nothing but these tags. Note that, according to draft PSR-5 and phpDocumentor's implementation, this is
-        // incorrect. However, some large frameworks (such as Symfony) use this and it thus makes life easier for many
-        // developers, hence this workaround.
-        return !$processedData['hasDocblock'] || in_array($processedData['descriptions']['short'], [
-            '{@inheritdoc}', '{@inheritDoc}'
-        ]);
+        $specialTags = [
+            // Ticket #86 - Inherit the entire parent docblock if the docblock contains nothing but these tags.
+            // According to draft PSR-5 and phpDocumentor's implementation, these are incorrect. However, some large
+            // frameworks (such as Symfony 2) use these and it thus makes life easier for many  developers.
+            '{@inheritdoc}', '{@inheritDoc}',
+
+            // This tag (without curly braces) is, according to draft PSR-5, a valid way to indicate an entire docblock
+            // should be inherited and to implicitly indicate that documentation was not forgotten.
+            '@inheritDoc'
+        ];
+
+        return !$processedData['hasDocblock'] || in_array($processedData['descriptions']['short'], $specialTags);
     }
 
     /**

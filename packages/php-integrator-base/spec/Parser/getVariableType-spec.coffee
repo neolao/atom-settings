@@ -5,6 +5,14 @@ describe "getVariableType", ->
     grammar = null
 
     proxyMock = {
+        getClassListForFile: (file) ->
+            return {
+                'EXPECTED\\TYPE_1' : @getClassInfo('EXPECTED\\TYPE_1')
+            }
+
+        resolveType: (file, line, type) ->
+            return type
+
         getGlobalFunctions: () ->
             return {
                 foo:
@@ -24,6 +32,8 @@ describe "getVariableType", ->
             if className == 'EXPECTED\\TYPE_1'
                 return {
                     name: 'EXPECTED\\TYPE_1'
+                    startLine: 0
+                    endLine: 9999
                     methods:
                         foo:
                             parameters: [
@@ -106,7 +116,9 @@ describe "getVariableType", ->
             """
             <?php
 
-            class Bar
+            namespace EXPECTED;
+
+            class TYPE_1
             {
                 public function __construct()
                 {
@@ -124,7 +136,7 @@ describe "getVariableType", ->
             row    : row
             column : column
 
-        expect(parser.getVariableType(editor, bufferPosition, '$this')).toEqual('Bar')
+        expect(parser.getVariableType(editor, bufferPosition, '$this')).toEqual('EXPECTED\\TYPE_1')
 
     it "correctly returns the type of a variable through a call stack.", ->
         source =

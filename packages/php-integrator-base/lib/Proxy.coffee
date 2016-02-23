@@ -57,20 +57,17 @@ class Proxy
         try
             response = child_process.spawnSync(command, parameters)
 
-            if response.error
-                throw response.error
+            rawOutput = response.output[1].toString('ascii')
 
             try
-                response = JSON.parse(response.output[1].toString('ascii'))
+                response = JSON.parse(rawOutput)
 
             catch error
-                throw 'Invalid JSON data was returned by the PHP side!'
+                @showUnexpectedOutputError(rawOutput)
+                throw new Error('Unexpected JSON output encountered!')
 
-            if not response or response.error?
-                throw response.error
-
-            if not response.success
-                throw 'An unsuccessful status code was returned by the PHP side!'
+            if not response or not response.success
+                throw new Error('An unsuccessful status code was returned by the PHP side!')
 
         catch error
             throw (if error.message then error.message else error)
@@ -99,25 +96,17 @@ class Proxy
 
             proc.on 'close', (code) =>
                 if not buffer or buffer.length == 0
-                    reject({message: "No output received from the PHP side!"})
+                    reject({rawOutput: buffer, message: "No output received from the PHP side!"})
                     return
 
                 try
                     response = JSON.parse(buffer)
 
                 catch error
-                    #console.error(error)
-                    reject({message: error})
-                    return
+                    @showUnexpectedOutputError(buffer)
 
-                if response?.error
-                    #console.error(message)
-                    message = response.error?.message
-                    reject({message: message})
-                    return
-
-                if not response.success
-                    reject({message: 'An unsuccessful status code was returned by the PHP side!'})
+                if not response or not response.success
+                    reject({rawOutput: buffer, message: 'An unsuccessful status code was returned by the PHP side!'})
                     return
 
                 resolve(response.result)
@@ -129,6 +118,17 @@ class Proxy
             if stdinData?
                 proc.stdin.write(stdinData, 'utf-8')
                 proc.stdin.end()
+
+    ###*
+     * @param {string} rawOutput
+    ###
+    showUnexpectedOutputError: (rawOutput) ->
+        atom.notifications.addError('php-integrator - Oops, something went wrong!', {
+            dismissable : true
+            detail      :
+                "PHP sent back something unexpected. This is most likely an issue with your setup. If you're sure " +
+                "this is a bug, feel free to report it on the bug tracker.\n \n→ " + rawOutput
+        })
 
     ###*
      * Performs a request to the PHP side.
@@ -163,6 +163,20 @@ class Proxy
         return @performRequest(['--class-list', '--database=' + @getIndexDatabasePath()], async)
 
     ###*
+     * Retrieves a list of available classes in the specified file.
+     *
+     * @param {string}  file
+     * @param {boolean} async
+     *
+     * @return {Promise|Object}
+    ###
+    getClassListForFile: (file, async = false) ->
+        if not file
+            throw new Error('No file passed!')
+
+        return @performRequest(['--class-list', '--database=' + @getIndexDatabasePath(), '--file=' + file], async)
+
+    ###*
      * Retrieves a list of available global constants.
      *
      * @param {boolean} async
@@ -186,17 +200,36 @@ class Proxy
      * Retrieves a list of available members of the class (or interface, trait, ...) with the specified name.
      *
      * @param {string} className
-     *
      * @param {boolean} async
      *
      * @return {Promise|Object}
     ###
     getClassInfo: (className, async = false) ->
         if not className
-            throw 'No class name passed!'
+            throw new Error('No class name passed!')
 
         return @performRequest(
             ['--class-info', '--database=' + @getIndexDatabasePath(), '--name=' + className],
+            async
+        )
+
+    ###*
+     * Resolves a local type in the specified file, based on use statements and the namespace.
+     *
+     * @param {string}  file
+     * @param {number}  line   The line the type is located at. The first line is 1, not 0.
+     * @param {string}  type
+     * @param {boolean} async
+     *
+     * @return {Promise|Object}
+    ###
+    resolveType: (file, line, type, async = false) ->
+        throw new Error('No file passed!') if not file
+        throw new Error('No line passed!') if not line
+        throw new Error('No type passed!') if not type
+
+        return @performRequest(
+            ['--resolve-type', '--database=' + @getIndexDatabasePath(), '--file=' + file, '--line=' + line, '--type=' + type],
             async
         )
 
@@ -212,7 +245,7 @@ class Proxy
     ###
     reindex: (path, source, progressStreamCallback) ->
         if not path
-            throw 'No class name passed!'
+            throw new Error('No class name passed!')
 
         progressStreamCallbackWrapper = (output) =>
             # Sometimes we receive multiple lines in bulk, so we must ensure it remains split correctly.

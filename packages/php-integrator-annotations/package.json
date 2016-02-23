@@ -1,7 +1,7 @@
 {
   "name": "php-integrator-annotations",
   "main": "./lib/Main",
-  "version": "0.2.4",
+  "version": "0.3.1",
   "description": "Shows annotations (e.g. for overriden methods interface implementations) in your PHP source code.",
   "repository": {
     "type": "git",
@@ -14,7 +14,7 @@
   "consumedServices": {
     "php-integrator.service": {
       "versions": {
-        "~0.5.0": "setService"
+        "~0.6.0": "setService"
       }
     }
   },
@@ -28,22 +28,22 @@
     "integration",
     "php-integrator"
   ],
-  "readme": "# php-integrator-annotations\n\n![Screenshot](http://ipfs.pics/ipfs/QmTMju5ZZtcHBxKzfMfER35QkNik84Yva3HMbTz5LwMVdC)\n\nThis package provides annotations for your PHP source code using [PHP Integrator](https://github.com/Gert-dev/php-integrator-base).\n\n**Note that the [php-integrator-base](https://github.com/Gert-dev/php-integrator-base) package is required and needs to be set up correctly for this package to function correctly.**\n\nWhat is included?\n  * Annotations for class methods that are implementing a method from an interface.\n  * Annotations for class methods and properties that are overriding base class or trait members.\n  * Tooltips on mouse over that clarify why the annotations are cluttering your gutter with additional icons.\n  * Annotations for overrides and implementations can be clicked to navigate to respectively the method being overridden or implemented.\n\nRegarding donations: they were not my primary intention when releasing this project as open source, but I do accept them and am very grateful for any donation you may give. A link is provided on the readme of the [php-integrator-base](https://github.com/Gert-dev/php-integrator-base) package.\n\n![GPLv3 Logo](http://gplv3.fsf.org/gplv3-127x51.png)\n",
+  "readme": "# php-integrator-annotations\n<p align=\"right\">\n:coffee:\n<a href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YKTNLZCRHMRTJ\">Send me some coffee beans</a>\n</p>\n\n![Screenshot](http://ipfs.pics/ipfs/QmTMju5ZZtcHBxKzfMfER35QkNik84Yva3HMbTz5LwMVdC)\n\nThis package provides annotations for your PHP source code using [PHP Integrator](https://github.com/Gert-dev/php-integrator-base).\n\n**Note that the [php-integrator-base](https://github.com/Gert-dev/php-integrator-base) package is required and needs to be set up correctly for this package to function correctly.**\n\nWhat is included?\n  * Annotations for class methods that are implementing a method from an interface.\n  * Annotations for class methods and properties that are overriding base class or trait members.\n  * Tooltips on mouse over that clarify why the annotations are cluttering your gutter with additional icons.\n  * Annotations for overrides and implementations can be clicked to navigate to respectively the method being overridden or implemented.\n\n![GPLv3 Logo](http://gplv3.fsf.org/gplv3-127x51.png)\n",
   "readmeFilename": "README.md",
   "bugs": {
     "url": "https://github.com/Gert-dev/php-integrator-annotations/issues"
   },
   "homepage": "https://github.com/Gert-dev/php-integrator-annotations#readme",
-  "_id": "php-integrator-annotations@0.2.4",
-  "_shasum": "562c253654dd6cacff48e433a9b0396ca8a06e9e",
-  "_resolved": "file:../d-11615-19972-1exavrw/package.tgz",
-  "_from": "../d-11615-19972-1exavrw/package.tgz",
+  "_id": "php-integrator-annotations@0.3.1",
+  "_shasum": "95bb9b92382ed782ffd5a15b5945de8ca5a6e86f",
+  "_resolved": "file:../d-116123-18301-15xfpd2/package.tgz",
+  "_from": "../d-116123-18301-15xfpd2/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
       {
         "name": "jquery",
-        "version": "2.2.0",
+        "version": "2.2.1",
         "path": "node_modules/sub-atom/node_modules/jquery/dist/jquery.js"
       }
     ],
@@ -64,6 +64,8 @@
       ".js": [
         "node_modules/sub-atom/node_modules/jquery/dist/jquery.js",
         "node_modules/sub-atom/node_modules/jquery/dist/jquery.min.js",
+        "node_modules/sub-atom/node_modules/jquery/dist/jquery.slim.js",
+        "node_modules/sub-atom/node_modules/jquery/dist/jquery.slim.min.js",
         "node_modules/sub-atom/node_modules/jquery/src/ajax/jsonp.js",
         "node_modules/sub-atom/node_modules/jquery/src/ajax/load.js",
         "node_modules/sub-atom/node_modules/jquery/src/ajax/parseJSON.js",
@@ -81,6 +83,7 @@
         "node_modules/sub-atom/node_modules/jquery/src/attributes/val.js",
         "node_modules/sub-atom/node_modules/jquery/src/attributes.js",
         "node_modules/sub-atom/node_modules/jquery/src/callbacks.js",
+        "node_modules/sub-atom/node_modules/jquery/src/core/DOMEval.js",
         "node_modules/sub-atom/node_modules/jquery/src/core/access.js",
         "node_modules/sub-atom/node_modules/jquery/src/core/init.js",
         "node_modules/sub-atom/node_modules/jquery/src/core/parseHTML.js",
@@ -109,6 +112,7 @@
         "node_modules/sub-atom/node_modules/jquery/src/data/var/dataPriv.js",
         "node_modules/sub-atom/node_modules/jquery/src/data/var/dataUser.js",
         "node_modules/sub-atom/node_modules/jquery/src/data.js",
+        "node_modules/sub-atom/node_modules/jquery/src/deferred/exceptionHook.js",
         "node_modules/sub-atom/node_modules/jquery/src/deferred.js",
         "node_modules/sub-atom/node_modules/jquery/src/deprecated.js",
         "node_modules/sub-atom/node_modules/jquery/src/dimensions.js",

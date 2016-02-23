@@ -130,6 +130,8 @@ class Indexer
      * Indexes the specified project.
      *
      * @param string $directory
+     *
+     * @return array A list of errors accumulated during indexing (indexing continues when these happen).
      */
     public function indexDirectory($directory)
     {
@@ -162,17 +164,23 @@ class Indexer
 
         $this->sendProgress(0, $totalItems);
 
+        $errors = [];
+
         foreach ($files as $i => $filePath) {
             echo $this->logMessage('  - Indexing ' . $filePath);
 
             try {
                 $this->indexFile($filePath);
             } catch (Indexer\IndexingFailedException $e) {
+                $errors = array_merge($errors, $e->getErrors());
+
                 $this->logMessage('    - ERROR: Indexing failed due to parsing errors!');
             }
 
             $this->sendProgress($i+1, $totalItems);
         }
+
+        return $errors;
     }
 
     /**
@@ -187,12 +195,21 @@ class Indexer
             $code = $code ?: @file_get_contents($filePath);
 
             if (!is_string($code)) {
-                throw new Indexer\IndexingFailedException($filePath);
+                throw new Indexer\IndexingFailedException();
             }
 
             $this->indexFileOutline($filePath, $code);
         } catch (Error $e) {
-            throw new Indexer\IndexingFailedException($filePath);
+            throw new Indexer\IndexingFailedException([
+                [
+                    'file'        => $filePath,
+                    'startLine'   => $e->getStartLine() >= 0 ? $e->getStartLine() : null,
+                    'endLine'     => $e->getEndLine() >= 0 ? $e->getEndLine() : null,
+                    'startColumn' => $e->hasColumnInfo() ? $e->getStartColumn($code) : null,
+                    'endColumn'   => $e->hasColumnInfo() ? $e->getEndColumn($code) : null,
+                    'message'     => $e->getMessage()
+                ]
+            ]);
         }
     }
 
@@ -248,11 +265,15 @@ class Indexer
              || !isset($fileModifiedMap[$filename])
              || $fileInfo->getMTime() > $fileModifiedMap[$filename]->getTimestamp()
             ) {
+                $dependencies = [];
+
                 try {
-                    $fileClassMap[$filename] = $this->getFqsenDependenciesForFile($filename);
+                    $dependencies = $this->getFqsenDependenciesForFile($filename);
                 } catch (Error $e) {
 
                 }
+
+                $fileClassMap[$filename] = $dependencies;
             }
         }
 
@@ -375,6 +396,7 @@ class Indexer
                     'name'                  => $name,
                     'file_id'               => null,
                     'start_line'            => null,
+                    'end_line'              => null,
                     'is_builtin'            => 1, // ($namespace !== 'user' ? 1 : 0)
                     'is_deprecated'         => false,
                     'short_description'     => null,
@@ -411,6 +433,7 @@ class Indexer
                     'name'                  => $functionName,
                     'file_id'               => null,
                     'start_line'            => null,
+                    'end_line'              => null,
                     'is_builtin'            => 1,
                     'is_deprecated'         => $function->isDeprecated() ? 1 : 0,
                     'short_description'     => null,
@@ -448,6 +471,17 @@ class Indexer
                         'is_optional'  => $parameter->isOptional() ? 1 : 0,
                         'is_variadic'  => $isVariadic ? 1 : 0
                     ];
+
+                    if (!isset($parameterData['name'])) {
+                        $this->logMessage(
+                            '  - WARNING: Ignoring malformed function parameters for ' . $function->getName()
+                        );
+
+                        // Some PHP extensions somehow contain parameters that have no name. An example of this is
+                        // ssh2_poll (from the ssh2 extension). Strangely enough this mystery function also can't be
+                        // found in the documentation. (Perhaps a bug in the extension?) Ignore these.
+                        continue;
+                    }
 
                     $parameters[] = $parameterData;
 
@@ -525,6 +559,7 @@ class Indexer
             'name'       => $element->getName(),
             'type'       => $type,
             'startLine'  => null,
+            'endLine'    => null,
             'isAbstract' => $element->isAbstract(),
             'docComment' => null,
             'parents'    => $parents,
@@ -573,6 +608,7 @@ class Indexer
             $rawData['methods'][$method->getName()] = [
                 'name'           => $method->getName(),
                 'startLine'      => null,
+                'endLine'        => null,
                 'isPublic'       => $method->isPublic(),
                 'isPrivate'      => $method->isPrivate(),
                 'isProtected'    => $method->isProtected(),
@@ -588,6 +624,7 @@ class Indexer
             $rawData['properties'][$property->getName()] = [
                 'name'        => $property->getName(),
                 'startLine'   => null,
+                'endLine'     => null,
                 'isPublic'    => $property->isPublic(),
                 'isPrivate'   => $property->isPrivate(),
                 'isStatic'    => $property->isStatic(),
@@ -600,6 +637,7 @@ class Indexer
             $rawData['constants'][$constantName] = [
                 'name'       => $constantName,
                 'startLine'  => null,
+                'endLine'    => null,
                 'docComment' => null
             ];
         }
@@ -639,6 +677,7 @@ class Indexer
             $this->storage->deletePropertiesByFileId($fileId);
             $this->storage->deleteConstantsByFileId($fileId);
             $this->storage->deleteFunctionsByFileId($fileId);
+            $this->storage->deleteNamespacesByFileId($fileId);
 
             $this->storage->update(IndexStorageItemEnum::FILES, $fileId, [
                 'indexed_time' => $time
@@ -668,6 +707,24 @@ class Indexer
 
         foreach ($outlineIndexingVisitor->getGlobalConstants() as $constant) {
             $this->indexConstant($constant, $fileId, null, $useStatementFetchingVisitor);
+        }
+
+        foreach ($useStatementFetchingVisitor->getNamespaces() as $namespace) {
+            $namespaceId = $this->storage->insert(IndexStorageItemEnum::FILES_NAMESPACES, [
+                'start_line'  => $namespace['startLine'],
+                'end_line'    => $namespace['endLine'],
+                'namespace'   => $namespace['name'],
+                'file_id'    => $fileId
+            ]);
+
+            foreach ($namespace['useStatements'] as $useStatement) {
+                $this->storage->insert(IndexStorageItemEnum::FILES_NAMESPACES_IMPORTS, [
+                    'line'               => $useStatement['line'],
+                    'alias'              => $useStatement['alias'] ?: null,
+                    'fqsen'              => $useStatement['fqsen'],
+                    'files_namespace_id' => $namespaceId
+                ]);
+            }
         }
 
         // Remove structural elements that are no longer in this file.
@@ -708,6 +765,7 @@ class Indexer
             'fqsen'                      => $fqsen,
             'file_id'                    => $fileId,
             'start_line'                 => $rawData['startLine'],
+            'end_line'                   => $rawData['endLine'],
             'structural_element_type_id' => $structuralElementTypeMap[$rawData['type']],
             'is_abstract'                => (isset($rawData['isAbstract']) && $rawData['isAbstract']) ? 1 : 0,
             'is_deprecated'              => $documentation['deprecated'] ? 1 : 0,
@@ -880,6 +938,10 @@ class Indexer
         foreach ($magicProperties as $propertyName => $propertyData) {
             $data = $this->adaptMagicPropertyData($propertyName, $propertyData);
 
+            // Use the same line as the class definition, it matters for e.g. type resolution.
+            $data['startLine'] = $rawData['startLine'];
+            $data['endLine']   = $rawData['endLine'];
+
             $this->indexProperty(
                 $data,
                 $fileId,
@@ -893,6 +955,10 @@ class Indexer
         // Index magic methods.
         foreach ($documentation['methods'] as $methodName => $methodData) {
             $data = $this->adaptMagicMethodData($methodName, $methodData);
+
+            // Use the same line as the class definition, it matters for e.g. type resolution.
+            $data['startLine'] = $rawData['startLine'];
+            $data['endLine']   = $rawData['endLine'];
 
             $this->indexFunction(
                 $data,
@@ -920,6 +986,7 @@ class Indexer
         return [
             'name'        => mb_substr($name, 1), // Strip off the dollar sign.
             'startLine'   => null,
+            'endLine'     => null,
             'isPublic'    => true,
             'isPrivate'   => false,
             'isProtected' => false,
@@ -965,6 +1032,7 @@ class Indexer
         return [
             'name'           => $name,
             'startLine'      => null,
+            'endLine'        => null,
             'returnType'     => $data['type'],
             'fullReturnType' => $data['type'],
             'parameters'     => $parameters,
@@ -1001,13 +1069,19 @@ class Indexer
 
         if ($documentation['var']['type']) {
             $returnType = $documentation['var']['type'];
-            $fullReturnType = $this->getFullTypeForDocblockType($returnType, $useStatementFetchingVisitor);
+
+            $fullReturnType = $this->getFullTypeForDocblockType(
+                $returnType,
+                $rawData['startLine'],
+                $useStatementFetchingVisitor
+            );
         }
 
         $this->storage->insert(IndexStorageItemEnum::CONSTANTS, [
             'name'                  => $rawData['name'],
             'file_id'               => $fileId,
             'start_line'            => $rawData['startLine'],
+            'end_line'              => $rawData['endLine'],
             'is_builtin'            => 0,
             'is_deprecated'         => $documentation['deprecated'] ? 1 : 0,
             'short_description'     => $documentation['descriptions']['short'],
@@ -1057,13 +1131,19 @@ class Indexer
 
         if ($documentation['var']['type']) {
             $returnType = $documentation['var']['type'];
-            $fullReturnType = $this->getFullTypeForDocblockType($returnType, $useStatementFetchingVisitor);
+
+            $fullReturnType = $this->getFullTypeForDocblockType(
+                $returnType,
+                $rawData['startLine'],
+                $useStatementFetchingVisitor
+            );
         }
 
         $this->storage->insert(IndexStorageItemEnum::PROPERTIES, [
             'name'                  => $rawData['name'],
             'file_id'               => $fileId,
             'start_line'            => $rawData['startLine'],
+            'end_line'              => $rawData['endLine'],
             'is_deprecated'         => $documentation['deprecated'] ? 1 : 0,
             'short_description'     => $shortDescription,
             'long_description'      => $documentation['descriptions']['long'],
@@ -1109,13 +1189,19 @@ class Indexer
 
         if (!$returnType) {
             $returnType = $documentation['return']['type'];
-            $fullReturnType = $this->getFullTypeForDocblockType($returnType, $useStatementFetchingVisitor);
+
+            $fullReturnType = $this->getFullTypeForDocblockType(
+                $returnType,
+                $rawData['startLine'],
+                $useStatementFetchingVisitor
+            );
         }
 
         $functionId = $this->storage->insert(IndexStorageItemEnum::FUNCTIONS, [
             'name'                  => $rawData['name'],
             'file_id'               => $fileId,
             'start_line'            => $rawData['startLine'],
+            'end_line'              => $rawData['endLine'],
             'is_builtin'            => 0,
             'is_deprecated'         => $documentation['deprecated'] ? 1 : 0,
             'short_description'     => $documentation['descriptions']['short'],
@@ -1141,7 +1227,12 @@ class Indexer
 
             if (!$fullType) {
                 $fullType = $parameterDoc ? $parameterDoc['type'] : null;
-                $fullType = $this->getFullTypeForDocblockType($fullType, $useStatementFetchingVisitor);
+
+                $fullType = $this->getFullTypeForDocblockType(
+                    $fullType,
+                    $rawData['startLine'],
+                    $useStatementFetchingVisitor
+                );
             }
 
             $parameterData = [
@@ -1166,7 +1257,7 @@ class Indexer
             $throwsData = [
                 'function_id' => $functionId,
                 'type'        => $type,
-                'full_type'   => $this->getFullTypeForDocblockType($type, $useStatementFetchingVisitor),
+                'full_type'   => $this->getFullTypeForDocblockType($type, $rawData['startLine'], $useStatementFetchingVisitor),
                 'description' => $description ?: null
             ];
 
@@ -1205,33 +1296,72 @@ class Indexer
     }
 
     /**
-     * Returns a boolean indicating if the specified value is a class type or not.
+     * Resolves and determines the FQSEN of the specified type.
      *
-     * @param string $type
+     * @param string                                   $type
+     * @param int                                      $line
+     * @param Indexer\UseStatementFetchingVisitor|null $useStatementFetchingVisitor
      *
-     * @return bool
+     * @return string|null
      */
-    protected function isClassType($type)
-    {
-        return ucfirst($type) === $type && $type !== '$this';
+    protected function getFullTypeForDocblockType(
+        $type,
+        $line,
+        Indexer\UseStatementFetchingVisitor $useStatementFetchingVisitor = null
+    ) {
+        // There can be multiple namespaces in each file, check with namespace is active for the specified line.
+        $useStatements = [];
+        $namespaceName = null;
+
+        if ($useStatementFetchingVisitor) {
+            if (!$line) {
+                throw new UnexpectedValueException('The passed line number must not be null!');
+            }
+
+            foreach ($useStatementFetchingVisitor->getNamespaces() as $namespace) {
+                if ($line >= $namespace['startLine'] &&
+                   ($line <= $namespace['endLine'] || $namespace['endLine'] === null)) {
+                    $namespaceName = $namespace['name'];
+
+                    // Only use statements before the current line actually apply.
+                    foreach ($namespace['useStatements'] as $useStatement) {
+                        if ($useStatement['line'] <= $line) {
+                            $useStatements[] = $useStatement;
+                        }
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        $typeResolver = new TypeResolver($namespaceName, $useStatements);
+
+        $soleType = $this->getSoleClassNameForTypeSpecification($type);
+
+        if (!$soleType) {
+            return $type;
+        }
+
+        return $typeResolver->resolve($soleType);
     }
 
     /**
-     * Retrieves the sole class name from the specified return value statement.
+     * Retrieves the sole class name for the specified type specification.
      *
      * @example "null" returns null.
      * @example "FooClass" returns "FooClass".
      * @example "FooClass|null" returns "FooClass".
      * @example "FooClass|BarClass|null" returns null (there is no single type).
      *
-     * @param string $returnValueStatement
+     * @param string $typeSpecification
      *
      * @return string|null
      */
-    protected function getSoleClassName($returnValueStatement)
+    public function getSoleClassNameForTypeSpecification($typeSpecification)
     {
-        if ($returnValueStatement) {
-            $types = explode(DocParser::TYPE_SPLITTER, $returnValueStatement);
+        if ($typeSpecification) {
+            $types = explode(DocParser::TYPE_SPLITTER, $typeSpecification);
 
             $classTypes = [];
 
@@ -1250,62 +1380,15 @@ class Indexer
     }
 
     /**
-     * Resolves and determines the FQSEN of the specified type.
+     * Returns a boolean indicating if the specified value is a class type or not.
      *
-     * @param string                                   $type
-     * @param Indexer\UseStatementFetchingVisitor|null $useStatementFetchingVisitor
+     * @param string $type
      *
-     * @return string|null
+     * @return bool
      */
-    protected function getFullTypeForDocblockType(
-        $type,
-        Indexer\UseStatementFetchingVisitor $useStatementFetchingVisitor = null
-    ) {
-        if (empty($type)) {
-            return null;
-        }
-
-        $soleClassName = $this->getSoleClassName($type);
-
-        if (!empty($soleClassName)) {
-            if ($soleClassName[0] !== "\\" && $useStatementFetchingVisitor) {
-
-                $soleClassNameParts = explode('\\', $soleClassName);
-
-                foreach ($useStatementFetchingVisitor->getUseStatements() as $use) {
-                    if ($use['alias'] === $soleClassNameParts[0]) {
-                        array_shift($soleClassNameParts);
-
-                        $fullName = $use['fqsen'];
-
-                        if (!empty($soleClassNameParts)) {
-                            /*
-                             * This block is only executed when relative names are used with more than one part, i.e.:
-                             *   use A\B\C;
-                             *
-                             *   C\D::foo();
-                             *
-                             * 'C' will be dropped from 'C\D', and the remaining 'D' will be appended to 'A\B\C',
-                             * becoming 'A\B\C\D'.
-                             */
-                            $fullName .= '\\' . implode('\\', $soleClassNameParts);
-                        }
-
-                        return $fullName;
-                    }
-                }
-
-                // Still here? There must be no explicit use statement, default to the current namespace.
-                $fullName = $useStatementFetchingVisitor->getNamespace() ?: '';
-                $fullName .= '\\' . $soleClassName;
-
-                return $fullName;
-            }
-
-            return $soleClassName;
-        }
-
-        return $type;
+    protected function isClassType($type)
+    {
+        return ucfirst($type) === $type && $type !== '$this';
     }
 
     /**
@@ -1339,7 +1422,13 @@ class Indexer
     protected function getParser()
     {
         if (!$this->parser) {
-            $this->parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+            $lexer = new Lexer([
+                'usedAttributes' => [
+                    'comments', 'startLine', 'endLine', 'startFilePos', 'endFilePos'
+                ]
+            ]);
+
+            $this->parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7, $lexer);
         }
 
         return $this->parser;

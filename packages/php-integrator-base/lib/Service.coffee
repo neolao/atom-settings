@@ -62,6 +62,17 @@ class Service
         return @proxy.getClassList(async)
 
     ###*
+     * Retrieves a list of available classes in the specified file.
+     *
+     * @param {string}  file
+     * @param {boolean} async
+     *
+     * @return {Promise|Object} If the operation is asynchronous, a Promise, otherwise the result as object.
+    ###
+    getClassListForFile: (file, async = false) ->
+        return @proxy.getClassListForFile(file, async)
+
+    ###*
      * Retrieves a list of available global constants.
      *
      * @param {boolean} async
@@ -91,6 +102,19 @@ class Service
     ###
     getClassInfo: (className, async = false) ->
         return @proxy.getClassInfo(className, async)
+
+    ###*
+     * Resolves a local type in the specified file, based on use statements and the namespace.
+     *
+     * @param {string}  file
+     * @param {number}  line  The line the type is located at. The first line is 1, not 0.
+     * @param {string}  type
+     * @param {boolean} async
+     *
+     * @return {Promise|Object}
+    ###
+    resolveType: (file, line, type, async = false) ->
+        return @proxy.resolveType(file, line, type, async)
 
     ###*
      * Refreshes the specified file or folder. This method is asynchronous and will return immediately.
@@ -150,21 +174,49 @@ class Service
      * @return {object|null} A selector to be used with jQuery.
     ###
     getClassSelectorFromEvent: (event) ->
-        return @parser.getClassSelectorFromEvent(event)
+        selector = event.currentTarget
+
+        $ = require 'jquery'
+
+        if $(selector).parent().hasClass('function argument')
+            return $(selector).parent().children('.namespace, .class:not(.operator):not(.constant)')
+
+        if $(selector).prev().hasClass('namespace') && $(selector).hasClass('class')
+            return $([$(selector).prev()[0], selector])
+
+        if $(selector).next().hasClass('class') && $(selector).hasClass('namespace')
+           return $([selector, $(selector).next()[0]])
+
+        if $(selector).prev().hasClass('namespace') || $(selector).next().hasClass('inherited-class')
+            return $(selector).parent().children('.namespace, .inherited-class')
+
+        return selector
 
     ###*
-     * Determines the full class name (without leading slash) of the specified class in the specified editor. If no
-     * class name is passed, the full class name of the class defined in the current file is returned instead.
+     * Determines the current class' FQCN based on the specified buffer position.
      *
-     * @param {TextEditor}  editor    The editor that contains the class (needed to resolve relative class names).
-     * @param {String|null} className The (local) name of the class to resolve.
+     * @param {TextEditor} editor         The editor that contains the class (needed to resolve relative class names).
+     * @param {Point}      bufferPosition
+     *
+     * @return {string|null}
+    ###
+    determineCurrentClassName: (editor, bufferPosition) ->
+        return @parser.determineCurrentClassName(editor, bufferPosition)
+
+    ###*
+     * Convenience function that resolves types using {@see resolveType}, automatically determining the correct
+     * parameters for the editor and buffer position.
+     *
+     * @param {TextEditor} editor         The editor.
+     * @param {Point}      bufferPosition The location of the type.
+     * @param {string}     type           The (local) type to resolve.
      *
      * @return {string|null}
      *
-     * @example In a file with namespace A\B, determining C will lead to A\B\C.
+     * @example In a file with namespace A\B, determining C could lead to A\B\C.
     ###
-    determineFullClassName: (editor, className = null) ->
-        return @parser.determineFullClassName(editor, className)
+    resolveTypeAt: (editor, bufferPosition, type) ->
+        return @parser.resolveTypeAt(editor, bufferPosition, type)
 
     ###*
      * Indicates if the specified type is a basic type (e.g. int, array, object, etc.).

@@ -4,6 +4,103 @@ describe "getResultingTypeFromCallStack", ->
     editor = null
     grammar = null
 
+    proxyMock = {
+        getClassListForFile: (file) ->
+            return {
+                'Bar' : @getClassInfo('Bar')
+            }
+
+        getGlobalFunctions: () ->
+            return {
+                global_function:
+                    return:
+                        type: '\\DateTime'
+            }
+
+        getClassInfo: (className) ->
+            if className == '\\DateTime'
+                return {
+                    constants: {}
+                    methods: {}
+                    properties:
+                        '':
+                            return:
+                                resolvedType: 'EXPECTED_TYPE_1'
+                }
+
+            else if className == '\\Closure'
+                return {
+                    name: '\\Closure'
+
+                    methods:
+                        bindTo:
+                            return:
+                                resolvedType: '\\Closure'
+                }
+
+            else if className == 'ParentClass'
+                return {
+                    constants: {}
+                    methods: {}
+                    properties:
+                        testProperty:
+                            return:
+                                resolvedType: 'EXPECTED_TYPE_1'
+                }
+
+            else if className == 'Bar'
+                return {
+                    name: 'Bar'
+                    parents: ['ParentClass']
+                    startLine : 0
+                    endLine   : 9999
+                    methods: {}
+                    constants: {}
+                    properties:
+                        '':
+                            return:
+                                resolvedType: 'EXPECTED_TYPE_1'
+
+                        testProperty:
+                            return:
+                                resolvedType: 'EXPECTED_TYPE_1'
+                }
+
+            else if className == 'EXPECTED_TYPE_1'
+                return {
+                    name: 'EXPECTED_TYPE_1'
+                    constants: {}
+                    methods:
+                        aMethod:
+                            return:
+                                resolvedType: 'EXPECTED_TYPE_2'
+                }
+
+            else if className == 'EXPECTED_TYPE_2'
+                return {
+                    name: 'EXPECTED_TYPE_2'
+                    methods: {}
+                    constants: {}
+
+                    properties:
+                        anotherProperty:
+                            return:
+                                resolvedType: 'EXPECTED_TYPE_3'
+                }
+
+            else if className == 'EXPECTED_TYPE_3'
+                return {
+                    methods: {}
+                    name: 'EXPECTED_TYPE_3'
+                }
+
+        resolveType: (file, line, type) ->
+            return type
+
+        autocomplete: (className, element) ->
+            return {name: 'EXPECTED_TYPE_1'} if className == 'ParentClass' and element == 'testProperty'
+    }
+
     beforeEach ->
         waitsForPromise ->
             atom.workspace.open().then (result) ->
@@ -31,23 +128,6 @@ describe "getResultingTypeFromCallStack", ->
 
         editor.setText(source)
 
-        proxyMock = {
-            getClassInfo: (className) ->
-                if className == 'Bar'
-                    return {
-                        constants: {}
-                        properties:
-                            testProperty:
-                                return:
-                                    resolvedType: 'EXPECTED_TYPE'
-                    }
-
-                else if className == 'EXPECTED_TYPE'
-                    return {
-                        name: 'EXPECTED_TYPE'
-                    }
-        }
-
         parser = new Parser(proxyMock)
 
         row = editor.getLineCount() - 1
@@ -57,7 +137,7 @@ describe "getResultingTypeFromCallStack", ->
             row    : row
             column : column
 
-        expect(parser.getResultingTypeFromCallStack(editor, bufferPosition, ['Bar', '$testProperty'])).toEqual('EXPECTED_TYPE')
+        expect(parser.getResultingTypeFromCallStack(editor, bufferPosition, ['Bar', '$testProperty'])).toEqual('EXPECTED_TYPE_1')
 
     it "correctly deals with self.", ->
         source =
@@ -75,24 +155,6 @@ describe "getResultingTypeFromCallStack", ->
 
         editor.setText(source)
 
-        proxyMock = {
-            getClassInfo: (className) ->
-                if className == 'Bar'
-                    return {
-                        constants: {}
-
-                        properties:
-                            testProperty:
-                                return:
-                                    resolvedType: 'EXPECTED_TYPE'
-                    }
-
-                else if className == 'EXPECTED_TYPE'
-                    return {
-                        name: 'EXPECTED_TYPE'
-                    }
-        }
-
         parser = new Parser(proxyMock)
 
         row = editor.getLineCount() - 3
@@ -102,7 +164,7 @@ describe "getResultingTypeFromCallStack", ->
             row    : row
             column : column
 
-        expect(parser.getResultingTypeFromCallStack(editor, bufferPosition, ['self', '$testProperty'])).toEqual('EXPECTED_TYPE')
+        expect(parser.getResultingTypeFromCallStack(editor, bufferPosition, ['self', '$testProperty'])).toEqual('EXPECTED_TYPE_1')
 
     it "correctly deals with static.", ->
         source =
@@ -120,24 +182,6 @@ describe "getResultingTypeFromCallStack", ->
 
         editor.setText(source)
 
-        proxyMock = {
-            getClassInfo: (className) ->
-                if className == 'Bar'
-                    return {
-                        constants: {}
-
-                        properties:
-                            testProperty:
-                                return:
-                                    resolvedType: 'EXPECTED_TYPE'
-                    }
-
-                else if className == 'EXPECTED_TYPE'
-                    return {
-                        name: 'EXPECTED_TYPE'
-                    }
-        }
-
         parser = new Parser(proxyMock)
 
         row = editor.getLineCount() - 3
@@ -147,7 +191,7 @@ describe "getResultingTypeFromCallStack", ->
             row    : row
             column : column
 
-        expect(parser.getResultingTypeFromCallStack(editor, bufferPosition, ['static', '$testProperty'])).toEqual('EXPECTED_TYPE')
+        expect(parser.getResultingTypeFromCallStack(editor, bufferPosition, ['static', '$testProperty'])).toEqual('EXPECTED_TYPE_1')
 
     it "correctly deals with parent.", ->
         source =
@@ -165,30 +209,6 @@ describe "getResultingTypeFromCallStack", ->
 
         editor.setText(source)
 
-        proxyMock = {
-            getClassInfo: (className) ->
-                return {parents: ['ParentClass']} if className == 'Bar'
-
-                if className == 'ParentClass'
-                    return {
-                        constants: {}
-
-                        properties:
-                            testProperty:
-                                return:
-                                    resolvedType: 'EXPECTED_TYPE'
-                    }
-
-                else if className == 'EXPECTED_TYPE'
-                    return {
-                        name: 'EXPECTED_TYPE'
-                    }
-
-
-            autocomplete: (className, element) ->
-                return {name: 'EXPECTED_TYPE'} if className == 'ParentClass' and element == 'testProperty'
-        }
-
         parser = new Parser(proxyMock)
 
         row = editor.getLineCount() - 3
@@ -198,7 +218,7 @@ describe "getResultingTypeFromCallStack", ->
             row    : row
             column : column
 
-        expect(parser.getResultingTypeFromCallStack(editor, bufferPosition, ['parent', '$testProperty'])).toEqual('EXPECTED_TYPE')
+        expect(parser.getResultingTypeFromCallStack(editor, bufferPosition, ['parent', '$testProperty'])).toEqual('EXPECTED_TYPE_1')
 
     it "correctly deals with $this.", ->
         source =
@@ -216,24 +236,6 @@ describe "getResultingTypeFromCallStack", ->
 
         editor.setText(source)
 
-        proxyMock = {
-            getClassInfo: (className) ->
-                if className == 'Bar'
-                    return {
-                        constants: {}
-
-                        properties:
-                            testProperty:
-                                return:
-                                    resolvedType: 'EXPECTED_TYPE'
-                    }
-
-                else if className == 'EXPECTED_TYPE'
-                    return {
-                        name: 'EXPECTED_TYPE'
-                    }
-        }
-
         parser = new Parser(proxyMock)
 
         row = editor.getLineCount() - 3
@@ -243,7 +245,7 @@ describe "getResultingTypeFromCallStack", ->
             row    : row
             column : column
 
-        expect(parser.getResultingTypeFromCallStack(editor, bufferPosition, ['$this', 'testProperty'])).toEqual('EXPECTED_TYPE')
+        expect(parser.getResultingTypeFromCallStack(editor, bufferPosition, ['$this', 'testProperty'])).toEqual('EXPECTED_TYPE_1')
 
     it "correctly deals with variables.", ->
         source =
@@ -256,27 +258,6 @@ describe "getResultingTypeFromCallStack", ->
 
         editor.setText(source)
 
-        proxyMock = {
-            getGlobalFunctions: () ->
-                return []
-
-            getClassInfo: (className) ->
-                if className == 'Bar'
-                    return {
-                        constants: {}
-
-                        properties:
-                            testProperty:
-                                return:
-                                    resolvedType: 'EXPECTED_TYPE'
-                    }
-
-                else if className == 'EXPECTED_TYPE'
-                    return {
-                        name: 'EXPECTED_TYPE'
-                    }
-        }
-
         parser = new Parser(proxyMock)
 
         row = editor.getLineCount() - 1
@@ -286,7 +267,7 @@ describe "getResultingTypeFromCallStack", ->
             row    : row
             column : column
 
-        expect(parser.getResultingTypeFromCallStack(editor, bufferPosition, ['$var', 'testProperty'])).toEqual('EXPECTED_TYPE')
+        expect(parser.getResultingTypeFromCallStack(editor, bufferPosition, ['$var', 'testProperty'])).toEqual('EXPECTED_TYPE_1')
 
     it "correctly deals with global PHP functions.", ->
         source =
@@ -298,31 +279,6 @@ describe "getResultingTypeFromCallStack", ->
 
         editor.setText(source)
 
-        proxyMock = {
-            getGlobalFunctions: () ->
-                return {
-                    global_function:
-                        return:
-                            type: '\\DateTime'
-                }
-
-            getClassInfo: (className) ->
-                if className == '\\DateTime'
-                    return {
-                        constants: {}
-
-                        properties:
-                            '':
-                                return:
-                                    resolvedType: 'EXPECTED_TYPE'
-                    }
-
-                else if className == 'EXPECTED_TYPE'
-                    return {
-                        name: 'EXPECTED_TYPE'
-                    }
-        }
-
         parser = new Parser(proxyMock)
 
         row = editor.getLineCount() - 1
@@ -332,7 +288,7 @@ describe "getResultingTypeFromCallStack", ->
             row    : row
             column : column
 
-        expect(parser.getResultingTypeFromCallStack(editor, bufferPosition, ['global_function()', ''])).toEqual('EXPECTED_TYPE')
+        expect(parser.getResultingTypeFromCallStack(editor, bufferPosition, ['global_function()', ''])).toEqual('EXPECTED_TYPE_1')
 
     it "correctly deals with closures.", ->
         source =
@@ -347,22 +303,6 @@ describe "getResultingTypeFromCallStack", ->
             """
 
         editor.setText(source)
-
-        proxyMock = {
-            getGlobalFunctions: () ->
-                return []
-
-            getClassInfo: (className) ->
-                if className == '\\Closure'
-                    return {
-                        name: '\\Closure'
-
-                        methods:
-                            bindTo:
-                                return:
-                                    resolvedType: '\\Closure'
-                    }
-        }
 
         parser = new Parser(proxyMock)
 
@@ -385,26 +325,6 @@ describe "getResultingTypeFromCallStack", ->
 
         editor.setText(source)
 
-        proxyMock = {
-            getGlobalFunctions: () ->
-                return {}
-
-            getClassInfo: (className) ->
-                if className == 'Bar'
-                    return {
-                        constants: {}
-                        properties:
-                            '':
-                                return:
-                                    resolvedType: 'EXPECTED_TYPE'
-                    }
-
-                else if className == 'EXPECTED_TYPE'
-                    return {
-                        name: 'EXPECTED_TYPE'
-                    }
-        }
-
         parser = new Parser(proxyMock)
 
         row = editor.getLineCount() - 1
@@ -414,7 +334,7 @@ describe "getResultingTypeFromCallStack", ->
             row    : row
             column : column
 
-        expect(parser.getResultingTypeFromCallStack(editor, bufferPosition, ['new Bar()', ''])).toEqual('EXPECTED_TYPE')
+        expect(parser.getResultingTypeFromCallStack(editor, bufferPosition, ['new Bar()', ''])).toEqual('EXPECTED_TYPE_1')
 
     it "correctly handles the new keyword with keywords such as static.", ->
         source =
@@ -432,14 +352,6 @@ describe "getResultingTypeFromCallStack", ->
 
         editor.setText(source)
 
-        proxyMock = {
-            getGlobalFunctions: () ->
-                return {}
-
-            getClassInfo: (className) ->
-                return {}
-        }
-
         parser = new Parser(proxyMock)
 
         row = editor.getLineCount() - 3
@@ -450,6 +362,29 @@ describe "getResultingTypeFromCallStack", ->
             column : column
 
         expect(parser.getResultingTypeFromCallStack(editor, bufferPosition, ['new static()'])).toEqual('Bar')
+
+    it "correctly handles the clone keyword.", ->
+        source =
+            """
+            <?php
+
+            $var = new \DateTime();
+
+            $test = clone $var;
+            """
+
+        editor.setText(source)
+
+        parser = new Parser(proxyMock)
+
+        row = editor.getLineCount() - 3
+        column = editor.getBuffer().lineLengthForRow(row)
+
+        bufferPosition =
+            row    : row
+            column : column
+
+        expect(parser.getResultingTypeFromCallStack(editor, bufferPosition, ['clone $var'])).toEqual('\DateTime')
 
     it "correctly handles longer chains.", ->
         source =
@@ -466,49 +401,6 @@ describe "getResultingTypeFromCallStack", ->
             """
 
         editor.setText(source)
-
-        proxyMock = {
-            getGlobalFunctions: () ->
-                return {}
-
-
-
-            getClassInfo: (className) ->
-                if className == 'Bar'
-                    return {
-                        name: 'Bar'
-                        methods: {}
-                        constants: {}
-                        properties:
-                            testProperty:
-                                return:
-                                    resolvedType: 'EXPECTED_TYPE_1'
-                    }
-
-                if className == 'EXPECTED_TYPE_1'
-                    return {
-                        name: 'EXPECTED_TYPE_1'
-                        constants: {}
-                        methods:
-                            aMethod:
-                                return:
-                                    resolvedType: 'EXPECTED_TYPE_2'
-                    }
-
-                if className == 'EXPECTED_TYPE_2'
-                    return {
-                        name: 'EXPECTED_TYPE_2'
-                        methods: {}
-                        constants: {}
-
-                        properties:
-                            anotherProperty:
-                                return:
-                                    resolvedType: 'EXPECTED_TYPE_3'
-                    }
-
-                return {name: 'EXPECTED_TYPE_3'} if className == 'EXPECTED_TYPE_3'
-        }
 
         parser = new Parser(proxyMock)
 

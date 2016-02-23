@@ -263,6 +263,18 @@ class IndexDatabase implements
     /**
      * {@inheritDoc}
      */
+    public function deleteNamespacesByFileId($fileId)
+    {
+        $this->getConnection()->createQueryBuilder()
+            ->delete(IndexStorageItemEnum::FILES_NAMESPACES)
+            ->where('file_id = ?')
+            ->setParameter(0, $fileId)
+            ->execute();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function deletePropertiesFor($seId)
     {
         $this->getConnection()->createQueryBuilder()
@@ -394,11 +406,21 @@ class IndexDatabase implements
     /**
      * Retrieves raw information about all structural elements.
      *
+     * @param string|null $file
+     *
      * @return \Traversable
      */
-    public function getAllStructuralElementsRawInfo()
+    public function getAllStructuralElementsRawInfo($file)
     {
-        return $this->getStructuralElementRawInfoQueryBuilder()->execute();
+        $queryBuilder = $this->getStructuralElementRawInfoQueryBuilder();
+
+        if ($file) {
+            $queryBuilder
+                ->where('fi.path = ?')
+                ->setParameter(0, $file);
+        }
+
+        return $queryBuilder->execute();
     }
 
     /**
@@ -411,6 +433,34 @@ class IndexDatabase implements
             ->setParameter(0, $id)
             ->execute()
             ->fetch();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getStructuralElementRawParents($id)
+    {
+        return $this->getConnection()->createQueryBuilder()
+            ->select('se.id')
+            ->from(IndexStorageItemEnum::STRUCTURAL_ELEMENTS, 'se')
+            ->innerJoin('se', IndexStorageItemEnum::STRUCTURAL_ELEMENTS_PARENTS_LINKED, 'sepl', 'sepl.linked_structural_element_id = se.id')
+            ->where('sepl.structural_element_id = ?')
+            ->setParameter(0, $id)
+            ->execute();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getStructuralElementRawChildren($id)
+    {
+        return $this->getConnection()->createQueryBuilder()
+            ->select('se.id', 'se.fqsen')
+            ->from(IndexStorageItemEnum::STRUCTURAL_ELEMENTS, 'se')
+            ->innerJoin('se', IndexStorageItemEnum::STRUCTURAL_ELEMENTS_PARENTS_LINKED, 'sepl', 'sepl.structural_element_id = se.id')
+            ->where('sepl.linked_structural_element_id = ?')
+            ->setParameter(0, $id)
+            ->execute();
     }
 
     /**
@@ -430,6 +480,20 @@ class IndexDatabase implements
     /**
      * {@inheritDoc}
      */
+    public function getStructuralElementRawImplementors($id)
+    {
+        return $this->getConnection()->createQueryBuilder()
+            ->select('se.id', 'se.fqsen')
+            ->from(IndexStorageItemEnum::STRUCTURAL_ELEMENTS, 'se')
+            ->innerJoin('se', IndexStorageItemEnum::STRUCTURAL_ELEMENTS_INTERFACES_LINKED, 'seil', 'seil.structural_element_id = se.id')
+            ->where('seil.linked_structural_element_id = ?')
+            ->setParameter(0, $id)
+            ->execute();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getStructuralElementRawTraits($id)
     {
         return $this->getConnection()->createQueryBuilder()
@@ -437,6 +501,20 @@ class IndexDatabase implements
             ->from(IndexStorageItemEnum::STRUCTURAL_ELEMENTS, 'se')
             ->innerJoin('se', IndexStorageItemEnum::STRUCTURAL_ELEMENTS_TRAITS_LINKED, 'setl', 'setl.linked_structural_element_id = se.id')
             ->where('setl.structural_element_id = ?')
+            ->setParameter(0, $id)
+            ->execute();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getStructuralElementRawTraitUsers($id)
+    {
+        return $this->getConnection()->createQueryBuilder()
+            ->select('se.id', 'se.fqsen')
+            ->from(IndexStorageItemEnum::STRUCTURAL_ELEMENTS, 'se')
+            ->innerJoin('se', IndexStorageItemEnum::STRUCTURAL_ELEMENTS_TRAITS_LINKED, 'setl', 'setl.structural_element_id = se.id')
+            ->where('setl.linked_structural_element_id = ?')
             ->setParameter(0, $id)
             ->execute();
     }
@@ -532,29 +610,6 @@ class IndexDatabase implements
     /**
      * {@inheritDoc}
      */
-    public function getParentFqsens($seId)
-    {
-        $result = [];
-
-        $parentSes = $this->getConnection()->createQueryBuilder()
-            ->select('se.id', 'se.fqsen')
-            ->from(IndexStorageItemEnum::STRUCTURAL_ELEMENTS, 'se')
-            ->innerJoin('se', IndexStorageItemEnum::STRUCTURAL_ELEMENTS_PARENTS_LINKED, 'sepl', 'sepl.linked_structural_element_id = se.id')
-            ->where('sepl.structural_element_id = ?')
-            ->setParameter(0, $seId)
-            ->execute()
-            ->fetchAll();
-
-        foreach ($parentSes as $parentSe) {
-            $result[$parentSe['id']] = $parentSe['fqsen'];
-        }
-
-        return $result;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getFunctionParameters($functionId)
     {
         return $this->getConnection()->createQueryBuilder()
@@ -624,5 +679,52 @@ class IndexDatabase implements
             ->leftJoin('fu', IndexStorageItemEnum::FILES, 'fi', 'fi.id = fu.file_id')
             ->where('structural_element_id IS NULL')
             ->execute();
+    }
+
+    /**
+     * Fetches the namespace that applies to the specified line in the specified file.
+     *
+     * @param string $filePath
+     * @param int    $line
+     *
+     * @return array
+     */
+    public function getRelevantNamespace($filePath, $line)
+    {
+        return $this->getConnection()->createQueryBuilder()
+            ->select('fn.*')
+            ->from(IndexStorageItemEnum::FILES_NAMESPACES, 'fn')
+            ->join('fn', IndexStorageItemEnum::FILES, 'fi', 'fi.id = fn.file_id')
+            ->andWhere('fi.path = ?')
+            ->andWhere('? >= fn.start_line')
+            ->andWhere('(? <= fn.end_line OR fn.end_line IS NULL)')
+            ->setParameter(0, $filePath)
+            ->setParameter(1, $line)
+            ->setParameter(2, $line)
+            ->execute()
+            ->fetch();
+    }
+
+    /**
+     * Fetches a list of use statements that apply to the specified namespace.
+     *
+     * @param int      $namespaceId
+     * @param int|null $maxLine
+     *
+     * @return \Traversable
+     */
+    public function getUseStatementsByNamespaceId($namespaceId, $maxLine = null)
+    {
+        $queryBuilder = $this->getConnection()->createQueryBuilder()
+            ->select('fni.*')
+            ->from(IndexStorageItemEnum::FILES_NAMESPACES_IMPORTS, 'fni')
+            ->where('fni.files_namespace_id = ?')
+            ->setParameter(0, $namespaceId);
+
+        if ($maxLine !== null) {
+            $queryBuilder->andWhere('fni.line <= ?')->setParameter(1, $maxLine);
+        }
+
+        return $queryBuilder->execute();
     }
 }

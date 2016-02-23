@@ -40,6 +40,7 @@
       "language-ruby"
       "language-objective-c"
       "sublime-panes"
+      "php-integrator-base"
     ]
     excludeVcsIgnoredPaths: false
     followSymlinks: true
@@ -122,6 +123,7 @@
     textOpacity: 0.3
   "one-dark-ui":
     layoutMode: "Compact"
+  "php-integrator-base": {}
   pigments: {}
   "project-manager": {}
   "release-notes":

@@ -8,14 +8,9 @@ module.exports =
 ##
 class AbstractProvider
     ###*
-     * The class selectors for which a hover event can be triggered.
+     * The class selectors for which a hover or click event can be triggered.
     ###
-    hoverEventSelectors: ''
-
-    ###*
-     * The class selectors for which a click event can be triggered.
-    ###
-    clickEventSelectors: ''
+    eventSelectors: ''
 
     ###*
      * The service (that can be used to query the source code and contains utility methods).
@@ -114,42 +109,100 @@ class AbstractProvider
             textEditorElement = atom.views.getView(editor)
             scrollViewElement = $(textEditorElement.shadowRoot).find('.scroll-view')
 
-            @subAtom.add scrollViewElement, 'mousemove', @hoverEventSelectors, (event) =>
-                return unless @areEventMouseModifiersValid(event)
+            @subAtom.add scrollViewElement, 'mousemove', @eventSelectors, (event) =>
+                @onMouseMove(editor, event)
 
-                selector = @getHoverSelectorFromEvent(event)
+            @subAtom.add scrollViewElement, 'mouseout', @eventSelectors, (event) =>
+                @onMouseOut(editor, event)
 
-                return unless selector
+            @subAtom.add scrollViewElement, 'click', @eventSelectors, (event) =>
+                @onMouseClick(editor, event)
 
-                bufferPosition = atom.views.getView(editor).component.screenPositionForMouseEvent(event)
+    ###*
+     * Indicates if the specified selector in the editor is valid for navigation.
+     *
+     * @param {TextEditor}  editor
+     * @param {HTMLElement} selector
+    ###
+    isValidForNavigation: (editor, selector) ->
+        return true
 
-                if @isValid(editor, bufferPosition, $(selector).text())
-                    $(selector).addClass('php-integrator-navigation-navigation-possible')
+    ###*
+     * Handles a mouse move event.
+     *
+     * @param {TextEditor}   editor
+     * @param {jQuery.event} event
+    ###
+    onMouseMove: (editor, event) ->
+        return unless @areEventMouseModifiersValid(event)
 
-                else
-                    $(selector).addClass('php-integrator-navigation-navigation-impossible')
+        selector = @getHoverSelectorFromEvent(event)
 
-            @subAtom.add scrollViewElement, 'mouseout', @hoverEventSelectors, (event) =>
-                selector = @getHoverSelectorFromEvent(event)
+        return unless selector
+        return unless @isValidForNavigation(editor, selector)
 
-                return unless selector
+        bufferPosition = atom.views.getView(editor).component.screenPositionForMouseEvent(event)
 
-                $(selector).removeClass('php-integrator-navigation-navigation-possible')
-                $(selector).removeClass('php-integrator-navigation-navigation-impossible')
+        text = @getClickedTextByEvent(editor, event)
 
-            @subAtom.add scrollViewElement, 'click', @clickEventSelectors, (event) =>
-                return unless @areEventMouseModifiersValid(event)
+        if @isValid(editor, bufferPosition, text)
+            $(selector).addClass('php-integrator-navigation-navigation-possible')
 
-                selector = @getClickSelectorFromEvent(event)
+        else
+            $(selector).addClass('php-integrator-navigation-navigation-impossible')
 
-                return unless selector
+    ###*
+     * Handles a mouse out event.
+     *
+     * @param {TextEditor}   editor
+     * @param {jQuery.event} event
+    ###
+    onMouseOut: (editor, event) ->
+        selector = @getHoverSelectorFromEvent(event)
 
-                return unless not event.handled
+        return unless selector
+        return unless @isValidForNavigation(editor, selector)
 
-                bufferPosition = atom.views.getView(editor).component.screenPositionForMouseEvent(event)
+        $(selector).removeClass('php-integrator-navigation-navigation-possible')
+        $(selector).removeClass('php-integrator-navigation-navigation-impossible')
 
-                @gotoFromWord(editor, bufferPosition, $(selector).text())
-                event.handled = true
+    ###*
+     * Handles a mouse click event.
+     *
+     * @param {TextEditor}   editor
+     * @param {jQuery.event} event
+    ###
+    onMouseClick: (editor, event) ->
+        return unless @areEventMouseModifiersValid(event)
+
+        selector = @getClickSelectorFromEvent(event)
+
+        return unless selector
+        return unless not event.handled
+        return unless @isValidForNavigation(editor, selector)
+
+        bufferPosition = atom.views.getView(editor).component.screenPositionForMouseEvent(event)
+
+        text = @getClickedTextByEvent(editor, event)
+
+        @gotoFromWord(editor, bufferPosition, text)
+
+        event.handled = true
+
+    ###*
+     * Retrieves the clicked text for an event.
+     *
+     * @param {TextEditor}   editor
+     * @param {jQuery.event} event
+     *
+     * @return {string|null}
+    ###
+    getClickedTextByEvent: (editor, event) ->
+        selector = @getClickSelectorFromEvent(event)
+
+        return null unless selector
+
+        return $(selector).text()
 
     ###*
      * Indicates if the specified event has the correct mouse modifier kesy held down.

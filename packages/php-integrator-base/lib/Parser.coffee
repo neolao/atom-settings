@@ -7,11 +7,6 @@ module.exports =
 ##
 class Parser
     ###*
-     * Regular expression that will search for a structure (class, interface, trait, ...).
-    ###
-    structureStartRegex : /(?:abstract class|class|trait|interface)\s+(\w+)/
-
-    ###*
      * Regular expression that will search for a use statement.
     ###
     useStatementRegex : /(?:use)(?:[^\w\\])([\w\\]+)(?![\w\\])(?:(?:[ ]+as[ ]+)(\w+))?(?:;)/
@@ -67,92 +62,23 @@ class Parser
         return matches
 
     ###*
-     * Determines the full class name (without leading slash) of the specified class in the specified editor. If no
-     * class name is passed, the full class name of the class defined in the current file is returned instead.
+     * Determines the current class' FQCN based on the specified buffer position.
      *
-     * @param {TextEditor}  editor    The editor that contains the class (needed to resolve relative class names).
-     * @param {String|null} className The (local) name of the class to resolve.
+     * @param {TextEditor} editor         The editor that contains the class (needed to resolve relative class names).
+     * @param {Point}      bufferPosition
      *
      * @return {string|null}
-     *
-     * @example In a file with namespace A\B, determining C will lead to A\B\C.
     ###
-    determineFullClassName: (editor, className = null) ->
-        if className == null
-            className = ''
+    determineCurrentClassName: (editor, bufferPosition) ->
+        path = editor.getPath()
 
-        else if not className
-            return null # Nothing we can do here.
+        classesInFile = @proxy.getClassListForFile(editor.getPath())
 
-        if className and className[0] == "\\"
-            return className.substr(1) # FQCN, not subject to any further context.
+        for name,classInfo of classesInFile
+            if bufferPosition.row >= classInfo.startLine and bufferPosition.row <= classInfo.endLine
+                return name
 
-        if @isBasicType(className)
-            return className
-
-        found = false
-        fullClass = className
-
-        for i in [0 .. editor.getLineCount() - 1]
-            line = editor.lineTextForBufferRow(i)
-
-            if not line
-                continue
-
-            scopeDescriptor = editor.scopeDescriptorForBufferPosition([i, line.length]).getScopeChain()
-
-            if scopeDescriptor.indexOf('.comment') != -1 or scopeDescriptor.indexOf('.string') != -1
-                continue
-
-            matches = line.match(@namespaceDeclarationRegex)
-
-            if matches
-                fullClass = matches[1] + '\\' + className
-
-            else if className
-                matches = line.match(@useStatementRegex)
-
-                if matches
-                    classNameParts = className.split('\\')
-                    importNameParts = matches[1].split('\\')
-
-                    isAliasedImport = if matches[2] then true else false
-
-                    if className == matches[1]
-                        fullClass = className # Already a complete name.
-
-                        break
-
-                    else if (isAliasedImport and matches[2] == classNameParts[0]) or (!isAliasedImport and importNameParts[importNameParts.length - 1] == classNameParts[0])
-                        found = true
-
-                        fullClass = matches[1]
-
-                        classNameParts = classNameParts[1 .. classNameParts.length]
-
-                        if (classNameParts.length > 0)
-                            fullClass += '\\' + classNameParts.join('\\')
-
-                        break
-
-            matches = line.match(@structureStartRegex)
-
-            if matches
-                if not className
-                    found = true
-                    fullClass += matches[1]
-
-                break
-
-        # In the class map, classes never have a leading slash. The leading slash only indicates that import rules of
-        # the file don't apply, but it's useless after that.
-        if fullClass and fullClass[0] == '\\'
-            fullClass = fullClass.substr(1)
-
-        if fullClass.length == 0
-            return null
-
-        return fullClass
+        return null
 
     ###*
      * Indicates if the specifiec location is a property usage or not. If it is not, it is most likely a method call.
@@ -213,7 +139,7 @@ class Parser
             for i in [lastIndex .. 0]
                 chain = editor.scopeDescriptorForBufferPosition([row, i]).getScopeChain()
 
-                continue if chain.indexOf('comment') != -1
+                continue if chain.indexOf('comment') != -1 or chain.indexOf('.string-contents') != -1
 
                 # }
                 if line[i] == '}'
@@ -266,7 +192,7 @@ class Parser
             for i in [startIndex .. lastIndex]
                 chain = editor.scopeDescriptorForBufferPosition([row, i]).getScopeChain()
 
-                if chain.indexOf('comment') != -1
+                if chain.indexOf('comment') != -1 or chain.indexOf('.string-contents') != -1
                     continue
 
                 else if not isInFunction and chain.indexOf('.storage.type.function') != -1
@@ -331,7 +257,7 @@ class Parser
             for i in lineRange
                 scopeDescriptor = editor.scopeDescriptorForBufferPosition([line, i]).getScopeChain()
 
-                if scopeDescriptor.indexOf('.comment') != -1 or scopeDescriptor.indexOf('.string') != -1
+                if scopeDescriptor.indexOf('.comment') != -1 or scopeDescriptor.indexOf('.string-contents') != -1
                     # Do nothing, we just keep parsing. (Comments can occur inside call stacks.)
 
                 else if lineText[i] == '('
@@ -537,7 +463,7 @@ class Parser
 
         # The start of the call stack may be wrapped in parentheses, e.g. ""(new Foo())->test", unwrap them. Note that
         # "($this)->" is invalid (at least in PHP 5.6).
-        regex = /^\(new\s+.+?\)/g
+        regex = /^\(new\s+(.|\n)+?\)/g
         text = text.replace regex, (match) =>
             return match.substr(1, match.length - 2)
 
@@ -588,7 +514,7 @@ class Parser
             regexTypeAnnotation = ///\/\*\*\s*@var\s+(#{classRegexPart}(?:\[\])?)\s+#{elementForRegex}\s*(\s.*)?\*\////
 
             editor.getBuffer().backwardsScanInRange regexTypeAnnotation, [scanStartPosition, bufferPosition], (matchInfo) =>
-                bestMatch = @determineFullClassName(editor, matchInfo.match[1])
+                bestMatch = @resolveTypeAt(editor, matchInfo.range.start, matchInfo.match[1])
 
                 matchInfo.stop()
 
@@ -598,7 +524,7 @@ class Parser
             regexReverseTypeAnnotation = ///\/\*\*\s*@var\s+#{elementForRegex}\s+(#{classRegexPart}(?:\[\])?)\s*(\s.*)?\*\////
 
             editor.getBuffer().backwardsScanInRange regexReverseTypeAnnotation, [scanStartPosition, bufferPosition], (matchInfo) =>
-                bestMatch = @determineFullClassName(editor, matchInfo.match[1])
+                bestMatch = @resolveTypeAt(editor, matchInfo.range.start, matchInfo.match[1])
 
                 matchInfo.stop()
 
@@ -608,14 +534,16 @@ class Parser
             regexFunction = ///function(?:\s+([a-zA-Z0-9_]+))?\s*\([^{]*?(?:(#{classRegexPart})\s+)?#{elementForRegex}[^{]*?\)///g
 
             editor.getBuffer().backwardsScanInRange regexFunction, [scanStartPosition, bufferPosition], (matchInfo) =>
-                return if editor.scopeDescriptorForBufferPosition(matchInfo.range.start).getScopeChain().indexOf('comment') != -1
+                chain = editor.scopeDescriptorForBufferPosition(matchInfo.range.start).getScopeChain()
+
+                return if chain.indexOf('comment') != -1 or chain.indexOf('.string-contents') != -1
 
                 scanStartPosition = matchInfo.range.end
 
                 typeHint = matchInfo.match[2]
 
                 if typeHint?.length > 0
-                    bestMatch = @determineFullClassName(editor, typeHint)
+                    bestMatch = @resolveTypeAt(editor, matchInfo.range.start, typeHint)
 
                 else
                     functionName = matchInfo.match[1]
@@ -623,7 +551,7 @@ class Parser
                     # Can be empty for closures.
                     if functionName?.length > 0
                         try
-                            currentClass = @determineFullClassName(editor)
+                            currentClass = @determineCurrentClassName(editor, bufferPosition)
 
                             response = null
                             functionInfo = null
@@ -655,7 +583,9 @@ class Parser
             regexAssignment = ///#{elementForRegex}\s*=\s*///g
 
             editor.getBuffer().backwardsScanInRange regexAssignment, [scanStartPosition, bufferPosition], (matchInfo) =>
-                return if editor.scopeDescriptorForBufferPosition(matchInfo.range.start).getScopeChain().indexOf('comment') != -1
+                chain = editor.scopeDescriptorForBufferPosition(matchInfo.range.start).getScopeChain()
+
+                return if chain.indexOf('comment') != -1 or chain.indexOf('.string-contents') != -1
 
                 boundary = @determineBoundaryOfExpression(editor, matchInfo.range.end, false)
 
@@ -681,11 +611,13 @@ class Parser
             regexCatch = ///catch\s*\(\s*(#{classRegexPart})\s+#{elementForRegex}\s*\)///g
 
             editor.getBuffer().backwardsScanInRange regexCatch, [scanStartPosition, bufferPosition], (matchInfo) =>
-                return if editor.scopeDescriptorForBufferPosition(matchInfo.range.start).getScopeChain().indexOf('comment') != -1
+                chain = editor.scopeDescriptorForBufferPosition(matchInfo.range.start).getScopeChain()
+
+                return if chain.indexOf('comment') != -1 or chain.indexOf('.string-contents') != -1
 
                 scanStartPosition = matchInfo.range.end
 
-                bestMatch = @determineFullClassName(editor, matchInfo.match[1])
+                bestMatch = @resolveTypeAt(editor, matchInfo.range.start, matchInfo.match[1])
 
                 matchInfo.stop()
 
@@ -693,7 +625,9 @@ class Parser
             regexInstanceof = ///if\s*\(\s*#{elementForRegex}\s+instanceof\s+(#{classRegexPart})\s*\)///g
 
             editor.getBuffer().backwardsScanInRange regexInstanceof, [scanStartPosition, bufferPosition], (matchInfo) =>
-                return if editor.scopeDescriptorForBufferPosition(matchInfo.range.start).getScopeChain().indexOf('comment') != -1
+                chain = editor.scopeDescriptorForBufferPosition(matchInfo.range.start).getScopeChain()
+
+                return if chain.indexOf('comment') != -1 or chain.indexOf('.string-contents') != -1
 
                 scanStartPosition = matchInfo.range.end
 
@@ -706,7 +640,9 @@ class Parser
             regexForeach = ///(foreach\s+\(.+)\s+as\s+(?:(?:\$[a-zA-Z0-9_]+)\s*=>)?\s*(#{elementForRegex})\)///
 
             editor.getBuffer().backwardsScanInRange regexForeach, [scanStartPosition, bufferPosition], (matchInfo) =>
-                return if editor.scopeDescriptorForBufferPosition(matchInfo.range.start).getScopeChain().indexOf('comment') != -1
+                chain = editor.scopeDescriptorForBufferPosition(matchInfo.range.start).getScopeChain()
+
+                return if chain.indexOf('comment') != -1 or chain.indexOf('.string-contents') != -1
 
                 scanStartPosition = matchInfo.range.end
 
@@ -724,7 +660,7 @@ class Parser
             break if bestMatch
 
         if not bestMatch and name == '$this'
-            bestMatch = @determineFullClassName(editor)
+            bestMatch = @determineCurrentClassName(editor, bufferPosition)
 
         return bestMatch
 
@@ -756,12 +692,12 @@ class Parser
         else if firstElement == 'static' or firstElement == 'self'
             propertyAccessNeedsDollarSign = true
 
-            className = @determineFullClassName(editor)
+            className = @determineCurrentClassName(editor, bufferPosition)
 
         else if firstElement == 'parent'
             propertyAccessNeedsDollarSign = true
 
-            currentClassName = @determineFullClassName(editor)
+            currentClassName = @determineCurrentClassName(editor, bufferPosition)
 
             if currentClassName?
                 currentClassInfo = @proxy.getClassInfo(currentClassName)
@@ -796,6 +732,9 @@ class Parser
         else if (matches = firstElement.match(///^new\s+(#{classRegexPart})(?:\(\))?///))
             className = @getResultingTypeFromCallStack(editor, bufferPosition, [matches[1]])
 
+        else if (matches = firstElement.match(///^clone\s+(\$[a-zA-Z0-9_]+)///))
+            className = @getResultingTypeFromCallStack(editor, bufferPosition, [matches[1]])
+
         else if (matches = firstElement.match(/^(.*?)\(\)$/))
             # Global PHP function.
             functions = @proxy.getGlobalFunctions()
@@ -807,7 +746,7 @@ class Parser
             propertyAccessNeedsDollarSign = true
 
             # Static class name.
-            className = @determineFullClassName(editor, firstElement)
+            className = @resolveTypeAt(editor, bufferPosition, firstElement)
 
         else
             className = null # No idea what this is.
@@ -898,7 +837,7 @@ class Parser
                 if lineText[i] in interestingCharacters
                     chain = editor.scopeDescriptorForBufferPosition([line, i]).getScopeChain()
 
-                    if chain.indexOf('.comment') != -1 or chain.indexOf('.string') != -1
+                    if chain.indexOf('.comment') != -1 or chain.indexOf('.string-contents') != -1
                         continue
 
                     else if lineText[i] == '}'
@@ -916,6 +855,11 @@ class Parser
                     else if lineText[i] == '['
                         ++bracketsOpened
 
+                        if bracketsOpened > bracketsClosed
+                            # We must have been inside an array argument, reset.
+                            argumentIndex = 0
+                            --bracketsOpened
+
                     else if lineText[i] == ')'
                         ++parenthesesClosed
 
@@ -926,13 +870,16 @@ class Parser
                         if lineText[i] == ';'
                             return null # We've moved too far and reached another expression, stop here.
 
-                        else if bracketsOpened >= bracketsClosed and
-                                parenthesesOpened == parenthesesClosed and
-                                lineText[i] == ','
-                            ++argumentIndex
+                        else if lineText[i] == ','
+                            if parenthesesOpened == (parenthesesClosed + 1)
+                                # Pretend the parentheses were closed, the user is probably inside an argument that
+                                # contains parentheses.
+                                ++parenthesesClosed
 
-                if scopesOpened == scopesClosed and
-                   parenthesesOpened == (parenthesesClosed + 1)
+                            if bracketsOpened >= bracketsClosed and parenthesesOpened == parenthesesClosed
+                                ++argumentIndex
+
+                if scopesOpened == scopesClosed and parenthesesOpened == (parenthesesClosed + 1)
                     chain = editor.scopeDescriptorForBufferPosition([line, i]).getScopeChain()
 
                     isClassName = (chain.indexOf('.support.class') != -1)
@@ -957,30 +904,16 @@ class Parser
         return null
 
     ###*
-     * Gets the correct selector when a class or namespace is clicked.
+     * Convenience function that resolves types using {@see resolveType}, automatically determining the correct
+     * parameters for the editor and buffer position.
      *
-     * @param {jQuery.Event} event
+     * @param {TextEditor} editor         The editor.
+     * @param {Point}      bufferPosition The location of the type.
+     * @param {string}     type           The (local) type to resolve.
      *
-     * @return {object|null} A selector to be used with jQuery.
+     * @return {string|null}
+     *
+     * @example In a file with namespace A\B, determining C could lead to A\B\C.
     ###
-    getClassSelectorFromEvent: (event) ->
-        selector = event.currentTarget
-
-        $ = require 'jquery'
-
-        if $(selector).hasClass('builtin') or $(selector).children('.builtin').length > 0
-            return null
-
-        if $(selector).parent().hasClass('function argument')
-            return $(selector).parent().children('.namespace, .class:not(.operator):not(.constant)')
-
-        if $(selector).prev().hasClass('namespace') && $(selector).hasClass('class')
-            return $([$(selector).prev()[0], selector])
-
-        if $(selector).next().hasClass('class') && $(selector).hasClass('namespace')
-           return $([selector, $(selector).next()[0]])
-
-        if $(selector).prev().hasClass('namespace') || $(selector).next().hasClass('inherited-class')
-            return $(selector).parent().children('.namespace, .inherited-class')
-
-        return selector
+    resolveTypeAt: (editor, bufferPosition, type) ->
+        return @proxy.resolveType(editor.getPath(), bufferPosition.row + 1, type)

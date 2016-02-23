@@ -2,6 +2,7 @@
 
 namespace PhpIntegrator;
 
+use Exception;
 use UnexpectedValueException;
 
 /**
@@ -21,11 +22,12 @@ class Application
         $command = array_shift($arguments);
 
         $commands = [
-            '--class-list' => 'ClassList',
-            '--class-info' => 'ClassInfo',
-            '--functions'  => 'GlobalFunctions',
-            '--constants'  => 'GlobalConstants',
-            '--reindex'    => 'Reindex'
+            '--class-list'   => 'ClassList',
+            '--class-info'   => 'ClassInfo',
+            '--functions'    => 'GlobalFunctions',
+            '--constants'    => 'GlobalConstants',
+            '--reindex'      => 'Reindex',
+            '--resolve-type' => 'ResolveType'
         ];
 
         if (isset($commands[$command])) {
@@ -34,7 +36,11 @@ class Application
             /** @var \PhpIntegrator\Application\CommandInterface $command */
             $command = new $className();
 
-            return $command->execute($arguments);
+            try {
+                return $command->execute($arguments);
+            } catch (Exception $e) {
+                return $e->getFile() . ':' . $e->getLine() . ' - ' . $e->getMessage();
+            }
         }
 
         $supportedCommands = implode(', ', array_keys($commands));

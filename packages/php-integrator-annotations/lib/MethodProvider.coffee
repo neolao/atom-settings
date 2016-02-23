@@ -1,3 +1,5 @@
+{Range} = require 'atom'
+
 AbstractProvider = require './AbstractProvider'
 
 module.exports =
@@ -10,19 +12,27 @@ class MethodProvider extends AbstractProvider
      * @inheritdoc
     ###
     registerAnnotations: (editor) ->
-        currentClass = @service.determineFullClassName(editor)
+        path = editor.getPath()
 
-        return if not currentClass
+        return if not path
 
-        successHandler = (currentClassInfo) =>
-            return if not currentClassInfo
+        try
+            classesInEditor = @service.getClassListForFile(path)
 
-            for name, method of currentClassInfo.methods
+        catch error
+            return
+
+        successHandler = (classInfo) =>
+            return if not classInfo
+
+            for name, method of classInfo.methods
                 continue if not method.override and not method.implementation
 
                 regex = new RegExp("^([\\t\\ ]*)((?:public|protected|private)\\s+(?:static\\s+)?function\\s+" + name + "\\s*)\\(")
 
-                editor.getBuffer().scan(regex, (matchInfo) =>
+                range = new Range([classInfo.startLine, 0], [classInfo.endLine + 1, 0])
+
+                editor.scanInBufferRange(regex, range, (matchInfo) =>
                     # Remove the spacing from the range.
                     matchInfo.range.start.column += matchInfo.match[1].length
 
@@ -34,7 +44,8 @@ class MethodProvider extends AbstractProvider
         failureHandler = () =>
             # Just do nothing.
 
-        @service.getClassInfo(currentClass, true).then(successHandler, failureHandler)
+        for name,classInfo of classesInEditor
+            @service.getClassInfo(name, true).then(successHandler, failureHandler)
 
     ###*
      * Fetches annotation info for the specified context.
@@ -48,13 +59,21 @@ class MethodProvider extends AbstractProvider
         tooltipText = ''
         lineNumberClass = ''
 
-        # NOTE: We deliberately show the declaring class here, not the structure (which could be a trait).
         if context.override
+            # NOTE: We deliberately show the declaring class here, not the structure (which could be a trait). However,
+            # if the method is overriding a trait method from the *same* class, we show the trait name, as it would be
+            # strange to put an annotation in "Foo" saying "Overrides method from Foo".
+            overriddenFromFqcn = context.override.declaringClass.name
+
+            if overriddenFromFqcn == context.declaringClass.name
+                overriddenFromFqcn = context.override.declaringStructure.name
+
             extraData = context.override
             lineNumberClass = 'override'
-            tooltipText = 'Overrides method from ' + extraData.declaringClass.name
+            tooltipText = 'Overrides method from ' + overriddenFromFqcn
 
         else
+            # NOTE: We deliberately show the declaring class here, not the structure (which could be a trait).
             extraData = context.implementation
             lineNumberClass = 'implementation'
             tooltipText = 'Implements method for ' + extraData.declaringClass.name

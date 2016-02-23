@@ -61,6 +61,12 @@ class CachingProxy extends Proxy
     ###*
      * @inherited
     ###
+    getClassListForFile: (file, async = false) ->
+        return @wrapCachedRequestToParent("getClassListForFile-#{file}", 'getClassListForFile', arguments, async)
+
+    ###*
+     * @inherited
+    ###
     getGlobalConstants: (async = false) ->
         return @wrapCachedRequestToParent("getGlobalConstants", 'getGlobalConstants', arguments, async)
 
@@ -75,6 +81,12 @@ class CachingProxy extends Proxy
     ###
     getClassInfo: (className, async = false) ->
         return @wrapCachedRequestToParent("getClassInfo-#{className}", 'getClassInfo', arguments, async)
+
+    ###*
+     * @inherited
+    ###
+    resolveType: (file, line, type, async = false) ->
+        return @wrapCachedRequestToParent("resolveType-#{file}-#{line}-#{type}", 'resolveType', arguments, async)
 
     ###*
      * @inherited

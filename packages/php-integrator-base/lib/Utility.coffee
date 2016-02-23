@@ -17,7 +17,8 @@ module.exports =
 
         #else
         if os.type() != "Windows_NT"
-            parameter = parameter.replace(/\\/g, '\\\\')
+            # parameter = parameter.replace(/\\/g, '\\\\')
+            # TODO: Could be that this is no longer necessary and causes problems.
             parameter = parameter.replace(/\ /g, '\\ ')
 
         return parameter

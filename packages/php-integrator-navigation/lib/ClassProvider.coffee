@@ -1,5 +1,5 @@
 $ = require 'jquery'
-fuzzaldrin = require 'fuzzaldrin'
+shell = require 'shell'
 
 AbstractProvider = require './AbstractProvider'
 
@@ -12,12 +12,7 @@ class ClassProvider extends AbstractProvider
     ###*
      * @inheritdoc
     ###
-    hoverEventSelectors: '.entity.inherited-class, .support.namespace, .support.class, .comment-clickable .region'
-
-    ###*
-     * @inheritdoc
-    ###
-    clickEventSelectors: '.entity.inherited-class, .support.namespace, .support.class, .comment-clickable .region'
+    eventSelectors: '.entity.inherited-class, .support.namespace, .support.class, .comment-clickable .region'
 
     ###*
      * A list of all markers that have been placed inside comments to allow code navigation there as well.
@@ -33,10 +28,14 @@ class ClassProvider extends AbstractProvider
         @markers = {}
 
         atom.workspace.observeTextEditors (editor) =>
-            editor.onDidSave (event) =>
-                @rescanMarkers(editor)
+            @registerMarkers(editor)
 
-            @registerMarkers editor
+        # Ensure annotations are updated.
+        @service.onDidFinishIndexing (data) =>
+            editor = @findTextEditorByPath(data.path)
+
+            if editor?
+                @rescanMarkers(editor)
 
     ###*
      * @inheritdoc
@@ -47,43 +46,47 @@ class ClassProvider extends AbstractProvider
         @removeMarkers()
 
     ###*
+     * Retrieves the text editor that is managing the file with the specified path.
+     *
+     * @param {string} path
+     *
+     * @return {TextEditor|null}
+    ###
+    findTextEditorByPath: (path) ->
+        for textEditor in atom.workspace.getTextEditors()
+            if textEditor.getPath() == path
+                return textEditor
+
+        return null
+
+    ###*
      * @inheritdoc
     ###
-    registerEvents: (editor) ->
-        super(editor)
+    getClickedTextByEvent: (editor, event) ->
+        selector = event.currentTarget
 
-        if /text.html.php$/.test(editor.getGrammar().scopeName)
-            textEditorElement = atom.views.getView(editor)
-            scrollViewElement = $(textEditorElement.shadowRoot).find('.scroll-view')
+        return null unless selector
 
-            # This is needed to be able to alt-click class names inside comments (docblocks).
-            @subAtom.add scrollViewElement, 'click', @clickEventSelectors, (event) =>
-                return unless event.altKey
+        # Class names inside comments require special treatment as their div doesn't actually contain any text, so we
+        # use markers to fetch the text instead.
+        if selector.className.indexOf('region') != -1
+            longTitle = editor.getLongTitle()
 
-                selector = event.currentTarget
+            return if longTitle not of @markers
 
-                return unless selector
+            bufferPosition = atom.views.getView(editor).component.screenPositionForMouseEvent(event)
 
-                return unless not event.handled
+            markerProperties =
+                containsBufferPosition: bufferPosition
 
-                # The other case will be handled by the existing handler.
-                if selector.className.indexOf('region') >= 0
-                    longTitle = editor.getLongTitle()
+            markers = editor.findMarkers(markerProperties)
 
-                    return if longTitle not of @markers
+            for key,marker of markers
+                for allMarker in @markers[longTitle]
+                    if marker.id == allMarker.id
+                        return marker.getProperties().term
 
-                    markerProperties =
-                        containsBufferPosition: editor.cursors[0].getBufferPosition()
-
-                    markers = editor.findMarkers markerProperties
-
-                    for key,marker of markers
-                        for allMarker in @markers[longTitle]
-                            if marker.id == allMarker.id
-                                @gotoFromWord(editor, marker.getProperties().term)
-                                break
-
-                    event.handled = true
+        return super(editor, event)
 
     ###*
      * Convenience method that returns information for the specified term.
@@ -93,18 +96,32 @@ class ClassProvider extends AbstractProvider
      * @param {string}     term
     ###
     getInfoFor: (editor, bufferPosition, term) ->
-        className = @service.determineFullClassName(editor, term)
+        return null if not term
+
+        scopeChain = editor.scopeDescriptorForBufferPosition(bufferPosition).getScopeChain()
 
         try
+            className = term
+            doResolve = true
+
+            # Don't attempt to resolve class names in use statements.
+            if scopeChain.indexOf('.support.other.namespace.use') != -1
+                currentClassName = @service.determineCurrentClassName(editor, bufferPosition)
+
+                # Scope descriptors for trait use statements and actual "import" use statements are the same, so we
+                # have no choice but to use class information for this.
+                if not currentClassName?
+                    doResolve = false
+
+            if doResolve
+                className = @service.resolveTypeAt(editor, bufferPosition, className)
+
             classInfo = @service.getClassInfo(className)
 
         catch error
             return null
 
-        if classInfo.filename
-            return classInfo
-
-        return null
+        return classInfo
 
     ###*
      * @inheritdoc
@@ -119,10 +136,14 @@ class ClassProvider extends AbstractProvider
         info = @getInfoFor(editor, bufferPosition, term)
 
         if info?
-            atom.workspace.open(info.filename, {
-                initialLine    : (info.startLine - 1),
-                searchAllPanes : true
-            })
+            if info.filename?
+                atom.workspace.open(info.filename, {
+                    initialLine    : (info.startLine - 1),
+                    searchAllPanes : true
+                })
+
+            else
+                shell.openExternal(@config.get('php_documentation_base_urls').classes + info.name)
 
     ###*
      * @inheritdoc
@@ -134,10 +155,10 @@ class ClassProvider extends AbstractProvider
      * @inheritdoc
     ###
     getClickSelectorFromEvent: (event) ->
-        if event.currentTarget.className.indexOf('region') >= 0
+        # if event.currentTarget.className.indexOf('region') != -1
             # Class name inside a comment, we can't fetch the text of these elements (it will be empty), this is handled
             # by our override of registerEvents instead.
-            return null
+            # return null
 
         return @service.getClassSelectorFromEvent(event)
 

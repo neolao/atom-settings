@@ -1,3 +1,91 @@
+## 0.6.5
+### Bugs fixed
+* Reintroduced the xdebug max nesting level, but this time set it to a ridiculously large number for compatibility.
+
+## 0.6.4
+### Bugs fixed
+* Fixed a minor logic error.
+
+## 0.6.3
+### Bugs fixed
+* Don't treat invalid JSON output as a JavaScript error, as it's usually not a bug in our package. Just display an error to the user instead.
+
+## 0.6.2
+### Bugs fixed
+* The "Indexing failed!" message has disappeared. If you wish to know when the indexer is having problems, consider using the new linter package (see also the README).
+
+## 0.6.1
+### Bugs fixed
+* Removed the dependency on fuzzaldrin.
+* Fixed the type of new instances, wrapped in parentheses and spread over several lines, not being properly recognized:
+
+```php
+// Works:
+(new \IteratorIterator)->
+
+// Fails (fixed):
+(new \IteratorIterator(
+
+))->
+```
+
+## 0.6.0
+### Features and enhancements
+* xdebug will now be disabled in the indexer if it is present, it will only slow down the indexer.
+* Support for type inference when using the `clone` keyword, for example:
+
+```php
+$a = new \DateTime();
+$b = clone $a;
+$b-> // Autocompletion for DateTime.
+```
+
+* The draft PSR-5's `@inheritDoc` is now supported to indicate documentation was forgotten. Also, note the difference with the non-standard ("incorrect"), yet commonly used, curly brace syntax used by Symfony 2 and other frameworks (which is also supported).
+
+```php
+/**
+ * @inheritDoc
+ */
+public function explicitInheritanceAccordingToDraftPsr5()
+{
+    ...
+}
+
+/**
+ * {@inheritDoc}
+ */
+public function incorrectInheritanceButCommonlyUsed()
+{
+    ...
+}
+```
+
+### Bugs fixed
+* Fixed autocompletion not working after the concatenation operator.
+* Fixed author tags that contained mail addresses (such as used in Symfony) being taken up in extended descriptions.
+* Fixed an incorrect parameter index being returned in cases where you had array access via keys in function or method invocations.
+* Fixed a database constraint error when indexing parameters, which can happen if you have certain PHP extensions enabled (I'm looking at you, ssh2).
+* Resolving types is now more correct, taking multiple namespaces per file into account as well as only utilizing use statements that actually apply for a specific line.
+
+### Changes for developers
+* Changes to the service
+  * A new call `getClassListForFile` takes a file path to filter the class list by.
+  * `getClassSelectorFromEvent` will no longer return null for built-in classes (you can still easily check this yourself).
+  * Next to `startLine` information, `endLine` information will now also be returned.
+  * Fetching class information will now also return information about direct and indirect implemented interfaces and used traits via the properties `parents`, `directParents`, `interfaces`, `directInterfaces`, `traits` and `directTraits`.
+  * Fetching class information will now also return information about direct children, direct implementors (if it's an interface) and direct users (if it's a trait).
+  * `determineFullClassName` was split up into two methods (separation of concerns):
+    * `determineCurrentClassName` - Takes an editor and a buffer position and returns the FQCN of the class the location is in. The buffer position is now required as a file can contain multiple classes, which were not retrievable before.
+    * `resolveType` (with accompanying convenience method `resolveTypeAt`) - Takes an editor, a line, and a type name and resolves that type to its FQCN based on local use statements and namespace rules.
+
+## 0.5.4
+### Features and enhancements
+* Better error reporting. Exceptions thrown by the PHP side will now be displayed in an Atom error.
+
+### Bugs fixed
+* Fixed `getInvocationInfoAt` not giving correct results when inside an argument that was wrapped in parentheses.
+* Fixed `getInvocationInfoAt` not giving a correct argument index when inside an array parameter with square brackets.
+
 ## 0.5.3
 ### Bugs fixed
 * Fixed expressions inside ternary operators not correctly being fetched.

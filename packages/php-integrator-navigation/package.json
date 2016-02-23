@@ -1,7 +1,7 @@
 {
   "name": "php-integrator-navigation",
   "main": "./lib/Main",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Provides code navigation and go to functionality for your PHP source code.",
   "repository": {
     "type": "git",
@@ -14,14 +14,13 @@
   "consumedServices": {
     "php-integrator.service": {
       "versions": {
-        "~0.5.0": "setService"
+        "~0.6.0": "setService"
       }
     }
   },
   "dependencies": {
     "jquery": "~2.1.4",
-    "sub-atom": "~1.0.0",
-    "fuzzaldrin": "^2.1.0"
+    "sub-atom": "~1.0.0"
   },
   "keywords": [
     "php",
@@ -31,24 +30,19 @@
     "integration",
     "php-integrator"
   ],
-  "readme": "# php-integrator-navigation\n\nThis package provides code navigation for your PHP source code using [PHP Integrator](https://github.com/Gert-dev/php-integrator-base).\n\n**Note that the [php-integrator-base](https://github.com/Gert-dev/php-integrator-base) package is required and needs to be set up correctly for this package to function correctly.**\n\nWhat is included?\n  * Navigate to the definition of your global PHP constnats and functions.\n  * Navigate to the definition of classes, traits and interfaces by alt-clicking them.\n  * Navigate to the definition of class, trait and interface members by alt-clicking them.\n\nTip: You can also alt-click the names of classes, interfaces and traits inside docblocks! If an item is *navigable*, it will be underlined when moving your mouse over it while holding the alt modifier key.\n\nRegarding donations: they were not my primary intention when releasing this project as open source, but I do accept them and am very grateful for any donation you may give. A link is provided on the readme of the [php-integrator-base](https://github.com/Gert-dev/php-integrator-base) package.\n\n![GPLv3 Logo](http://gplv3.fsf.org/gplv3-127x51.png)\n",
+  "readme": "# php-integrator-navigation\n<p align=\"right\">\n:coffee:\n<a href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YKTNLZCRHMRTJ\">Send me some coffee beans</a>\n</p>\n\nThis package provides code navigation for your PHP source code using [PHP Integrator](https://github.com/Gert-dev/php-integrator-base).\n\n**Note that the [php-integrator-base](https://github.com/Gert-dev/php-integrator-base) package is required and needs to be set up correctly for this package to function correctly.**\n\nWhat is included?\n  * Navigate to the definition of your global PHP constants and functions.\n  * Navigate to the PHP documentation of built-in classes and functions by alt-clicking them.\n  * Navigate to the definition of classes, traits and interfaces by alt-clicking them.\n  * Navigate to the definition of class, trait and interface members by alt-clicking them.\n\nTip: You can also alt-click the names of classes, interfaces and traits inside docblocks! If an item is *navigable*, it will be underlined when moving your mouse over it while holding the alt modifier key.\n\n![GPLv3 Logo](http://gplv3.fsf.org/gplv3-127x51.png)\n",
   "readmeFilename": "README.md",
   "bugs": {
     "url": "https://github.com/Gert-dev/php-integrator-navigation/issues"
   },
   "homepage": "https://github.com/Gert-dev/php-integrator-navigation#readme",
-  "_id": "php-integrator-navigation@0.4.0",
-  "_shasum": "0f5aed04ed446a4ae3632addaf0215d08868e213",
-  "_resolved": "file:../d-11615-19986-e0az75/package.tgz",
-  "_from": "../d-11615-19986-e0az75/package.tgz",
+  "_id": "php-integrator-navigation@0.5.0",
+  "_shasum": "fab35c2f1d04ba8c3025fa2d9930f102cc5e9d12",
+  "_resolved": "file:../d-116122-25693-enwzz6/package.tgz",
+  "_from": "../d-116122-25693-enwzz6/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
-      {
-        "name": "fuzzaldrin",
-        "version": "2.1.0",
-        "path": "node_modules/fuzzaldrin/lib/fuzzaldrin.js"
-      },
       {
         "name": "jquery",
         "version": "2.1.4",
@@ -69,11 +63,13 @@
         "lib/PropertyProvider.coffee",
         "node_modules/sub-atom/lib/sub-atom.coffee"
       ],
+      ".json": [
+        "node_modules/jquery/bower.json",
+        "node_modules/jquery/package.json",
+        "node_modules/sub-atom/package.json",
+        "package.json"
+      ],
       ".js": [
-        "node_modules/fuzzaldrin/lib/filter.js",
-        "node_modules/fuzzaldrin/lib/fuzzaldrin.js",
-        "node_modules/fuzzaldrin/lib/matcher.js",
-        "node_modules/fuzzaldrin/lib/scorer.js",
         "node_modules/jquery/dist/jquery.js",
         "node_modules/jquery/dist/jquery.min.js",
         "node_modules/jquery/src/ajax/jsonp.js",
@@ -159,13 +155,6 @@
         "node_modules/jquery/src/var/support.js",
         "node_modules/jquery/src/var/toString.js",
         "node_modules/jquery/src/wrap.js"
-      ],
-      ".json": [
-        "node_modules/fuzzaldrin/package.json",
-        "node_modules/jquery/bower.json",
-        "node_modules/jquery/package.json",
-        "node_modules/sub-atom/package.json",
-        "package.json"
       ]
     },
     "folders": [
@@ -176,8 +165,7 @@
         ],
         "dependencies": {
           "jquery": "~2.1.4",
-          "sub-atom": "~1.0.0",
-          "fuzzaldrin": "^2.1.0"
+          "sub-atom": "~1.0.0"
         }
       },
       {
