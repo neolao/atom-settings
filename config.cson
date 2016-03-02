@@ -102,7 +102,7 @@
   "linter-php": {}
   "linter-phpcs":
     enableWarning: 1
-    ignore: "*.blade.php,*.twig.php"
+    executablePath: "/Users/eric/pear/bin/phpcs"
     phpcsExecutablePath: "/usr/bin/phpcs"
     standard: "PSR2"
   "markdown-preview":

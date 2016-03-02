@@ -363,7 +363,7 @@ class IndexDataAdapter
                     'declaringClass'     => $existingProperty['declaringClass'],
                     'declaringStructure' => $existingProperty['declaringStructure'],
                     'startLine'          => (int) $existingProperty['startLine'],
-                    'endLine'            => (int) $existingProperty['end_line']
+                    'endLine'            => (int) $existingProperty['endLine']
                 ];
 
                 if ($this->isInheritingDocumentation($property)) {
@@ -551,7 +551,7 @@ class IndexDataAdapter
 
         return [
             'name'          => $rawInfo['name'],
-            'isBuiltin'     => false,
+            'isBuiltin'     => !!$rawInfo['is_builtin'],
             'startLine'     => (int) $rawInfo['start_line'],
             'endLine'       => (int) $rawInfo['end_line'],
             'filename'      => $rawInfo['path'],
@@ -693,13 +693,21 @@ class IndexDataAdapter
      */
     protected function extractInheritedPropertyInfo(array $processedData)
     {
-        return array_filter($processedData, function ($key) {
-            return in_array($key, [
-                'isDeprecated',
-                'descriptions',
-                'return'
-            ]);
-        }, ARRAY_FILTER_USE_KEY);
+        $info = [];
+
+        $inheritedKeys = [
+            'isDeprecated',
+            'descriptions',
+            'return'
+        ];
+
+        foreach ($processedData as $key => $value) {
+            if (in_array($key, $inheritedKeys)) {
+                $info[$key] = $value;
+            }
+        }
+
+        return $info;
     }
 
     /**
@@ -711,14 +719,22 @@ class IndexDataAdapter
      */
     protected function extractInheritedMethodInfo(array $processedData)
     {
-        return array_filter($processedData, function ($key) {
-            return in_array($key, [
-                'isDeprecated',
-                'descriptions',
-                'return',
-                'parameters',
-                'throws'
-            ]);
-        }, ARRAY_FILTER_USE_KEY);
+        $info = [];
+
+        $inheritedKeys = [
+            'isDeprecated',
+            'descriptions',
+            'return',
+            'parameters',
+            'throws'
+        ];
+
+        foreach ($processedData as $key => $value) {
+            if (in_array($key, $inheritedKeys)) {
+                $info[$key] = $value;
+            }
+        }
+
+        return $info;
     }
 }

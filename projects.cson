@@ -1,50 +1,10 @@
-"Académie du goût":
-  title: "Académie du goût"
+fitnext:
+  title: "Fitnext Site marketing (ancien)"
   paths: [
-    "/Users/eric/workspace/udg"
+    "/Users/eric/workspace/fitnext"
   ]
-opsdeploy:
-  title: "opsdeploy"
+fitnextblog:
+  title: "Fitnext Blog (wordpress)"
   paths: [
-    "/Users/eric/workspace/opsdeploy"
-  ]
-"ambed.io":
-  title: "ambed.io"
-  paths: [
-    "/Users/eric/workspace/popio"
-  ]
-EntityFilterableBundle:
-  title: "EntityFilterableBundle"
-  paths: [
-    "/Users/eric/workspace/EntityFilterableBundle"
-  ]
-PaginationBundle:
-  title: "PaginationBundle"
-  paths: [
-    "/Users/eric/workspace/paginationBundle"
-  ]
-CityAutocompleteFormTypeBundle:
-  title: "CityAutocompleteFormTypeBundle"
-  paths: [
-    "/Users/eric/workspace/CityAutocompleteFormTypeBundle"
-  ]
-JeuxVideoVideoHostingBundle:
-  title: "JeuxVideoVideoHostingBundle"
-  paths: [
-    "/Users/eric/workspace/JeuxVideoVideoHostingBundle"
-  ]
-AlloCineVideoEncoderBundle:
-  title: "AlloCineVideoEncoderBundle"
-  paths: [
-    "/Users/eric/workspace/AlloCineVideoEncoderBundle"
-  ]
-WebediaCrmBundle:
-  title: "WebediaCrmBundle"
-  paths: [
-    "/Users/eric/workspace/WebediaCrmBundle"
-  ]
-michalak:
-  title: "Michalak"
-  paths: [
-    "/Users/eric/workspace/christophemichalak"
+    "/Users/eric/workspace/fitnext-blog"
   ]

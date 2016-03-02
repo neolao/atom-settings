@@ -1,3 +1,22 @@
+## 0.6.9
+### Bugs fixed
+* Fixed built-in functions not being marked as being built-in.
+* Fixed the "Oops, something went wrong!" message when opening a comment that encompassed the rest of the file.
+
+## 0.6.8
+### Bugs fixed
+* Fixed no namespace being generated internally, resulting in notifications being shown relating to no namespace being found.
+
+## 0.6.7
+### Bugs fixed
+* Fixed incorrect array key being used (`Undefined index: end_line`).
+* Notices and warnings from the PHP side will now be shown in the error notification.
+* Error reporting is now enabled explicitly in case you have it disabled on a global scale so you can see what is going wrong in the Atom error notification (without having to manually debug it).
+
+## 0.6.6
+### Bugs fixed
+* Fixed compatibility with PHP < 5.6 by avoiding use of ARRAY_FILTER_USE_KEY.
+
 ## 0.6.5
 ### Bugs fixed
 * Reintroduced the xdebug max nesting level, but this time set it to a ridiculously large number for compatibility.
