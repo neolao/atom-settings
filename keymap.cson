@@ -37,9 +37,10 @@
     'cmd-alt-down': 'editor:duplicate-lines'
 
 # Basculer vers la liste des fichiers
-'.platform-darwin atom-workspace atom-text-editor':
+'.platform-darwin':
   'ctrl-left': 'tree-view:toggle-focus'
   'ctrl-right': 'tree-view:toggle-focus'
+  'ctrl-w': 'tree-view:toggle-focus'
 
 # Confirmer une autocompletion avec Enter
 ".autocomplete-plus input.hidden-input":

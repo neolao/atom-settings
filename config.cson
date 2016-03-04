@@ -39,6 +39,7 @@
       "language-objective-c"
       "sublime-panes"
       "php-integrator-base"
+      "linter-phpcs"
     ]
     excludeVcsIgnoredPaths: false
     followSymlinks: true
@@ -105,6 +106,8 @@
     standard: "PSR2"
   "markdown-preview":
     useGitHubStyle: true
+  "markdown-preview-opener":
+    closePreviewWhenClosingEditor: true
   "merge-conflicts":
     gitPath: "/usr/bin/git"
   metrics:
