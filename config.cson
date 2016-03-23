@@ -39,7 +39,8 @@
       "metrics"
       "language-toml"
       "language-objective-c"
-      "sublime-panes"
+      "tab-smart-sort"
+      "zentabs"
     ]
     excludeVcsIgnoredPaths: false
     followSymlinks: true
@@ -57,6 +58,7 @@
     simple_mode: true
     spacer_between_sections: true
   editor:
+    backUpBeforeSaving: true
     fontFamily: "DejaVu Sans Mono"
     fontSize: 19
     invisibles: {}
