@@ -27,6 +27,9 @@
   "autocomplete-plus":
     autoActivationDelay: 500
     includeCompletionsFromAllBuffers: true
+  "autohide-tree-view":
+    animationSpeed: 0
+    pushEditor: true
   composer:
     composerPath: "/usr/local/bin/composer"
   core:
@@ -41,11 +44,13 @@
       "language-objective-c"
       "tab-smart-sort"
       "zentabs"
+      "autohide-tree-view"
     ]
     excludeVcsIgnoredPaths: false
     followSymlinks: true
     packagesWithKeymapsDisabled: [
       "symbols-tree-view"
+      "git-blame"
     ]
     projectHome: "/Users/eric/workspace"
     themes: [
@@ -71,6 +76,8 @@
     userId: "5c1b3e91-177a-1a3d-e8d5-6f5458113034"
   fonts:
     fontFamily: "DejaVu Mono"
+  "git-blame":
+    columnWidth: 300
   "git-plus": {}
   "github-issues":
     username: "udg-eric"

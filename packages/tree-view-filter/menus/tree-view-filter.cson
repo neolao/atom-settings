@@ -1,0 +1,30 @@
+# See https://atom.io/docs/latest/creating-a-package#menus for more details
+'context-menu':
+  'atom-text-editor': [
+    {
+      'label': 'Toggle tree-view-filter'
+      'command': 'tree-view-filter:toggle'
+    },
+    {
+      'label': 'Activate tree-view-filter'
+      'command': 'tree-view-filter:activate'
+    }
+  ]
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'Tree View Filter'
+      'submenu': [
+        {
+          'label': 'Activate'
+          'command': 'tree-view-filter:activate'
+        },
+        {
+          'label': 'Toggle'
+          'command': 'tree-view-filter:toggle'
+        }
+      ]
+    ]
+  }
+]

@@ -15,28 +15,31 @@
 /**
  * The tree view
  */
-atom-workspace .horizontal .left {
+.tree-view {
     font-size: 12px;
+
+    &.full-menu.list-tree {
+        background: #000;
+    }
 }
 @media screen and (min-width: 1600px) {
-    atom-workspace .horizontal .left {
+    .tree-view {
         font-size: 16px;
     }
 }
 @media screen and (min-width: 2000px) {
-    atom-workspace .horizontal .left {
+    .tree-view {
         font-size: 20px;
-
-        .entry.file {
+        .list-item {
+            line-height: 1.5em;
             height: 1.5em;
         }
-        .entry.directory .header {
+        .selected:before {
+            line-height: 1.5em;
             height: 1.5em;
+            margin-top: .2em;
         }
     }
-}
-.tree-view.full-menu.list-tree {
-    background: #000;
 }
 // END tree view
 
@@ -152,9 +155,24 @@ atom-panel.modal.overlay.from-top {
     }
 }
 
+// Tree view filter
+.tree-view-filter {
+    font-size: 12px;
+    border-top: solid 2px #666;
+}
+.tree-view-filter-clear {
+    font-size: 1.5em;
+}
+
+@media screen and (min-width: 2000px) {
+    .tree-view-filter {
+        font-size: 16px;
+    }
+}
+
 // Git control
 .git-control {
-    font-size: 1.2em;
+    font-size: 12px;
 
     .menu {
         border-bottom: solid 2px #ccc;
@@ -192,6 +210,15 @@ atom-panel.modal.overlay.from-top {
         pre {
             font-size: 1em;
             color: #ccc;
+        }
+    }
+}
+@media screen and (min-width: 2000px) {
+    .git-control {
+        font-size: 20px;
+
+        .logger {
+            font-size: 12px;
         }
     }
 }
