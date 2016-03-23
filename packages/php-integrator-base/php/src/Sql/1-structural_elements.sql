@@ -9,7 +9,7 @@ CREATE TABLE settings(
 CREATE TABLE files(
     id           integer NOT NULL PRIMARY KEY AUTOINCREMENT,
     path         varchar(512) NOT NULL,
-    indexed_time timestamp NOT NULL
+    indexed_time datetime NOT NULL
 );
 
 --
@@ -188,6 +188,7 @@ CREATE TABLE functions(
     end_line              integer unsigned,
 
     is_builtin            tinyint(1) NOT NULL DEFAULT 0,
+    is_abstract           tinyint(1) NOT NULL DEFAULT 0,
     is_deprecated         tinyint(1) NOT NULL DEFAULT 0,
 
     short_description     text,

@@ -16,7 +16,7 @@ use PhpIntegrator\Application\Command as BaseCommand;
 class ClassList extends BaseCommand
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected function attachOptions(OptionCollection $optionCollection)
     {
@@ -24,29 +24,41 @@ class ClassList extends BaseCommand
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    protected function process(ArrayAccess $arguments)
-    {
-        $result = [];
+     protected function process(ArrayAccess $arguments)
+     {
+         $file = isset($arguments['file']) ? $arguments['file']->value : null;
 
-        $storageProxy = new IndexDataAdapter\ClassListProxyProvider($this->indexDatabase);
-        $dataAdapter = new IndexDataAdapter($storageProxy);
+         $classList = $this->getClassList($file);
 
-        $file = isset($arguments['file']) ? $arguments['file']->value : null;
+         return $this->outputJson(true, $classList);
+     }
 
-        foreach ($this->indexDatabase->getAllStructuralElementsRawInfo($file) as $element) {
-            // Directly load in the raw information we already have, this avoids performing a database query for each
-            // record.
-            $storageProxy->setStructuralElementRawInfo($element);
+     /**
+      * @param string|null $file
+      *
+      * @return array
+      */
+     public function getClassList($file)
+     {
+         $result = [];
 
-            $info = $dataAdapter->getStructuralElementInfo($element['id']);
+         $storageProxy = new IndexDataAdapter\ClassListProxyProvider($this->indexDatabase);
+         $dataAdapter = new IndexDataAdapter($storageProxy);
 
-            unset($info['constants'], $info['properties'], $info['methods']);
+         foreach ($this->indexDatabase->getAllStructuralElementsRawInfo($file) as $element) {
+             // Directly load in the raw information we already have, this avoids performing a database query for each
+             // record.
+             $storageProxy->setStructuralElementRawInfo($element);
 
-            $result[$element['fqsen']] = $info;
-        }
+             $info = $dataAdapter->getStructuralElementInfo($element['id']);
 
-        return $this->outputJson(true, $result);
-    }
+             unset($info['constants'], $info['properties'], $info['methods']);
+
+             $result[$element['fqsen']] = $info;
+         }
+
+         return $result;
+     }
 }

@@ -5,9 +5,8 @@ describe 'VariableParser', ->
   [parser] = []
 
   itParses = (expression) ->
-    description: ''
     as: (variables) ->
-      it "parses the '#{expression}' as variables #{jasmine.pp(variables)}", ->
+      it "parses '#{expression}' as variables #{jasmine.pp(variables)}", ->
         results = parser.parse(expression)
 
         expect(results.length).toEqual(Object.keys(variables).length)
@@ -22,23 +21,45 @@ describe 'VariableParser', ->
 
       this
 
+    asUndefined: ->
+      it "does not parse '#{expression}' as a variable expression", ->
+        results = parser.parse(expression)
+
+        expect(results).toBeUndefined()
+
   beforeEach ->
     parser = new VariableParser(registry)
 
   itParses('color = white').as('color': 'white')
   itParses('non-color = 10px').as('non-color': '10px')
 
-  itParses('$color: white;').as('$color': 'white')
   itParses('$color: white').as('$color': 'white')
   itParses('$color  : white').as('$color': 'white')
-  itParses('$non-color: 10px;').as('$non-color': '10px')
-  itParses('$non-color: 10px').as('$non-color': '10px')
+  itParses('$some-color: white;').as({
+    '$some-color': 'white'
+    '$some_color': 'white'
+  })
+  itParses('$some_color  : white').as({
+    '$some-color': 'white'
+    '$some_color': 'white'
+  })
+  itParses('$non-color: 10px;').as({
+    '$non-color': '10px'
+    '$non_color': '10px'
+  })
+  itParses('$non_color: 10px').as({
+    '$non-color': '10px'
+    '$non_color': '10px'
+  })
 
   itParses('@color: white;').as('@color': 'white')
   itParses('@non-color: 10px;').as('@non-color': '10px')
+  itParses('@non--color: 10px;').as('@non--color': '10px')
 
   itParses('--color: white;').as('var(--color)': 'white')
   itParses('--non-color: 10px;').as('var(--non-color)': '10px')
+
+  itParses('\n.error--large(@color: red) {\n  background-color: @color;\n}').asUndefined()
 
   itParses("""
     colors = {

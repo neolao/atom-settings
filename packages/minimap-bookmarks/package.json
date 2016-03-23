@@ -1,7 +1,7 @@
 {
   "name": "minimap-bookmarks",
   "main": "./lib/minimap-bookmarks",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Displays Atom bookmarks in the minimap",
   "repository": {
     "type": "git",
@@ -24,10 +24,10 @@
     "url": "https://github.com/atom-minimap/minimap-bookmarks/issues"
   },
   "homepage": "https://github.com/atom-minimap/minimap-bookmarks#readme",
-  "_id": "minimap-bookmarks@0.2.0",
-  "_shasum": "2294c55ff75688b6faf5b510a3da7efb77789078",
-  "_resolved": "file:../d-1151122-8332-11r61jw/package.tgz",
-  "_from": "../d-1151122-8332-11r61jw/package.tgz",
+  "_id": "minimap-bookmarks@0.3.0",
+  "_shasum": "0c8c21406c372c28e18ffb070df50b9fe7457a5c",
+  "_resolved": "file:../d-11628-86233-hsljhc/package.tgz",
+  "_from": "../d-11628-86233-hsljhc/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [],

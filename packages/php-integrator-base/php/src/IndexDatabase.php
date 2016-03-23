@@ -6,10 +6,6 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Configuration;
 
-use Doctrine\DBAL\Exception\TableNotFoundException;
-
-use PhpIntegrator\IndexDataProvider;
-
 class IndexDatabase implements
     Indexer\StorageInterface,
     IndexDataAdapter\ProviderInterface
@@ -85,18 +81,32 @@ class IndexDatabase implements
                     return $this->getConnection(); // Do it again.
                 }
             }
+
+            // Data could become corrupted if the operating system were to crash during synchronization, but this
+            // matters very little as we will just reindex the project next time. In the meantime, this majorly reduces
+            // hard disk I/O during indexing and increases indexing speed dramatically (dropped from over a minute to a
+            // couple of seconds for a very small (!) project).
+            $this->connection->executeQuery('PRAGMA synchronous=OFF');
         }
 
         // Have to be a douche about this as these PRAGMA's seem to reset, even though the connection is not closed.
         $this->connection->executeQuery('PRAGMA foreign_keys=ON');
 
-        // Data could become corrupted if the operating system were to crash during synchronization, but this
-        // matters very little as we will just reindex the project next time. In the meantime, this majorly reduces
-        // hard disk I/O during indexing and increases indexing speed dramatically (dropped from over a minute to a
-        // couple of seconds for a very small (!) project).
-        $this->connection->executeQuery('PRAGMA synchronous=OFF');
+        // Use the new Write-Ahead Logging mode, which offers performance benefits for our purposes. See also
+        // https://www.sqlite.org/draft/wal.html
+        $this->connection->executeQuery('PRAGMA journal_mode=WAL');
 
         return $this->connection;
+    }
+
+    /**
+     * Retrieves the currently set databasePath.
+     *
+     * @return string
+     */
+    public function getDatabasePath()
+    {
+        return $this->databasePath;
     }
 
     /**
@@ -124,7 +134,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getFileModifiedMap()
     {
@@ -143,7 +153,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getFileId($path)
     {
@@ -159,7 +169,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getAccessModifierMap()
     {
@@ -178,7 +188,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getStructuralElementTypeMap()
     {
@@ -197,7 +207,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getStructuralElementId($fqsen)
     {
@@ -213,7 +223,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function deleteFile($fileId)
     {
@@ -225,7 +235,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function deletePropertiesByFileId($fileId)
     {
@@ -237,7 +247,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function deleteConstantsByFileId($fileId)
     {
@@ -249,7 +259,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function deleteFunctionsByFileId($fileId)
     {
@@ -261,7 +271,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function deleteNamespacesByFileId($fileId)
     {
@@ -273,7 +283,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function deletePropertiesFor($seId)
     {
@@ -285,7 +295,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function deleteMethodsFor($seId)
     {
@@ -297,7 +307,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function deleteConstantsFor($seId)
     {
@@ -309,7 +319,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function deleteParentLinksFor($seId)
     {
@@ -321,7 +331,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function deleteInterfaceLinksFor($seId)
     {
@@ -333,7 +343,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function deleteTraitLinksFor($seId)
     {
@@ -357,7 +367,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function deleteExcludedStructuralElementsByFileId($fileId, array $excludedIds)
     {
@@ -386,7 +396,7 @@ class IndexDatabase implements
      *
      * @param int $id
      *
-     * @return Doctrine\DBAL\Query\QueryBuilder
+     * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     protected function getStructuralElementRawInfoQueryBuilder()
     {
@@ -424,7 +434,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getStructuralElementRawInfo($id)
     {
@@ -436,7 +446,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getStructuralElementRawParents($id)
     {
@@ -450,7 +460,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getStructuralElementRawChildren($id)
     {
@@ -464,7 +474,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getStructuralElementRawInterfaces($id)
     {
@@ -478,7 +488,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getStructuralElementRawImplementors($id)
     {
@@ -492,7 +502,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getStructuralElementRawTraits($id)
     {
@@ -506,7 +516,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getStructuralElementRawTraitUsers($id)
     {
@@ -520,7 +530,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getStructuralElementRawConstants($id)
     {
@@ -534,7 +544,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getStructuralElementRawProperties($id)
     {
@@ -548,7 +558,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getStructuralElementRawMethods($id)
     {
@@ -563,7 +573,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getStructuralElementTraitAliasesAssoc($id)
     {
@@ -586,7 +596,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getStructuralElementTraitPrecedencesAssoc($id)
     {
@@ -608,7 +618,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getFunctionParameters($functionId)
     {
@@ -621,7 +631,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getFunctionThrows($functionId)
     {
@@ -634,7 +644,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function insert($indexStorageItem, array $data)
     {
@@ -644,7 +654,7 @@ class IndexDatabase implements
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function update($indexStorageItem, $id, array $data)
     {
@@ -726,5 +736,29 @@ class IndexDatabase implements
         }
 
         return $queryBuilder->execute();
+    }
+
+    /**
+     * Starts a transaction.
+     */
+    public function beginTransaction()
+    {
+        $this->getConnection()->beginTransaction();
+    }
+
+    /**
+     * Commits a transaction.
+     */
+    public function commitTransaction()
+    {
+        $this->getConnection()->commit();
+    }
+
+    /**
+     * Rolls back a transaction.
+     */
+    public function rollbackTransaction()
+    {
+        $this->getConnection()->rollBack();
     }
 }

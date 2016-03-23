@@ -1,7 +1,7 @@
 {
   "name": "php-integrator-navigation",
   "main": "./lib/Main",
-  "version": "0.5.0",
+  "version": "0.6.1",
   "description": "Provides code navigation and go to functionality for your PHP source code.",
   "repository": {
     "type": "git",
@@ -14,7 +14,7 @@
   "consumedServices": {
     "php-integrator.service": {
       "versions": {
-        "~0.6.0": "setService"
+        "~0.7.0": "setService"
       }
     }
   },
@@ -36,10 +36,10 @@
     "url": "https://github.com/Gert-dev/php-integrator-navigation/issues"
   },
   "homepage": "https://github.com/Gert-dev/php-integrator-navigation#readme",
-  "_id": "php-integrator-navigation@0.5.0",
-  "_shasum": "fab35c2f1d04ba8c3025fa2d9930f102cc5e9d12",
-  "_resolved": "file:../d-116122-25693-enwzz6/package.tgz",
-  "_from": "../d-116122-25693-enwzz6/package.tgz",
+  "_id": "php-integrator-navigation@0.6.1",
+  "_shasum": "7f09aed07909e89be837c8f2541fadcaef928bff",
+  "_resolved": "file:../d-116222-94214-1j2cyt9/package.tgz",
+  "_from": "../d-116222-94214-1j2cyt9/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [

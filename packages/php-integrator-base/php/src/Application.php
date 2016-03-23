@@ -3,7 +3,8 @@
 namespace PhpIntegrator;
 
 use Exception;
-use UnexpectedValueException;
+
+use Doctrine\DBAL\Exception\DriverException;
 
 /**
  * Main application class.
@@ -22,12 +23,14 @@ class Application
         $command = array_shift($arguments);
 
         $commands = [
-            '--class-list'   => 'ClassList',
-            '--class-info'   => 'ClassInfo',
-            '--functions'    => 'GlobalFunctions',
-            '--constants'    => 'GlobalConstants',
-            '--reindex'      => 'Reindex',
-            '--resolve-type' => 'ResolveType'
+            '--class-list'          => 'ClassList',
+            '--class-info'          => 'ClassInfo',
+            '--functions'           => 'GlobalFunctions',
+            '--constants'           => 'GlobalConstants',
+            '--reindex'             => 'Reindex',
+            '--resolve-type'        => 'ResolveType',
+            '--semantic-lint'       => 'SemanticLint',
+            '--available-variables' => 'AvailableVariables'
         ];
 
         if (isset($commands[$command])) {
@@ -38,6 +41,12 @@ class Application
 
             try {
                 return $command->execute($arguments);
+            } catch (DriverException $e) {
+                $message = "A driver exception occurred. Please check if support for sqlite is present.";
+                $message .= "\n \n";
+                $message .= $e->getFile() . ':' . $e->getLine() . ' - ' . $e->getMessage();
+
+                return $message;
             } catch (Exception $e) {
                 return $e->getFile() . ':' . $e->getLine() . ' - ' . $e->getMessage();
             }

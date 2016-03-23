@@ -10,11 +10,40 @@ registry.createExpression 'pigments:scss_params', '^[ \\t]*@(mixin|include|funct
   [match] = match
   solver.endParsing(match.length - 1)
 
-registry.createExpression 'pigments:scss', '^[ \\t]*(\\$[a-zA-Z0-9\\-_]+)\\s*:\\s*(.*?)(\\s*!default)?;', ['*']
+sass_handler = (match, solver) ->
+  solver.appendResult([
+    match[1]
+    match[2]
+    0
+    match[0].length
+  ])
 
-registry.createExpression 'pigments:sass', '^[ \\t]*(\\$[a-zA-Z0-9\\-_]+)\\s*:\\s*([^\\{]*?)(\\s*!default)?$', ['*']
+  if match[1].match(/[-_]/)
+    all_underscore = match[1].replace(/-/g, '_')
+    all_hyphen = match[1].replace(/_/g, '-')
 
-registry.createExpression 'pigments:css_vars', '(--[^\\s:]+):\\s*([^;]+);', ['css'], (match, solver) ->
+    if match[1] isnt all_underscore
+      solver.appendResult([
+        all_underscore
+        match[2]
+        0
+        match[0].length
+      ])
+    if match[1] isnt all_hyphen
+      solver.appendResult([
+        all_hyphen
+        match[2]
+        0
+        match[0].length
+      ])
+
+  solver.endParsing(match[0].length)
+
+registry.createExpression 'pigments:scss', '^[ \\t]*(\\$[a-zA-Z0-9\\-_]+)\\s*:\\s*(.*?)(\\s*!default)?;', ['*'], sass_handler
+
+registry.createExpression 'pigments:sass', '^[ \\t]*(\\$[a-zA-Z0-9\\-_]+)\\s*:\\s*([^\\{]*?)(\\s*!default)?$', ['*'], sass_handler
+
+registry.createExpression 'pigments:css_vars', '(--[^\\s:]+):\\s*([^\\n;]+);', ['css'], (match, solver) ->
   solver.appendResult([
     "var(#{match[1]})"
     match[2]

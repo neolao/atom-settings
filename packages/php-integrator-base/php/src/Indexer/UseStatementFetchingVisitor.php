@@ -67,7 +67,7 @@ class UseStatementFetchingVisitor implements NodeVisitor
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function leaveNode(Node $node)
     {
@@ -75,7 +75,7 @@ class UseStatementFetchingVisitor implements NodeVisitor
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function beforeTraverse(array $nodes)
     {
@@ -83,7 +83,7 @@ class UseStatementFetchingVisitor implements NodeVisitor
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function afterTraverse(array $nodes)
     {

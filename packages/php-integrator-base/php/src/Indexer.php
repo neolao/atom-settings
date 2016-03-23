@@ -11,6 +11,7 @@ use RecursiveDirectoryIterator;
 
 use PhpParser\Lexer;
 use PhpParser\Error;
+use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use PhpParser\NodeTraverser;
 
@@ -40,7 +41,12 @@ class Indexer
     protected $docParser;
 
     /**
-     * @var PhpParser\Parser|null
+     * @var TypeAnalyzer|null
+     */
+    protected $typeAnalyzer;
+
+    /**
+     * @var Parser|null
      */
     protected $parser;
 
@@ -182,6 +188,8 @@ class Indexer
      */
     public function indexFile($filePath, $code = null)
     {
+        $this->storage->beginTransaction();
+
         try {
             $code = $code ?: @file_get_contents($filePath);
 
@@ -190,7 +198,11 @@ class Indexer
             }
 
             $this->indexFileOutline($filePath, $code);
+
+            $this->storage->commitTransaction();
         } catch (Error $e) {
+            $this->storage->rollbackTransaction();
+
             throw new Indexer\IndexingFailedException([
                 [
                     'file'        => $filePath,
@@ -736,7 +748,7 @@ class Indexer
      * @param array                                    $rawData
      * @param int                                      $fileId
      * @param string                                   $fqsen
-     * @param boolean                                  $isBuiltin
+     * @param bool                                     $isBuiltin
      * @param Indexer\UseStatementFetchingVisitor|null $useStatementFetchingVisitor
      *
      * @return int The ID of the structural element.
@@ -938,8 +950,7 @@ class Indexer
             $data = $this->adaptMagicPropertyData($propertyName, $propertyData);
 
             // Use the same line as the class definition, it matters for e.g. type resolution.
-            $data['startLine'] = $rawData['startLine'];
-            $data['endLine']   = $rawData['endLine'];
+            $data['startLine'] = $data['endLine'] = $rawData['startLine'];
 
             $this->indexProperty(
                 $data,
@@ -956,8 +967,7 @@ class Indexer
             $data = $this->adaptMagicMethodData($methodName, $methodData);
 
             // Use the same line as the class definition, it matters for e.g. type resolution.
-            $data['startLine'] = $rawData['startLine'];
-            $data['endLine']   = $rawData['endLine'];
+            $data['startLine'] = $data['endLine'] = $rawData['startLine'];
 
             $this->indexFunction(
                 $data,
@@ -983,14 +993,17 @@ class Indexer
     protected function adaptMagicPropertyData($name, array $data)
     {
         return [
-            'name'        => mb_substr($name, 1), // Strip off the dollar sign.
-            'startLine'   => null,
-            'endLine'     => null,
-            'isPublic'    => true,
-            'isPrivate'   => false,
-            'isProtected' => false,
-            'isStatic'    => $data['isStatic'],
-            'docComment'  => "/** {$data['description']} */"
+            'name'             => mb_substr($name, 1), // Strip off the dollar sign.
+            'startLine'        => null,
+            'endLine'          => null,
+            'isPublic'         => true,
+            'isPrivate'        => false,
+            'isProtected'      => false,
+            'isStatic'         => $data['isStatic'],
+            'returnType'       => $data['type'],
+            'fullReturnType'   => null,                // Determine automatically.
+            'shortDescription' => $data['description'],
+            'docComment'       => null
         ];
     }
 
@@ -1008,9 +1021,9 @@ class Indexer
 
         foreach ($data['requiredParameters'] as $parameterName => $parameter) {
             $parameters[] = [
-                'name'        => $parameterName,
+                'name'        => mb_substr($parameterName, 1), // Strip off the dollar sign.
                 'type'        => $parameter['type'],
-                'fullType'    => $parameter['type'],
+                'fullType'    => null,                         // Determine automatically.
                 'isReference' => false,
                 'isVariadic'  => false,
                 'isOptional'  => false
@@ -1019,9 +1032,9 @@ class Indexer
 
         foreach ($data['optionalParameters'] as $parameterName => $parameter) {
             $parameters[] = [
-                'name'        => $parameterName,
+                'name'        => mb_substr($parameterName, 1), // Strip off the dollar sign.
                 'type'        => $parameter['type'],
-                'fullType'    => $parameter['type'],
+                'fullType'    => null,                         // Determine automatically.
                 'isReference' => false,
                 'isVariadic'  => false,
                 'isOptional'  => true
@@ -1029,17 +1042,18 @@ class Indexer
         }
 
         return [
-            'name'           => $name,
-            'startLine'      => null,
-            'endLine'        => null,
-            'returnType'     => $data['type'],
-            'fullReturnType' => $data['type'],
-            'parameters'     => $parameters,
-            'docComment'     => "/** {$data['description']} */",
-            'isPublic'       => true,
-            'isPrivate'      => false,
-            'isProtected'    => false,
-            'isStatic'       => $data['isStatic']
+            'name'             => $name,
+            'startLine'        => null,
+            'endLine'          => null,
+            'returnType'       => $data['type'],
+            'fullReturnType'   => null,                       // Determine automatically.
+            'parameters'       => $parameters,
+            'shortDescription' => $data['description'],
+            'docComment'       => null,
+            'isPublic'         => true,
+            'isPrivate'        => false,
+            'isProtected'      => false,
+            'isStatic'         => $data['isStatic']
         ];
     }
 
@@ -1117,20 +1131,24 @@ class Indexer
             DocParser::DESCRIPTION
         ], $rawData['name']);
 
-        $shortDescription = $documentation['descriptions']['short'];
+        $shortDescription = isset($rawData['shortDescription']) ? $rawData['shortDescription'] : null;
 
-        // You can place documentation after the @var tag as well as at the start of the docblock. Fall back
-        // from the latter to the former.
-        if (empty($shortDescription)) {
-            $shortDescription = $documentation['var']['description'];
+        if ($shortDescription === null) {
+            $shortDescription = $documentation['descriptions']['short'];
+
+            // You can place documentation after the @var tag as well as at the start of the docblock. Fall back
+            // from the latter to the former.
+            if (empty($shortDescription)) {
+                $shortDescription = $documentation['var']['description'];
+            }
         }
 
-        $returnType = null;
-        $fullReturnType = null;
+        $returnType = isset($rawData['returnType']) ? $rawData['returnType'] : null;
+        $returnType = $returnType ?: ($documentation ? $documentation['var']['type'] : null);
 
-        if ($documentation['var']['type']) {
-            $returnType = $documentation['var']['type'];
+        $fullReturnType = isset($rawData['fullReturnType']) ? $rawData['fullReturnType'] : null;
 
+        if (!$fullReturnType) {
             $fullReturnType = $this->getFullTypeForDocblockType(
                 $returnType,
                 $rawData['startLine'],
@@ -1183,17 +1201,21 @@ class Indexer
             DocParser::RETURN_VALUE
         ], $rawData['name']);
 
-        $returnType = $rawData['returnType'];
+        $returnType = $rawData['returnType'] ?: ($documentation ? $documentation['return']['type'] : null);
         $fullReturnType = $rawData['fullReturnType'];
 
-        if (!$returnType) {
-            $returnType = $documentation['return']['type'];
-
+        if (!$fullReturnType) {
             $fullReturnType = $this->getFullTypeForDocblockType(
                 $returnType,
                 $rawData['startLine'],
                 $useStatementFetchingVisitor
             );
+        }
+
+        $shortDescription = isset($rawData['shortDescription']) ? $rawData['shortDescription'] : null;
+
+        if ($shortDescription === null) {
+            $shortDescription = $documentation['descriptions']['short'];
         }
 
         $functionId = $this->storage->insert(IndexStorageItemEnum::FUNCTIONS, [
@@ -1202,8 +1224,9 @@ class Indexer
             'start_line'            => $rawData['startLine'],
             'end_line'              => $rawData['endLine'],
             'is_builtin'            => 0,
+            'is_abstract'           => (isset($rawData['isAbstract']) && $rawData['isAbstract']) ? 1 : 0,
             'is_deprecated'         => $documentation['deprecated'] ? 1 : 0,
-            'short_description'     => $documentation['descriptions']['short'],
+            'short_description'     => $shortDescription,
             'long_description'      => $documentation['descriptions']['long'],
             'return_type'           => $returnType,
             'full_return_type'      => $fullReturnType,
@@ -1222,13 +1245,12 @@ class Indexer
             $parameterDoc = isset($documentation['params'][$parameterKey]) ?
                 $documentation['params'][$parameterKey] : null;
 
+            $type = $parameter['type'] ?: ($parameterDoc ? $parameterDoc['type'] : null);
             $fullType = $parameter['fullType'];
 
             if (!$fullType) {
-                $fullType = $parameterDoc ? $parameterDoc['type'] : null;
-
                 $fullType = $this->getFullTypeForDocblockType(
-                    $fullType,
+                    $type,
                     $rawData['startLine'],
                     $useStatementFetchingVisitor
                 );
@@ -1237,7 +1259,7 @@ class Indexer
             $parameterData = [
                 'function_id'  => $functionId,
                 'name'         => $parameter['name'],
-                'type'         => $parameter['type'] ?: ($parameterDoc ? $parameterDoc['type'] : null),
+                'type'         => $type,
                 'full_type'    => $fullType,
                 'description'  => $parameterDoc ? $parameterDoc['description'] : null,
                 'is_reference' => $parameter['isReference'] ? 1 : 0,
@@ -1365,7 +1387,7 @@ class Indexer
             $classTypes = [];
 
             foreach ($types as $type) {
-                if ($this->isClassType($type)) {
+                if (!$this->getTypeAnalyzer()->isSpecialType($type)) {
                     $classTypes[] = $type;
                 }
             }
@@ -1376,18 +1398,6 @@ class Indexer
         }
 
         return null;
-    }
-
-    /**
-     * Returns a boolean indicating if the specified value is a class type or not.
-     *
-     * @param string $type
-     *
-     * @return bool
-     */
-    protected function isClassType($type)
-    {
-        return ucfirst($type) === $type && $type !== '$this';
     }
 
     /**
@@ -1416,7 +1426,7 @@ class Indexer
 
 
     /**
-     * @return PhpParser\Parser
+     * @return Parser
      */
     protected function getParser()
     {
@@ -1431,6 +1441,18 @@ class Indexer
         }
 
         return $this->parser;
+    }
+
+    /**
+     * @return TypeAnalyzer
+     */
+    protected function getTypeAnalyzer()
+    {
+        if (!$this->typeAnalyzer) {
+            $this->typeAnalyzer = new TypeAnalyzer();
+        }
+
+        return $this->typeAnalyzer;
     }
 
     /**

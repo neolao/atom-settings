@@ -48,6 +48,14 @@ class StatusBarManager
         @element.appendChild(@progressBar)
         @element.appendChild(@labelElement)
 
+        atom.tooltips.add(@element, {
+            title: '''
+                Your project is being indexed. During this time, functionality such as autocompletion<br/>
+                may not be available. Saved or unsaved changes made to files may also not be indexed<br/>
+                until the next modification is made.
+                '''
+        })
+
         @tile = statusBarService.addRightTile(item: @element, priority: 999999)
 
     ###*

@@ -1,3 +1,49 @@
+## 0.7.1
+### Bugs fixed
+* Fixed semantic linting not marking use statements in docblocks as used when their types were used inside a type union (e.g. `string|DateTime`).
+* Fixed semantic linting not checking if class names in docblocks existed when they occurred inside a type union (e.g. `string|DateTime`).
+* Fixed semantic linting not validating class names that were used inside function calls or in class constant fetching.
+* Fixed semantic linting marking use statements as unused whilst they were being used inside function calls or in class constant fetching.
+
+## 0.7.0
+### Features and enhancements
+* The SQLite database will now use the WAL journal mode, which offers performance benefits. (See also [the SQLite documentation](https://www.sqlite.org/draft/wal.html) for those interested.)
+* Additional checks have been added to ensure the indexing database doesn't go into an invalid state.
+* The use of `{@inheritDoc}` to extend long descriptions will now also work for child classes and extending interfaces.
+* Indexing will now respond less aggressively to changes in the buffer. Instead of spawning an indexing process unconditionally each time a file stops changing (after a couple hundred milliseconds by default), an indexing process will now only be spawned as soon as the previous one finishes. In essence, if an indexing process is already running, the indexer holds on to the changes and issues a reindex as soon as the previous one finishes. If a file takes very long to index and at this point you make multiple changes to the same file, only the last version will be reindexed (i.e. reindexing actions are not actually queued and the indexer does not need to catch up on a possibly long list of changes).
+
+### Bugs fixed
+* Fixed some parameters of magic methods not showing up at all.
+* Fixed event handlers not being disposed when the package was deactivated.
+* Fixed parameter names for magic methods containing a comma in some cases.
+* Fixed parameters for magic methods being incorrectly marked as being optional.
+* Return types for magic properties were not being fetched at all.
+* Fixed problems with paths containing spaces on anything non-Windows (Linux, Mac OS X, ...).
+* Fixed the indexing progress bar disappearing sometimes if you edited a file while it was busy.
+* Fixed the `Warning: is_dir(): Unable to find the wrapper "atom"` error showing up in rare cases.
+* Fixed call stacks of simple expressions interpolated inside strings not being correctly retrieved.
+* Return types for magic methods were not being resolved relative to use statements or the namespace.
+* Parameter names for magic methods no longer contain a dollar sign (consistent with everything else).
+* Always set the timezone to UTC. (I changed my mind about this, due to reasons listed in [PR #129](https://github.com/Gert-dev/php-integrator-base/pull/129).) (thanks to [@tillkruss](https://github.com/tillkruss)).
+* Fixed issues with the indexer not correctly dealing with class names starting with a lower case letter.
+* Some non-standard behavior has been removed that may or may not be noticable to users:
+  * Constants in traits will no longer be picked up (PHP error).
+  * Properties in traits will no longer be scanned for aliases (PHP error).
+  * Properties inside interfaces will not be "inherited" anymore (PHP error).
+
+### Changes for developers
+* Changes to the service
+  * Magic properties and methods will no longer return true for `hasDocblock`.
+  * `getAvailableVariables` received an extra (optional) `async` parameter.
+  * `determineCurrentClassName` received an extra (optional) `async` parameter.
+  * Magic properties and methods now return the class start line as their end line.
+  * A new method `semanticLint` is now available that can semantically lint files and return various issues with it.
+  * A new method `getAvailableVariablesByOffset` has been added that allows fetching available variables via an offset in a file. This method is implemented in PHP, supports asynchronous operation and the existing `getAvailableVariables` has been rewritten to use this method.
+
+## 0.6.10
+### Bugs fixed
+* Fixed the type resolver (--resolve-type) returning types prefixed with a leading slash when a file had no namespace, which is unnecessary and confusing as this slash isn't prepended anywhere else.
+
 ## 0.6.9
 ### Bugs fixed
 * Fixed built-in functions not being marked as being built-in.
@@ -5,7 +51,7 @@
 
 ## 0.6.8
 ### Bugs fixed
-* Fixed no namespace being generated internally, resulting in notifications being shown relating to no namespace being found.
+* Fixed no internal namespace record being generated when there were no use statements nor a namespace in a file (resulting in notifications being shown relating to no namespace being found).
 
 ## 0.6.7
 ### Bugs fixed

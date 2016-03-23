@@ -2,8 +2,6 @@ fs            = require 'fs'
 stream        = require 'stream'
 child_process = require 'child_process'
 
-Utility = require "./Utility"
-
 module.exports =
 
 ##*
@@ -28,7 +26,7 @@ class Proxy
     constructor: (@config) ->
 
     ###*
-     * Prepares parameters for execution by escaping them.
+     * Prepares parameters for execution.
      *
      * @param {array} parameters
      *
@@ -37,11 +35,11 @@ class Proxy
     prepareParameters: (args) ->
         parameters = [
             '-d memory_limit=-1',
-            Utility.escapeShellParameter(__dirname + "/../php/src/Main.php")
+            __dirname + "/../php/src/Main.php"
         ]
 
         for a in args
-            parameters.push(Utility.escapeShellParameter(a))
+            parameters.push(a)
 
         return parameters
 
@@ -242,6 +240,55 @@ class Proxy
         return @performRequest(
             ['--resolve-type', '--database=' + @getIndexDatabasePath(), '--file=' + file, '--line=' + line, '--type=' + type],
             async
+        )
+
+    ###*
+     * Performs a semantic lint of the specified file.
+     *
+     * @param {string}      file
+     * @param {string|null} source The source code of the file to index. May be null if a directory is passed instead.
+     * @param {boolean}     async
+     *
+     * @return {Promise|Object}
+    ###
+    semanticLint: (file, source, async = false) ->
+        throw new Error('No file passed!') if not file
+
+        return @performRequest(
+            ['--semantic-lint', '--database=' + @getIndexDatabasePath(), '--file=' + file, '--stdin'],
+            async,
+            null,
+            source
+        )
+
+    ###*
+     * Fetches all available variables at a specific location.
+     *
+     * @param {string|null} file   The path to the file to examine. May be null if the source parameter is passed.
+     * @param {string|null} source The source code to search. May be null if a file is passed instead.
+     * @param {number}      offset The character offset into the file to examine.
+     * @param {boolean}     async
+     *
+     * @return {Promise|Object}
+    ###
+    getAvailableVariables: (file, source, offset, async = false) ->
+        if not file? and not source?
+            throw 'Either a path to a file or source code must be passed!'
+
+        if file?
+            parameter = '--file=' + file
+
+        else if not async
+            throw 'Passing direct file contents is only supported for asynchronous calls!'
+
+        else
+            parameter = '--stdin'
+
+        return @performRequest(
+            ['--available-variables', '--database=' + @getIndexDatabasePath(), parameter, '--offset=' + offset],
+            async,
+            null,
+            source
         )
 
     ###*

@@ -22,7 +22,7 @@ abstract class Command implements CommandInterface
      *
      * @var int
      */
-    const DATABASE_VERSION = 8;
+    const DATABASE_VERSION = 10;
 
     /**
      * @var IndexDatabase
@@ -35,7 +35,7 @@ abstract class Command implements CommandInterface
     protected $indexDataAdapter;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function execute(array $arguments)
     {
@@ -63,7 +63,7 @@ abstract class Command implements CommandInterface
             return $this->outputJson(false, 'No database path passed!');
         }
 
-        $this->indexDatabase = $this->createIndexDatabase($processedArguments['database']->value);
+        $this->setIndexDatabase($this->createIndexDatabase($processedArguments['database']->value));
 
         try {
             return $this->process($processedArguments);
@@ -82,6 +82,19 @@ abstract class Command implements CommandInterface
     protected function createIndexDatabase($filePath)
     {
         return new IndexDatabase($filePath, static::DATABASE_VERSION);
+    }
+
+    /**
+     * Sets the indexDatabase to use.
+     *
+     * @param IndexDatabase $indexDatabase
+     *
+     * @return $this
+     */
+    public function setIndexDatabase(IndexDatabase $indexDatabase)
+    {
+        $this->indexDatabase = $indexDatabase;
+        return $this;
     }
 
     /**

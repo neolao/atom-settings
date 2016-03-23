@@ -32,7 +32,7 @@ registry = new ExpressionsRegistry(ColorExpression)
 ##    ######## ####    ##    ######## ##     ## ##     ## ########
 
 # #6f3489ef
-registry.createExpression 'pigments:css_hexa_8', "#(#{hexadecimal}{8})(?![\\d\\w])", ['css', 'less', 'styl', 'stylus', 'sass', 'scss'], (match, expression, context) ->
+registry.createExpression 'pigments:css_hexa_8', "#(#{hexadecimal}{8})(?![\\d\\w])", 1, ['css', 'less', 'styl', 'stylus', 'sass', 'scss'], (match, expression, context) ->
   [_, hexa] = match
 
   @hexRGBA = hexa
@@ -290,7 +290,7 @@ registry.createExpression 'pigments:gray', strip("
 colors = Object.keys(SVGColors.allCases)
 colorRegexp = "(?:#{namePrefixes})(#{colors.join('|')})\\b(?![ \\t]*[-\\.:=\\(])"
 
-registry.createExpression 'pigments:named_colors', colorRegexp, ['*'], (match, expression, context) ->
+registry.createExpression 'pigments:named_colors', colorRegexp, ['css', 'less', 'styl', 'stylus', 'sass', 'scss'], (match, expression, context) ->
   [_,name] = match
 
   @colorExpression = @name = name

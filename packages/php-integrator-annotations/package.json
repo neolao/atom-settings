@@ -1,7 +1,7 @@
 {
   "name": "php-integrator-annotations",
   "main": "./lib/Main",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Shows annotations (e.g. for overriden methods interface implementations) in your PHP source code.",
   "repository": {
     "type": "git",
@@ -14,7 +14,7 @@
   "consumedServices": {
     "php-integrator.service": {
       "versions": {
-        "~0.6.0": "setService"
+        "~0.7.0": "setService"
       }
     }
   },
@@ -34,16 +34,16 @@
     "url": "https://github.com/Gert-dev/php-integrator-annotations/issues"
   },
   "homepage": "https://github.com/Gert-dev/php-integrator-annotations#readme",
-  "_id": "php-integrator-annotations@0.3.1",
-  "_shasum": "95bb9b92382ed782ffd5a15b5945de8ca5a6e86f",
-  "_resolved": "file:../d-116123-18301-15xfpd2/package.tgz",
-  "_from": "../d-116123-18301-15xfpd2/package.tgz",
+  "_id": "php-integrator-annotations@0.3.2",
+  "_shasum": "acd68a67f8e0a6755257fb591640c5af768dea6b",
+  "_resolved": "file:../d-116222-94201-1sn7hto/package.tgz",
+  "_from": "../d-116222-94201-1sn7hto/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
       {
         "name": "jquery",
-        "version": "2.2.1",
+        "version": "2.2.2",
         "path": "node_modules/sub-atom/node_modules/jquery/dist/jquery.js"
       }
     ],
@@ -66,6 +66,8 @@
         "node_modules/sub-atom/node_modules/jquery/dist/jquery.min.js",
         "node_modules/sub-atom/node_modules/jquery/dist/jquery.slim.js",
         "node_modules/sub-atom/node_modules/jquery/dist/jquery.slim.min.js",
+        "node_modules/sub-atom/node_modules/jquery/sizzle/dist/sizzle.js",
+        "node_modules/sub-atom/node_modules/jquery/sizzle/dist/sizzle.min.js",
         "node_modules/sub-atom/node_modules/jquery/src/ajax/jsonp.js",
         "node_modules/sub-atom/node_modules/jquery/src/ajax/load.js",
         "node_modules/sub-atom/node_modules/jquery/src/ajax/parseJSON.js",

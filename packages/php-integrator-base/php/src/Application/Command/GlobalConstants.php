@@ -14,9 +14,19 @@ use PhpIntegrator\Application\Command as BaseCommand;
 class GlobalConstants extends BaseCommand
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected function process(ArrayAccess $arguments)
+    {
+        $constants = $this->getGlobalConstants();
+
+        return $this->outputJson(true, $constants);
+    }
+
+    /**
+     * @return array
+     */
+    public function getGlobalConstants()
     {
         $constants = [];
 
@@ -24,6 +34,6 @@ class GlobalConstants extends BaseCommand
             $constants[$constant['name']] = $this->getIndexDataAdapter()->getConstantInfo($constant);
         }
 
-        return $this->outputJson(true, $constants);
+        return $constants;
     }
 }

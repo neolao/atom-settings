@@ -4,8 +4,6 @@ namespace PhpIntegrator\Application\Command;
 
 use ArrayAccess;
 
-use PhpIntegrator\IndexDataAdapter;
-
 use PhpIntegrator\Application\Command as BaseCommand;
 
 /**
@@ -14,16 +12,26 @@ use PhpIntegrator\Application\Command as BaseCommand;
 class GlobalFunctions extends BaseCommand
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
-    protected function process(ArrayAccess $arguments)
-    {
-        $result = [];
+     protected function process(ArrayAccess $arguments)
+     {
+         $result = $this->getGlobalFunctions();
 
-        foreach ($this->indexDatabase->getGlobalFunctions() as $function) {
-            $result[$function['name']] = $this->getIndexDataAdapter()->getFunctionInfo($function);
-        }
+         return $this->outputJson(true, $result);
+     }
 
-        return $this->outputJson(true, $result);
-    }
+     /**
+      * @return array
+      */
+     public function getGlobalFunctions()
+     {
+         $result = [];
+
+         foreach ($this->indexDatabase->getGlobalFunctions() as $function) {
+             $result[$function['name']] = $this->getIndexDataAdapter()->getFunctionInfo($function);
+         }
+
+         return $result;
+     }
 }

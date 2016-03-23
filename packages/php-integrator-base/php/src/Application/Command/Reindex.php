@@ -19,7 +19,7 @@ use PhpIntegrator\Application\Command as BaseCommand;
 class Reindex extends BaseCommand
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected function attachOptions(OptionCollection $optionCollection)
     {
@@ -30,7 +30,7 @@ class Reindex extends BaseCommand
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected function process(ArrayAccess $arguments)
     {
@@ -38,10 +38,23 @@ class Reindex extends BaseCommand
             throw new UnexpectedValueException('The file or directory to index is required for this command.');
         }
 
-        $showOutput = isset($arguments['verbose']);
-        $streamProgress = isset($arguments['stream-progress']);
+        return $this->reindex(
+            $arguments['source']->value,
+            isset($arguments['stdin']),
+            isset($arguments['verbose']),
+            isset($arguments['stream-progress'])
+        );
+    }
 
-        $indexer = new Indexer($this->indexDatabase, $showOutput, $streamProgress);
+    /**
+     * @param string $path
+     * @param bool   $useStdin
+     * @param bool   $showOutput
+     * @param bool   $doStreamProgress
+     */
+    public function reindex($path, $useStdin, $showOutput, $doStreamProgress)
+    {
+        $indexer = new Indexer($this->indexDatabase, $showOutput, $doStreamProgress);
 
         $hasIndexedBuiltin = $this->indexDatabase->getConnection()->createQueryBuilder()
             ->select('id', 'value')
@@ -66,29 +79,45 @@ class Reindex extends BaseCommand
             }
         }
 
-        $path = $arguments['source']->value;
-
         if (is_dir($path)) {
             $errors = $indexer->indexDirectory($path);
 
             return $this->outputJson(true, ['errors' => $errors]);
-        } elseif (is_file($path)) {
+        } elseif (is_file($path) || $useStdin) {
             $code = null;
 
-            if (isset($arguments['stdin']) && $arguments['stdin']->value) {
+            if ($useStdin) {
                 // NOTE: This call is blocking if there is no input!
                 $code = file_get_contents('php://stdin');
             }
 
+            $isInMemoryDatabase = ($this->indexDatabase->getDatabasePath() === ':memory:');
+
+            if (!$isInMemoryDatabase) {
+                // All other commands don't abide by these locks, so they can just happily continue using the database (as
+                // they are only reading, that poses no problem). However, writing in a transaction will cause the database
+                // to become locked, which poses a problem if two simultaneous reindexing processes are spawned. If that
+                // happens, just block until the database becomes available again. If we don't, we will receive an
+                // exception from the driver.
+                $f = fopen($this->indexDatabase->getDatabasePath(), 'rw');
+                flock($f, LOCK_EX);
+            }
+
+            $errors = [];
+
             try {
                 $indexer->indexFile($path, $code ?: null);
             } catch (Indexer\IndexingFailedException $e) {
-                return $this->outputJson(false, ['errors' => $e->getErrors()]);
+                $errors = $e->getErrors();
             }
 
-            return $this->outputJson(true, ['errors' => []]);
+            if (!$isInMemoryDatabase) {
+                flock($f, LOCK_UN);
+            }
+
+            return $this->outputJson(true, ['errors' => $errors]);
         }
 
-        throw new UnexpectedValueException('The specified file or directoy does not exist!');
+        throw new UnexpectedValueException('The specified file or directory "' . $path . '" does not exist!');
     }
 }

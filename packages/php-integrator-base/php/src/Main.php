@@ -2,6 +2,14 @@
 
 use PhpIntegrator\Application;
 
+if (version_compare(PHP_VERSION, '5.4.0') === -1) {
+    die('You need at least PHP 5.4, your current version is PHP ' . PHP_VERSION);
+}
+
+if (!function_exists('mb_substr')) {
+    die('Multibyte String support in your PHP installation is required. See also https://secure.php.net/manual/en/book.mbstring.php');
+}
+
 // Show us pretty much everything so we can properly debug what is going wrong.
 error_reporting(E_ALL & ~E_DEPRECATED);
 
@@ -15,6 +23,10 @@ ini_set('xdebug.max_nesting_level', 10000);
 if (function_exists('xdebug_disable')) {
     xdebug_disable();
 }
+
+// Explicitly set the timezone to avoid warnings in some older PHP 5 versions. Also, this prevents files suddenly being
+// picked up as being modified if the user changes the timezone in php.ini.
+date_default_timezone_set('UTC');
 
 chdir(__DIR__);
 

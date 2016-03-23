@@ -27,6 +27,8 @@
   "autocomplete-plus":
     autoActivationDelay: 500
     includeCompletionsFromAllBuffers: true
+  composer:
+    composerPath: "/usr/local/bin/composer"
   core:
     disabledPackages: [
       "enhanced-package-list"
@@ -38,8 +40,6 @@
       "language-toml"
       "language-objective-c"
       "sublime-panes"
-      "php-integrator-base"
-      "linter-phpcs"
     ]
     excludeVcsIgnoredPaths: false
     followSymlinks: true
@@ -125,6 +125,8 @@
   "one-dark-ui":
     layoutMode: "Compact"
   "php-integrator-base": {}
+  "php-integrator-symbol-viewer":
+    defaultShowInherited: true
   pigments: {}
   "project-manager": {}
   "release-notes":
@@ -175,6 +177,12 @@
     neverCloseDirty: true
     neverCloseNew: true
     neverCloseUnsaved: true
+".babel.regexp.source":
+  editor:
+    preferredLineLength: 120
 ".diff.source":
+  editor:
+    preferredLineLength: 120
+".js.jsx.source":
   editor:
     preferredLineLength: 120

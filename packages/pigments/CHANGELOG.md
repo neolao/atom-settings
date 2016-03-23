@@ -1,3 +1,42 @@
+<a name="v0.25.0"></a>
+# v0.25.0 (2016-03-22)
+
+## Features
+
+- Add HSL conversion commands ([3c512131](https://github.com/abe33/atom-pigments/commit/3c512131d5aae91c038824263c5d943942951f5b), [#161](https://github.com/abe33/atom-pigments/issues/161))
+- Add support for sass variable variations ([b9e9dbe6](https://github.com/abe33/atom-pigments/commit/b9e9dbe6a3bcadba51e4515b3e7ee23e7816c1f1))
+  <br>Variables such as `$some-color` are now also available as `$some_color`
+- Change scopes for SVG names color expression  ([30f2ffee](https://github.com/abe33/atom-pigments/commit/30f2ffeea9be8d7396aa9eae8f6cd72654945cc4), [#153](https://github.com/abe33/atom-pigments/issues/153))
+  <br>Its now limited to CSS and CSS pre-processor files. The supported scopes can be extended through the `extendedFiletypesForColorWords` setting.
+
+## Bug Fixes
+
+- Fix svg color not detected if preceded with > ([941fc7a3](https://github.com/abe33/atom-pigments/commit/941fc7a34f1fb3a5072defb3a5f7b04b0a3dcf97), [#162](https://github.com/abe33/atom-pigments/issues/162))
+- Fix infinite loop when looking for a variable having a circular reference ([80889983](https://github.com/abe33/atom-pigments/commit/80889983d2619137fc892d5487109067f3f87c1b))
+
+<a name="v0.24.5"></a>
+# v0.24.5 (2016-03-09)
+
+## Bug Fixes
+
+- Fix variables followed by !default not matched as color ([7a735c05](https://github.com/abe33/atom-pigments/commit/7a735c05386dd147bcd190b93744397602e9b9c0))
+
+<a name="v0.24.4"></a>
+# v0.24.4 (2016-03-07)
+
+## Bug Fixes
+
+- Fix error when styling undefined regions ([d6118d95](https://github.com/abe33/atom-pigments/commit/d6118d9596f4973ce0fae7a02e9e44ef02c92650))
+- Fix error raised when regions array holds null region ([d3512b9a](https://github.com/abe33/atom-pigments/commit/d3512b9a5cbcd575a99cebf8f0ed0f8cc7fececa))
+
+<a name="v0.24.3"></a>
+# v0.24.3 (2016-03-07)
+
+## Bug Fixes
+
+- Fix issues with less mixing looking like CSS variables ([37cbaed0](https://github.com/abe33/atom-pigments/commit/37cbaed02a9e6e2b1916ae0be49538fa9dd16061), [#157](https://github.com/abe33/atom-pigments/issues/157))
+- Fix invalid scope name computed in scan buffer handler ([edeaf44c](https://github.com/abe33/atom-pigments/commit/edeaf44cab21b555e3424d9710400432bdd42804), [#156](https://github.com/abe33/atom-pigments/issues/156))
+
 <a name="v0.24.2"></a>
 # v0.24.2 (2016-02-29)
 
@@ -25,7 +64,7 @@
 
 - Ensure that all custom pane items are serialized on pane split ([0d39d82c](https://github.com/abe33/atom-pigments/commit/0d39d82c192a24bbc3558fc10b9e3f04f79122c5), [#139](https://github.com/abe33/atom-pigments/issues/139))
 
-a name="v0.23.1"></a>
+<a name="v0.23.1"></a>
 # v0.23.1 (2016-02-03)
 
 ## Bug Fixes

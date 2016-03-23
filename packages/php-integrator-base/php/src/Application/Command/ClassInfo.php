@@ -17,7 +17,7 @@ use PhpIntegrator\Application\Command as BaseCommand;
 class ClassInfo extends BaseCommand
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected function attachOptions(OptionCollection $optionCollection)
     {
@@ -25,7 +25,7 @@ class ClassInfo extends BaseCommand
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected function process(ArrayAccess $arguments)
     {
@@ -35,8 +35,18 @@ class ClassInfo extends BaseCommand
             );
         }
 
-        $fqsen = $arguments['name']->value;
+        $result = $this->getClassInfo($arguments['name']->value);
 
+        return $this->outputJson(true, $result);
+    }
+
+    /**
+     * @param string $fqsen
+     *
+     * @return array
+     */
+    public function getClassInfo($fqsen)
+    {
         if ($fqsen[0] === '\\') {
             $fqsen = mb_substr($fqsen, 1);
         }
@@ -47,8 +57,6 @@ class ClassInfo extends BaseCommand
             throw new UnexpectedValueException('The structural element "' . $fqsen . '" was not found!');
         }
 
-        $result = $this->getIndexDataAdapter()->getStructuralElementInfo($id);
-
-        return $this->outputJson(true, $result);
+        return $this->getIndexDataAdapter()->getStructuralElementInfo($id);
     }
 }
