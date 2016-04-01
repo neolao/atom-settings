@@ -1,8 +1,8 @@
 {
   "name": "tree-view-git-branch",
   "main": "./lib/main.js",
-  "version": "0.0.6",
-  "description": "Change git branches from the tree view",
+  "version": "0.1.2",
+  "description": "Quickly change git branches from the tree view",
   "keywords": [
     "tree-view",
     "git",
@@ -21,16 +21,19 @@
     "array.from": "^0.2.0",
     "object-assign-shim": "^1.0.0"
   },
-  "readme": "# tree-view-git-branch package\n\nList branches and tags of git projects in the tree view. Double click to `git checkout` the branch.\n\n![screenshot](https://raw.githubusercontent.com/olmokramer/atom-tree-view-git-branch/master/screencast.gif)\n\n## Planned features\n\n* [ ] Create/delete branches\n* [ ] Auto-update branches\n* [ ] Manage remote branches\n* [ ] Manage tags\n* [ ] Merge branches\n* [ ] Add/reset changed files\n* [ ] Commit/push/pull\n\n* [ ] Rename package to `tree-view-git-control` when all of the above is done\n\nIf you can think of another feature, feel free to submit it in an issue over at the repo.\n\n[MIT](LICENSE.md) &copy; Olmo Kramer\n",
+  "devDependencies": {
+    "eslint": "^2.5.3"
+  },
+  "readme": "# tree-view-git-branch package\n\nQuickly switch git branches from the tree view.\n\n![screenshot](https://raw.githubusercontent.com/olmokramer/atom-tree-view-git-branch/master/screencast.gif)\n\n## Planned features\n\n* [ ] Better error messages, e.g. reason why checkout failed\n* [ ] Create/delete branches\n* [ ] Auto-update branches\n* [ ] Manage remote branches\n* [ ] Manage tags\n* [ ] Merge branches\n* [ ] Add/reset changed files\n* [ ] Commit/push/pull\n\nIf you can think of another feature, feel free to submit it in an issue over at the repo.\n\n[MIT](LICENSE.md) &copy; Olmo Kramer\n",
   "readmeFilename": "README.md",
   "bugs": {
     "url": "https://github.com/olmokramer/atom-tree-view-git-branch/issues"
   },
   "homepage": "https://github.com/olmokramer/atom-tree-view-git-branch#readme",
-  "_id": "tree-view-git-branch@0.0.6",
-  "_shasum": "2ddfc55c554dbf74ffc437cbfaf7bc8c008bd6b8",
-  "_resolved": "file:../d-116223-23930-261b56/package.tgz",
-  "_from": "../d-116223-23930-261b56/package.tgz",
+  "_id": "tree-view-git-branch@0.1.2",
+  "_shasum": "52ec65ba0c8feea6f452c39a0297e637e6c90a6c",
+  "_resolved": "file:../d-116230-72839-10dj4gr/package.tgz",
+  "_from": "../d-116230-72839-10dj4gr/package.tgz",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [

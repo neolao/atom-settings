@@ -1,5 +1,25 @@
 # Changelog
 
+## 2.9.3
+Just publishing to add the correct changelog. See 2.9.1
+
+## 2.9.2
+This is really 2.9.1 but a git issue messed up the version number.
+
+## 2.9.1
+- Fixes [#209](https://github.com/danielbrodin/atom-project-manager/issues/209)
+- Now adds and removes paths when added to the projects settings.
+
+## 2.9.0
+- Added some prettifying of autosuggested project title.
+- Bugfixes
+
+## 2.8.0
+- You can now sort projects by the last modification date of the root path.
+- The Project Manager will now look for a local settings file (`project.cson`) for the currently active project and merge the settings with what's in `projects.cson`.
+- Plus some other behind the scenes stuff which could mean you have to restart Atom for everything to work as it should.
+Thanks to [@mrodalgaard](https://github.com/mrodalgaard) for one of the fixes.
+
 ## 2.7.6
 Fix [#195](https://github.com/danielbrodin/atom-project-manager/issues/195)
 

@@ -45,6 +45,8 @@
       "tab-smart-sort"
       "zentabs"
       "autohide-tree-view"
+      "php-integrator-symbol-viewer"
+      "tree-view-git-branch"
     ]
     excludeVcsIgnoredPaths: false
     followSymlinks: true
@@ -74,6 +76,7 @@
     sourceFilter: "user"
   "exception-reporting":
     userId: "5c1b3e91-177a-1a3d-e8d5-6f5458113034"
+  "file-icons": {}
   fonts:
     fontFamily: "DejaVu Mono"
   "git-blame":
@@ -133,11 +136,41 @@
     textOpacity: 0.3
   "one-dark-ui":
     layoutMode: "Compact"
+  "php-getters-setters":
+    getterTemplate: '''
+  \    /**
+       * Get the %description%
+       *
+       * @return  %type%        The %description%
+       */
+      %scope% function %methodName%()
+      {
+          return $this->%variable%;
+      }
+
+
+    '''
+    setterTemplate: '''
+  \    /**
+       * Set the %description%
+       *
+       * @param   %type%    $%variable%     The %description%
+       * @return  self
+       */
+      %scope% function %methodName%(%typeHint%$%variable%)
+      {
+          $this->%variable% = $%variable%;
+          return $this;
+      }
+
+
+    '''
   "php-integrator-base": {}
   "php-integrator-symbol-viewer":
     defaultShowInherited: true
   pigments: {}
-  "project-manager": {}
+  "project-manager":
+    sortBy: "title"
   "release-notes":
     viewedVersion: "0.94.0"
   "symbols-tree-view":
@@ -163,13 +196,6 @@
       "/vendor/"
       "/vendor_front/"
       "/web/"
-      "/src/Shamp/"
-      "/src/Udg/AdminBundle/"
-      "/src/Udg/ApiBundle/"
-      "/src/Udg/CoreBundle/"
-      "/src/Udg/ProfilBundle/"
-      "/src/Udg/StatsBundle/"
-      "/src/Udg/WebBundle/"
     ]
   "tool-bar":
     visible: false
