@@ -47,6 +47,7 @@
       "autohide-tree-view"
       "php-integrator-symbol-viewer"
       "tree-view-git-branch"
+      "linter-phpcs"
     ]
     excludeVcsIgnoredPaths: false
     followSymlinks: true
@@ -67,7 +68,7 @@
   editor:
     backUpBeforeSaving: true
     fontFamily: "DejaVu Sans Mono"
-    fontSize: 19
+    fontSize: 16
     invisibles: {}
     preferredLineLength: 120
     showInvisibles: true
@@ -138,7 +139,7 @@
     layoutMode: "Compact"
   "php-getters-setters":
     getterTemplate: '''
-  \    /**
+      /**
        * Get the %description%
        *
        * @return  %type%        The %description%
@@ -147,11 +148,11 @@
       {
           return $this->%variable%;
       }
-
-
+            
+            
     '''
     setterTemplate: '''
-  \    /**
+      /**
        * Set the %description%
        *
        * @param   %type%    $%variable%     The %description%
@@ -162,8 +163,8 @@
           $this->%variable% = $%variable%;
           return $this;
       }
-
-
+            
+            
     '''
   "php-integrator-base": {}
   "php-integrator-symbol-viewer":
