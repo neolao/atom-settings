@@ -1,10 +1,6 @@
-fitnext:
-  title: "Fitnext Site marketing (ancien)"
+solfege:
+  title: "Solfege"
   paths: [
-    "/Users/eric/workspace/fitnext"
-  ]
-fitnextblog:
-  title: "Fitnext Blog (wordpress)"
-  paths: [
-    "/Users/eric/workspace/fitnext-blog"
+    "/Users/neolao/workspace/solfege",
+    "/Users/neolao/.atom"
   ]
