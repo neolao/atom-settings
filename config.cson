@@ -68,7 +68,7 @@
   editor:
     backUpBeforeSaving: true
     fontFamily: "DejaVu Sans Mono"
-    fontSize: 16
+    fontSize: 20
     invisibles: {}
     preferredLineLength: 120
     showInvisibles: true
