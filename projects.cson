@@ -1,33 +1,7 @@
-fitnext:
-  title: "Fitnext Site marketing (ancien)"
-  paths: [
-    "/Users/eric/workspace/fitnext"
-  ]
-fitnextblog:
-  title: "Fitnext Blog (wordpress)"
-  paths: [
-    "/Users/eric/workspace/fitnext-blog"
-  ]
-"fitnextespacecoaché":
-  title: "Fitnext Espace coaché"
-  paths: [
-    "/Users/eric/workspace/fitnext-app"
-  ]
-fitnextnextgeneration:
-  title: "Fitnext Next Generation"
-  paths: [
-    "/Users/eric/workspace/fitnext-ng"
-  ]
-"fitnext-skeleton":
-  title: "fitnext-skeleton"
+fitnextskeleton:
+  title: "Fitnext Skeleton"
   paths: [
     "/Users/eric/workspace/fitnext-skeleton"
-    "/Users/eric/workspace/symfony-backoffice-bundle"
-    "/Users/eric/workspace/symfony-user-bundle"
     "/Users/eric/workspace/symfony-ecommerce-bundle"
-  ]
-"symfony-user-bundle":
-  title: "symfony-user-bundle"
-  paths: [
-    "/Users/eric/workspace/symfony-user-bundle"
+    "/Users/eric/workspace/symfony-backoffice-bundle"
   ]

@@ -82,6 +82,7 @@
     fontFamily: "DejaVu Mono"
   "git-blame":
     columnWidth: 300
+  "git-log": {}
   "git-plus": {}
   "github-issues":
     username: "udg-eric"
@@ -139,32 +140,32 @@
     layoutMode: "Compact"
   "php-getters-setters":
     getterTemplate: '''
-      /**
-       * Get the %description%
-       *
-       * @return  %type%        The %description%
-       */
-      %scope% function %methodName%()
-      {
-          return $this->%variable%;
-      }
-            
-            
+\    /**
+\     * Get the %description%
+\     *
+\     * @return  %type%        The %description%
+\     */
+\    %scope% function %methodName%()
+\    {
+\        return $this->%variable%;
+\    }
+
+
     '''
     setterTemplate: '''
-      /**
-       * Set the %description%
-       *
-       * @param   %type%    $%variable%     The %description%
-       * @return  self
-       */
-      %scope% function %methodName%(%typeHint%$%variable%)
-      {
-          $this->%variable% = $%variable%;
-          return $this;
-      }
-            
-            
+\    /**
+\     * Set the %description%
+\     *
+\     * @param   %type%    $%variable%     The %description%
+\     * @return  self
+\     */
+\    %scope% function %methodName%(%typeHint%$%variable%)
+\    {
+\        $this->%variable% = $%variable%;
+\        return $this;
+\    }
+
+
     '''
   "php-integrator-base": {}
   "php-integrator-symbol-viewer":
