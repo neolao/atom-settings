@@ -38,16 +38,13 @@
       "welcome"
       "styleguide"
       "package-generator"
-      "open-on-github"
       "metrics"
       "language-toml"
-      "language-objective-c"
-      "tab-smart-sort"
-      "zentabs"
       "autohide-tree-view"
       "php-integrator-symbol-viewer"
-      "tree-view-git-branch"
       "linter-phpcs"
+      "language-clojure"
+      "language-csharp"
     ]
     excludeVcsIgnoredPaths: false
     followSymlinks: true
@@ -80,6 +77,10 @@
   "file-icons": {}
   fonts:
     fontFamily: "DejaVu Mono"
+  "fuzzy-finder":
+    ignoredNames: [
+      ".git"
+    ]
   "git-blame":
     columnWidth: 300
   "git-log": {}
@@ -140,32 +141,32 @@
     layoutMode: "Compact"
   "php-getters-setters":
     getterTemplate: '''
-\    /**
-\     * Get the %description%
-\     *
-\     * @return  %type%        The %description%
-\     */
-\    %scope% function %methodName%()
-\    {
-\        return $this->%variable%;
-\    }
-
-
+      /**
+       * Get the %description%
+       *
+       * @return  %type%        The %description%
+       */
+      %scope% function %methodName%()
+      {
+          return $this->%variable%;
+      }
+            
+            
     '''
     setterTemplate: '''
-\    /**
-\     * Set the %description%
-\     *
-\     * @param   %type%    $%variable%     The %description%
-\     * @return  self
-\     */
-\    %scope% function %methodName%(%typeHint%$%variable%)
-\    {
-\        $this->%variable% = $%variable%;
-\        return $this;
-\    }
-
-
+      /**
+       * Set the %description%
+       *
+       * @param   %type%    $%variable%     The %description%
+       * @return  self
+       */
+      %scope% function %methodName%(%typeHint%$%variable%)
+      {
+          $this->%variable% = $%variable%;
+          return $this;
+      }
+            
+            
     '''
   "php-integrator-base": {}
   "php-integrator-symbol-viewer":
