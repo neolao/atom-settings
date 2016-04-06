@@ -81,6 +81,8 @@
   "fuzzy-finder":
     ignoredNames: [
       ".git"
+      "**/node_modules/*"
+      "**/vendor/*"
     ]
   "git-blame":
     columnWidth: 300
@@ -151,8 +153,8 @@
       {
           return $this->%variable%;
       }
-            
-            
+
+
     '''
     setterTemplate: '''
       /**
@@ -166,8 +168,8 @@
           $this->%variable% = $%variable%;
           return $this;
       }
-            
-            
+
+
     '''
   "php-integrator-base": {}
   "php-integrator-symbol-viewer":
