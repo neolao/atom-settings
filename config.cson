@@ -52,6 +52,7 @@
       "symbols-tree-view"
       "git-blame"
       "es-identifier-highlight"
+      "zentabs"
     ]
     projectHome: "/Users/eric/workspace"
     themes: [
@@ -153,8 +154,8 @@
       {
           return $this->%variable%;
       }
-
-
+      
+      
     '''
     setterTemplate: '''
       /**
@@ -168,8 +169,8 @@
           $this->%variable% = $%variable%;
           return $this;
       }
-
-
+      
+      
     '''
   "php-integrator-base": {}
   "php-integrator-symbol-viewer":
@@ -185,24 +186,32 @@
     showIcons: true
   "terminal-panel": {}
   "todo-show":
-    findTheseRegexes: [
-      "TODOs"
-      "/@todo ?:?(.+$)/g"
-      "FIXMEs"
-      "/(^.*FIXME.+$)/g"
-      "TODOs"
-      "/(^.*TODO.+$)/g"
+    findTheseTodos: [
+      "TODO"
+      "FIXME"
+      "@fixme"
+      "@todo"
+      "@idea"
+      "@note"
+      "@hack"
     ]
+    findUsingRegex: "/(${TODOS}):?\\d*($|\\s.*$)/g"
     ignoreThesePaths: [
-      "/app/"
-      "/data/"
-      "/docs/"
-      "/scripts/"
-      "/tests"
-      "/vendor/"
-      "/vendor_front/"
-      "/web/"
+      "app"
+      "data"
+      "docs"
+      "scripts"
+      "tests"
+      "vendor"
+      "vendor_front"
+      "web"
+      "node_modules"
+      ".git"
+      "*.map"
+      "Resources/public/assets/build/js/*.js"
     ]
+    saveOutputAs: "Table"
+    sortBy: "Tags"
   "tool-bar":
     visible: false
   toolbar:
@@ -214,7 +223,7 @@
   whitespace:
     ignoreWhitespaceOnCurrentLine: false
   zentabs:
-    maximumOpenedTabs: 10
+    maximumOpenedTabs: 8
     neverCloseDirty: true
     neverCloseNew: true
     neverCloseUnsaved: true
