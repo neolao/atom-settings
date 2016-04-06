@@ -51,6 +51,7 @@
     packagesWithKeymapsDisabled: [
       "symbols-tree-view"
       "git-blame"
+      "es-identifier-highlight"
     ]
     projectHome: "/Users/eric/workspace"
     themes: [
