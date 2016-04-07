@@ -40,11 +40,10 @@
       "package-generator"
       "metrics"
       "language-toml"
-      "autohide-tree-view"
-      "php-integrator-symbol-viewer"
       "linter-phpcs"
       "language-clojure"
       "language-csharp"
+      "autohide-tree-view"
     ]
     excludeVcsIgnoredPaths: false
     followSymlinks: true
@@ -53,6 +52,7 @@
       "git-blame"
       "es-identifier-highlight"
       "zentabs"
+      "php-integrator-symbol-viewer"
     ]
     projectHome: "/Users/eric/workspace"
     themes: [
@@ -172,7 +172,13 @@
       
       
     '''
+  "php-integrator-autocomplete-plus":
+    disableBuiltinAutocompletion: false
+    insertNewlinesForUseStatements: true
   "php-integrator-base": {}
+  "php-integrator-navigation":
+    navigationRequireAltKey: false
+    navigationRequireMetaKey: true
   "php-integrator-symbol-viewer":
     defaultShowInherited: true
   pigments: {}
@@ -235,4 +241,8 @@
     preferredLineLength: 120
 ".js.jsx.source":
   editor:
+    preferredLineLength: 120
+".source.yaml":
+  editor:
+    autoIndentOnPaste: true
     preferredLineLength: 120
