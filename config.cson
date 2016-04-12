@@ -53,6 +53,7 @@
       "es-identifier-highlight"
       "zentabs"
       "php-integrator-symbol-viewer"
+      "aligner"
     ]
     projectHome: "/Users/eric/workspace"
     themes: [
@@ -116,6 +117,7 @@
       "phpcs"
     ]
     showErrorInline: true
+    showErrorPanel: false
     statusBar: "Show all errors"
   "linter-php": {}
   "linter-phpcs":
@@ -123,6 +125,8 @@
     executablePath: "/Users/eric/pear/bin/phpcs"
     phpcsExecutablePath: "/usr/bin/phpcs"
     standard: "PSR2"
+  "linter-scss-lint":
+    disableWhenNoConfigFileInPath: true
   "markdown-preview":
     useGitHubStyle: true
   "markdown-preview-opener":
