@@ -9,7 +9,6 @@ fitnextng:
   title: "Fitnext Ng"
   paths: [
     "/Users/eric/workspace/fitnext-ng"
-    "/Users/eric/workspace/fitnext-skeleton"
     "/Users/eric/workspace/symfony-ecommerce-bundle"
     "/Users/eric/workspace/symfony-service-access-bundle"
     "/Users/eric/workspace/symfony-backoffice-bundle"

@@ -46,6 +46,12 @@
         &.file > .name {
             color: #fff;
         }
+        &.status-modified {
+            &.directory > .header .name,
+            &.file > .name {
+                color: #ff0;
+            }
+        }
     }
 }
 @media screen and (min-width: 1600px) {
@@ -137,6 +143,52 @@ atom-text-editor {
     background: url("atom://neolao/images/editor-origin.jpg");
     background-size: cover;
 
+    &::shadow {
+        .gutter {
+            background: rgba(50, 50, 50, 0.3);
+            //background: transparent;
+        }
+        /*
+        .gutter[gutter-name="line-number"] {
+            border-right: solid 1px #333;
+        }
+        .gutter[gutter-name="linter"] {
+        }
+        .line-number {
+            padding-left: 10px;
+            &:after {
+                content: "";
+                display: block;
+                position: absolute;
+                left: 0;
+                width: 100%;
+                height: 1px;
+                background: #555;
+            }
+        }
+        */
+       .line-number.cursor-line {
+            background: #000;
+            color: #ff0;
+            &:before, &:after {
+                content: "";
+                display: block;
+                position: absolute;
+                left: 0;
+                width: 100%;
+                height: 1px;
+                background: #555;
+            }
+       }
+    }
+}
+background-tips {
+    background: #000 url("atom://neolao/images/editor-origin.jpg");
+    background-size: cover;
+
+    .message {
+        color: rgba(255, 255, 255, 0.6);
+    }
 }
 
 /*
