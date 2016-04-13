@@ -17,9 +17,34 @@
  */
 .tree-view {
     font-size: 12px;
+    background: url("atom://neolao/images/tree-view.png") right top;
+    background-repeat: repeat-y;
 
     &.full-menu.list-tree {
-        background: #000;
+    }
+
+    .project-root {
+        margin-top: 1em;
+        &:before {
+        }
+        & > .header {
+            height: auto;
+            border-top: solid 1px #999;
+            border-bottom: solid 1px #999;
+            background: rgba(70, 70, 70, .5);
+        }
+    }
+
+    // Sélection
+    .selected {
+        &:before {
+            background: #000;
+            border-top: solid 1px #333;
+            border-bottom: solid 1px #333;
+        }
+        .name {
+            color: #fff;
+        }
     }
 }
 @media screen and (min-width: 1600px) {
@@ -108,6 +133,9 @@ atom-text-editor .gutter .line-number {
 // The editor
 atom-text-editor {
     // font-family: "DejaVu Sans Mono" !important;
+    background: url("atom://neolao/images/editor-origin.jpg");
+    background-size: cover;
+
 }
 
 /*
