@@ -143,7 +143,24 @@ atom-text-editor {
     background: url("atom://neolao/images/editor-origin.jpg");
     background-size: cover;
 
+
     &::shadow {
+        // Source
+        .source {
+            text-shadow: 2px 2px 0px #000, 2px -2px 0px #000, -2px 2px 0px #000, -2px -2px 0px #000;
+        }
+
+        // Comment
+        .comment {
+
+        }
+
+        // Invisible character
+        .invisible-character {
+            text-shadow: none;
+        }
+
+        // Gutter
         .gutter {
             background: rgba(50, 50, 50, 0.3);
             //background: transparent;
@@ -339,7 +356,7 @@ atom-text-editor::shadow .cursor {
 
 // Package: Highlight-line
 atom-text-editor::shadow .highlight.selection .region {
-    background: rgba(255, 255, 0, 0.15);
+    background: rgba(255, 255, 0, 0.3);
     /*
     background: rgba(255, 255, 0, 0.1);
 
