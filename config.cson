@@ -44,6 +44,7 @@
       "language-clojure"
       "language-csharp"
       "autohide-tree-view"
+      "autocomplete-ctags"
     ]
     excludeVcsIgnoredPaths: false
     followSymlinks: true
@@ -54,6 +55,7 @@
       "zentabs"
       "php-integrator-symbol-viewer"
       "aligner"
+      "linter"
     ]
     projectHome: "/Users/eric/workspace"
     themes: [
@@ -111,13 +113,12 @@
     matchEditorFont: true
     spaciousMode: true
   linter:
-    errorPanelHeight: 32
+    errorPanelHeight: 200
     ignoredLinterErrors: [
       "php"
       "phpcs"
     ]
     showErrorInline: true
-    showErrorPanel: false
     statusBar: "Show all errors"
   "linter-php": {}
   "linter-phpcs":
