@@ -45,6 +45,7 @@
       "language-csharp"
       "autohide-tree-view"
       "autocomplete-ctags"
+      "language-gfm"
     ]
     excludeVcsIgnoredPaths: false
     followSymlinks: true
@@ -132,6 +133,10 @@
     useGitHubStyle: true
   "markdown-preview-opener":
     closePreviewWhenClosingEditor: true
+  "markdown-table-formatter":
+    formatOnSave: false
+  "markdown-writer":
+    relativeImagePath: true
   "merge-conflicts":
     gitPath: "/usr/bin/git"
   metrics:
@@ -151,9 +156,9 @@
   "php-getters-setters":
     getterTemplate: '''
       /**
-       * Get the %description%
+       * Get %description%
        *
-       * @return  %type%        The %description%
+       * @return  %type%        %description%
        */
       %scope% function %methodName%()
       {
@@ -164,9 +169,9 @@
     '''
     setterTemplate: '''
       /**
-       * Set the %description%
+       * Set %description%
        *
-       * @param   %type%    $%variable%     The %description%
+       * @param   %type%    $%variable%     %description%
        * @return  self
        */
       %scope% function %methodName%(%typeHint%$%variable%)
@@ -235,7 +240,6 @@
     ignoreWhitespaceOnCurrentLine: false
   zentabs:
     maximumOpenedTabs: 8
-    neverCloseDirty: true
     neverCloseNew: true
     neverCloseUnsaved: true
 ".babel.regexp.source":
