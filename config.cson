@@ -26,6 +26,8 @@
     includeCompletionsFromAllBuffers: true
   "autocomplete-plus":
     autoActivationDelay: 500
+    backspaceTriggersAutocomplete: true
+    defaultProvider: "Fuzzy"
     includeCompletionsFromAllBuffers: true
   "autohide-tree-view":
     animationSpeed: 0
@@ -40,12 +42,12 @@
       "package-generator"
       "metrics"
       "language-toml"
-      "linter-phpcs"
       "language-clojure"
       "language-csharp"
       "autohide-tree-view"
       "autocomplete-ctags"
       "language-gfm"
+      "linter-php"
     ]
     excludeVcsIgnoredPaths: false
     followSymlinks: true
@@ -121,11 +123,11 @@
     ]
     showErrorInline: true
     statusBar: "Show all errors"
-  "linter-php": {}
+  "linter-php":
+    executablePath: "/usr/local/bin/php"
   "linter-phpcs":
     enableWarning: 1
-    executablePath: "/Users/eric/pear/bin/phpcs"
-    phpcsExecutablePath: "/usr/bin/phpcs"
+    executablePath: "/Users/eric/workspace/vendor/bin/phpcs"
     standard: "PSR2"
   "linter-scss-lint":
     disableWhenNoConfigFileInPath: true
