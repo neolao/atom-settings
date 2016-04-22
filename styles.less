@@ -15,6 +15,9 @@
 /**
  * The tree view
  */
+atom-panel-container.left {
+    // border-right: solid 2px rgba(70, 70, 70, .5);
+}
 .tree-view {
     font-size: 12px;
     background: url("atom://neolao/images/tree-view.png") right top;
@@ -383,6 +386,34 @@ atom-text-editor::shadow .line.highlight-line-multi-line-solid-bottom {
         height: 1px;
         background: #ff0;
         box-shadow: 0 0 10px #ff0;
+    }
+}
+
+
+// Package: PHP Integrator Symbol viewer
+atom-php-integrator-symbol-viewer {
+    font-size: 10px;
+    width: 300px;
+    background: url("atom://neolao/images/symbols-view.png") right top;
+    background-repeat: repeat-y;
+    border-left: solid 2px rgba(50, 50, 50, 0.6);
+}
+@media screen and (min-width: 1300px) {
+    atom-php-integrator-symbol-viewer {
+        font-size: 14px;
+        width: 300px;
+    }
+}
+@media screen and (min-width: 1600px) {
+    atom-php-integrator-symbol-viewer {
+        font-size: 16px;
+        width: 300px;
+    }
+}
+@media screen and (min-width: 2000px) {
+    atom-php-integrator-symbol-viewer {
+        font-size: 18px;
+        width: 400px;
     }
 }
 

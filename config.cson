@@ -48,6 +48,7 @@
       "autocomplete-ctags"
       "language-gfm"
       "linter-php"
+      "php-analyser"
     ]
     excludeVcsIgnoredPaths: false
     followSymlinks: true
@@ -166,8 +167,8 @@
       {
           return $this->%variable%;
       }
-      
-      
+            
+            
     '''
     setterTemplate: '''
       /**

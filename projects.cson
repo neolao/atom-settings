@@ -20,3 +20,18 @@ symfonyserviceaccessbundle:
   paths: [
     "/Users/eric/workspace/symfony-service-access-bundle"
   ]
+symfonyecommercebundle:
+  title: "Symfony Ecommerce Bundle"
+  paths: [
+    "/Users/eric/workspace/symfony-ecommerce-bundle"
+  ]
+symfonybackofficebundle:
+  title: "Symfony Backoffice Bundle"
+  paths: [
+    "/Users/eric/workspace/symfony-backoffice-bundle"
+  ]
+symfonyuserbundle:
+  title: "Symfony User Bundle"
+  paths: [
+    "/Users/eric/workspace/symfony-user-bundle"
+  ]
