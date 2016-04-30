@@ -26,6 +26,8 @@
     includeCompletionsFromAllBuffers: true
   "autocomplete-plus":
     autoActivationDelay: 500
+    backspaceTriggersAutocomplete: true
+    defaultProvider: "Fuzzy"
     includeCompletionsFromAllBuffers: true
   "autohide-tree-view":
     animationSpeed: 0
@@ -38,22 +40,26 @@
       "welcome"
       "styleguide"
       "package-generator"
-      "open-on-github"
       "metrics"
       "language-toml"
-      "language-objective-c"
-      "tab-smart-sort"
-      "zentabs"
+      "language-clojure"
+      "language-csharp"
       "autohide-tree-view"
-      "php-integrator-symbol-viewer"
-      "tree-view-git-branch"
-      "linter-phpcs"
+      "autocomplete-ctags"
+      "language-gfm"
+      "linter-php"
+      "php-analyser"
     ]
     excludeVcsIgnoredPaths: false
     followSymlinks: true
     packagesWithKeymapsDisabled: [
       "symbols-tree-view"
       "git-blame"
+      "es-identifier-highlight"
+      "zentabs"
+      "php-integrator-symbol-viewer"
+      "aligner"
+      "linter"
     ]
     projectHome: "/Users/eric/workspace"
     themes: [
@@ -68,7 +74,7 @@
   editor:
     backUpBeforeSaving: true
     fontFamily: "DejaVu Sans Mono"
-    fontSize: 16
+    fontSize: 20
     invisibles: {}
     preferredLineLength: 120
     showInvisibles: true
@@ -80,8 +86,15 @@
   "file-icons": {}
   fonts:
     fontFamily: "DejaVu Mono"
+  "fuzzy-finder":
+    ignoredNames: [
+      ".git"
+      "**/node_modules/*"
+      "**/vendor/*"
+    ]
   "git-blame":
     columnWidth: 300
+  "git-log": {}
   "git-plus": {}
   "github-issues":
     username: "udg-eric"
@@ -104,23 +117,29 @@
     matchEditorFont: true
     spaciousMode: true
   linter:
-    errorPanelHeight: 32
+    errorPanelHeight: 200
     ignoredLinterErrors: [
       "php"
       "phpcs"
     ]
     showErrorInline: true
     statusBar: "Show all errors"
-  "linter-php": {}
+  "linter-php":
+    executablePath: "/usr/local/bin/php"
   "linter-phpcs":
     enableWarning: 1
-    executablePath: "/Users/eric/pear/bin/phpcs"
-    phpcsExecutablePath: "/usr/bin/phpcs"
+    executablePath: "/Users/eric/workspace/vendor/bin/phpcs"
     standard: "PSR2"
+  "linter-scss-lint":
+    disableWhenNoConfigFileInPath: true
   "markdown-preview":
     useGitHubStyle: true
   "markdown-preview-opener":
     closePreviewWhenClosingEditor: true
+  "markdown-table-formatter":
+    formatOnSave: false
+  "markdown-writer":
+    relativeImagePath: true
   "merge-conflicts":
     gitPath: "/usr/bin/git"
   metrics:
@@ -140,9 +159,9 @@
   "php-getters-setters":
     getterTemplate: '''
       /**
-       * Get the %description%
+       * Get %description%
        *
-       * @return  %type%        The %description%
+       * @return  %type%        %description%
        */
       %scope% function %methodName%()
       {
@@ -153,9 +172,9 @@
     '''
     setterTemplate: '''
       /**
-       * Set the %description%
+       * Set %description%
        *
-       * @param   %type%    $%variable%     The %description%
+       * @param   %type%    $%variable%     %description%
        * @return  self
        */
       %scope% function %methodName%(%typeHint%$%variable%)
@@ -163,10 +182,16 @@
           $this->%variable% = $%variable%;
           return $this;
       }
-            
-            
+      
+      
     '''
+  "php-integrator-autocomplete-plus":
+    disableBuiltinAutocompletion: false
+    insertNewlinesForUseStatements: true
   "php-integrator-base": {}
+  "php-integrator-navigation":
+    navigationRequireAltKey: false
+    navigationRequireMetaKey: true
   "php-integrator-symbol-viewer":
     defaultShowInherited: true
   pigments: {}
@@ -180,24 +205,32 @@
     showIcons: true
   "terminal-panel": {}
   "todo-show":
-    findTheseRegexes: [
-      "TODOs"
-      "/@todo ?:?(.+$)/g"
-      "FIXMEs"
-      "/(^.*FIXME.+$)/g"
-      "TODOs"
-      "/(^.*TODO.+$)/g"
+    findTheseTodos: [
+      "TODO"
+      "FIXME"
+      "@fixme"
+      "@todo"
+      "@idea"
+      "@note"
+      "@hack"
     ]
+    findUsingRegex: "/(${TODOS}):?\\d*($|\\s.*$)/g"
     ignoreThesePaths: [
-      "/app/"
-      "/data/"
-      "/docs/"
-      "/scripts/"
-      "/tests"
-      "/vendor/"
-      "/vendor_front/"
-      "/web/"
+      "app"
+      "data"
+      "docs"
+      "scripts"
+      "tests"
+      "vendor"
+      "vendor_front"
+      "web"
+      "node_modules"
+      ".git"
+      "*.map"
+      "Resources/public/assets/build/js/*.js"
     ]
+    saveOutputAs: "Table"
+    sortBy: "Tags"
   "tool-bar":
     visible: false
   toolbar:
@@ -209,8 +242,7 @@
   whitespace:
     ignoreWhitespaceOnCurrentLine: false
   zentabs:
-    maximumOpenedTabs: 10
-    neverCloseDirty: true
+    maximumOpenedTabs: 8
     neverCloseNew: true
     neverCloseUnsaved: true
 ".babel.regexp.source":
@@ -221,4 +253,8 @@
     preferredLineLength: 120
 ".js.jsx.source":
   editor:
+    preferredLineLength: 120
+".source.yaml":
+  editor:
+    autoIndentOnPaste: true
     preferredLineLength: 120
