@@ -397,22 +397,36 @@ atom-php-integrator-symbol-viewer {
     background: url("atom://neolao/images/symbols-view.png") right top;
     background-repeat: repeat-y;
     border-left: solid 2px rgba(50, 50, 50, 0.6);
+
+    .details {
+        background: #efefef !important;
+
+        h6 {
+            font-weight: bold;
+            border-bottom: solid 1px #000;
+            font-size: 1em;
+        }
+        p {
+            font-size: .8em;
+            font-family: monospace;
+        }
+    }
 }
 @media screen and (min-width: 1300px) {
     atom-php-integrator-symbol-viewer {
-        font-size: 14px;
+        font-size: 12px;
         width: 300px;
     }
 }
 @media screen and (min-width: 1600px) {
     atom-php-integrator-symbol-viewer {
-        font-size: 16px;
+        font-size: 13px;
         width: 300px;
     }
 }
 @media screen and (min-width: 2000px) {
     atom-php-integrator-symbol-viewer {
-        font-size: 18px;
+        font-size: 14px;
         width: 400px;
     }
 }

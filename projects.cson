@@ -35,3 +35,8 @@ symfonyuserbundle:
   paths: [
     "/Users/eric/workspace/symfony-user-bundle"
   ]
+symfonyfitnextenginebundle:
+  title: "Symfony Fitnext Engine Bundle"
+  paths: [
+    "/Users/eric/workspace/symfony-fitnext-engine-bundle"
+  ]

@@ -156,34 +156,36 @@
     textOpacity: 0.3
   "one-dark-ui":
     layoutMode: "Compact"
+
+  # Package PHP Getters/Setters
   "php-getters-setters":
     getterTemplate: '''
-      /**
-       * Get %description%
-       *
-       * @return  %type%        %description%
-       */
-      %scope% function %methodName%()
-      {
-          return $this->%variable%;
-      }
-            
-            
+/**
+ * Get %description%
+ *
+ * @return  %type%        %description%
+ */
+%scope% function %methodName%()
+{
+    return $this->%variable%;
+}
+
+
     '''
     setterTemplate: '''
-      /**
-       * Set %description%
-       *
-       * @param   %type%    $%variable%     %description%
-       * @return  self
-       */
-      %scope% function %methodName%(%typeHint%$%variable%)
-      {
-          $this->%variable% = $%variable%;
-          return $this;
-      }
-      
-      
+/**
+ * Set %description%
+ *
+ * @param   %type%    $%variable%     %description%
+ * @return  self
+ */
+%scope% function %methodName%(%typeHint%$%variable%)
+{
+    $this->%variable% = $%variable%;
+    return $this;
+}
+
+
     '''
   "php-integrator-autocomplete-plus":
     disableBuiltinAutocompletion: false
@@ -195,6 +197,8 @@
   "php-integrator-symbol-viewer":
     defaultShowInherited: true
   pigments: {}
+  "plantuml-preview":
+    jarLocation: "/usr/local/Cellar/plantuml/8037/plantuml.8037.jar"
   "project-manager":
     sortBy: "title"
   "release-notes":
