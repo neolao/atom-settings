@@ -121,6 +121,8 @@
     fontWeight: "Regular"
     matchEditorFont: true
     spaciousMode: true
+  "lazy-motion":
+    clearSearchTextOnEverySearch: false
   linter:
     errorPanelHeight: 200
     ignoredLinterErrors: [
@@ -210,6 +212,13 @@
     viewedVersion: "0.94.0"
   "symbols-tree-view":
     zAutoHideTypes: "variable class"
+  tablr:
+    csvEditor:
+      eof: true
+      header: true
+    tableEditor:
+      minimumRowHeight: 24
+      rowHeight: 36
   tabs:
     showIcons: true
   "terminal-panel": {}
@@ -257,6 +266,18 @@
 ".babel.regexp.source":
   editor:
     preferredLineLength: 120
+".csv.semicolon.text":
+  editor:
+    preferredLineLength: 120
+    tabLength: 4
+".csv.tabular.text":
+  editor:
+    preferredLineLength: 120
+    tabLength: 4
+".csv.text":
+  editor:
+    preferredLineLength: 120
+    tabLength: 4
 ".diff.source":
   editor:
     preferredLineLength: 120
@@ -267,3 +288,7 @@
   editor:
     autoIndentOnPaste: true
     preferredLineLength: 120
+".tabular.text.tsv":
+  editor:
+    preferredLineLength: 120
+    tabLength: 4

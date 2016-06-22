@@ -431,6 +431,42 @@ atom-php-integrator-symbol-viewer {
     }
 }
 
+// Package: Tablr
+atom-pane .tab-bar .tab[data-type="CSVEditor"] .title[data-path]::before {
+    font-size: 16px !important;
+}
+
+tablr-editor::shadow {
+    .tablr-header-content,
+    .tablr-header-row,
+    .tablr-header-wrapper,
+    tablr-header-cell,
+    .active-column.selected {
+        font-weight: bold !important;
+        background: black;
+    }
+    tablr-header-cell.active-column.selected {
+        background: rgba(255, 255, 0, .2);
+    }
+
+    .tablr-gutter {
+        background: black;
+    }
+    tablr-gutter-cell.active-row {
+        background: rgba(255, 255, 0, .2);
+    }
+}
+tablr-editor {
+    font-size: 14px;
+
+    atom-text-editor {
+        background: red;
+
+        &::before {
+            white-space: nowrap;
+        }
+    }
+}
 
 // Package: Terminal
 .terminal {
