@@ -47,6 +47,9 @@
 ".autocomplete-plus input.hidden-input":
     "enter": "autocomplete-plus:confirm"
 
+# Projets
+'.platform-darwin atom-text-editor':
+  'ctrl-cmd-p': 'project-plus:toggle-project-finder'
 
 # Bug bizarre avec Docblockr
 #'.editor:not(.mini)':

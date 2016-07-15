@@ -7,6 +7,8 @@
     autoToggle: false
   "atom-beautify":
     _analyticsUserId: "3e27096e-2708-460f-96c8-139f3245429c"
+    general:
+      _analyticsUserId: "892ee795-b8f7-413e-8d0a-cc9b4a13003f"
   "atom-ctags":
     autoBuildTagsWhenActive: true
     buildTimeout: 60000
@@ -53,6 +55,8 @@
       "php-analyser"
       "bookmark-panel"
       "nav-panel"
+      "language-javascript-jsx"
+      "project-manager"
     ]
     excludeVcsIgnoredPaths: false
     followSymlinks: true
@@ -61,10 +65,12 @@
       "git-blame"
       "es-identifier-highlight"
       "zentabs"
-      "php-integrator-symbol-viewer"
       "aligner"
       "linter"
       "nav-panel"
+      "php-integrator-symbol-viewer"
+      "plantuml-preview"
+      "plantuml-viewer"
     ]
     projectHome: "/Users/eric/workspace"
     themes: [
@@ -79,7 +85,7 @@
   editor:
     backUpBeforeSaving: true
     fontFamily: "DejaVu Sans Mono"
-    fontSize: 20
+    fontSize: 21
     invisibles: {}
     preferredLineLength: 120
     showInvisibles: true
@@ -196,7 +202,6 @@
     '''
   "php-integrator-autocomplete-plus":
     disableBuiltinAutocompletion: false
-    insertNewlinesForUseStatements: true
   "php-integrator-base": {}
   "php-integrator-navigation":
     navigationRequireAltKey: false
@@ -208,6 +213,9 @@
     jarLocation: "/usr/local/Cellar/plantuml/8037/plantuml.8037.jar"
   "project-manager":
     sortBy: "title"
+  "project-plus":
+    projectHome: " /Users/eric/workspace"
+    showPath: true
   "release-notes":
     viewedVersion: "0.94.0"
   "symbols-tree-view":
@@ -263,9 +271,14 @@
     maximumOpenedTabs: 8
     neverCloseNew: true
     neverCloseUnsaved: true
+".attribute-values.js.jsx.source":
+  editor:
+    preferredLineLength: 120
+    tabLength: 4
 ".babel.regexp.source":
   editor:
     preferredLineLength: 120
+    tabLength: 4
 ".csv.semicolon.text":
   editor:
     preferredLineLength: 120
@@ -281,9 +294,30 @@
 ".diff.source":
   editor:
     preferredLineLength: 120
+".js.jsx.react.source":
+  editor:
+    preferredLineLength: 120
+    tabLength: 4
 ".js.jsx.source":
   editor:
     preferredLineLength: 120
+    tabLength: 4
+".js.regexp.source":
+  editor:
+    preferredLineLength: 120
+    tabLength: 4
+".js.source":
+  editor:
+    preferredLineLength: 120
+    tabLength: 4
+".js.source.subtlegradient":
+  editor:
+    preferredLineLength: 120
+    tabLength: 4
+".plantuml.source":
+  editor:
+    preferredLineLength: 120
+    tabLength: 4
 ".source.yaml":
   editor:
     autoIndentOnPaste: true
