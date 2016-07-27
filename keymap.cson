@@ -25,7 +25,8 @@
     'alt-ctrl-space': 'autocomplete-plus:activate'
     'cmd-g': 'goto:declaration'
     "cmd-l": "symbols-tree-view:toggle"
-    "cmd-m": "php-integrator-symbol-viewer:toggle-panel"
+    #"cmd-m": "php-integrator-symbol-viewer:toggle-panel"
+    "cmd-m": "symbols-list:toggle"
 
 # Traitement sur les lignes
 'body.platform-darwin atom-text-editor':
