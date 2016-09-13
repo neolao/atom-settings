@@ -255,6 +255,57 @@ atom-panel.modal.overlay.from-top {
         line-height: 1.5em !important;
     }
 }
+@keyframes linter-background {
+	from {
+        background-color: #ff0;
+    }
+	to {
+        background-color: #f00;
+    }
+}
+@keyframes linter-foreground {
+	from {
+        color: #000;
+    }
+	to {
+        color: #fff;
+    }
+}
+linter-panel {
+    //height: 3em !important;
+    border: solid 2px red;
+    background: red;
+    color: #fff;
+    animation: linter-background 1s infinite alternate,
+               linter-foreground 1s infinite alternate;
+
+    &:hover {
+        background: #000;
+        animation: none;
+
+        .linter-message-link {
+            text: #fff;
+            animation: none;
+        }
+    }
+
+    &:after {
+        content: "";
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        display: block;
+        width: 300px / 2.5;
+        height: 281px / 2.5;
+        background: url("atom://neolao/images/error-boo.png");
+        background-size: contain;
+    }
+}
+.linter-message-link {
+    animation: linter-foreground 1s infinite alternate;
+    text-decoration: underline;
+}
+
 
 // Tree view filter
 .tree-view-filter {
@@ -457,6 +508,22 @@ atom-php-integrator-symbol-viewer {
     atom-php-integrator-symbol-viewer {
         font-size: 14px;
         width: 400px;
+    }
+}
+
+// PHP Integrator: tooltip
+.php-integrator-call-tip {
+    &:after {
+        content: "";
+        position: absolute;
+        z-index: 2000;
+        left: -62px;
+        top: -10px;
+        display: block;
+        width: 125px / 1.5;
+        height: 130px / 1.5;
+        background: url("atom://neolao/images/carapuce.png");
+        background-size: contain;
     }
 }
 

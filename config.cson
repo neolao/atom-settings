@@ -56,8 +56,8 @@
       "bookmark-panel"
       "nav-panel"
       "language-javascript-jsx"
-      "project-manager"
-      "php-integrator-symbol-viewer"
+      "project-plus"
+      "linter-twig"
     ]
     excludeVcsIgnoredPaths: false
     followSymlinks: true
@@ -81,9 +81,8 @@
     ]
   docblockr:
     auto_add_method_tag: true
-    extend_double_slash: false
+    deep_indent: true
     simple_mode: true
-    spacer_between_sections: true
   editor:
     backUpBeforeSaving: true
     fontFamily: "DejaVu Sans Mono"
@@ -133,7 +132,7 @@
   "lazy-motion":
     clearSearchTextOnEverySearch: false
   linter:
-    errorPanelHeight: 200
+    errorPanelHeight: 60
     ignoredLinterErrors: [
       "php"
       "phpcs"
@@ -236,6 +235,12 @@
   tabs:
     showIcons: true
   "terminal-panel": {}
+  "terminal-plus":
+    core: {}
+    style:
+      animationSpeed: 500
+    toggles:
+      runInsertedText: false
   "todo-show":
     findTheseTodos: [
       "TODO"

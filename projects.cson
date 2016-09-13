@@ -1,10 +1,3 @@
-fitnextskeleton:
-  title: "Fitnext Skeleton"
-  paths: [
-    "/Users/eric/workspace/fitnext-skeleton"
-    "/Users/eric/workspace/symfony-ecommerce-bundle"
-    "/Users/eric/workspace/symfony-backoffice-bundle"
-  ]
 fitnextng:
   title: "Fitnext Ng"
   paths: [
@@ -40,3 +33,26 @@ symfonyfitnextenginebundle:
   paths: [
     "/Users/eric/workspace/symfony-fitnext-engine-bundle"
   ]
+  php:
+    enabled: true
+    php_integrator:
+      enabled: true
+      phpVersion: 7.0
+      excludedPaths: []
+      fileExtensions: [
+        "php"
+      ]
+symfonyi18nbundle:
+  title: "Symfony Internationalization Bundle"
+  paths: [
+    "/Users/eric/workspace/symfony-internationalization-bundle"
+  ]
+  php:
+    enabled: true
+    php_integrator:
+      enabled: true
+      phpVersion: 7.0
+      excludedPaths: []
+      fileExtensions: [
+        "php"
+      ]
