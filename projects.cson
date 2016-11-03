@@ -1,58 +1,84 @@
-fitnextng:
-  title: "Fitnext Ng"
-  paths: [
-    "/Users/eric/workspace/fitnext-ng"
-  ]
-symfonysponsorshipbundle:
-  title: "Symfony Sponsorship Bundle"
-  paths: [
-    "/Users/eric/workspace/symfony-sponsorship-bundle"
-  ]
-symfonyserviceaccessbundle:
-  title: "Symfony Service Access Bundle"
-  paths: [
-    "/Users/eric/workspace/symfony-service-access-bundle"
-  ]
-symfonyecommercebundle:
-  title: "Symfony Ecommerce Bundle"
-  paths: [
-    "/Users/eric/workspace/symfony-ecommerce-bundle"
-  ]
-symfonybackofficebundle:
-  title: "Symfony Backoffice Bundle"
-  paths: [
-    "/Users/eric/workspace/symfony-backoffice-bundle"
-  ]
-symfonyuserbundle:
-  title: "Symfony User Bundle"
-  paths: [
-    "/Users/eric/workspace/symfony-user-bundle"
-  ]
-symfonyfitnextenginebundle:
-  title: "Symfony Fitnext Engine Bundle"
-  paths: [
-    "/Users/eric/workspace/symfony-fitnext-engine-bundle"
-  ]
-  php:
-    enabled: true
-    php_integrator:
+[
+  {
+    title: "Fitnext Ng"
+    paths: [
+      "/Users/eric/workspace/fitnext-ng"
+    ]
+  }
+  {
+    title: "Symfony Sponsorship Bundle"
+    paths: [
+      "/Users/eric/workspace/symfony-sponsorship-bundle"
+    ]
+  }
+  {
+    title: "Symfony Service Access Bundle"
+    paths: [
+      "/Users/eric/workspace/symfony-service-access-bundle"
+    ]
+  }
+  {
+    title: "Symfony Ecommerce Bundle"
+    paths: [
+      "/Users/eric/workspace/symfony-ecommerce-bundle"
+    ]
+  }
+  {
+    title: "Symfony Backoffice Bundle"
+    paths: [
+      "/Users/eric/workspace/symfony-backoffice-bundle"
+    ]
+  }
+  {
+    title: "Symfony User Bundle"
+    paths: [
+      "/Users/eric/workspace/symfony-user-bundle"
+    ]
+  }
+  {
+    title: "Symfony Fitnext Engine Bundle"
+    paths: [
+      "/Users/eric/workspace/symfony-fitnext-engine-bundle"
+    ]
+    php:
       enabled: true
-      phpVersion: 7.0
-      excludedPaths: []
-      fileExtensions: [
-        "php"
-      ]
-symfonyi18nbundle:
-  title: "Symfony Internationalization Bundle"
-  paths: [
-    "/Users/eric/workspace/symfony-internationalization-bundle"
-  ]
-  php:
-    enabled: true
-    php_integrator:
+      php_integrator:
+        enabled: true
+        phpVersion: 7
+        excludedPaths: []
+        fileExtensions: [
+          "php"
+        ]
+  }
+  {
+    title: "Symfony Internationalization Bundle"
+    paths: [
+      "/Users/eric/workspace/symfony-internationalization-bundle"
+    ]
+    php:
       enabled: true
-      phpVersion: 7.0
-      excludedPaths: []
-      fileExtensions: [
-        "php"
-      ]
+      php_integrator:
+        enabled: true
+        phpVersion: 7
+        excludedPaths: []
+        fileExtensions: [
+          "php"
+        ]
+  }
+  {
+    title: "Media Bundle"
+    group: "Fitnext"
+    paths: [
+      "/Users/eric/workspace/symfony-media-bundle"
+    ]
+    php:
+      enabled: true
+      php_integrator:
+        enabled: true
+        phpVersion: 5.6
+        excludedPaths: []
+        fileExtensions: [
+          "php"
+        ]
+  }
+]

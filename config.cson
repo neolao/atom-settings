@@ -55,9 +55,9 @@
       "php-analyser"
       "bookmark-panel"
       "nav-panel"
-      "language-javascript-jsx"
-      "project-plus"
-      "linter-twig"
+      "dev-live-reload"
+      "linter-sass-lint"
+      "linter-stylelint"
     ]
     excludeVcsIgnoredPaths: false
     followSymlinks: true
@@ -83,6 +83,7 @@
     auto_add_method_tag: true
     deep_indent: true
     simple_mode: true
+  "double-tag": {}
   editor:
     backUpBeforeSaving: true
     fontFamily: "DejaVu Sans Mono"
@@ -145,8 +146,12 @@
     enableWarning: 1
     executablePath: "/Users/eric/workspace/vendor/bin/phpcs"
     standard: "PSR2"
+  "linter-sass-lint":
+    globalNodePath: "/Users/eric/.nvm/versions/node/v6.6.0"
+    noConfigDisable: true
   "linter-scss-lint":
     disableWhenNoConfigFileInPath: true
+  "linter-stylelint": {}
   "markdown-preview":
     useGitHubStyle: true
   "markdown-preview-opener":
@@ -206,7 +211,7 @@
     disableBuiltinAutocompletion: false
   "php-integrator-base": {}
   "php-integrator-linter":
-    validateDocblockCorrectness: false
+    showUnknownClasses: false
   "php-integrator-navigation":
     navigationRequireAltKey: false
     navigationRequireMetaKey: true
@@ -215,6 +220,12 @@
   pigments: {}
   "plantuml-preview":
     jarLocation: "/usr/local/Cellar/plantuml/8037/plantuml.8037.jar"
+  "platformio-ide-terminal":
+    style:
+      animationSpeed: 500
+      fontSize: "14"
+    toggles:
+      autoClose: true
   "project-manager":
     sortBy: "title"
   "project-plus":
@@ -290,6 +301,10 @@
   editor:
     preferredLineLength: 120
     tabLength: 4
+".css.source.styled":
+  editor:
+    preferredLineLength: 120
+    tabLength: 4
 ".csv.semicolon.text":
   editor:
     preferredLineLength: 120
@@ -322,6 +337,10 @@
     preferredLineLength: 120
     tabLength: 4
 ".js.source.subtlegradient":
+  editor:
+    preferredLineLength: 120
+    tabLength: 4
+".languagebabel.ttlextension":
   editor:
     preferredLineLength: 120
     tabLength: 4

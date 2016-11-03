@@ -52,6 +52,10 @@
 '.platform-darwin atom-text-editor':
   'ctrl-cmd-p': 'project-plus:toggle-project-finder'
 
+# Terminal
+'.platform-darwin atom-workspace':
+  'cmd-t': 'platformio-ide-terminal:toggle'
+
 # Bug bizarre avec Docblockr
 #'.editor:not(.mini)':
 #  'enter': 'docblockr:parse-inline'

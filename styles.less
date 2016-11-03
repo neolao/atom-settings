@@ -22,6 +22,7 @@ atom-panel-container.left {
     font-size: 12px;
     background: url("atom://neolao/images/tree-view.png") right top;
     background-repeat: repeat-y;
+    background-color: rgb(16, 16, 16);
 
     &.full-menu.list-tree {
     }
@@ -257,10 +258,10 @@ atom-panel.modal.overlay.from-top {
 }
 @keyframes linter-background {
 	from {
-        background-color: #ff0;
+        background-color: #f00;
     }
 	to {
-        background-color: #f00;
+        background-color: #c00;
     }
 }
 @keyframes linter-foreground {
@@ -273,11 +274,11 @@ atom-panel.modal.overlay.from-top {
 }
 linter-panel {
     //height: 3em !important;
-    border: solid 2px red;
-    background: red;
+    border: solid 2px #c00;
+    background: #c00;
     color: #fff;
-    animation: linter-background 1s infinite alternate,
-               linter-foreground 1s infinite alternate;
+    //animation: linter-background 1s infinite alternate,
+    //           linter-foreground 1s infinite alternate;
 
     &:hover {
         background: #000;
@@ -302,8 +303,8 @@ linter-panel {
     }
 }
 .linter-message-link {
-    animation: linter-foreground 1s infinite alternate;
     text-decoration: underline;
+    //animation: linter-foreground 1s infinite alternate;
 }
 
 
@@ -425,15 +426,51 @@ atom-text-editor::shadow .cursor {
 
 
 // Autocomplete
+@tooltip-background-color: #528bff;
+@tooltip-selection-background-color: #376fe0;
 autocomplete-suggestion-list {
+    border: solid 2px @tooltip-background-color;
+    background: @tooltip-background-color;
+    color: #fff;
+    margin-left: 0 !important;
+
+    .suggestion-list-scroller {
+        background: @tooltip-background-color;
+
+        ol.list-group li.selected {
+            background: @tooltip-selection-background-color;
+            border-radius: 10px;
+        }
+
+        .icon.value {
+            background: rgba(0, 0, 0, 0.3);
+        }
+    }
     &.select-list.popover-list {
         max-width: none;
     }
     .word {
+        color: #fff;
         max-width: none;
     }
     .character-match {
         color: #ff0 !important;
+    }
+
+}
+.autocomplete-plus {
+
+    &:after {
+        content: "";
+        position: absolute;
+        z-index: 2000;
+        left: -61px;
+        top: -10px;
+        display: block;
+        width: 125px / 1.5;
+        height: 130px / 1.5;
+        background: url("atom://neolao/images/carapuce.png");
+        background-size: contain;
     }
 }
 
