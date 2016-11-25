@@ -387,10 +387,12 @@ atom-text-editor::shadow .cursor {
 }
 
 
-// Package: Symbols list
+/**
+ * Package: Symbols list
+ */
 .symbols-list {
-    font-size: 1.5rem;
-    width: 400px;
+    width: 200px;
+    font-size: 1rem;
 
     span.pastille {
         width: 20px;
@@ -400,6 +402,11 @@ atom-text-editor::shadow .cursor {
             line-height: 20px;
             font-size: 14px;
         }
+    }
+
+    @media screen and (min-width: 1300px) {
+        width: 400px;
+        font-size: 1.5rem;
     }
 }
 
