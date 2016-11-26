@@ -136,8 +136,11 @@ atom-text-editor::shadow atom-text-editor-minimap {
 /**
  * Line numbers
  */
-atom-text-editor .gutter .line-number {
+atom-text-editor .gutter {
+    //min-width: 0;
 
+    .line-number {
+    }
 }
 
 
@@ -394,19 +397,24 @@ atom-text-editor::shadow .cursor {
     width: 200px;
     font-size: 1rem;
 
-    span.pastille {
-        width: 20px;
-        height: 20px;
-        line-height: 20px;
-        &:before {
-            line-height: 20px;
-            font-size: 14px;
-        }
+    .editor.mini {
+        background: #000;
+        overflow: hidden;
     }
 
     @media screen and (min-width: 1300px) {
         width: 400px;
         font-size: 1.5rem;
+
+        span.pastille {
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            &:before {
+                line-height: 20px;
+                font-size: 14px;
+            }
+        }
     }
 }
 
