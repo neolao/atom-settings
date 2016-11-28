@@ -150,6 +150,14 @@ atom-text-editor {
     background: url("atom://neolao/images/editor-origin.jpg");
     background-size: cover;
 
+    // Indent guide
+    .indent-guide-improved {
+        background-color: rgba(255, 255, 255, 0.2) !important;
+        &.indent-guide-active {
+            background-color: #ffff00 !important;
+            box-shadow: 2px 0 5px #ff0;
+        }
+    }
 
     &::shadow {
         // Source
@@ -490,6 +498,9 @@ autocomplete-suggestion-list {
 }
 
 // Package: Highlight-line
+atom-text-editor::shadow .highlight-line {
+    border-bottom: solid 1px #ff0 !important;
+}
 atom-text-editor::shadow .highlight.selection .region {
     background: rgba(255, 255, 0, 0.3);
     /*
@@ -734,20 +745,19 @@ tablr-editor {
 
 // Package: markdown-scroll-sync
 // Github theme
+/*
 .markdown-preview {
     font-family: Helvetica, arial, sans-serif;
-    font-size: 14px;
+    font-size: 14px !important;
     line-height: 1.6;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    background-color: white;
-    color: #333;
-    padding: 30px;
+    background-color: white !important;
+    color: #333 !important;
+    padding: 30px !important;
 
     a {
-      color: #4183C4; }
+      color: #4183C4 !important; }
     a.absent {
-      color: #cc0000; }
+      color: #cc0000  !important; }
     a.anchor {
       display: block;
       padding-left: 30px;
@@ -790,12 +800,12 @@ tablr-editor {
 
     h1 {
       font-size: 28px;
-      color: black; }
+      color: black !important; }
 
     h2 {
       font-size: 24px;
       border-bottom: 1px solid #cccccc;
-      color: black; }
+      color: black !important; }
 
     h3 {
       font-size: 18px; }
@@ -807,7 +817,7 @@ tablr-editor {
       font-size: 14px; }
 
     h6 {
-      color: #777777;
+      color: #777777 !important;
       font-size: 14px; }
 
     p, blockquote, ul, ol, dl, li, table, pre {
@@ -1015,3 +1025,4 @@ tablr-editor {
     	-webkit-print-color-adjust: exact;
     }
 }
+*/

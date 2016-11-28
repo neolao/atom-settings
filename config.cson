@@ -1,183 +1,27 @@
 "*":
-  Clean2: {}
-  Zen:
-    fullscreen: false
-    tabs: "multiple"
-  "activate-power-mode":
-    autoToggle: false
-  "atom-beautify":
-    _analyticsUserId: "3e27096e-2708-460f-96c8-139f3245429c"
-    general:
-      _analyticsUserId: "892ee795-b8f7-413e-8d0a-cc9b4a13003f"
-  "atom-ctags":
-    autoBuildTagsWhenActive: true
-    buildTimeout: 60000
-    cmdArgs: "--exclude=.git --exclude=app --exclude=vendor --exclude=vendor_front --exclude=web --exclude=tests"
-  "autoclose-html":
-    closeOnEndOfOpeningTag: true
-    forceInline: [
-      "title"
-      "h1"
-      "h2"
-      "h3"
-      "h4"
-      "h5"
-      "h6"
-      "p"
-    ]
-    makeNeverCloseElementsSelfClosing: true
-  autocomplete:
-    includeCompletionsFromAllBuffers: true
-  "autocomplete-plus":
-    autoActivationDelay: 500
-    backspaceTriggersAutocomplete: true
-    defaultProvider: "Fuzzy"
-    includeCompletionsFromAllBuffers: true
-  "autohide-tree-view":
-    animationSpeed: 0
-    pushEditor: true
-  composer:
-    composerPath: "/usr/local/bin/composer"
   core:
     disabledPackages: [
-      "enhanced-package-list"
-      "welcome"
-      "styleguide"
-      "package-generator"
-      "metrics"
-      "language-toml"
-      "language-clojure"
-      "language-csharp"
-      "autohide-tree-view"
-      "autocomplete-ctags"
       "language-gfm"
-      "linter-php"
-      "php-analyser"
-      "bookmark-panel"
       "nav-panel"
-      "dev-live-reload"
-      "linter-sass-lint"
-      "linter-stylelint"
-    ]
-    excludeVcsIgnoredPaths: false
-    followSymlinks: true
-    packagesWithKeymapsDisabled: [
-      "symbols-tree-view"
-      "git-blame"
-      "es-identifier-highlight"
-      "zentabs"
-      "aligner"
-      "linter"
-      "nav-panel"
-      "php-integrator-symbol-viewer"
-      "plantuml-preview"
-      "plantuml-viewer"
-      "symbols-list"
+      "markdown-preview-opener"
+      "markdown-scroll-sync"
     ]
     projectHome: "/Users/eric/workspace"
-    themes: [
-      "one-dark-ui"
-      "monokai"
-    ]
-  docblockr:
-    auto_add_method_tag: true
-    deep_indent: true
-    simple_mode: true
-  "double-tag": {}
+    telemetryConsent: "limited"
   editor:
-    backUpBeforeSaving: true
-    fontFamily: "DejaVu Sans Mono"
-    fontSize: 16
-    invisibles: {}
-    preferredLineLength: 120
+    fontSize: 15
     showInvisibles: true
+    softWrapHangingIndent: 4
     tabLength: 4
-  "enhanced-package-list":
-    sourceFilter: "user"
   "exception-reporting":
-    userId: "5c1b3e91-177a-1a3d-e8d5-6f5458113034"
-  "file-icons": {}
-  "fold-navigator": {}
+    userId: "cece949e-7083-e52a-1d60-1b47eb65bd9a"
   fonts:
     fontFamily: "DejaVu Mono"
-  "fuzzy-finder":
-    ignoredNames: [
-      ".git"
-      "**/node_modules/*"
-      "**/vendor/*"
-    ]
-  "git-blame":
-    columnWidth: 300
-  "git-log": {}
-  "git-plus": {}
-  "github-issues":
-    username: "udg-eric"
-  goto: {}
-  "highlight-column":
-    enableHighlight: true
-    opacity: 1
-  "highlight-line":
-    enableBackgroundColor: false
-    enableSelectionBorder: true
-    enableUnderline: true
-    hideHighlightOnSelect: true
-  "highlight-selected":
-    hideHighlightOnSelectedWord: true
-    highlightBackground: true
-    lightTheme: true
-  "isotope-ui":
-    fontFamily: "Ubuntu"
-    fontWeight: "Regular"
-    matchEditorFont: true
-    spaciousMode: true
-  "lazy-motion":
-    clearSearchTextOnEverySearch: false
-  linter:
-    errorPanelHeight: 60
-    ignoredLinterErrors: [
-      "php"
-      "phpcs"
-    ]
-    showErrorInline: true
-    statusBar: "Show all errors"
-  "linter-php":
-    executablePath: "/usr/local/bin/php"
-  "linter-phpcs":
-    enableWarning: 1
-    executablePath: "/Users/eric/workspace/vendor/bin/phpcs"
-    standard: "PSR2"
-  "linter-sass-lint":
-    globalNodePath: "/Users/eric/.nvm/versions/node/v6.6.0"
-    noConfigDisable: true
-  "linter-scss-lint":
-    disableWhenNoConfigFileInPath: true
-  "linter-stylelint": {}
+  "highlight-line": {}
   "markdown-preview":
     useGitHubStyle: true
   "markdown-preview-opener":
     closePreviewWhenClosingEditor: true
-  "markdown-table-formatter":
-    formatOnSave: false
-  "markdown-writer":
-    relativeImagePath: true
-  "merge-conflicts":
-    gitPath: "/usr/bin/git"
-  metrics:
-    userId: "b53641952e75709991d2d77f556a6ab0a912fea0"
-  minimap:
-    charWidth: 2
-    displayMinimapOnLeft: true
-    plugins:
-      bookmarks: true
-      "find-and-replace": true
-      linter: true
-    scrollAnimation: true
-    scrollAnimationDuration: 200
-    textOpacity: 0.3
-  "nav-panel":
-    ignoredGroups: "Property"
-  "one-dark-ui":
-    layoutMode: "Compact"
   "php-getters-setters":
     getterTemplate: '''
       /**
@@ -207,92 +51,10 @@
       
       
     '''
-  "php-integrator-autocomplete-plus":
-    disableBuiltinAutocompletion: false
-  "php-integrator-base": {}
-  "php-integrator-linter":
-    showUnknownClasses: false
-  "php-integrator-navigation":
-    navigationRequireAltKey: false
-    navigationRequireMetaKey: true
-  "php-integrator-symbol-viewer":
-    defaultShowInherited: true
-  pigments: {}
-  "plantuml-preview":
-    jarLocation: "/usr/local/Cellar/plantuml/8037/plantuml.8037.jar"
-  "platformio-ide-terminal":
-    style:
-      animationSpeed: 500
-      fontSize: "14"
-    toggles:
-      autoClose: true
-  "project-manager":
-    sortBy: "title"
-  "project-plus":
-    projectHome: " /Users/eric/workspace"
-    showPath: true
-  "release-notes":
-    viewedVersion: "0.94.0"
-  "symbols-list": {}
-  "symbols-tree-view":
-    zAutoHideTypes: "variable class"
-  tablr:
-    csvEditor:
-      eof: true
-      header: true
-    tableEditor:
-      minimumRowHeight: 24
-      rowHeight: 36
-  tabs:
-    showIcons: true
-  "terminal-panel": {}
-  "terminal-plus":
-    core: {}
-    style:
-      animationSpeed: 500
-    toggles:
-      runInsertedText: false
-  "todo-show":
-    findTheseTodos: [
-      "TODO"
-      "FIXME"
-      "@fixme"
-      "@todo"
-      "@idea"
-      "@note"
-      "@hack"
-    ]
-    findUsingRegex: "/(${TODOS}):?\\d*($|\\s.*$)/g"
-    ignoreThesePaths: [
-      "app"
-      "data"
-      "docs"
-      "scripts"
-      "tests"
-      "vendor"
-      "vendor_front"
-      "web"
-      "node_modules"
-      ".git"
-      "*.map"
-      "Resources/public/assets/build/js/*.js"
-    ]
-    saveOutputAs: "Table"
-    sortBy: "Tags"
-  "tool-bar":
-    visible: false
-  toolbar:
-    position: "Left"
-    visible: false
-  "tree-view": {}
+  "symbols-list":
+    alphabecticalSorting: true
   welcome:
     showOnStartup: false
-  whitespace:
-    ignoreWhitespaceOnCurrentLine: false
-  zentabs:
-    maximumOpenedTabs: 8
-    neverCloseNew: true
-    neverCloseUnsaved: true
 ".attribute-values.js.jsx.source":
   editor:
     preferredLineLength: 120

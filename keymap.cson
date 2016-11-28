@@ -27,21 +27,23 @@
     "cmd-l": "symbols-tree-view:toggle"
     #"cmd-m": "php-integrator-symbol-viewer:toggle-panel"
     "cmd-m": "symbols-list:toggle"
+    'alt-shift-left': 'editor:select-to-beginning-of-word'
+    'alt-shift-right': 'editor:select-to-end-of-word'
 
 # Traitement sur les lignes
-'body.platform-darwin atom-text-editor':
-    'cmd-d': 'editor:delete-line'
-    'alt-cmd-down': 'editor:duplicate-lines'
-    'cmd-alt-down': 'editor:duplicate-lines'
-'.platform-darwin atom-workspace atom-text-editor':
-    'alt-cmd-down': 'unset!'
-    'alt-cmd-down': 'editor:duplicate-lines'
-    'cmd-alt-down': 'editor:duplicate-lines'
+#'body.platform-darwin atom-text-editor':
+#    'cmd-d': 'editor:delete-line'
+#    'alt-cmd-down': 'editor:duplicate-lines'
+#    'cmd-alt-down': 'editor:duplicate-lines'
+#'.platform-darwin atom-workspace atom-text-editor':
+#    'alt-cmd-down': 'unset!'
+#    'alt-cmd-down': 'editor:duplicate-lines'
+#    'cmd-alt-down': 'editor:duplicate-lines'
 
 # Basculer vers la liste des fichiers
 '.platform-darwin':
-  'ctrl-left': 'tree-view:toggle-focus'
-  'ctrl-right': 'tree-view:toggle-focus'
+  #'ctrl-left': 'tree-view:toggle-focus'
+  #'ctrl-right': 'tree-view:toggle-focus'
   'ctrl-w': 'tree-view:toggle-focus'
 
 # Confirmer une autocompletion avec Enter
