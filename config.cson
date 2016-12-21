@@ -1,15 +1,19 @@
 "*":
+  "autocomplete-plus":
+    autoActivationDelay: 500
+    confirmCompletion: "enter"
   core:
     disabledPackages: [
       "language-gfm"
       "nav-panel"
       "markdown-preview-opener"
       "markdown-scroll-sync"
+      "linter-php"
     ]
     projectHome: "/Users/eric/workspace"
     telemetryConsent: "limited"
   editor:
-    fontSize: 20
+    fontSize: 19
     showInvisibles: true
     softWrapHangingIndent: 4
     tabLength: 4
@@ -19,6 +23,10 @@
     fontFamily: "DejaVu Mono"
   "highlight-line": {}
   "linter-phpcs": {}
+  "linter-sass-lint":
+    noConfigDisable: true
+  "linter-scss-lint":
+    disableWhenNoConfigFileInPath: true
   "markdown-preview":
     useGitHubStyle: true
   "markdown-preview-opener":
@@ -52,10 +60,16 @@
       
       
     '''
+  "php-integrator-linter": {}
   "symbols-list":
     alphabecticalSorting: true
   welcome:
     showOnStartup: false
+  zentabs:
+    maximumOpenedTabs: 8
+    neverCloseDirty: true
+    neverCloseNew: true
+    neverCloseUnsaved: true
 ".attribute-values.js.jsx.source":
   editor:
     preferredLineLength: 120
