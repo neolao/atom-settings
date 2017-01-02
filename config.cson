@@ -1,4 +1,19 @@
 "*":
+  "aligner-scss": {}
+  "api-docs":
+    dom: false
+    dom_events: false
+    http: false
+    jquery: true
+    node: true
+    php: true
+    react: true
+    redux: true
+    sass: true
+    svg: true
+    "symfony~3":
+      "1": true
+    twig: true
   "autocomplete-plus":
     autoActivationDelay: 500
     confirmCompletion: "enter"
@@ -60,9 +75,32 @@
       
       
     '''
-  "php-integrator-linter": {}
+  "php-integrator-base": {}
+  "php-integrator-linter":
+    showUnknownClasses: false
+  "quick-editor": {}
   "symbols-list":
     alphabecticalSorting: true
+  "todo-show":
+    findTheseTodos: [
+      "FIXME"
+      "TODO"
+      "CHANGED"
+      "XXX"
+      "IDEA"
+      "HACK"
+      "NOTE"
+      "REVIEW"
+      "todo"
+    ]
+    ignoreThesePaths: [
+      "**/node_modules/"
+      "**/vendor/"
+      "**/bower_components/"
+      "**/lib/"
+      "**/build/"
+      "**/docs/"
+    ]
   welcome:
     showOnStartup: false
   zentabs:
