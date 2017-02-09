@@ -16,6 +16,10 @@
 #   'ctrl-P': 'core:move-up'
 #   'ctrl-p': 'core:move-down'
 #
+#
+
+#
+
 'atom-text-editor':
     'cmd-up': 'editor:move-line-up'
     'cmd-down': 'editor:move-line-down'
@@ -23,13 +27,18 @@
     'alt-cmd-down': 'editor:duplicate-lines'
     'alt-cmd-space': 'autocomplete-plus:activate'
     'alt-ctrl-space': 'autocomplete-plus:activate'
-    'cmd-g': 'goto:declaration'
     "cmd-l": "symbols-tree-view:toggle"
     #"cmd-m": "php-integrator-symbol-viewer:toggle-panel"
     "cmd-m": "symbols-list:toggle"
     'alt-shift-left': 'editor:select-to-beginning-of-word'
     'alt-shift-right': 'editor:select-to-end-of-word'
 
+    # Ouvrir le menu GIT
+    'cmd-g': 'git-plus:menu'
+
+    # Fold
+    'ctrl-f': 'editor:fold-current-row'
+    'ctrl-shift-f': 'editor:unfold-current-row'
 # Traitement sur les lignes
 #'body.platform-darwin atom-text-editor':
 #    'cmd-d': 'editor:delete-line'
@@ -42,17 +51,25 @@
 
 # Basculer vers la liste des fichiers
 '.platform-darwin':
-  #'ctrl-left': 'tree-view:toggle-focus'
-  #'ctrl-right': 'tree-view:toggle-focus'
-  'ctrl-w': 'tree-view:toggle-focus'
+    #'ctrl-left': 'tree-view:toggle-focus'
+    #'ctrl-right': 'tree-view:toggle-focus'
+    'ctrl-w': 'tree-view:toggle-focus'
+    # Ouvrir le menu GIT
+    'cmd-g': 'git-plus:menu'
+
 
 # Confirmer une autocompletion avec Enter
 ".autocomplete-plus input.hidden-input":
     "enter": "autocomplete-plus:confirm"
 
-# Projets
 '.platform-darwin atom-text-editor':
-  'ctrl-cmd-p': 'project-plus:toggle-project-finder'
+    # Projets
+    'ctrl-cmd-p': 'project-plus:toggle-project-finder'
+    # Toggle tree view
+    'cmd-e': 'tree-view:toggle'
+
+    # Ouvrir le menu GIT
+    'cmd-g': 'git-plus:menu'
 
 # Terminal
 '.platform-darwin atom-workspace':

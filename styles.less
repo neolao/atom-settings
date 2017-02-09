@@ -58,6 +58,11 @@ atom-panel-container.left {
         }
     }
 }
+@media screen and (min-width: 1400px) {
+    .tree-view {
+        font-size: 14px;
+    }
+}
 @media screen and (min-width: 1600px) {
     .tree-view {
         font-size: 16px;
@@ -81,19 +86,77 @@ atom-panel-container.left {
 
 
 /**
+ * Header - Title bar
+ */
+.title-bar {
+    font-size: 12px;
+    height: auto;
+    padding-top: .2em;
+    padding-bottom: .2em;
+    border-bottom: solid 1px #000;
+
+    @media screen and (min-width: 2000px) {
+        font-size: 18px;
+    }
+}
+
+/**
+ * Status bar
+ * Celle du bas
+ */
+status-bar.status-bar {
+    font-size: 12px;
+    border-top: solid 1px #000;
+
+    @media screen and (min-width: 1200px) {
+        font-size: 14px;
+    }
+
+    @media screen and (min-width: 1600px) {
+        font-size: 16px;
+    }
+
+    @media screen and (min-width: 2000px) {
+        font-size: 18px;
+    }
+}
+
+/**
  * Tab bar
  */
 atom-workspace .horizontal .vertical {
     font-size: 10px;
 }
 .tab-bar {
+    background: #000;
     height: 4em;
     .tab {
+        background: #181c24;
+
         height: 4em;
         line-height: 4em;
 
+        &.active, &.active .title {
+            background: #282c34 !important;
+            &:after {
+                content: "";
+                display: block;
+                height: 1px;
+                width: 100%;
+                background: yellow;
+                transform: translateY(-2px);
+                z-index: 100;
+            }
+        }
         &:before {
             height: 4em;
+            background: none; // Remove highlight
+        }
+        &:after, &.active:after {
+            background: none !important;
+        }
+        .title {
+            background: none;
         }
     }
     .title {
@@ -124,7 +187,7 @@ atom-workspace .horizontal .vertical {
 /**
  * Minimap
  */
-atom-text-editor::shadow atom-text-editor-minimap {
+atom-text-editor.editor atom-text-editor-minimap {
     border: 2px solid rgba(255, 255, 255, 0.2);
     background: rgba(0, 0, 0, 0.2);
     width: 100px;
@@ -159,9 +222,9 @@ atom-text-editor {
         }
     }
 
-    &::shadow {
+    &.editor {
         // Source
-        .source {
+        .syntax--source {
             text-shadow: 2px 2px 0px #000, 2px -2px 0px #000, -2px 2px 0px #000, -2px -2px 0px #000;
         }
 
@@ -390,12 +453,28 @@ linter-panel {
 
 
 // Cursor
-atom-text-editor::shadow .cursor {
-    border-color: #ff0;
-    border-width: 2px;
-    box-shadow: 0 0 10px #ff0;
-    width: 2px !important;
+atom-text-editor.editor .cursors {
+
+    .cursor {
+        border-color: #ff0;
+        border-width: 2px;
+        box-shadow: 0 0 10px #ff0;
+        width: 2px !important;
+
+        /*
+        &::after {
+            opacity: 1;
+            content: "";
+            display: block;
+            background: red;
+            width: 100px;
+            height: 100px;
+        }
+        */
+    }
+
 }
+
 
 
 /**
@@ -410,7 +489,12 @@ atom-text-editor::shadow .cursor {
         overflow: hidden;
     }
 
-    @media screen and (min-width: 1300px) {
+    @media screen and (min-width: 1400px) {
+        width: 300px;
+        font-size: 1.2rem;
+    }
+
+    @media screen and (min-width: 1600px) {
         width: 400px;
         font-size: 1.5rem;
 
@@ -426,7 +510,9 @@ atom-text-editor::shadow .cursor {
     }
 }
 
-// Package: Symbols Tree
+/**
+ * Package: Symbols Tree
+ */
 .symbols-tree-view {
     font-size: 1rem;
     width: 300px !important;
@@ -498,10 +584,10 @@ autocomplete-suggestion-list {
 }
 
 // Package: Highlight-line
-atom-text-editor::shadow .highlight-line {
+atom-text-editor.editor .highlight-line {
     border-bottom: solid 1px #ff0 !important;
 }
-atom-text-editor::shadow .highlight.selection .region {
+atom-text-editor.editor .highlight.selection .region {
     background: rgba(255, 255, 0, 0.3);
     /*
     background: rgba(255, 255, 0, 0.1);
@@ -511,7 +597,7 @@ atom-text-editor::shadow .highlight.selection .region {
     }
     */
 }
-atom-text-editor::shadow .line.highlight-line-multi-line-solid-top {
+atom-text-editor.editor .line.highlight-line-multi-line-solid-top {
     // background: rgba(255, 255, 0, 0.1) !important;
     &:before {
         content: "";
@@ -521,7 +607,7 @@ atom-text-editor::shadow .line.highlight-line-multi-line-solid-top {
         box-shadow: 0 0 10px #ff0;
     }
 }
-atom-text-editor::shadow .line.highlight-line-multi-line-solid-bottom {
+atom-text-editor.editor .line.highlight-line-multi-line-solid-bottom {
     // background: rgba(255, 255, 0, 0.1) !important;
     &:after {
         content: "";

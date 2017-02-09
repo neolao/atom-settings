@@ -17,6 +17,10 @@
   "autocomplete-plus":
     autoActivationDelay: 500
     confirmCompletion: "enter"
+  "autohide-tree-view":
+    animationSpeed: 200
+    pushEditor: true
+    triggerAreaSize: 10
   core:
     disabledPackages: [
       "language-gfm"
@@ -24,11 +28,15 @@
       "markdown-preview-opener"
       "markdown-scroll-sync"
       "linter-php"
+      "es-identifier-highlight"
+      "symbols-view"
     ]
     projectHome: "/Users/eric/workspace"
+    reopenProjectMenuCount: 10
     telemetryConsent: "limited"
+    useCustomTitleBar: true
   editor:
-    fontSize: 19
+    fontSize: 18
     showInvisibles: true
     softWrapHangingIndent: 4
     tabLength: 4
@@ -36,8 +44,15 @@
     userId: "cece949e-7083-e52a-1d60-1b47eb65bd9a"
   fonts:
     fontFamily: "DejaVu Mono"
+  "git-plus":
+    general:
+      _analyticsUserId: "714e7ca0-e428-485c-91f1-33966ae201ba"
+  "hide-tree":
+    focus: false
   "highlight-line": {}
   "linter-phpcs": {}
+  "linter-raml":
+    lintOnFly: false
   "linter-sass-lint":
     noConfigDisable: true
   "linter-scss-lint":
@@ -46,6 +61,8 @@
     useGitHubStyle: true
   "markdown-preview-opener":
     closePreviewWhenClosingEditor: true
+  "php-cs-fixer":
+    showInfoNotifications: true
   "php-getters-setters":
     getterTemplate: '''
       /**
@@ -75,12 +92,18 @@
       
       
     '''
-  "php-integrator-base": {}
+  "php-integrator-base":
+    additionalIndexingDelay: 1000
+    phpCommand: "/usr/local/bin/php"
   "php-integrator-linter":
     showUnknownClasses: false
   "quick-editor": {}
+  syfi:
+    appFolderOverride: "var"
   "symbols-list":
     alphabecticalSorting: true
+  "symbols-view-plus":
+    plusConfigurations: {}
   "todo-show":
     findTheseTodos: [
       "FIXME"
@@ -101,6 +124,13 @@
       "**/build/"
       "**/docs/"
     ]
+  "tree-view": {}
+  "tree-view-breadcrumb":
+    displayProjectRoot: true
+    displayProjectRootName: true
+    keepBreadcrumbVisible: true
+    pathStyle: true
+    scrollbarStyle: "thin"
   welcome:
     showOnStartup: false
   zentabs:

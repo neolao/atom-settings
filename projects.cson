@@ -1,6 +1,7 @@
 [
   {
-    title: "Fitnext Ng"
+    title: "Fitnext NG"
+    group: "Fitnext"
     paths: [
       "/Users/eric/workspace/fitnext-ng"
     ]
@@ -143,5 +144,12 @@
         fileExtensions: [
           "php"
         ]
+  }
+  {
+    title: "Documentation"
+    group: "neolao"
+    paths: [
+      "/Users/eric/workspace/documentation"
+    ]
   }
 ]
