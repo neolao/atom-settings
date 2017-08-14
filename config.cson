@@ -1,143 +1,33 @@
 "*":
-  "aligner-scss": {}
-  "api-docs":
-    dom: false
-    dom_events: false
-    http: false
-    jquery: true
-    node: true
-    php: true
-    react: true
-    redux: true
-    sass: true
-    svg: true
-    "symfony~3":
-      "1": true
-    twig: true
-  "autocomplete-plus":
-    autoActivationDelay: 500
-    confirmCompletion: "enter"
-  "autohide-tree-view":
-    animationSpeed: 200
-    pushEditor: true
-    triggerAreaSize: 10
   core:
     disabledPackages: [
       "language-gfm"
-      "nav-panel"
-      "markdown-preview-opener"
-      "markdown-scroll-sync"
-      "linter-php"
-      "es-identifier-highlight"
-      "symbols-view"
+      "whitespace"
+      "markdown-preview"
     ]
-    projectHome: "/Users/eric/workspace"
-    reopenProjectMenuCount: 10
     telemetryConsent: "limited"
-    useCustomTitleBar: true
   editor:
-    fontSize: 18
-    showInvisibles: true
-    softWrapHangingIndent: 4
-    tabLength: 4
+    fontSize: 19
   "exception-reporting":
-    userId: "cece949e-7083-e52a-1d60-1b47eb65bd9a"
+    userId: "0c23997d-0533-435f-af48-0ad3492b4ba8"
   fonts:
     fontFamily: "DejaVu Mono"
-  "git-plus":
-    general:
-      _analyticsUserId: "714e7ca0-e428-485c-91f1-33966ae201ba"
-  "hide-tree":
-    focus: false
-  "highlight-line": {}
-  "linter-phpcs": {}
-  "linter-raml":
-    lintOnFly: false
-  "linter-sass-lint":
-    noConfigDisable: true
-  "linter-scss-lint":
-    disableWhenNoConfigFileInPath: true
+  linter:
+    lintPreviewTabs: false
+  "linter-phpcs":
+    disableWhenNoConfigFile: true
+  "linter-ui-default": {}
   "markdown-preview":
+    openPreviewInSplitPane: false
     useGitHubStyle: true
-  "markdown-preview-opener":
-    closePreviewWhenClosingEditor: true
-  "php-cs-fixer":
-    showInfoNotifications: true
-  "php-getters-setters":
-    getterTemplate: '''
-      /**
-       * Get %description%
-       *
-       * @return  %type%        %description%
-       */
-      %scope% function %methodName%()
-      {
-          return $this->%variable%;
-      }
-      
-      
-    '''
-    setterTemplate: '''
-      /**
-       * Set %description%
-       *
-       * @param   %type%    $%variable%     %description%
-       * @return  self
-       */
-      %scope% function %methodName%(%typeHint%$%variable%)
-      {
-          $this->%variable% = $%variable%;
-          return $this;
-      }
-      
-      
-    '''
-  "php-integrator-base":
-    additionalIndexingDelay: 1000
-    phpCommand: "/usr/local/bin/php"
-  "php-integrator-linter":
-    showUnknownClasses: false
-  "quick-editor": {}
-  syfi:
-    appFolderOverride: "var"
   "symbols-list":
-    alphabecticalSorting: true
-  "symbols-view-plus":
-    plusConfigurations: {}
-  "todo-show":
-    findTheseTodos: [
-      "FIXME"
-      "TODO"
-      "CHANGED"
-      "XXX"
-      "IDEA"
-      "HACK"
-      "NOTE"
-      "REVIEW"
-      "todo"
-    ]
-    ignoreThesePaths: [
-      "**/node_modules/"
-      "**/vendor/"
-      "**/bower_components/"
-      "**/lib/"
-      "**/build/"
-      "**/docs/"
-    ]
-  "tree-view": {}
-  "tree-view-breadcrumb":
-    displayProjectRoot: true
-    displayProjectRootName: true
-    keepBreadcrumbVisible: true
-    pathStyle: true
-    scrollbarStyle: "thin"
+    alphabeticalSorting: true
   welcome:
     showOnStartup: false
   zentabs:
     maximumOpenedTabs: 8
     neverCloseDirty: true
     neverCloseNew: true
-    neverCloseUnsaved: true
 ".attribute-values.js.jsx.source":
   editor:
     preferredLineLength: 120

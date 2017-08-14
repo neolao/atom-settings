@@ -9,3 +9,7 @@
 .apm/source-map/0.1.43/package/package.json
 blob-store
 /packages/php-integrator-base/indexes/
+/recovery
+/pending-packages
+github.cson
+.package-cop.json

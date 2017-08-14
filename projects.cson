@@ -1,15 +1,25 @@
 [
   {
-    title: "Fitnext NG"
+    title: "Fitnext"
     group: "Fitnext"
     paths: [
+      "/Users/eric/workspace/fitnext"
       "/Users/eric/workspace/fitnext-ng"
+      "/Users/eric/workspace/symfony-service-access-bundle"
+      "/Users/eric/workspace/symfony-user-bundle"
+      "/Users/eric/workspace/symfony-fitnext-engine-bundle"
+      "/Users/eric/workspace/symfony-backoffice-bundle"
+      "/Users/eric/workspace/symfony-ecommerce-bundle"
+      "/Users/eric/workspace/symfony-media-bundle"
+      "/Users/eric/workspace/symfony-internationalization-bundle"
+      "/Users/eric/workspace/symfony-messaging-bundle"
+      "/Users/eric/workspace/php-filterable-entity"
     ]
     php:
       enabled: true
       php_integrator:
         enabled: true
-        phpVersion: 5.6
+        phpVersion: 7
         excludedPaths: []
         fileExtensions: [
           "php"
@@ -103,7 +113,7 @@
         ]
   }
   {
-    title: "Media Bundle"
+    title: "Symfony Media Bundle"
     group: "Fitnext"
     paths: [
       "/Users/eric/workspace/symfony-media-bundle"
@@ -150,6 +160,26 @@
     group: "neolao"
     paths: [
       "/Users/eric/workspace/documentation"
+    ]
+  }
+  {
+    title: "Filterable Entity"
+    group: "Fitnext"
+    paths: [
+      "/Users/eric/workspace/php-filterable-entity"
+    ]
+  }
+  {
+    title: "Timestampable Entity"
+    group: "Fitnext"
+    paths: [
+      "/Users/eric/workspace/php-timestampable-entity"
+    ]
+  }
+  {
+    title: "Fitnext NG"
+    paths: [
+      "/Users/eric/workspace/fitnext-ng"
     ]
   }
 ]

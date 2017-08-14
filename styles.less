@@ -225,7 +225,10 @@ atom-text-editor {
     &.editor {
         // Source
         .syntax--source {
-            text-shadow: 2px 2px 0px #000, 2px -2px 0px #000, -2px 2px 0px #000, -2px -2px 0px #000;
+            text-shadow: 1px 1px 1px #000, 1px -1px 1px #000, -1px 1px 1px #000, -1px -1px 1px #000;
+        }
+        .pigments-native-background {
+            text-shadow: 0 0 1px rgba(0, 0, 0, .5);
         }
 
         // Comment
@@ -534,6 +537,24 @@ atom-text-editor.editor .cursors {
 }
 
 
+/**
+ * Linter panel
+ */
+#linter-panel {
+
+    th, td {
+        background: red;
+        color: #fff;
+    }
+    .badge {
+        background: rgba(0, 0, 0, .2);
+        padding: .8em;
+        line-height: 1.3em;
+        font-size: .8em;
+        border-radius: initial;
+    }
+}
+
 // Autocomplete
 @tooltip-background-color: #528bff;
 @tooltip-selection-background-color: #376fe0;
@@ -584,9 +605,25 @@ autocomplete-suggestion-list {
 }
 
 // Package: Highlight-line
-atom-text-editor.editor .highlight-line {
+atom-text-editor.editor .cursor-line.highlight-line {
     border-bottom: solid 1px #ff0 !important;
+    position: relative;
+    overflow: visible;
+    
+    &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        right: 0px;
+        bottom: -14px;
+        width: 44px;
+        height: 54px;
+        background: url("atom://neolao/images/kinto.png");
+        background-size: contain;
+        z-index: 4000;
+    }
 }
+
 atom-text-editor.editor .highlight.selection .region {
     background: rgba(255, 255, 0, 0.3);
     /*
@@ -676,6 +713,18 @@ atom-php-integrator-symbol-viewer {
     }
 }
 
+// PHP Integrator:
+.php-integrator-autocomplete-plus-suggestion {
+    .icon-globe {
+        color: green !important;
+        background: rgba(0, 255, 0, .3) !important;
+    }
+    .icon-shield {
+        color: red !important;
+        background: rgba(255, 0, 0, .3) !important;
+    }
+}
+
 // Package: Tablr
 atom-pane .tab-bar .tab[data-type="CSVEditor"] .title[data-path]::before {
     font-size: 16px !important;
@@ -709,6 +758,37 @@ tablr-editor {
 
         &::before {
             white-space: nowrap;
+        }
+    }
+}
+
+// Package: Tree view extended
+.tree-view-extended {
+    .tree-view {
+        margin-top: 1em;
+    }
+    .list-item {
+        line-height: 1.2em !important;
+        padding: 0;
+        &.header {
+            background: rgba(255, 255, 0, .1);
+            border-top: solid 1px #cc9;
+            border-bottom: solid 1px #cc9;
+            margin-bottom: 10px;
+            line-height: 3em !important;
+            height: 3em !important;
+            &:before {
+                line-height: 2em !important;
+            }
+        }
+        &.selected > .name {
+            color: #ff0 !important;
+        }
+        &:before {
+            line-height: 1.5em !important;
+            height: 2em !important;
+            padding: 0;
+            margin: 0;
         }
     }
 }
